@@ -1,0 +1,341 @@
+﻿@using IWSProject.Content
+@using IWSProject.Models
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "VatsGridView";
+        settings.Caption = IWSLocalResource.vat;
+
+        settings.CallbackRouteValues = new { Controller = "Vats", Action = "VatsGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "Vats", Action = "VatsGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Vats", Action = "VatsGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Vats", Action = "VatsGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "id";
+
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Percentage(300);
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 350;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+        settings.SettingsPager.PageSize = 50;
+
+        settings.Columns.Add("id").Caption = IWSLocalResource.id;
+        settings.Columns.Add("name").Caption = IWSLocalResource.name;
+        settings.Columns.Add("modelid").Caption = IWSLocalResource.modelid;
+        settings.Columns.Add("description").Caption = IWSLocalResource.description;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "PVat";
+            column.Caption = IWSLocalResource.percent;
+            column.EditorProperties().SpinEdit(p =>
+            {
+                p.DisplayFormatInEditMode = true;
+                p.SpinButtons.ShowLargeIncrementButtons = true;
+                p.Width = Unit.Percentage(100);
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "inputvataccountid";
+            column.Caption = IWSLocalResource.inputvataccountid;
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetAccounts();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.item;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "outputvataccountid";
+            column.Caption = IWSLocalResource.outputvataccountid;
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetAccounts();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.item;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "revenueaccountid";
+            column.Caption = IWSLocalResource.revenueaccountid;
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetAccounts();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.item;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "stockaccountid";
+            column.Caption = IWSLocalResource.stockaccountid;
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetAccounts();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.item;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "expenseaccountid";
+            column.Caption = IWSLocalResource.expenseaccountid;
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetAccounts();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.item;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
+
+        #region Template Edit
+        settings.SetEditFormTemplateContent(templateContent =>
+        {
+            var editItem = ViewData["vat"] != null ? ViewData["vat"] : templateContent.DataItem;
+
+            Html.DevExpress().FormLayout(formLayoutSettings =>
+            {
+                formLayoutSettings.Name = "ArticleViewEdit";
+                formLayoutSettings.Width = Unit.Percentage(100);
+                formLayoutSettings.ColCount = 3;
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "id";
+                    i.Caption = IWSLocalResource.id;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "name";
+                    i.Caption = IWSLocalResource.name;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "modelid";
+                    i.Caption = IWSLocalResource.modelid;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "description";
+                    i.Caption = IWSLocalResource.description;
+                    i.NestedExtension().Memo(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "PVat";
+                    i.Caption = IWSLocalResource.percent;
+                    i.NestedExtension().SpinEdit(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "inputvataccountid";
+                    i.Caption = IWSLocalResource.inputvataccountid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.item;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "outputvataccountid";
+                    i.Caption = IWSLocalResource.outputvataccountid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.item;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "revenueaccountid";
+                    i.Caption = IWSLocalResource.revenueaccountid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.item;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "stockaccountid";
+                    i.Caption = IWSLocalResource.stockaccountid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.item;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "expenseaccountid";
+                    i.Caption = IWSLocalResource.expenseaccountid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.item;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.ShowCaption = DefaultBoolean.False;
+                }).SetNestedContent(() =>
+                {
+                    ViewContext.Writer.Write("<div style='float:right'>");
+
+                    Html.DevExpress().Button(
+                btnSettings =>
+                {
+                    btnSettings.Name = "btnUpdate";
+                    btnSettings.Text = IWSLocalResource.btnUpdate;
+                    btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                    btnSettings.ClientSideEvents.Click = "function(s, e){ VatsGridView.UpdateEdit(); }";
+                }).Render();
+
+                    Html.DevExpress().Button(
+                btnSettings =>
+                {
+                    btnSettings.Name = "btnCancel";
+                    btnSettings.Text = IWSLocalResource.btnCancel;
+                    btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                    btnSettings.ClientSideEvents.Click = "function(s, e){ VatsGridView.CancelEdit(); }";
+                }).Render();
+                    ViewContext.Writer.Write("</div>");
+                });
+            })
+            .Bind(ViewData["article"] ?? templateContent.DataItem)
+            .Render();
+        });
+        #endregion
+
+        settings.DataBinding = (sender, e) =>
+        {
+            ((MVCxGridView)sender).ForceDataRowType(typeof(Vat));
+        };
+    });
+    if (ViewData["GenericError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["GenericError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()

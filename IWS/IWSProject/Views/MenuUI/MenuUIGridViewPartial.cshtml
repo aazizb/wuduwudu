@@ -1,0 +1,178 @@
+﻿@using IWSProject.Content
+@using IWSProject.Models
+@{
+    var grid = Html.DevExpress().GridView(settings =>
+    {
+        settings.Name = "MenuUIGridView";
+        settings.Caption = IWSLocalResource.menus;
+
+        settings.CallbackRouteValues = new { Controller = "MenuUI", Action = "MenuUIGridViewPartial" };
+
+        settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "MenuUI", Action = "MenuUIGridViewPartialAddNew" };
+        settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "MenuUI", Action = "MenuUIGridViewPartialUpdate" };
+        settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "MenuUI", Action = "MenuUIGridViewPartialDelete" };
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
+
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowNewButtonInHeader = true;
+        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowEditButton = true;
+
+        settings.KeyFieldName = "ID";
+
+        settings.Settings.ShowFilterRow = true;
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.Width = Unit.Percentage(100);
+        settings.Height = Unit.Percentage(300);
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 350;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+
+        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
+        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
+        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
+        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
+        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
+
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+        settings.SettingsPager.PageSize = 50;
+
+        settings.Columns.Add("ID").Caption = IWSLocalResource.id;
+        settings.Columns.Add("Name").Caption = IWSLocalResource.name;
+        settings.Columns.Add("Action").Caption = IWSLocalResource.action;
+        settings.Columns.Add("Controller").Caption = IWSLocalResource.controller;
+        settings.Columns.Add("Roles").Caption = IWSLocalResource.Roles;
+        settings.Columns.Add("Parent").Caption = IWSLocalResource.parent;
+        settings.Columns.Add("MenuOrder").Caption = IWSLocalResource.menuorder;
+
+        #region Template Edit
+        settings.SetEditFormTemplateContent(templateContent =>
+        {
+            var editItem = ViewData["menus"] != null ? ViewData["menus"] : templateContent.DataItem;
+
+            Html.DevExpress().FormLayout(formLayoutSettings =>
+            {
+                formLayoutSettings.Name = "MenuUIViewEdit";
+                formLayoutSettings.Width = Unit.Percentage(100);
+                formLayoutSettings.ColCount = 2;
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "Name";
+                    i.Caption = IWSLocalResource.name;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "Action";
+                    i.Caption = IWSLocalResource.action;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "Controller";
+                    i.Caption = IWSLocalResource.controller;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "Roles";
+                    i.Caption = IWSLocalResource.Roles;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "Parent";
+                    i.Caption = IWSLocalResource.parent;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "MenuOrder";
+                    i.Caption = IWSLocalResource.menuorder;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.ShowCaption = DefaultBoolean.False;
+                }).SetNestedContent(() =>
+                {
+                    ViewContext.Writer.Write("<div style='float:right'>");
+
+                    Html.DevExpress().Button(
+                btnSettings =>
+                {
+                    btnSettings.Name = "btnUpdate";
+                    btnSettings.Text = IWSLocalResource.btnUpdate;
+                    btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                    btnSettings.ClientSideEvents.Click = "function(s, e){ MenuUIGridView.UpdateEdit(); }";
+                }).Render();
+
+                    Html.DevExpress().Button(
+                btnSettings =>
+                {
+                    btnSettings.Name = "btnCancel";
+                    btnSettings.Text = IWSLocalResource.btnCancel;
+                    btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                    btnSettings.ClientSideEvents.Click = "function(s, e){ MenuUIGridView.CancelEdit(); }";
+                }).Render();
+                    ViewContext.Writer.Write("</div>");
+                });
+            })
+            .Bind(ViewData["menus"] ?? templateContent.DataItem)
+            .Render();
+        });
+        #endregion
+
+        settings.DataBinding = (sender, e) =>
+        {
+            ((MVCxGridView)sender).ForceDataRowType(typeof(Stock));
+        };
+    });
+    if (ViewData["GenericError"] != null)
+    {
+        grid.SetEditErrorText((string)ViewData["GenericError"]);
+    }
+}
+@grid.Bind(Model).GetHtml()
+

@@ -1,0 +1,67 @@
+﻿@using IWSProject.Models
+@using IWSProject.Content
+
+    @Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "ValidateBLGridView";
+    settings.Caption = IWSLocalResource.Accounting;
+
+    settings.CallbackRouteValues = new { Controller = "Accounting", Action = "ValidateBLPartialView" };
+
+    settings.KeyFieldName = "ItemID";
+
+    settings.Settings.ShowGroupPanel = true;
+    settings.SettingsBehavior.AllowFocusedRow = true;
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsPager.PageSize = 32;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+    settings.Settings.VerticalScrollableHeight = 350;
+    settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+    settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+    settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+    settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+    settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+    settings.Columns.Add("ItemID").Caption = IWSLocalResource.item;
+    settings.Columns.Add("DueDate").Caption = IWSLocalResource.duedate;
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "SupplierID";
+        column.Caption = IWSLocalResource.supplier;
+
+        column.EditorProperties().ComboBox(combo =>
+        {
+            combo.TextField = "Name";
+            combo.ValueField = "id";
+            combo.ValueType = typeof(string);
+            combo.DataSource = IWSLookUp.GetSuppliers();
+            combo.Columns.Add("id").Caption = IWSLocalResource.id;
+            combo.Columns.Add("name").Caption = IWSLocalResource.supplier;
+            combo.TextFormatString = "{0}-{1}";
+        });
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "CompanyID";
+        column.Caption = IWSLocalResource.company;
+
+        column.EditorProperties().ComboBox(combo =>
+        {
+            combo.TextField = "Name";
+            combo.ValueField = "id";
+            combo.ValueType = typeof(string);
+            combo.DataSource = IWSLookUp.GetSuppliers();
+            combo.Columns.Add("id").Caption = IWSLocalResource.id;
+            combo.Columns.Add("name").Caption = IWSLocalResource.company;
+            combo.TextFormatString = "{0}-{1}";
+        });
+    });
+
+}).Bind(Model).GetHtml()
+
