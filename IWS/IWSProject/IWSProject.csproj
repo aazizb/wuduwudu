@@ -544,7 +544,7 @@
     <Content Include="Views\Companies\Index.cshtml" />
     <Content Include="Views\Companies\CompaniesGridViewPartial.cshtml" />
     <Content Include="Views\Stocks\Index.cshtml" />
-    <Content Include="Views\Stocks\StocksGridViewPartial.cshtml" />
+    <Content Include="Views\Stocks\StocksPartialView.cshtml" />
     <Content Include="Views\MenuUI\Index.cshtml" />
     <Content Include="Views\MenuUI\MenuUIGridViewPartial.cshtml" />
     <Content Include="Views\Shared\HeaderMenuPartialView.cshtml" />
@@ -558,9 +558,9 @@
     <Content Include="Views\Account\UsersList.cshtml" />
     <Content Include="Views\Accounting\Index.cshtml" />
     <Content Include="Views\Accounting\ValidateBLPartialView.cshtml" />
-    <Content Include="Views\Accounting\AccountBalanceView.cshtml" />
-    <Content Include="Views\Accounting\StockView.cshtml" />
     <Content Include="Views\Home\GoodReceiving.cshtml" />
+    <Content Include="Views\Balance\Index.cshtml" />
+    <Content Include="Views\Balance\AccountBalancePartialView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -602,6 +602,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\AccountingController.cs" />
     <Compile Include="Controllers\ArticlesController.cs" />
+    <Compile Include="Controllers\BalanceController.cs" />
     <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\BanksController.cs" />

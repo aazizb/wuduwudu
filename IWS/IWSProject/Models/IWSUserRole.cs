@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-
+﻿
 namespace IWSProject.Models
 {
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
     public class IWSUsers
     {
         [Key]
@@ -17,14 +17,12 @@ namespace IWSProject.Models
         public string PhoneNumber { get; set; }
         public IEnumerable<IWSRole> Roles { get; set; }
     }
-
     public class IWSRole
     {
         [Key]
         [Display(Name = "Role Name")]
         public string RoleName { get; set; }
     }
-
     public class IWSUserRoleModel
     {
         [Key]

@@ -1,1 +1,3 @@
-﻿@Html.Action("StocksGridViewPartial")
+﻿@using IWSProject.Models
+@model List<StockViewModel>
+@Html.Partial("StocksPartialView", Model)

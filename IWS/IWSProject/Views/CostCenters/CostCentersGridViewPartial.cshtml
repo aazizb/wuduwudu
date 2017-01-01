@@ -14,11 +14,15 @@
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = Unit.Pixel(120);
         settings.CommandColumn.ShowNewButtonInHeader = true;
         settings.CommandColumn.ShowDeleteButton = true;
         settings.CommandColumn.ShowEditButton = true;
 
         settings.KeyFieldName = "id";
+        settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
+        settings.SettingsCommandButton.EditButton.Image.IconID = IconID.ActionsEdit16x16devav;
+        settings.SettingsCommandButton.DeleteButton.Image.IconID = IconID.ActionsDeletelist16x16;
 
         settings.Settings.ShowFilterRow = true;
         settings.SettingsBehavior.ConfirmDelete = true;
@@ -48,7 +52,7 @@
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("name").Caption = IWSLocalResource.name;
-        settings.Columns.Add("modelid").Caption = IWSLocalResource.modelid;
+        //settings.Columns.Add("modelid").Caption = IWSLocalResource.modelid;
         settings.Columns.Add("description").Caption = IWSLocalResource.description;
 
         #region Template Edit
@@ -121,6 +125,7 @@
                     btnSettings.Name = "btnUpdate";
                     btnSettings.Text = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ CostCentersGridView.UpdateEdit(); }";
                 }).Render();
 
@@ -130,6 +135,7 @@
                     btnSettings.Name = "btnCancel";
                     btnSettings.Text = IWSLocalResource.btnCancel;
                     btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                    btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ CostCentersGridView.CancelEdit(); }";
                 }).Render();
                     ViewContext.Writer.Write("</div>");

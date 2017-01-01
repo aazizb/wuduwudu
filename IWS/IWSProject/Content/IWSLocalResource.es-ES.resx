@@ -465,4 +465,10 @@
   <data name="AveragePrice" xml:space="preserve">
     <value>Precio Promedio</value>
   </data>
+  <data name="StockAndStore" xml:space="preserve">
+    <value>Store And Stock</value>
+  </data>
+  <data name="PeriodicAccountBalance" xml:space="preserve">
+    <value>Periodic Account Balance es-ES</value>
+  </data>
 </root>

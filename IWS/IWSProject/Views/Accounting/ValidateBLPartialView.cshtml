@@ -10,6 +10,9 @@
 
     settings.KeyFieldName = "ItemID";
 
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+
     settings.Settings.ShowGroupPanel = true;
     settings.SettingsBehavior.AllowFocusedRow = true;
 
@@ -26,14 +29,28 @@
     settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
     settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
 
-    settings.Columns.Add("ItemID").Caption = IWSLocalResource.item;
-    settings.Columns.Add("DueDate").Caption = IWSLocalResource.duedate;
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "ItemID";
+        column.Caption = IWSLocalResource.item;
+        column.Width = Unit.Pixel(85);
+    });
 
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "DueDate";
+        column.Caption = IWSLocalResource.duedate;
+        column.Width = Unit.Pixel(85);
+        column.EditorProperties().TextBox(textBox =>
+        {
+            textBox.DisplayFormatString = "yyyy-MM-dd";
+        });
+    });
     settings.Columns.Add(column =>
     {
         column.FieldName = "SupplierID";
         column.Caption = IWSLocalResource.supplier;
-
+        column.Width = Unit.Pixel(300);
         column.EditorProperties().ComboBox(combo =>
         {
             combo.TextField = "Name";
@@ -60,6 +77,16 @@
             combo.Columns.Add("id").Caption = IWSLocalResource.id;
             combo.Columns.Add("name").Caption = IWSLocalResource.company;
             combo.TextFormatString = "{0}-{1}";
+        });
+    });
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "TotalItem";
+        column.Caption = IWSLocalResource.amount;
+        column.EditorProperties().TextBox(textBox =>
+        {
+            textBox.DisplayFormatString = "c";
         });
     });
 

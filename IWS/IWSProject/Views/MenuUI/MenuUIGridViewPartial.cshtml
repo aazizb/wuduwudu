@@ -14,14 +14,23 @@
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = Unit.Pixel(120);
         settings.CommandColumn.ShowNewButtonInHeader = true;
         settings.CommandColumn.ShowDeleteButton = true;
         settings.CommandColumn.ShowEditButton = true;
 
+        settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
+        settings.SettingsCommandButton.EditButton.Image.IconID = IconID.ActionsEdit16x16devav;
+        settings.SettingsCommandButton.DeleteButton.Image.IconID = IconID.ActionsDeletelist16x16;
+
+
         settings.KeyFieldName = "ID";
 
         settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowFilterRowMenu = true;
         settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
@@ -132,6 +141,7 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
@@ -145,6 +155,7 @@
                     btnSettings.Name = "btnUpdate";
                     btnSettings.Text = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ MenuUIGridView.UpdateEdit(); }";
                 }).Render();
 
@@ -154,6 +165,7 @@
                     btnSettings.Name = "btnCancel";
                     btnSettings.Text = IWSLocalResource.btnCancel;
                     btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                    btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ MenuUIGridView.CancelEdit(); }";
                 }).Render();
                     ViewContext.Writer.Write("</div>");

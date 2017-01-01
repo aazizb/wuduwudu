@@ -14,6 +14,7 @@
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = Unit.Pixel(120);
         settings.CommandColumn.ShowNewButtonInHeader = true;
         settings.CommandColumn.ShowDeleteButton = true;
         settings.CommandColumn.ShowEditButton = true;
@@ -75,11 +76,13 @@
         {
             column.FieldName = "id";
             column.Caption = IWSLocalResource.id;
+            column.Width = Unit.Pixel(60);
         });
         settings.Columns.Add(column =>
         {
             column.FieldName = "oid";
             column.Caption = IWSLocalResource.oid;
+            column.Width = Unit.Pixel(60);
         });
         settings.Columns.Add(column =>
         {

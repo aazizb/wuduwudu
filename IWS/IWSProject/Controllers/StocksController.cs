@@ -1,9 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Web.Mvc;
-using DevExpress.Web.Mvc;
 using IWSProject.Models;
-using IWSProject.Content;
+
 namespace IWSProject.Controllers
 {
     [Authorize]
@@ -14,87 +12,23 @@ namespace IWSProject.Controllers
         // GET: Stocks
         public ActionResult Index()
         {
-            return View(db.Stocks);
+            var SV = IWSLookUp.GetStock();
+            var model = new List<StockViewModel>();
+            foreach (StockViewModel item in SV)
+            {
+                model.Add(item);
+            }
+            return View(model);
         }
-
-        [ValidateInput(false)]
-        public ActionResult StocksGridViewPartial()
+        public ActionResult StocksPartialView()
         {
-            return PartialView("StocksGridViewPartial", db.Stocks);
-        }
-
-        [HttpPost, ValidateInput(false)]
-        public ActionResult StocksGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Stock item)
-        {
-            var model = db.Stocks;
-            ViewData["stock"] = item;
-            if (ModelState.IsValid)
+            var SV = IWSLookUp.GetStock();
+            var model = new List<StockViewModel>();
+            foreach (StockViewModel item in SV)
             {
-                try
-                {
-                    model.InsertOnSubmit(item);
-
-                    db.SubmitChanges();
-                }
-                catch (Exception e)
-                {
-                    ViewData["GenericError"] = e.Message;
-                }
+                model.Add(item);
             }
-            else
-            {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
-            }
-            return PartialView("StocksGridViewPartial", model);
-        }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult StocksGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Stock item)
-        {
-            var model = db.Stocks;
-            ViewData["stock"] = item;
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    var modelItem = model.FirstOrDefault(it => it.id == item.id);
-                    if (modelItem != null)
-                    {
-                        this.UpdateModel(modelItem);
-
-                        db.SubmitChanges();
-                    }
-                }
-                catch (Exception e)
-                {
-                    ViewData["GenericError"] = e.Message;
-                }
-            }
-            else
-            {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
-            }
-            return PartialView("StocksGridViewPartial", model);
-        }
-        [HttpPost, ValidateInput(false)]
-        public ActionResult StocksGridViewPartialDelete(string id)
-        {
-            var model = db.Stocks;
-            if (id != null)
-            {
-                try
-                {
-                    var item = model.FirstOrDefault(it => it.id == id);
-                    if (item != null)
-                        model.DeleteOnSubmit(item);
-
-                    db.SubmitChanges();
-                }
-                catch (Exception e)
-                {
-                    ViewData["GenericError"] = e.Message;
-                }
-            }
-            return PartialView("StocksGridViewPartial", model);
+            return PartialView(model);
         }
     }
 }

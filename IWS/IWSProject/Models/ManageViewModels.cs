@@ -66,16 +66,16 @@ namespace IWSProject.Models
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
 
-    public class ValidadeBLViewModel
+    public class ValidateBLViewModel
     {
         [Key]
         public int ItemID { get; set; }
         public DateTime DueDate { get; set; }
-        public string CompanyID { get; set; }
         public string SupplierID { get; set; }
+        public string CompanyID { get; set; }
         public bool IsValidated { get; set; }
+        public decimal TotalItem { get; set; }
     }
-
     public class AccountBalanceViewModel
     {
         [Key]
@@ -87,11 +87,10 @@ namespace IWSProject.Models
     public class StockViewModel
     {
         [Key]
-        public string ItemID { get; set; }
-        public string StoreID { get; set; }
+        public string ItemName { get; set; }
+        public string StoreName { get; set; }
         public int Quantity { get; set; }
-        public decimal Price { get; set; }
+        public string ItemUnit { get; set; }
         public decimal AveragePrice { get; set; }
-        public decimal SalePrice { get; set; }
     }
 }

@@ -736,6 +736,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Periodic Account Balance.
+        /// </summary>
+        public static string PeriodicAccountBalance {
+            get {
+                return ResourceManager.GetString("PeriodicAccountBalance", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone.
         /// </summary>
         public static string PhoneNumber {
@@ -799,7 +808,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Quantiy.
+        ///   Looks up a localized string similar to Quantity.
         /// </summary>
         public static string quantity {
             get {
@@ -939,6 +948,15 @@ namespace IWSProject.Content {
         public static string stockaccountid {
             get {
                 return ResourceManager.GetString("stockaccountid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Store And Stock.
+        /// </summary>
+        public static string StockAndStore {
+            get {
+                return ResourceManager.GetString("StockAndStore", resourceCulture);
             }
         }
         

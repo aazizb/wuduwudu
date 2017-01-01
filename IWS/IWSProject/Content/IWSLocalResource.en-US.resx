@@ -160,7 +160,7 @@
     <value>Price</value>
   </data>
   <data name="quantity" xml:space="preserve">
-    <value>Quantiy</value>
+    <value>Quantity</value>
   </data>
   <data name="store" xml:space="preserve">
     <value>Store</value>
@@ -458,5 +458,11 @@
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Average Price</value>
+  </data>
+  <data name="StockAndStore" xml:space="preserve">
+    <value>Store And Stock</value>
+  </data>
+  <data name="PeriodicAccountBalance" xml:space="preserve">
+    <value>Periodic Account Balance</value>
   </data>
 </root>

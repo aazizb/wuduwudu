@@ -124,7 +124,6 @@
             }).OrderBy(o => o.Name).ToList();
             return company;
         }
-
         public static IEnumerable GetAccounts()
         {
             var account = IWSEntities.Accounts.AsEnumerable().Select(item => new
@@ -134,44 +133,53 @@
             }).OrderBy(o => o.Id);
             return account;
         }
-
         public static IEnumerable GetBL(bool IsValidated) 
         {
-            List<ValidadeBLViewModel> BL = (from bl in IWSEntities.GoodReceivings
-                                             where bl.IsValidated==IsValidated
-                                            select new ValidadeBLViewModel
-                                            {
-                                                ItemID = bl.id,
-                                                DueDate =Convert.ToDateTime(bl.ItemDate),
-                                                CompanyID = "1000",
-                                                SupplierID = bl.account,
-                                                IsValidated = Convert.ToBoolean(bl.IsValidated)
-                                            }).OrderBy(o => o.ItemID).ToList();
+            List<ValidateBLViewModel> BL = (from LineGoodReceiving in IWSEntities.LineGoodReceivings
+                                           where
+                                             LineGoodReceiving.GoodReceiving.IsValidated == false
+                                           group new { LineGoodReceiving.GoodReceiving, LineGoodReceiving, LineGoodReceiving.Article.Vat } by new
+                                           {
+                                               LineGoodReceiving.GoodReceiving.id,
+                                               ItemDate = (DateTime?)LineGoodReceiving.GoodReceiving.ItemDate,
+                                               LineGoodReceiving.GoodReceiving.account
+                                           } into g
+                                           orderby
+                                             g.Key.id
+                                           select new ValidateBLViewModel()
+                                           {
+                                               ItemID = g.Key.id,
+                                               DueDate = Convert.ToDateTime(g.Key.ItemDate),
+                                               CompanyID = "1000",
+                                               SupplierID = g.Key.account,
+                                               TotalItem = Convert.ToDecimal(g.Sum(p => (double)p.LineGoodReceiving.price * (double)p.LineGoodReceiving.quantity * (1 + p.LineGoodReceiving.Article.Vat.PVat)))
+                                           }).OrderBy(o => o.ItemID).ToList(); 
+
             return BL;
         }
         public static IEnumerable GetAccountBalance()
         {
-            List<AccountBalanceViewModel> AB = (from ab in IWSEntities.PeriodicAccountBalances
-                                                select new AccountBalanceViewModel
+            List<AccountBalanceViewModel> AB = (from PeriodicAccountBalance in IWSEntities.PeriodicAccountBalances
+                                                select new AccountBalanceViewModel()
                                                 {
-                                                    AccountID=ab.AccountId,
-                                                    Periode=ab.Periode,
-                                                    Debit=ab.Debit,
-                                                    Credit=ab.Credit
+                                                    AccountID = (PeriodicAccountBalance.Account.id + "-" + 
+                                                                        PeriodicAccountBalance.Account.name),
+                                                    Periode = PeriodicAccountBalance.Periode,
+                                                    Debit = PeriodicAccountBalance.Debit,
+                                                    Credit = PeriodicAccountBalance.Credit
                                                 }).ToList();
             return AB;
         }
         public static IEnumerable GetStock()
         {
             List<StockViewModel> SV = (from Stock in IWSEntities.Stocks
-                                       select new StockViewModel
+                                       select new StockViewModel()
                                        {
-                                           ItemID = Stock.Article.name,
-                                           StoreID = Stock.Store.name,
+                                           ItemName = (Stock.Article.id + "-" + Stock.Article.name),
+                                           StoreName = (Stock.Store.id + "-" + Stock.Store.name),
                                            Quantity = Convert.ToInt32(Stock.quantity),
-                                           Price = (decimal)Stock.Article.price,
-                                           AveragePrice = (decimal)Stock.Article.avgprice,
-                                           SalePrice = (decimal)Stock.Article.salesprice
+                                           ItemUnit = Stock.Article.packunit,
+                                           AveragePrice = Convert.ToDecimal(Stock.Article.avgprice)
                                        }).ToList();
             return SV;
         }
@@ -195,7 +203,6 @@
         {
             return IWSEntities.Articles.FirstOrDefault(c => c.id == id).description;
         }
-
         public static IEnumerable GetVAT()
         {
             var vat = IWSEntities.Vats.AsEnumerable().Select(item => new

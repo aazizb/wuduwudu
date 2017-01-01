@@ -14,6 +14,9 @@
         settings.Settings.ShowGroupPanel = true;
         settings.SettingsBehavior.AllowFocusedRow = true;
 
+        settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowFilterRowMenu = true;
+
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.PageSize = 32;
         settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
@@ -23,7 +26,7 @@
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
 
         settings.ClientSideEvents.RowClick =
-                                   string.Format("function(s, e) {{ OnRowClicked(s, e, '{0}'); }}", 
+                                   string.Format("function(s, e) {{ OnRowClicked(s, e, '{0}'); }}",
                                    Url.Action("UserRoles"));
 
         settings.Columns.Add("FirstName").Caption = IWSLocalResource.FirstName;

@@ -18,13 +18,13 @@ namespace IWSProject.Controllers
         [ValidateInput(false)]
         public ActionResult MasterGridViewPartial()
         {
-            return PartialView("MasterGridViewPartial", db.GoodReceivings.ToList());
+            return PartialView("MasterGridViewPartial", db.GoodReceivings.ToList().OrderByDescending(o => o.id));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Models.GoodReceiving item)
         {
             var model = db.GoodReceivings;
-
+            item.IsValidated = false;
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {

@@ -14,13 +14,19 @@
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
+        settings.CommandColumn.Width = Unit.Pixel(120);
         settings.CommandColumn.ShowNewButtonInHeader = true;
         settings.CommandColumn.ShowDeleteButton = true;
         settings.CommandColumn.ShowEditButton = true;
 
+        settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
+        settings.SettingsCommandButton.EditButton.Image.IconID = IconID.ActionsEdit16x16devav;
+        settings.SettingsCommandButton.DeleteButton.Image.IconID = IconID.ActionsDeletelist16x16;
+
         settings.KeyFieldName = "id";
 
         settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowFilterRowMenu = true;
         settings.SettingsBehavior.ConfirmDelete = true;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
@@ -48,7 +54,7 @@
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("name").Caption = IWSLocalResource.name;
-        settings.Columns.Add("modelid").Caption = IWSLocalResource.modelid;
+        //settings.Columns.Add("modelid").Caption = IWSLocalResource.modelid;
         settings.Columns.Add("description").Caption = IWSLocalResource.description;
         settings.Columns.Add("groupid").Caption = IWSLocalResource.groupid;
 
@@ -60,10 +66,10 @@
             column.EditorProperties().DateEdit(d =>
             {
                 d.EditFormatString = "MM/dd/yyyy";
-                d.NullDisplayText = "MM/dd/yyyy";
+                d.NullDisplayText = "yyyy-MM-dd";
                 d.EditFormat = EditFormat.Custom;
                 d.Width = Unit.Percentage(100);
-                d.DisplayFormatString = "MM/dd/yyyy";
+                d.DisplayFormatString = "yyyy-MM-dd";
                 d.DisplayFormatInEditMode = true;
                 d.AllowUserInput = true;
                 d.AllowMouseWheel = true;
@@ -78,10 +84,10 @@
             column.EditorProperties().DateEdit(d =>
             {
                 d.EditFormatString = "MM/dd/yyyy";
-                d.NullDisplayText = "MM/dd/yyyy";
+                d.NullDisplayText = "yyyy-MM-dd";
                 d.EditFormat = EditFormat.Custom;
                 d.Width = Unit.Percentage(100);
-                d.DisplayFormatString = "MM/dd/yyyy";
+                d.DisplayFormatString = "yyyy-MM-dd";
                 d.DisplayFormatInEditMode = true;
                 d.AllowUserInput = true;
                 d.AllowMouseWheel = true;
@@ -93,160 +99,162 @@
             column.Caption = IWSLocalResource.balance;
             column.EditorProperties().SpinEdit(p =>
             {
-                p.DisplayFormatString = "c";
+                p.DisplayFormatString = "C";
                 p.DisplayFormatInEditMode = true;
                 p.SpinButtons.ShowLargeIncrementButtons = true;
                 p.Width = Unit.Percentage(100);
             });
         });
 
-    #region Template Edit
-    settings.SetEditFormTemplateContent(templateContent =>
-    {
-        var editItem = ViewData["accounts"] != null ? ViewData["accounts"] : templateContent.DataItem;
-
-        Html.DevExpress().FormLayout(formLayoutSettings =>
+        #region Template Edit
+        settings.SetEditFormTemplateContent(templateContent =>
         {
-            formLayoutSettings.Name = "AccountsViewEdit";
-            formLayoutSettings.Width = Unit.Percentage(100);
-            formLayoutSettings.ColCount = 3;
-            formLayoutSettings.Items.Add(i =>
-            {
-                i.FieldName = "id";
-                i.Caption = IWSLocalResource.id;
-                i.NestedExtension().TextBox(s =>
-                {
-                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                    s.ShowModelErrors = true;
-                    s.Width = Unit.Percentage(100);
-                });
-            });
+            var editItem = ViewData["accounts"] != null ? ViewData["accounts"] : templateContent.DataItem;
 
-            formLayoutSettings.Items.Add(i =>
+            Html.DevExpress().FormLayout(formLayoutSettings =>
             {
-                i.FieldName = "name";
-                i.Caption = IWSLocalResource.name;
-                i.NestedExtension().TextBox(s =>
+                formLayoutSettings.Name = "AccountsViewEdit";
+                formLayoutSettings.Width = Unit.Percentage(100);
+                formLayoutSettings.ColCount = 3;
+                formLayoutSettings.Items.Add(i =>
                 {
-                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                    s.ShowModelErrors = true;
-                    s.Width = Unit.Percentage(100);
+                    i.FieldName = "id";
+                    i.Caption = IWSLocalResource.id;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
                 });
-            });
 
-            formLayoutSettings.Items.Add(i =>
-            {
-                i.FieldName = "modelid";
-                i.Caption = IWSLocalResource.modelid;
-                i.NestedExtension().TextBox(s =>
+                formLayoutSettings.Items.Add(i =>
                 {
-                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                    s.ShowModelErrors = true;
-                    s.Width = Unit.Percentage(100);
+                    i.FieldName = "name";
+                    i.Caption = IWSLocalResource.name;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
                 });
-            });
-            formLayoutSettings.Items.Add(i =>
-            {
-                i.FieldName = "description";
-                i.Caption = IWSLocalResource.description;
-                i.NestedExtension().Memo(s =>
-                {
-                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                    s.ShowModelErrors = true;
-                    s.Width = Unit.Percentage(100);
-                });
-            });
 
-            formLayoutSettings.Items.Add(i =>
-            {
-                i.FieldName = "groupid";
-                i.Caption = IWSLocalResource.groupid;
-                i.NestedExtension().TextBox(s =>
+                formLayoutSettings.Items.Add(i =>
                 {
-                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                    s.ShowModelErrors = true;
-                    s.Width = Unit.Percentage(100);
+                    i.FieldName = "modelid";
+                    i.Caption = IWSLocalResource.modelid;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
                 });
-            });
-            formLayoutSettings.Items.Add(i =>
-            {
-                i.FieldName = "dateofopen";
-                i.Caption = IWSLocalResource.dateofopen;
-                i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
-                i.NestedExtension().DateEdit(d =>
+                formLayoutSettings.Items.Add(i =>
                 {
-                    d.Properties.UseMaskBehavior = true;
-                    d.Properties.EditFormat = EditFormat.Date;
-                    d.Properties.EditFormatString = "d";
-                    d.Properties.Width = Unit.Percentage(100);
-                    d.Properties.AllowUserInput = true;
-                    d.Properties.AllowMouseWheel = true;
+                    i.FieldName = "description";
+                    i.Caption = IWSLocalResource.description;
+                    i.NestedExtension().Memo(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
                 });
-            });
-            formLayoutSettings.Items.Add(i =>
-            {
-                i.FieldName = "dateofclose";
-                i.Caption = IWSLocalResource.dateofclose;
-                i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
-                i.NestedExtension().DateEdit(d =>
-                {
-                    d.Properties.UseMaskBehavior = true;
-                    d.Properties.EditFormat = EditFormat.Date;
-                    d.Properties.EditFormatString = "d";
-                    d.Properties.Width = Unit.Percentage(100);
-                    d.Properties.AllowUserInput = true;
-                    d.Properties.AllowMouseWheel = true;
-                });
-            });
-            formLayoutSettings.Items.Add(i =>
-            {
-                i.FieldName = "balance";
-                i.Caption = IWSLocalResource.balance;
-                i.NestedExtension().SpinEdit(s =>
-                {
-                    s.Properties.DisplayFormatString = "C";
-                    s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                    s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
-                    s.Width = Unit.Percentage(100);
-                });
-            });
-            //formLayoutSettings.Items.AddEmptyItem();
-            formLayoutSettings.Items.Add(i =>
-            {
-                i.ShowCaption = DefaultBoolean.False;
-            }).SetNestedContent(() =>
-            {
-                ViewContext.Writer.Write("<div style='float:right'>");
 
-                Html.DevExpress().Button(
-            btnSettings =>
-            {
-                btnSettings.Name = "btnUpdate";
-                btnSettings.Text = IWSLocalResource.btnUpdate;
-                btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                btnSettings.ClientSideEvents.Click = "function(s, e){ AccountsGridView.UpdateEdit(); }";
-            }).Render();
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "groupid";
+                    i.Caption = IWSLocalResource.groupid;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "dateofopen";
+                    i.Caption = IWSLocalResource.dateofopen;
+                    i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+                    i.NestedExtension().DateEdit(d =>
+                    {
+                        d.Properties.UseMaskBehavior = true;
+                        d.Properties.EditFormat = EditFormat.Date;
+                        d.Properties.EditFormatString = "d";
+                        d.Properties.Width = Unit.Percentage(100);
+                        d.Properties.AllowUserInput = true;
+                        d.Properties.AllowMouseWheel = true;
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "dateofclose";
+                    i.Caption = IWSLocalResource.dateofclose;
+                    i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+                    i.NestedExtension().DateEdit(d =>
+                    {
+                        d.Properties.UseMaskBehavior = true;
+                        d.Properties.EditFormat = EditFormat.Date;
+                        d.Properties.EditFormatString = "d";
+                        d.Properties.Width = Unit.Percentage(100);
+                        d.Properties.AllowUserInput = true;
+                        d.Properties.AllowMouseWheel = true;
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "balance";
+                    i.Caption = IWSLocalResource.balance;
+                    i.NestedExtension().SpinEdit(s =>
+                    {
+                        s.Properties.DisplayFormatString = "C";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                //formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.ShowCaption = DefaultBoolean.False;
+                }).SetNestedContent(() =>
+                {
+                    ViewContext.Writer.Write("<div style='float:right'>");
 
-                Html.DevExpress().Button(
-            btnSettings =>
-            {
-                btnSettings.Name = "btnCancel";
-                btnSettings.Text = IWSLocalResource.btnCancel;
-                btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
-                btnSettings.ClientSideEvents.Click = "function(s, e){ AccountsGridView.CancelEdit(); }";
-            }).Render();
-                ViewContext.Writer.Write("</div>");
-            });
-        })
-        .Bind(ViewData["accounts"] ?? templateContent.DataItem)
-        .Render();
-    });
-    #endregion
+                    Html.DevExpress().Button(
+                btnSettings =>
+                {
+                    btnSettings.Name = "btnUpdate";
+                    btnSettings.Text = IWSLocalResource.btnUpdate;
+                    btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                    btnSettings.ClientSideEvents.Click = "function(s, e){ AccountsGridView.UpdateEdit(); }";
+                }).Render();
 
-    settings.DataBinding = (sender, e) =>
-    {
-        ((MVCxGridView)sender).ForceDataRowType(typeof(Account));
-    };
+                    Html.DevExpress().Button(
+                btnSettings =>
+                {
+                    btnSettings.Name = "btnCancel";
+                    btnSettings.Text = IWSLocalResource.btnCancel;
+                    btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                    btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
+                    btnSettings.ClientSideEvents.Click = "function(s, e){ AccountsGridView.CancelEdit(); }";
+                }).Render();
+                    ViewContext.Writer.Write("</div>");
+                });
+            })
+            .Bind(ViewData["accounts"] ?? templateContent.DataItem)
+            .Render();
+        });
+        #endregion
+
+        settings.DataBinding = (sender, e) =>
+        {
+            ((MVCxGridView)sender).ForceDataRowType(typeof(Account));
+        };
     });
     if (ViewData["GenericError"] != null)
     {

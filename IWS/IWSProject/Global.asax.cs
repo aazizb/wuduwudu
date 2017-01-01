@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -31,5 +33,24 @@ namespace IWSProject
             Exception exception = System.Web.HttpContext.Current.Server.GetLastError();
             //TODO: Handle Exception
         }
+        protected void Application_AcquireRequestState(object sender, EventArgs e)
+        {
+            if (Request.Cookies["Culture"] != null && !string.IsNullOrEmpty(Request.Cookies["Culture"].Value))
+            {
+                string culture = Request.Cookies["Culture"].Value;
+                CultureInfo ci = new CultureInfo(culture);
+                Thread.CurrentThread.CurrentUICulture = ci;
+                Thread.CurrentThread.CurrentCulture = ci;
+            }
+        }
+        ////how to specify a theme of DevExpress Extensions in Global.asax
+        //protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)
+        //{
+        //    DevExpress.Web.Mvc.DevExpressHelper.Theme = "Aqua";
+        //}
+        //protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)
+        //{
+        //    DevExpress.Web.ASPxWebControl.GlobalTheme = "Aqua";
+        //}
     }
 }
