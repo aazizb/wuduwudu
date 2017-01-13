@@ -33,6 +33,7 @@ namespace IWSProject
             Exception exception = System.Web.HttpContext.Current.Server.GetLastError();
             //TODO: Handle Exception
         }
+        //how to specify culture & uiculture in Global.asax
         protected void Application_AcquireRequestState(object sender, EventArgs e)
         {
             if (Request.Cookies["Culture"] != null && !string.IsNullOrEmpty(Request.Cookies["Culture"].Value))
@@ -43,14 +44,10 @@ namespace IWSProject
                 Thread.CurrentThread.CurrentCulture = ci;
             }
         }
-        ////how to specify a theme of DevExpress Extensions in Global.asax
-        //protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)
-        //{
-        //    DevExpress.Web.Mvc.DevExpressHelper.Theme = "Aqua";
-        //}
-        //protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)
-        //{
-        //    DevExpress.Web.ASPxWebControl.GlobalTheme = "Aqua";
-        //}
+        //how to specify a theme in Global.asax
+        protected void Application_PreRequestHandlerExecute(object sender, EventArgs e)
+        {
+            DevExpress.Web.Mvc.DevExpressHelper.Theme = "Office2010Blue";//"Aqua";// "PlasticBlue";//  "BlackGlass";// "RedWine";// "MulBerry";//"Glass";// "Material";// "Moderno";// "iOS";
+        }
     }
 }

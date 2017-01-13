@@ -34,12 +34,17 @@
 
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.PageSize = 24;
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
         settings.Settings.VerticalScrollableHeight = 350;
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
 
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+
+        settings.Styles.RowHotTrack.Cursor = "pointer";
+        settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
 
         settings.SettingsPager.Visible = true;
         settings.Settings.ShowGroupPanel = true;
@@ -115,16 +120,32 @@
                 d.NullDisplayText = "MM/dd/yyyy";
                 d.EditFormat = EditFormat.Custom;
                 d.Width = Unit.Percentage(100);
-                d.DisplayFormatString = "MM/dd/yyyy";
+                d.DisplayFormatString = "yyyy-MM-dd";
                 d.DisplayFormatInEditMode = true;
                 d.AllowUserInput = true;
                 d.AllowMouseWheel = true;
-
             });
         });
 
         settings.Columns.Add("text").Caption = IWSLocalResource.text;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Total";
+            column.Caption = IWSLocalResource.Total;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "c";
+        });
 
+        settings.CustomUnboundColumnData = (sender, e) =>
+        {
+            if (e.Column.FieldName == "Total")
+            {
+                decimal amount = Convert.ToDecimal(e.GetListSourceFieldValue("amount"));
+                e.Value = amount;
+            }
+        };
+        settings.Settings.ShowFooter = true;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
         #region Template
         settings.SetEditFormTemplateContent(templateContent =>
         {
@@ -201,10 +222,12 @@
                     i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
                     i.NestedExtension().DateEdit(d =>
                     {
-                        d.Properties.UseMaskBehavior = true;
-                        d.Properties.EditFormat = EditFormat.Date;
-                        d.Properties.EditFormatString = "d";
+                        d.Properties.EditFormatString = "MM/dd/yyyy";
+                        d.Properties.NullDisplayText = "MM/dd/yyyy";
+                        d.Properties.EditFormat = EditFormat.Custom;
                         d.Properties.Width = Unit.Percentage(100);
+                        d.Properties.DisplayFormatString = "yyyy-MM-dd";
+                        d.Properties.DisplayFormatInEditMode = true;
                         d.Properties.AllowUserInput = true;
                         d.Properties.AllowMouseWheel = true;
                     });

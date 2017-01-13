@@ -30,9 +30,15 @@
         settings.SettingsBehavior.ConfirmDelete = true;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+
+        settings.Styles.RowHotTrack.Cursor = "pointer";
+        settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
+
         settings.Width = Unit.Percentage(100);
         settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
         settings.Settings.VerticalScrollableHeight = 350;
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
@@ -50,7 +56,7 @@
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
-        settings.SettingsPager.PageSize = 50;
+        settings.SettingsPager.PageSize = 24;
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("name").Caption = IWSLocalResource.name;
@@ -115,6 +121,7 @@
             {
                 formLayoutSettings.Name = "AccountsViewEdit";
                 formLayoutSettings.Width = Unit.Percentage(100);
+                //formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 3;
                 formLayoutSettings.Items.Add(i =>
                 {

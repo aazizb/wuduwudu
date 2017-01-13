@@ -34,7 +34,7 @@
 
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.PageSize = 24;
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
         settings.Settings.VerticalScrollableHeight = 350;
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
@@ -45,6 +45,12 @@
         settings.Settings.ShowGroupPanel = true;
         settings.Settings.ShowFilterRow = true;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
+
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+
+        settings.Styles.RowHotTrack.Cursor = "pointer";
+        settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
 
         settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
         settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
@@ -102,7 +108,21 @@
             });
         });
 
-        settings.Columns.Add("vat").Caption = IWSLocalResource.vat;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "VatCode";
+            column.Caption = IWSLocalResource.vatcode;
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetVAT();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.vat;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
 
         settings.Columns.Add(column =>
         {
@@ -115,16 +135,33 @@
                 d.NullDisplayText = "MM/dd/yyyy";
                 d.EditFormat = EditFormat.Custom;
                 d.Width = Unit.Percentage(100);
-                d.DisplayFormatString = "MM/dd/yyyy";
+                d.DisplayFormatString = "yyyy-MM-dd";
                 d.DisplayFormatInEditMode = true;
                 d.AllowUserInput = true;
                 d.AllowMouseWheel = true;
-
             });
         });
 
         settings.Columns.Add("text").Caption = IWSLocalResource.text;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Total";
+            column.Caption = IWSLocalResource.Total;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "c";
+        });
 
+        settings.CustomUnboundColumnData = (sender, e) =>
+        {
+            if (e.Column.FieldName == "Total")
+            {
+                decimal price = Convert.ToDecimal(e.GetListSourceFieldValue("price"));
+                decimal quantity = Convert.ToDecimal(e.GetListSourceFieldValue("quantity"));
+                e.Value = price * quantity;
+            }
+        };
+        settings.Settings.ShowFooter = true;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
         #region Template
         settings.SetEditFormTemplateContent(templateContent =>
         {
@@ -200,11 +237,20 @@
 
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "vat";
+                    i.FieldName = "VatCode";
                     i.Caption = IWSLocalResource.vat;
-                    i.NestedExtension().TextBox(e =>
+                    i.NestedExtension().ComboBox(s =>
                     {
-                        e.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetVAT();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.vat;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
                     });
                 });
 
@@ -215,10 +261,12 @@
                     i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
                     i.NestedExtension().DateEdit(d =>
                     {
-                        d.Properties.UseMaskBehavior = true;
-                        d.Properties.EditFormat = EditFormat.Date;
-                        d.Properties.EditFormatString = "d";
+                        d.Properties.EditFormatString = "MM/dd/yyyy";
+                        d.Properties.NullDisplayText = "MM/dd/yyyy";
+                        d.Properties.EditFormat = EditFormat.Custom;
                         d.Properties.Width = Unit.Percentage(100);
+                        d.Properties.DisplayFormatString = "yyyy-MM-dd";
+                        d.Properties.DisplayFormatInEditMode = true;
                         d.Properties.AllowUserInput = true;
                         d.Properties.AllowMouseWheel = true;
                     });

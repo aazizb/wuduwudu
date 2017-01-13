@@ -24,7 +24,9 @@ namespace IWSProject.Controllers
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] InventoryInvoice item)
         {
             var model = db.InventoryInvoices;
-
+            item.IsValidated = false;
+            item.modelid = 110;
+            item.oid = 0;
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
@@ -103,9 +105,8 @@ namespace IWSProject.Controllers
         public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LineInventoryInvoice line, int transId)
         {
             var model = db.LineInventoryInvoices;
-
+            line.modelid = 111;
             line.transid = transId;
-
             ViewData["lineInventory"] = line;
             if (ModelState.IsValid)
             {
@@ -186,7 +187,7 @@ namespace IWSProject.Controllers
         {
             return Json(IWSLookUp.GetQttyUnit(selectedItemIndex));
         }
-        public ActionResult Vat(string selectedItemIndex)
+        public ActionResult VATCode(string selectedItemIndex)
         {
             return Json(IWSLookUp.GetVatCode(selectedItemIndex));
         }

@@ -277,7 +277,7 @@
     <value>Ligne Facture Fournisseur</value>
   </data>
   <data name="expenseaccountid" xml:space="preserve">
-    <value>Expensive Account fr-FR</value>
+    <value>Expense Account fr-FR</value>
   </data>
   <data name="inputvataccountid" xml:space="preserve">
     <value>Input VAT Account fr-FR</value>
@@ -470,5 +470,23 @@
   </data>
   <data name="PeriodicAccountBalance" xml:space="preserve">
     <value>Periodic Account Balance fr-FR</value>
+  </data>
+  <data name="TotHVAT" xml:space="preserve">
+    <value>Total HTVA</value>
+  </data>
+  <data name="TotVAT" xml:space="preserve">
+    <value>Total TVA</value>
+  </data>
+  <data name="PartNumber" xml:space="preserve">
+    <value>Nº Pièce</value>
+  </data>
+  <data name="PartType" xml:space="preserve">
+    <value>Type Document</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Count fr-FR</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total fr-FR</value>
   </data>
 </root>

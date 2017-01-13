@@ -12,11 +12,11 @@
             }
         });
         $.ajax({
-            url: '@Url.Action("Vat", "InventoryInvoices")',
+            url: '@Url.Action("VATCode", "InventoryInvoices")',
             type: "POST",
             data: { selectedItemIndex: s.GetValue() },
             success: function (data) {
-                vat.SetText(data);
+                VATCode.SetText(data);
             },
             error: function (xhr, textStatus, errorThrown) {
                 alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);

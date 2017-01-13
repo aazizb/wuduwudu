@@ -20,6 +20,12 @@
         settings.CommandColumn.ShowEditButton = true;
 
         settings.KeyFieldName = "id";
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+
+        settings.Styles.RowHotTrack.Cursor = "pointer";
+        settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
+
         settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
         settings.SettingsCommandButton.EditButton.Image.IconID = IconID.ActionsEdit16x16devav;
         settings.SettingsCommandButton.DeleteButton.Image.IconID = IconID.ActionsDeletelist16x16;
@@ -30,7 +36,7 @@
 
         settings.Width = Unit.Percentage(100);
         settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
         settings.Settings.VerticalScrollableHeight = 350;
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
@@ -48,7 +54,7 @@
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
-        settings.SettingsPager.PageSize = 50;
+        settings.SettingsPager.PageSize = 24;
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("name").Caption = IWSLocalResource.name;

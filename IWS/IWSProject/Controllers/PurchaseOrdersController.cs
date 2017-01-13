@@ -191,7 +191,7 @@ namespace IWSProject.Controllers
         {
             return Json(IWSLookUp.GetQttyUnit(selectedItemIndex));
         }
-        public ActionResult Vat(string selectedItemIndex)
+        public ActionResult VatCode(string selectedItemIndex)
         {
             return Json(IWSLookUp.GetVatCode(selectedItemIndex));
         }

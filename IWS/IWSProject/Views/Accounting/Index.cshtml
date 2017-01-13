@@ -1,6 +1,6 @@
 ﻿@using IWSProject.Models
 @using IWSProject.Content
-@model List<ValidateBLViewModel>
+@model List<DocumentsViewModel>
 <script type="text/javascript">
         var selectedIDs;
         function OnBeginCallback(s, e) {
@@ -8,7 +8,7 @@
             e.customArgs["selectedIDs"] = selectedIDs;
         }
         function OnSelectionChanged(s, e) {
-            s.GetSelectedFieldValues("ItemID;CompanyID", GetSelectedFieldValuesCallback);
+            s.GetSelectedFieldValues("ItemID;ItemType", GetSelectedFieldValuesCallback);
         }
         function GetSelectedFieldValuesCallback(values) {
             //joins selected keys

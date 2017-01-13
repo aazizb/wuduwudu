@@ -268,7 +268,7 @@
     <value>Line Vendor Invoice de-DE</value>
   </data>
   <data name="expenseaccountid" xml:space="preserve">
-    <value>Expensive Account de-DE</value>
+    <value>Expense Account de-DE</value>
   </data>
   <data name="inputvataccountid" xml:space="preserve">
     <value>Input VAT Account de-DE</value>
@@ -464,5 +464,23 @@
   </data>
   <data name="PeriodicAccountBalance" xml:space="preserve">
     <value>Periodic Account Balance</value>
+  </data>
+  <data name="TotHVAT" xml:space="preserve">
+    <value>Gesamtsteuer</value>
+  </data>
+  <data name="TotVAT" xml:space="preserve">
+    <value>Gesamt Pflicht</value>
+  </data>
+  <data name="PartNumber" xml:space="preserve">
+    <value>Art.-Nr.</value>
+  </data>
+  <data name="PartType" xml:space="preserve">
+    <value>Document Type de-DE</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Count de-DE</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total de-DE</value>
   </data>
 </root>

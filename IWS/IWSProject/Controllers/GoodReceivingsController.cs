@@ -25,6 +25,8 @@ namespace IWSProject.Controllers
         {
             var model = db.GoodReceivings;
             item.IsValidated = false;
+            item.modelid = 104;
+            item.oid = 0;
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
@@ -105,6 +107,7 @@ namespace IWSProject.Controllers
             var model = db.LineGoodReceivings;
 
             lineGood.transid = transId;
+            lineGood.modelid = 105;
             ViewData["lineGood"] = lineGood;
 
             if (ModelState.IsValid)

@@ -295,6 +295,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Count.
+        /// </summary>
+        public static string Count {
+            get {
+                return ResourceManager.GetString("Count", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Credit.
         /// </summary>
         public static string credit {
@@ -394,7 +403,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Expensive Account.
+        ///   Looks up a localized string similar to Expense Account.
         /// </summary>
         public static string expenseaccountid {
             get {
@@ -687,6 +696,24 @@ namespace IWSProject.Content {
         public static string parent {
             get {
                 return ResourceManager.GetString("parent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Part N#.
+        /// </summary>
+        public static string PartNumber {
+            get {
+                return ResourceManager.GetString("PartNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Document Type.
+        /// </summary>
+        public static string PartType {
+            get {
+                return ResourceManager.GetString("PartType", resourceCulture);
             }
         }
         
@@ -1011,6 +1038,33 @@ namespace IWSProject.Content {
         public static string text {
             get {
                 return ResourceManager.GetString("text", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total.
+        /// </summary>
+        public static string Total {
+            get {
+                return ResourceManager.GetString("Total", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Without Taxes.
+        /// </summary>
+        public static string TotHVAT {
+            get {
+                return ResourceManager.GetString("TotHVAT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total VAT.
+        /// </summary>
+        public static string TotVAT {
+            get {
+                return ResourceManager.GetString("TotVAT", resourceCulture);
             }
         }
         

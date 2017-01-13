@@ -19,6 +19,12 @@
         settings.CommandColumn.ShowDeleteButton = true;
         settings.CommandColumn.ShowEditButton = true;
 
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+
+        settings.Styles.RowHotTrack.Cursor = "pointer";
+        settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
+
         //when an end-user double-clicks a grid row, the edit form appears, allowing an end-user to edit the row.  
         //settings.ClientSideEvents.RowDblClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
         //change button settings. 
@@ -44,7 +50,7 @@
 
         settings.Width = Unit.Percentage(100);
         settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
         settings.Settings.VerticalScrollableHeight = 350;
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
@@ -62,7 +68,7 @@
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
-        settings.SettingsPager.PageSize = 50;
+        settings.SettingsPager.PageSize = 24;
 
         settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
         settings.SettingsDetail.ShowDetailRow = true;
@@ -105,7 +111,6 @@
                 combo.TextFormatString = "{0}-{1}";
             });
         });
-
         settings.Columns.Add(column =>
         {
             column.FieldName = "account";
@@ -122,23 +127,37 @@
                 combo.TextFormatString = "{0}-{1}";
             });
         });
-
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "CompanyId";
+            column.Caption = IWSLocalResource.company;
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetCompanies();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.company;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
         settings.Columns.Add(column =>
         {
             column.FieldName = "ItemDate";
             column.Caption = IWSLocalResource.duedate;
             column.ColumnType = MVCxGridViewColumnType.DateEdit;
+            column.Width = Unit.Pixel(85);
             column.EditorProperties().DateEdit(d =>
             {
                 d.EditFormatString = "MM/dd/yyyy";
                 d.NullDisplayText = "MM/dd/yyyy";
                 d.EditFormat = EditFormat.Custom;
                 d.Width = Unit.Percentage(100);
-                d.DisplayFormatString = "MM/dd/yyyy";
+                d.DisplayFormatString = "yyyy-MM-dd";
                 d.DisplayFormatInEditMode = true;
                 d.AllowUserInput = true;
                 d.AllowMouseWheel = true;
-
             });
         });
 
@@ -191,7 +210,24 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
-
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "CompanyId";
+                    i.Caption = IWSLocalResource.company;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "Name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetCompanies();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "ItemDate";

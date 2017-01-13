@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 
@@ -66,15 +67,49 @@ namespace IWSProject.Models
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
 
-    public class ValidateBLViewModel
+    public class ValidateDocsViewModel
     {
         [Key]
+        [Column(Order = 1)]
         public int ItemID { get; set; }
+        [Key]
+        [Column(Order = 2)]
+        public string ItemType { get; set; }
+        public DateTime DueDate { get; set; }
+        public string Periode { get; set; }
+        public string SupplierID { get; set; }
+        public string CompanyID { get; set; }
+        public string VAT { get; set; }
+        public decimal TotalVAT { get; set; }
+        public decimal TotalHVAT { get; set; }
+        public bool IsValidated { get; set; }
+    }
+    public class DocumentsViewModel
+    {
+        [Key]
+        [Column(Order = 1)]
+        public int ItemID { get; set; }
+        [Key]
+        [Column(Order = 2)]
+        public string ItemType { get; set; }
         public DateTime DueDate { get; set; }
         public string SupplierID { get; set; }
         public string CompanyID { get; set; }
+        public decimal TotalVAT { get; set; }
+        public decimal TotalHVAT { get; set; }
         public bool IsValidated { get; set; }
-        public decimal TotalItem { get; set; }
+    }
+    public class ValidateStockViewModel
+    {
+        [Key]
+        [Column(Order =1)]
+        public string StoreID { get; set; }
+        [Key]
+        [Column(Order =2)]
+        public string ItemID { get; set; }
+        public decimal Quantity { get; set; }
+        public decimal Price { get; set; }
+        public bool IsService { get; set; }
     }
     public class AccountBalanceViewModel
     {

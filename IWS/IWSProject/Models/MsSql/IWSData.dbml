@@ -9,7 +9,7 @@
       <Column Name="groupid" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="dateofopen" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
       <Column Name="dateofclose" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
-      <Column Name="balance" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="balance" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
       <Association Name="Account_PeriodicAccountBalance" Member="PeriodicAccountBalances" ThisKey="id" OtherKey="AccountId" Type="PeriodicAccountBalance" />
     </Type>
   </Table>
@@ -18,27 +18,35 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="oid" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="store" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="account" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="store" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="account" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="text" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ItemDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyId" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="IsValidated" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="VendorInvoice_LineVendorInvoice" Member="LineVendorInvoices" ThisKey="id" OtherKey="transid" Type="LineVendorInvoice" />
+      <Association Name="Company_VendorInvoice" Member="Company" ThisKey="CompanyId" OtherKey="id" Type="Company" IsForeignKey="true" />
+      <Association Name="Store_VendorInvoice" Member="Store1" ThisKey="store" OtherKey="id" Type="Store" IsForeignKey="true" />
+      <Association Name="Supplier_VendorInvoice" Member="Supplier" ThisKey="account" OtherKey="id" Type="Supplier" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.Article" Member="Articles">
     <Type Name="Article">
       <Column Name="id" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
-      <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="name" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="description" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="price" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="avgprice" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="salesprice" Type="System.Decimal" DbType="Money" CanBeNull="true" />
+      <Column Name="price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="avgprice" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="salesprice" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
       <Column Name="qttyunit" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="packunit" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="groupid" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="VatCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="VatCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="IsService" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
       <Association Name="Article_LineGoodReceiving" Member="LineGoodReceivings" ThisKey="id" OtherKey="item" Type="LineGoodReceiving" />
+      <Association Name="Article_LineInventoryInvoice" Member="LineInventoryInvoices" ThisKey="id" OtherKey="item" Type="LineInventoryInvoice" />
+      <Association Name="Article_LinePurchaseOrder" Member="LinePurchaseOrders" ThisKey="id" OtherKey="item" Type="LinePurchaseOrder" />
       <Association Name="Article_Stock" Member="Stocks" ThisKey="id" OtherKey="itemid" Type="Stock" />
       <Association Name="Vat_Article" Member="Vat" ThisKey="VatCode" OtherKey="id" Type="Vat" IsForeignKey="true" />
     </Type>
@@ -144,6 +152,11 @@
       <Column Name="nextperiode" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="taxcode" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="vatcode" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Company_VendorInvoice" Member="VendorInvoices" ThisKey="id" OtherKey="CompanyId" Type="VendorInvoice" />
+      <Association Name="Company_GoodReceiving" Member="GoodReceivings" ThisKey="id" OtherKey="CompanyId" Type="GoodReceiving" />
+      <Association Name="Company_InventoryInvoice" Member="InventoryInvoices" ThisKey="id" OtherKey="CompanyId" Type="InventoryInvoice" />
+      <Association Name="Company_Payment" Member="Payments" ThisKey="id" OtherKey="CompanyId" Type="Payment" />
+      <Association Name="Company_PurchaseOrder" Member="PurchaseOrders" ThisKey="id" OtherKey="CompanyId" Type="PurchaseOrder" />
     </Type>
   </Table>
   <Table Name="dbo.CostCenter" Member="CostCenters">
@@ -179,11 +192,13 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="oid" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="store" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="account" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ItemDate" Type="System.DateTime" DbType="Date" CanBeNull="true" />
+      <Column Name="store" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="account" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ItemDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyId" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="IsValidated" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
       <Association Name="GoodReceiving_LineGoodReceiving" Member="LineGoodReceivings" ThisKey="id" OtherKey="transid" Type="LineGoodReceiving" />
+      <Association Name="Company_GoodReceiving" Member="Company" ThisKey="CompanyId" OtherKey="id" Type="Company" IsForeignKey="true" />
       <Association Name="Store_GoodReceiving" Member="Store1" ThisKey="store" OtherKey="id" Type="Store" IsForeignKey="true" />
       <Association Name="Supplier_GoodReceiving" Member="Supplier" ThisKey="account" OtherKey="id" Type="Supplier" IsForeignKey="true" />
     </Type>
@@ -193,10 +208,16 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="oid" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="store" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="account" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="store" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="account" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="text" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ItemDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyId" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="IsValidated" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="InventoryInvoice_LineInventoryInvoice" Member="LineInventoryInvoices" ThisKey="id" OtherKey="transid" Type="LineInventoryInvoice" />
+      <Association Name="Company_InventoryInvoice" Member="Company" ThisKey="CompanyId" OtherKey="id" Type="Company" IsForeignKey="true" />
+      <Association Name="Store_InventoryInvoice" Member="Store1" ThisKey="store" OtherKey="id" Type="Store" IsForeignKey="true" />
+      <Association Name="Supplier_InventoryInvoice" Member="Supplier" ThisKey="account" OtherKey="id" Type="Supplier" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.LineGoodReceiving" Member="LineGoodReceivings">
@@ -204,12 +225,12 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="transid" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="item" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="item" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="unit" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="price" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="quantity" Type="System.Single" DbType="Real" CanBeNull="true" />
-      <Column Name="VatCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="VatCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="text" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Association Name="Article_LineGoodReceiving" Member="Article" ThisKey="item" OtherKey="id" Type="Article" IsForeignKey="true" />
       <Association Name="GoodReceiving_LineGoodReceiving" Member="GoodReceiving" ThisKey="transid" OtherKey="id" Type="GoodReceiving" IsForeignKey="true" />
@@ -220,53 +241,66 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="transid" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="item" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="item" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="unit" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="price" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="quantity" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
-      <Column Name="vat" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="VATCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="text" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Article_LineInventoryInvoice" Member="Article" ThisKey="item" OtherKey="id" Type="Article" IsForeignKey="true" />
+      <Association Name="InventoryInvoice_LineInventoryInvoice" Member="InventoryInvoice" ThisKey="transid" OtherKey="id" Type="InventoryInvoice" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.LinePayment" Member="LinePayments">
     <Type Name="LinePayment">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="transid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="transid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="account" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="side" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="oaccount" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="amount" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="account" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="side" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="oaccount" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="amount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="text" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Payment_LinePayment" Member="Payment" ThisKey="transid" OtherKey="id" Type="Payment" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.LinePurchaseOrder" Member="LinePurchaseOrders">
     <Type Name="LinePurchaseOrder">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="transid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="transid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="item" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="item" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="unit" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="price" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="quantity" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="vat" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="price" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Decimal" DbType="Decimal(10,2) NOT NULL" CanBeNull="false" />
+      <Column Name="VatCode" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="text" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Article_LinePurchaseOrder" Member="Article" ThisKey="item" OtherKey="id" Type="Article" IsForeignKey="true" />
+      <Association Name="PurchaseOrder_LinePurchaseOrder" Member="PurchaseOrder" ThisKey="transid" OtherKey="id" Type="PurchaseOrder" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.LineVendorInvoice" Member="LineVendorInvoices">
     <Type Name="LineVendorInvoice">
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="transid" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="transid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="account" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="side" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
-      <Column Name="oaccount" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="amount" Type="System.Decimal" DbType="Money" CanBeNull="true" />
-      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2" CanBeNull="true" />
+      <Column Name="account" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="side" Type="System.Boolean" DbType="Bit NOT NULL" CanBeNull="false" />
+      <Column Name="oaccount" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="amount" Type="System.Decimal" DbType="Money NOT NULL" CanBeNull="false" />
+      <Column Name="duedate" Type="System.DateTime" DbType="DateTime2 NOT NULL" CanBeNull="false" />
       <Column Name="text" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="VendorInvoice_LineVendorInvoice" Member="VendorInvoice" ThisKey="transid" OtherKey="id" Type="VendorInvoice" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Localization" Member="Localizations">
+    <Type Name="Localization">
+      <Column Name="ItemName" Type="System.String" DbType="NVarChar(50) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="UICulture" Type="System.String" DbType="Char(5) NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="LocalName" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
   <Table Name="dbo.Menu" Member="Menus">
@@ -287,10 +321,15 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="oid" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="store" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="account" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="text" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="store" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="account" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="text" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="ItemDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyId" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="IsValidated" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Payment_LinePayment" Member="LinePayments" ThisKey="id" OtherKey="transid" Type="LinePayment" />
+      <Association Name="Company_Payment" Member="Company" ThisKey="CompanyId" OtherKey="id" Type="Company" IsForeignKey="true" />
+      <Association Name="Supplier_Payment" Member="Supplier" ThisKey="account" OtherKey="id" Type="Supplier" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.PeriodicAccountBalance" Member="PeriodicAccountBalances">
@@ -318,9 +357,13 @@
       <Column Name="id" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="oid" Type="System.Int32" DbType="Int" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="store" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="account" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Column Name="store" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="account" Type="System.String" DbType="NVarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ItemDate" Type="System.DateTime" DbType="Date NOT NULL" CanBeNull="false" />
+      <Column Name="CompanyId" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
       <Column Name="IsValidated" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="PurchaseOrder_LinePurchaseOrder" Member="LinePurchaseOrders" ThisKey="id" OtherKey="transid" Type="LinePurchaseOrder" />
+      <Association Name="Company_PurchaseOrder" Member="Company" ThisKey="CompanyId" OtherKey="id" Type="Company" IsForeignKey="true" />
     </Type>
   </Table>
   <Table Name="dbo.QuantityUnit" Member="QuantityUnits">
@@ -337,10 +380,10 @@
       <Column Name="name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="description" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="itemid" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="storeid" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="quantity" Type="System.Single" DbType="Real" CanBeNull="true" />
-      <Column Name="minstock" Type="System.Int16" DbType="SmallInt" CanBeNull="true" />
+      <Column Name="itemid" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="storeid" Type="System.String" DbType="NVarChar(50) NOT NULL" CanBeNull="false" />
+      <Column Name="quantity" Type="System.Single" DbType="Real NOT NULL" CanBeNull="false" />
+      <Column Name="minstock" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Association Name="Article_Stock" Member="Article" ThisKey="itemid" OtherKey="id" Type="Article" IsForeignKey="true" />
       <Association Name="Store_Stock" Member="Store" ThisKey="storeid" OtherKey="id" Type="Store" IsForeignKey="true" />
     </Type>
@@ -355,7 +398,9 @@
       <Column Name="zip" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="accountid" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Association Name="Store_VendorInvoice" Member="VendorInvoices" ThisKey="id" OtherKey="store" Type="VendorInvoice" />
       <Association Name="Store_GoodReceiving" Member="GoodReceivings" ThisKey="id" OtherKey="store" Type="GoodReceiving" />
+      <Association Name="Store_InventoryInvoice" Member="InventoryInvoices" ThisKey="id" OtherKey="store" Type="InventoryInvoice" />
       <Association Name="Store_Stock" Member="Stocks" ThisKey="id" OtherKey="storeid" Type="Stock" />
     </Type>
   </Table>
@@ -369,7 +414,10 @@
       <Column Name="state" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="zip" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="accountid" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
+      <Association Name="Supplier_VendorInvoice" Member="VendorInvoices" ThisKey="id" OtherKey="account" Type="VendorInvoice" />
       <Association Name="Supplier_GoodReceiving" Member="GoodReceivings" ThisKey="id" OtherKey="account" Type="GoodReceiving" />
+      <Association Name="Supplier_InventoryInvoice" Member="InventoryInvoices" ThisKey="id" OtherKey="account" Type="InventoryInvoice" />
+      <Association Name="Supplier_Payment" Member="Payments" ThisKey="id" OtherKey="account" Type="Payment" />
     </Type>
   </Table>
   <Table Name="dbo.Vat" Member="Vats">
@@ -378,7 +426,7 @@
       <Column Name="name" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="modelid" Type="System.Int16" DbType="SmallInt NOT NULL" CanBeNull="false" />
       <Column Name="description" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
-      <Column Name="PVat" Type="System.Double" DbType="Float" CanBeNull="true" />
+      <Column Name="PVat" Type="System.Decimal" DbType="Decimal(3,2) NOT NULL" CanBeNull="false" />
       <Column Name="inputvataccountid" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="outputvataccountid" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
       <Column Name="revenueaccountid" Type="System.String" DbType="NVarChar(255)" CanBeNull="true" />
