@@ -1,12 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
 
 namespace IWSProject.Models
 {
+    using System;
+    using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
+    using System.ComponentModel.DataAnnotations.Schema;
+    using Microsoft.AspNet.Identity;
+    using Microsoft.Owin.Security;
     public class IndexViewModel
     {
         public bool HasPassword { get; set; }
@@ -61,6 +61,22 @@ namespace IWSProject.Models
         public string PhoneNumber { get; set; }
     }
 
+    public class JournalViewModel
+    {
+        public int ItemID { get; set; }
+        public int OID { get; set; }
+        public int ModelID { get; set; }
+        public string ItemType { get; set; }
+        public string CustSupplierID { get; set; }
+        public string StoreID { get; set; }
+        public DateTime TransDate { get; set; }
+        public string Periode { get; set; }
+        public string Account { get; set; }
+        public string OAccount { get; set; }
+        public decimal Amount { get; set; }
+        public string Side { get; set; }
+    }
+
     public class ConfigureTwoFactorViewModel
     {
         public string SelectedProvider { get; set; }
@@ -98,6 +114,25 @@ namespace IWSProject.Models
         public decimal TotalVAT { get; set; }
         public decimal TotalHVAT { get; set; }
         public bool IsValidated { get; set; }
+    }
+    public class ValidateInvoiceViewModel
+    {
+        [Key]
+        public int ID { get; set; }
+        public int OID { get; set; }
+        public string StoreID { get; set; }
+        public string SupplierID { get; set; }
+        public int ModelID { get; set; }
+        public string CompanyID { get; set; }
+        public DateTime ItemDate { get; set; }
+        public string Text { get; set; }
+        public string VatCode { get; set; }
+        public string VatAccountID { get; set; }
+        public string Periode { get; set; }
+        public string DebitAccountID { get; set; }
+        public string CreditAccountID { get; set; }
+        public decimal TotHTVA { get; set; }
+        public decimal TotTVA { get; set; }
     }
     public class ValidateStockViewModel
     {

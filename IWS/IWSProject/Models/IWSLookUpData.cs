@@ -10,6 +10,7 @@
     using Microsoft.AspNet.Identity.EntityFramework;
     public static class IWSLookUp
     {
+
         const string IWSDataContext = "IWSDataContext";
         public static IWSDataContext IWSEntities
         {
@@ -105,8 +106,15 @@
         }
         public static List<Menu> GetMenu()
         {
-            var menu = IWSEntities.Menus.ToList();
-            return menu;
+            if (HttpContext.Current.Session["Menus"] == null)
+            {
+                List<Menu> menus = new List<Menu>();
+
+                menus = IWSEntities.Menus.ToList();
+
+                HttpContext.Current.Session["Menus"] = menus;
+            }
+            return (List<Menu>)HttpContext.Current.Session["Menus"];
         }
         public static IEnumerable GetSuppliers()
         {
@@ -367,7 +375,7 @@
         }
         public static IEnumerable GetAccountBalance()
         {
-            List<AccountBalanceViewModel> AB = (from PeriodicAccountBalance in IWSEntities.PeriodicAccountBalances
+            List<AccountBalanceViewModel> items = (from PeriodicAccountBalance in IWSEntities.PeriodicAccountBalances
                                                 select new AccountBalanceViewModel()
                                                 {
                                                     AccountID = (PeriodicAccountBalance.Account.id + "-" + 
@@ -376,7 +384,31 @@
                                                     Debit = PeriodicAccountBalance.Debit,
                                                     Credit = PeriodicAccountBalance.Credit
                                                 }).ToList();
-            return AB;
+            return items;
+        }
+        public static IEnumerable GetJournal()
+        {
+            // get current thread UICulture
+            string uiCulture = Thread.CurrentThread.CurrentUICulture.Name;
+
+            List<JournalViewModel> journals = 
+                (from journal in IWSEntities.Journals
+                from item in IWSEntities.Localizations
+                where item.ItemName == journal.ItemType && item.UICulture == uiCulture
+                select new JournalViewModel()
+                {
+                ItemID = journal.ItemID,
+                OID = journal.OID,
+                ItemType = item.LocalName,
+                CustSupplierID = journal.CustSupplierID,
+                TransDate = journal.TransDate,
+                Periode = journal.Periode,
+                Account = journal.Account,
+                OAccount = journal.OAccount,
+                Amount = journal.Amount,
+                Side = journal.Side
+            }).ToList();
+            return journals;
         }
         public static IEnumerable GetStock()
         {

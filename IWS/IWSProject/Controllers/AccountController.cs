@@ -7,20 +7,18 @@ using IWSProject.Models;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
+
+
 namespace IWSProject.Controllers
 {
-   [Authorize]
+    [Authorize]
     public class AccountController : Controller
     {
         ApplicationSignInManager _signInManager;
         public ApplicationSignInManager SignInManager {
             get {
                 return _signInManager ?? HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-                //if(_signInManager == null) {
-                //    _signInManager = HttpContext.GetOwinContext().Get<ApplicationSignInManager>();
-                //}
-                //return _signInManager;
-            }
+                    }
             private set
             {
                 _signInManager = value;
@@ -31,11 +29,7 @@ namespace IWSProject.Controllers
         public ApplicationUserManager UserManager {
             get {
                 return _userManager ?? HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                //if(_userManager == null) {
-                //    _userManager = HttpContext.GetOwinContext().GetUserManager<ApplicationUserManager>();
-                //}
-                //return _userManager;
-            }
+                       }
             private set
             {
                 _userManager = value;
@@ -61,7 +55,6 @@ namespace IWSProject.Controllers
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, change to shouldLockout: true
                 var result = await SignInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe.Value, shouldLockout: false);
-                ViewBag.MenuItems = null;
                 switch (result)
                 {
                     case SignInStatus.Success:
@@ -84,7 +77,6 @@ namespace IWSProject.Controllers
 
         public ActionResult LogOff() {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            ViewBag.MenuItems = null;
             return Redirect("/");
         }
 

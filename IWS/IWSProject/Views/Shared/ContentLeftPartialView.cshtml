@@ -3,7 +3,15 @@
 @using System.Resources;
 @using System.Linq;
 @{
-    List<IWSProject.Models.Menu> menuItems = IWSLookUp.GetMenu();
+    List<IWSProject.Models.Menu> menuItems = new List<IWSProject.Models.Menu>();
+    if (HttpContext.Current.Session["Menus"] == null)
+    {
+        menuItems = IWSLookUp.GetMenu();
+    }
+    else
+    {
+        menuItems = (List<IWSProject.Models.Menu>)HttpContext.Current.Session["Menus"];
+    }
     }
 @*Configure the left panel's menu *@
 @Html.DevExpress().NavBar(settings =>
@@ -17,7 +25,7 @@
     ResourceManager rm = new ResourceManager(typeof(IWSLocalResource));
     if (HttpContext.Current.User.Identity.IsAuthenticated)
     {
-        //find current user
+        //get current user
         var user = HttpContext.Current.User.Identity.Name;
         //find current user assigned roles
         string[] roles = Roles.GetRolesForUser(user);
@@ -73,23 +81,3 @@
     }
     
 }).GetHtml()
-    @*/////----
-    //foreach (var mp in menuItems.Where(p => (p.Parent == 0) && (p.HasAccess == false)))
-    //{
-    //    settings.Groups.Add(group =>
-    //    {
-    //        group.Name = mp.Name;
-    //        group.Text = rm.GetString(mp.Name);
-    //        foreach (var mc in menuItems.Where(c => c.Parent == mp.ID))
-    //        {
-
-    //            //group.Items.Add(item =>
-    //            //{
-    //            //    item.Name = mc.Name;
-    //            //    item.Text = rm.GetString(mc.Name);
-    //            //    item.NavigateUrl = DevExpressHelper.GetUrl(new { Controller = mc.Controller, Action = mc.Action });
-    //            //});
-    //        }
-    //    });
-    //}*@
-

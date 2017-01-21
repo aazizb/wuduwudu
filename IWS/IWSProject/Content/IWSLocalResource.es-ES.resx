@@ -489,4 +489,10 @@
   <data name="Total" xml:space="preserve">
     <value>Total es-ES</value>
   </data>
+  <data name="journal" xml:space="preserve">
+    <value>Journal es-ES</value>
+  </data>
+  <data name="CustSupplier" xml:space="preserve">
+    <value>Cliente/Provedor</value>
+  </data>
 </root>

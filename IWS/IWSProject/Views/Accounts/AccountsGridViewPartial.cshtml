@@ -60,7 +60,6 @@
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("name").Caption = IWSLocalResource.name;
-        //settings.Columns.Add("modelid").Caption = IWSLocalResource.modelid;
         settings.Columns.Add("description").Caption = IWSLocalResource.description;
         settings.Columns.Add("groupid").Caption = IWSLocalResource.groupid;
 
@@ -121,7 +120,6 @@
             {
                 formLayoutSettings.Name = "AccountsViewEdit";
                 formLayoutSettings.Width = Unit.Percentage(100);
-                //formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 3;
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -223,7 +221,6 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
-                //formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;

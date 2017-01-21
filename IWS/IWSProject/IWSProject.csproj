@@ -53,6 +53,7 @@
       </Objects>
     </PublishDatabaseSettings>
     <IncludeIisSettings>false</IncludeIisSettings>
+    <UseVSHostingProcess>true</UseVSHostingProcess>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -561,6 +562,8 @@
     <Content Include="Views\Home\GoodReceiving.cshtml" />
     <Content Include="Views\Balance\Index.cshtml" />
     <Content Include="Views\Balance\AccountBalancePartialView.cshtml" />
+    <Content Include="Views\Journal\Index.cshtml" />
+    <Content Include="Views\Journal\JournalPartialView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -612,6 +615,7 @@
     <Compile Include="Controllers\GoodReceivingsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryInvoicesController.cs" />
+    <Compile Include="Controllers\JournalController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\MenuUIController.cs" />
     <Compile Include="Controllers\PaymentsController.cs" />

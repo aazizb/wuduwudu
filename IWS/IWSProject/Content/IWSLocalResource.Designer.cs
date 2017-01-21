@@ -331,6 +331,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer/Supplier.
+        /// </summary>
+        public static string CustSupplier {
+            get {
+                return ResourceManager.GetString("CustSupplier", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboard.
         /// </summary>
         public static string dashboard {
@@ -507,6 +516,15 @@ namespace IWSProject.Content {
         public static string item {
             get {
                 return ResourceManager.GetString("item", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Journal en-EN.
+        /// </summary>
+        public static string journal {
+            get {
+                return ResourceManager.GetString("journal", resourceCulture);
             }
         }
         

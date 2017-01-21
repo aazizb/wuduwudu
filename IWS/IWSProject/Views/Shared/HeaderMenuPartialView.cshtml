@@ -3,7 +3,15 @@
 @using System.Resources;
 @using System.Linq;
 @{
-    List<IWSProject.Models.Menu> menuItems = IWSLookUp.GetMenu();
+    List<IWSProject.Models.Menu> menuItems = new List<IWSProject.Models.Menu>();
+    if (HttpContext.Current.Session["Menus"] == null)
+    {
+        menuItems = IWSLookUp.GetMenu();
+    }
+    else
+    {
+        menuItems = (List<IWSProject.Models.Menu>)HttpContext.Current.Session["Menus"];
+    }
     }
 @*Configure the header panel's menu *@
 @Html.DevExpress().Menu(settings =>
@@ -17,7 +25,7 @@
     ResourceManager rm = new ResourceManager(typeof(IWSLocalResource));
     if(HttpContext.Current.User.Identity.IsAuthenticated)
     {
-        //find current user
+        //get current user
         var user = HttpContext.Current.User.Identity.Name;
         //find current user assigned roles
         string[] roles = Roles.GetRolesForUser(user);

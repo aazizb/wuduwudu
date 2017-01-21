@@ -284,8 +284,6 @@
 
         settings.SetDetailRowTemplateContent(c =>
         {
-            //Session["transid"] = DataBinder.Eval(c.DataItem, "ID");
-            //Html.RenderAction("DetailGridViewPartial", new { transid = DataBinder.Eval(c.DataItem, "ID") });
             Session["transid"] = DataBinder.Eval(c.DataItem, "ID");
             Session["IsValidated"] = DataBinder.Eval(c.DataItem, "IsValidated");
             Html.RenderAction("DetailGridViewPartial", new { transid = Session["transid"], IsValidated = Session["IsValidated"] });
