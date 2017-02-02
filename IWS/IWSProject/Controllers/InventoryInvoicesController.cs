@@ -179,6 +179,8 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LineInventoryInvoices.Where(p => p.transid == transId).ToList());
         }
+
+        #region Helper
         public ActionResult PackUnit(string selectedItemIndex)
         {
             return Json(IWSLookUp.GetPackUnit(selectedItemIndex));
@@ -193,11 +195,13 @@ namespace IWSProject.Controllers
         }
         public ActionResult Price(string selectedItemIndex)
         {
-            return Json(IWSLookUp.GetPrice(selectedItemIndex));
+            return Json(IWSLookUp.GetSalesPrice(selectedItemIndex));
         }
         public ActionResult Text(string selectedItemIndex)
         {
             return Json(IWSLookUp.GetText(selectedItemIndex));
         }
+
+        #endregion
     }
 }

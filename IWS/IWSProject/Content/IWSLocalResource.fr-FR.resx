@@ -340,10 +340,10 @@
     <value>Dashboard fr-FR</value>
   </data>
   <data name="invoice" xml:space="preserve">
-    <value>Invoice fr-FR</value>
+    <value>Facture Client Logistic</value>
   </data>
   <data name="purchasing" xml:space="preserve">
-    <value>Purchasing fr-FR</value>
+    <value>Achat</value>
   </data>
   <data name="rolesmanagement" xml:space="preserve">
     <value>Roles Management fr-FR</value>
@@ -355,7 +355,7 @@
     <value>Master Files fr-FR</value>
   </data>
   <data name="GenericError" xml:space="preserve">
-    <value>Sorry, an error occurred while processing your request.</value>
+    <value>Désolé, une erreur est survenue lors du traitement de votre requête.</value>
   </data>
   <data name="action" xml:space="preserve">
     <value>Action Methode</value>
@@ -460,7 +460,7 @@
     <value>Validé</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
-    <value>Solde des Comptes</value>
+    <value>Solde Périodique des Comptes</value>
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Prix Moyen</value>
@@ -494,5 +494,50 @@
   </data>
   <data name="CustSupplier" xml:space="preserve">
     <value>Client/Fournisseur</value>
+  </data>
+  <data name="selling" xml:space="preserve">
+    <value>Vente</value>
+  </data>
+  <data name="Settlemet" xml:space="preserve">
+    <value>Encaissement</value>
+  </data>
+  <data name="SalesInvoice" xml:space="preserve">
+    <value>Facture Client Compta</value>
+  </data>
+  <data name="SalesOrder" xml:space="preserve">
+    <value>Commande Client</value>
+  </data>
+  <data name="BillOfDelivery" xml:space="preserve">
+    <value>Bon de Livraison</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="HasAccess" xml:space="preserve">
+    <value>Is Header</value>
+  </data>
+  <data name="lineSalesOrder" xml:space="preserve">
+    <value>Ligne Commande Client</value>
+  </data>
+  <data name="lineBillOfDelivery" xml:space="preserve">
+    <value>Ligne Bon de Livraison Client</value>
+  </data>
+  <data name="LineCustomerInvoice" xml:space="preserve">
+    <value>Ligne Facture Logistique Client</value>
+  </data>
+  <data name="linecashInflow" xml:space="preserve">
+    <value>Encaissement</value>
+  </data>
+  <data name="InsufficientStock" xml:space="preserve">
+    <value>Stock Insuffisant</value>
+  </data>
+  <data name="CustomerInvoice" xml:space="preserve">
+    <value>Facture Client Compta</value>
+  </data>
+  <data name="LineSalesInvoice" xml:space="preserve">
+    <value>Lignes Facture Client Compts</value>
+  </data>
+  <data name="LineSettlement" xml:space="preserve">
+    <value>Lignes Encaissement</value>
   </data>
 </root>

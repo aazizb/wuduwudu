@@ -343,7 +343,7 @@
     <value>Invoice es-ES</value>
   </data>
   <data name="purchasing" xml:space="preserve">
-    <value>Purchasing es-ES</value>
+    <value>Compra</value>
   </data>
   <data name="rolesmanagement" xml:space="preserve">
     <value>Roles Management es-ES</value>
@@ -355,7 +355,7 @@
     <value>Master Files es-ES</value>
   </data>
   <data name="GenericError" xml:space="preserve">
-    <value>Sorry, an error occurred while processing your request.</value>
+    <value>Disculpa, ocurrió un error al procesar su petición.</value>
   </data>
   <data name="action" xml:space="preserve">
     <value>Action Methodo</value>
@@ -460,7 +460,7 @@
     <value>Validado</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
-    <value>Saldo de las cuentas</value>
+    <value>Saldo periodico de las cuentas</value>
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Precio Promedio</value>
@@ -494,5 +494,53 @@
   </data>
   <data name="CustSupplier" xml:space="preserve">
     <value>Cliente/Provedor</value>
+  </data>
+  <data name="selling" xml:space="preserve">
+    <value>Selling</value>
+  </data>
+  <data name="String1" xml:space="preserve">
+    <value>Venta</value>
+  </data>
+  <data name="Settlement" xml:space="preserve">
+    <value>Settlement es-ES</value>
+  </data>
+  <data name="SalesInvoice" xml:space="preserve">
+    <value>Sales Invoice es-ES</value>
+  </data>
+  <data name="SalesOrder" xml:space="preserve">
+    <value>Sales Order es-ES</value>
+  </data>
+  <data name="BillOfdelivery" xml:space="preserve">
+    <value>Bill of Delivery es-ES</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="HasAccess" xml:space="preserve">
+    <value>Is Header</value>
+  </data>
+  <data name="lineSalesOrder" xml:space="preserve">
+    <value>Line Sales Order es-ES</value>
+  </data>
+  <data name="lineBillOfDelivery" xml:space="preserve">
+    <value>Line Bill of Delivery</value>
+  </data>
+  <data name="LineCustomerInvoice" xml:space="preserve">
+    <value>Line Customer Invoice es_ES</value>
+  </data>
+  <data name="linecashInflow" xml:space="preserve">
+    <value>Line Cash Inflow es-ES</value>
+  </data>
+  <data name="InsufficientStock" xml:space="preserve">
+    <value>Stock Insuficiente</value>
+  </data>
+  <data name="CustomerInvoice" xml:space="preserve">
+    <value>Customer Invoice es-ES</value>
+  </data>
+  <data name="LineSalesInvoice" xml:space="preserve">
+    <value>Line Sales Invoice es-ES</value>
+  </data>
+  <data name="LineSettlement" xml:space="preserve">
+    <value>Line Settlement es-ES</value>
   </data>
 </root>

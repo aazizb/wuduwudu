@@ -346,7 +346,7 @@
     <value>Master Files de-DE</value>
   </data>
   <data name="GenericError" xml:space="preserve">
-    <value>Sorry, an error occurred while processing your request.</value>
+    <value>Sorry, an error occurred while processing your request. de-DE</value>
   </data>
   <data name="action" xml:space="preserve">
     <value>Action Method</value>
@@ -383,9 +383,6 @@
   </data>
   <data name="support" xml:space="preserve">
     <value>Support</value>
-  </data>
-  <data name="UsersManagement1" xml:space="preserve">
-    <value>Users Management</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
@@ -454,7 +451,7 @@
     <value>IsValidated de-DE</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
-    <value>Account Balance</value>
+    <value>Periodic Account Balance de-DE</value>
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Average Price de-DE</value>
@@ -488,5 +485,50 @@
   </data>
   <data name="CustSupplier" xml:space="preserve">
     <value>Customer/Supplier de-DE</value>
+  </data>
+  <data name="selling" xml:space="preserve">
+    <value>Selling de-DE</value>
+  </data>
+  <data name="Settlement" xml:space="preserve">
+    <value>Settlement de-DE</value>
+  </data>
+  <data name="SalesInvoice" xml:space="preserve">
+    <value>Sales Invoice de-DE</value>
+  </data>
+  <data name="SalesOrder" xml:space="preserve">
+    <value>Sales Order de-DE</value>
+  </data>
+  <data name="BillOfdelivery" xml:space="preserve">
+    <value>Bill of delivery de-DE</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="HasAccess" xml:space="preserve">
+    <value>Is Header</value>
+  </data>
+  <data name="lineSalesOrder" xml:space="preserve">
+    <value>Line Sales Order de-DE</value>
+  </data>
+  <data name="lineBillOfDelivery" xml:space="preserve">
+    <value>Line Bill of Delivery de-DE</value>
+  </data>
+  <data name="LineCustomerInvoice" xml:space="preserve">
+    <value>Line Customer Invoice de-DE</value>
+  </data>
+  <data name="linecashInflow" xml:space="preserve">
+    <value>Line Cash Inflow de-DE</value>
+  </data>
+  <data name="InsufficientStock" xml:space="preserve">
+    <value>Insufficient Stock de-DE</value>
+  </data>
+  <data name="CustomerInvoice" xml:space="preserve">
+    <value>Customer Invoice de-DE</value>
+  </data>
+  <data name="LineSalesInvoice" xml:space="preserve">
+    <value>Line Sales Invoice de-DE</value>
+  </data>
+  <data name="LineSettlement" xml:space="preserve">
+    <value>Line Settlement de-DE</value>
   </data>
 </root>

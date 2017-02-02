@@ -24,7 +24,8 @@ namespace IWSProject.Controllers
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] PurchaseOrder item)
         {
             var model = db.PurchaseOrders;
-
+            item.IsValidated = false;
+            item.modelid = 101;
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
@@ -101,18 +102,18 @@ namespace IWSProject.Controllers
             return PartialView("DetailGridViewPartial", db.LinePurchaseOrders.Where(p => p.transid == transid).ToList());
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LinePurchaseOrder linePurchase, int transId)
+        public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LinePurchaseOrder line, int transId)
         {
             var model = db.LinePurchaseOrders;
 
-            linePurchase.transid = transId;
-
-            ViewData["linePurchase"] = linePurchase;
+            line.transid = transId;
+            line.modelid = 102;
+            ViewData["linePurchase"] = line;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    model.InsertOnSubmit(linePurchase);
+                    model.InsertOnSubmit(line);
 
                     db.SubmitChanges();
                 }
@@ -128,18 +129,18 @@ namespace IWSProject.Controllers
             return PartialView("DetailGridViewPartial", model.Where(m => m.transid == transId));
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult DetailGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] LinePurchaseOrder linePurchase, int transId)
+        public ActionResult DetailGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] LinePurchaseOrder line, int transId)
         {
             var model = db.LinePurchaseOrders;
 
-            linePurchase.transid = transId;
+            line.transid = transId;
 
-            ViewData["linePurchase"] = linePurchase;
+            ViewData["linePurchase"] = line;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    var modelItem = model.FirstOrDefault(it => it.id == linePurchase.id);
+                    var modelItem = model.FirstOrDefault(it => it.id == line.id);
 
                     if (modelItem != null)
                     {
@@ -183,6 +184,8 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LinePurchaseOrders.Where(p => p.transid == transId));
         }
+
+        #region Helper
         public ActionResult PackUnit(string selectedItemIndex)
         {
             return Json(IWSLookUp.GetPackUnit(selectedItemIndex));
@@ -197,11 +200,13 @@ namespace IWSProject.Controllers
         }
         public ActionResult Price(string selectedItemIndex)
         {
-            return Json(IWSLookUp.GetPrice(selectedItemIndex));
+            return Json(IWSLookUp.GetSalesPrice(selectedItemIndex));
         }
         public ActionResult Text(string selectedItemIndex)
         {
             return Json(IWSLookUp.GetText(selectedItemIndex));
         }
+
+        #endregion
     }
 }

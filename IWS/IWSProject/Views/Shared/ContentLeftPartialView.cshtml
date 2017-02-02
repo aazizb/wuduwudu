@@ -35,14 +35,14 @@
                     .Any(x => roles.Contains(x) || x == "All")
                     select item;
         //build the action links
-        foreach (var link in menuItems.Where(p => (p.Parent == 0) && (p.HasAccess == false)))
+        foreach (var link in menuItems.Where(p => (p.Parent == 0) && (p.HasAccess == false)).OrderBy(o=>o.MenuOrder))
         {
             settings.Groups.Add(group =>
             {
                 group.Name = link.Name;
                 group.Text = rm.GetString(link.Name);
 
-                foreach (var mc in menus.Where(c => c.Parent == link.ID))
+                foreach (var mc in menus.Where(c => c.Parent == link.ID).OrderBy(o=>o.MenuOrder))
                 {
                     group.Items.Add(item =>
                     {

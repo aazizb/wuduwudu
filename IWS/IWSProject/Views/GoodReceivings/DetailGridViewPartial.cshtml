@@ -30,7 +30,10 @@
                 e.Enabled = false.Equals(value);
             }
         };
-
+        settings.InitNewRow = (s, e) =>
+        {
+            e.NewValues["duedate"] = DateTime.Today.AddDays(14);
+        };
         settings.KeyFieldName = "id";
 
         settings.Width = Unit.Percentage(100);
@@ -166,7 +169,7 @@
         #region Template
         settings.SetEditFormTemplateContent(templateContent =>
         {
-            var editItem = ViewData["lineGood"] != null ? ViewData["lineGood"] : templateContent.DataItem;
+            //var editItem = ViewData["lineGood"] != null ? ViewData["lineGood"] : templateContent.DataItem;
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {

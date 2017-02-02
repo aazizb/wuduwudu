@@ -30,6 +30,12 @@
                 e.Enabled = false.Equals(value);
             }
         };
+        //set default value
+        settings.InitNewRow = (s, e) =>
+        {
+            e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
+            e.NewValues["oid"] = 0;
+        };
         settings.KeyFieldName = "id";
 
         settings.Settings.ShowFilterRow = true;
@@ -165,6 +171,11 @@
 
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "oid";
+                    i.Caption = IWSLocalResource.oid;
+                });
 
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -176,8 +187,10 @@
                         s.Properties.ValueField = "id";
                         s.Properties.ValueType = typeof(string);
                         s.Properties.DataSource = IWSLookUp.GetStore();
-
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.TextFormatString = "{0}-{1}";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                     });
@@ -193,11 +206,15 @@
                         s.Properties.ValueField = "id";
                         s.Properties.ValueType = typeof(string);
                         s.Properties.DataSource = IWSLookUp.GetSuppliers();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.TextFormatString = "{0}-{1}";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                     });
                 });
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "CompanyId";
@@ -210,8 +227,8 @@
                         s.Properties.DataSource = IWSLookUp.GetCompanies();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
-                        s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.TextFormatString = "{0}-{1}";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                     });
@@ -242,7 +259,7 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
-
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;

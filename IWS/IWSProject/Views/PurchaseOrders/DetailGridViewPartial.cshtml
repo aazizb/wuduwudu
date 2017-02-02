@@ -5,7 +5,7 @@
     var grid = Html.DevExpress().GridView(settings =>
     {
         settings.Name = "DetailGridView";
-        settings.Caption = IWSLocalResource.lineprchaseorder;
+        settings.Caption = IWSLocalResource.linepurchaseorder;
         settings.SettingsDetail.MasterGridName = "MasterGridViewPartial";
         settings.CallbackRouteValues = new { Controller = "PurchaseOrders", Action = "DetailGridViewPartial", transid = Session["transid"] };
 
@@ -29,6 +29,12 @@
             {
                 e.Enabled = false.Equals(value);
             }
+        };
+
+        //set default value
+        settings.InitNewRow = (s, e) =>
+        {
+            e.NewValues["duedate"] = DateTime.Today.AddDays(14);
         };
         settings.KeyFieldName = "id";
 

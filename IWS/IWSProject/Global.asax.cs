@@ -32,6 +32,8 @@ namespace IWSProject
         {
             Exception exception = System.Web.HttpContext.Current.Server.GetLastError();
             //TODO: Handle Exception
+            //Server.ClearError();
+            //Response.Redirect("/Home/Error");
         }
         //how to specify culture & uiculture in Global.asax
         protected void Application_AcquireRequestState(object sender, EventArgs e)

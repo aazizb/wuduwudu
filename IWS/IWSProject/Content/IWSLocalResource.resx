@@ -213,7 +213,7 @@
   <data name="PurchaseOrder" xml:space="preserve">
     <value>Purchase Order</value>
   </data>
-  <data name="lineprchaseorder" xml:space="preserve">
+  <data name="linepurchaseorder" xml:space="preserve">
     <value>Line Purchase Order</value>
   </data>
   <data name="accountid" xml:space="preserve">
@@ -355,7 +355,7 @@
     <value>Master Files</value>
   </data>
   <data name="GenericError" xml:space="preserve">
-    <value>Sorry, an error occurred while processing your request.</value>
+    <value>Sorry, an error occurred while processing your request!</value>
   </data>
   <data name="action" xml:space="preserve">
     <value>Action Method</value>
@@ -387,14 +387,8 @@
   <data name="product" xml:space="preserve">
     <value>Product</value>
   </data>
-  <data name="RoleManagement1" xml:space="preserve">
-    <value>Roles Management</value>
-  </data>
   <data name="support" xml:space="preserve">
     <value>Support</value>
-  </data>
-  <data name="UsersManagement1" xml:space="preserve">
-    <value>Users Management</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
@@ -460,7 +454,7 @@
     <value>IsValidated</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
-    <value>Account Balance</value>
+    <value>Periodic Account Balance</value>
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Average Price</value>
@@ -490,9 +484,54 @@
     <value>Total</value>
   </data>
   <data name="journal" xml:space="preserve">
-    <value>Journal en-EN</value>
+    <value>Journal</value>
   </data>
   <data name="CustSupplier" xml:space="preserve">
     <value>Customer/Supplier</value>
+  </data>
+  <data name="selling" xml:space="preserve">
+    <value>Selling</value>
+  </data>
+  <data name="Settlement" xml:space="preserve">
+    <value>Settlement</value>
+  </data>
+  <data name="SalesInvoice" xml:space="preserve">
+    <value>Sales Invoice</value>
+  </data>
+  <data name="SalesOrder" xml:space="preserve">
+    <value>Sales Order</value>
+  </data>
+  <data name="BillOfDelivery" xml:space="preserve">
+    <value>Bill of Delivery</value>
+  </data>
+  <data name="Disable" xml:space="preserve">
+    <value>Disable</value>
+  </data>
+  <data name="HasAccess" xml:space="preserve">
+    <value>Is Header</value>
+  </data>
+  <data name="lineSalesOrder" xml:space="preserve">
+    <value>Line Sales Order</value>
+  </data>
+  <data name="lineBillOfDelivery" xml:space="preserve">
+    <value>Line Bill of delivery</value>
+  </data>
+  <data name="LineCustomerInvoice" xml:space="preserve">
+    <value>Line Customer Invoice</value>
+  </data>
+  <data name="LineSalesInvoice" xml:space="preserve">
+    <value>Line Sales Invoice</value>
+  </data>
+  <data name="linecashInflow" xml:space="preserve">
+    <value>Line Cash Inflow</value>
+  </data>
+  <data name="InsufficientStock" xml:space="preserve">
+    <value>Insufficient Stock</value>
+  </data>
+  <data name="CustomerInvoice" xml:space="preserve">
+    <value>Customer Invoice</value>
+  </data>
+  <data name="LineSettlement" xml:space="preserve">
+    <value>Line Settlement</value>
   </data>
 </root>

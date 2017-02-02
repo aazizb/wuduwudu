@@ -63,6 +63,7 @@ namespace IWSProject.Models
 
     public class JournalViewModel
     {
+        public int pk { get; set; }
         public int ItemID { get; set; }
         public int OID { get; set; }
         public int ModelID { get; set; }
@@ -142,12 +143,15 @@ namespace IWSProject.Models
         [Key]
         [Column(Order =2)]
         public string ItemID { get; set; }
+        public string ItemName { get; set; }
         public decimal Quantity { get; set; }
         public decimal Price { get; set; }
         public bool IsService { get; set; }
     }
     public class AccountBalanceViewModel
     {
+        public int pk { get; set; }
+
         [Key]
         public string AccountID { get; set; }
         public string Periode { get; set; }

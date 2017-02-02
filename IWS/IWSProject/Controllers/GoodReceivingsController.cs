@@ -18,7 +18,7 @@ namespace IWSProject.Controllers
         [ValidateInput(false)]
         public ActionResult MasterGridViewPartial()
         {
-            return PartialView("MasterGridViewPartial", db.GoodReceivings.ToList().OrderByDescending(o => o.id));
+            return PartialView("MasterGridViewPartial", db.GoodReceivings.ToList());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Models.GoodReceiving item)
@@ -26,7 +26,7 @@ namespace IWSProject.Controllers
             var model = db.GoodReceivings;
             item.IsValidated = false;
             item.modelid = 104;
-            item.oid = 0;
+            item.oid = item.oid ?? 0;
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
@@ -181,6 +181,8 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LineGoodReceivings.Where(p => p.transid == transId).ToList());
         }
+
+        #region Helper
         public ActionResult PackUnit(string selectedItemIndex)
         {
             return Json(IWSLookUp.GetPackUnit(selectedItemIndex));
@@ -195,11 +197,14 @@ namespace IWSProject.Controllers
         }
         public ActionResult Price(string selectedItemIndex)
         {
-            return Json(IWSLookUp.GetPrice(selectedItemIndex));
+            return Json(IWSLookUp.GetSalesPrice(selectedItemIndex));
         }
         public ActionResult Text(string selectedItemIndex)
         {
             return Json(IWSLookUp.GetText(selectedItemIndex));
         }
+
+
+        #endregion
     }
 }

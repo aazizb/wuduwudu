@@ -77,6 +77,7 @@ namespace IWSProject.Controllers
 
         public ActionResult LogOff() {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
+            Session["Menus"] = null;
             return Redirect("/");
         }
 

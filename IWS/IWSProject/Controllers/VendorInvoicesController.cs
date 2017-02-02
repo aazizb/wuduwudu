@@ -25,7 +25,8 @@ namespace IWSProject.Controllers
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] VendorInvoice item)
         {
             var model = db.VendorInvoices;
-
+            item.IsValidated = false;
+            item.modelid = 112;
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
@@ -106,7 +107,7 @@ namespace IWSProject.Controllers
             var model = db.LineVendorInvoices;
 
             line.transid = transId;
-
+            line.modelid = 113;
             ViewData["line"] = line;
             if (ModelState.IsValid)
             {
@@ -180,6 +181,7 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LineVendorInvoices.Where(p => p.transid == transId).ToList());
         }
+        #region Helper
         public ActionResult PackUnit(string selectedItemIndex)
         {
             return Json(IWSLookUp.GetPackUnit(selectedItemIndex));
@@ -200,5 +202,7 @@ namespace IWSProject.Controllers
         {
             return Json(IWSLookUp.GetText(selectedItemIndex));
         }
+
+        #endregion
     }
 }

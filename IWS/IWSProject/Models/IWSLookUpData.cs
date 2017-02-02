@@ -110,7 +110,7 @@
             {
                 List<Menu> menus = new List<Menu>();
 
-                menus = IWSEntities.Menus.ToList();
+                menus = IWSEntities.Menus.Where(m=>m.Disable==false).ToList();
 
                 HttpContext.Current.Session["Menus"] = menus;
             }
@@ -124,6 +124,32 @@
                 Name = item.name
             }).OrderBy(o => o.Id);
             return supplier;
+        }
+        public static IEnumerable GetCustSuppliers()
+        {
+            var CustSupplier = IWSEntities.Suppliers.AsEnumerable().
+                        Select(item => new
+                        {
+                            Id = item.id,
+                            Name = item.name
+                        }).
+                        Union(IWSEntities.Customers.AsEnumerable().
+                        Select(item =>new
+                        {
+                            Id = item.id,
+                            Name = item.name
+                        })).
+                        OrderBy(o => o.Id);
+            return CustSupplier;
+        }
+        public static IEnumerable GetCustomers()
+        {
+            var customer = IWSEntities.Customers.AsEnumerable().Select(item => new
+            {
+                Id = item.id,
+                Name = item.name
+            }).OrderBy(o => o.Id);
+            return customer;
         }
         public static IEnumerable GetCompanies()
         {
@@ -149,7 +175,7 @@
             (from line in IWSEntities.LineVendorInvoices
                 where line.VendorInvoice.IsValidated == IsValidated
                 from Item in IWSEntities.Localizations
-                where Item.ItemName == "VendorInvoice" && Item.UICulture == uiCulture
+                where Item.ItemName == DocsType.VendorInvoice.ToString()  && Item.UICulture == uiCulture
                 group new
                 {
                     line.VendorInvoice,
@@ -188,7 +214,7 @@
             (from line in IWSEntities.LinePurchaseOrders
              where line.PurchaseOrder.IsValidated == IsValidated
              from Item in IWSEntities.Localizations
-             where Item.ItemName == "PurchaseOrder" && Item.UICulture == uiCulture
+             where Item.ItemName == DocsType.PurchaseOrder.ToString() && Item.UICulture == uiCulture
              group new
              {
                  line.PurchaseOrder,
@@ -230,7 +256,7 @@
              (from line in IWSEntities.LinePayments
              where line.Payment.IsValidated == IsValidated
              from Item in IWSEntities.Localizations
-             where Item.ItemName == "Payment" && Item.UICulture == uiCulture
+             where Item.ItemName == DocsType.Payment.ToString() && Item.UICulture == uiCulture
              group new
              {
                  line.Payment,
@@ -269,7 +295,7 @@
                 (from line in IWSEntities.LineInventoryInvoices
                  where line.InventoryInvoice.IsValidated == IsValidated
                  from Item in IWSEntities.Localizations
-                 where Item.ItemName == "InventoryInvoice" && Item.UICulture == uiCulture
+                 where Item.ItemName == DocsType.InventoryInvoice.ToString() && Item.UICulture == uiCulture
                  group new
                  {
                      line.InventoryInvoice,
@@ -310,7 +336,7 @@
             (from line in IWSEntities.LineGoodReceivings
              where line.GoodReceiving.IsValidated == IsValidated
              from Item in IWSEntities.Localizations
-             where Item.ItemName == "GoodReceiving" && Item.UICulture == uiCulture
+             where Item.ItemName == DocsType.GoodReceiving.ToString() && Item.UICulture == uiCulture
              group new
              {
                  line.GoodReceiving,
@@ -345,6 +371,207 @@
              }), o => o.ItemID).ToList();
             return BL;
         }
+        public static List<ValidateDocsViewModel> GetSalesOrder(string uiCulture, bool IsValidated)
+        {
+            List<ValidateDocsViewModel> BL = Queryable.OrderBy(
+            (from line in IWSEntities.LineSalesOrders
+             where line.SalesOrder.IsValidated == IsValidated
+             from Item in IWSEntities.Localizations
+             where Item.ItemName == DocsType.SalesOrder.ToString() && Item.UICulture == uiCulture
+             group new
+             {
+                 line.SalesOrder,
+                 line,
+                 line.Article.Vat
+             } by new
+             {
+                 line.SalesOrder.id,
+                 ItemType = Item.LocalName,
+                 ItemDate = (DateTime?)line.SalesOrder.ItemDate,
+                 xMonth = (Convert.ToString((int?)line.SalesOrder.ItemDate.Month)).Length == 1 ?
+                                                     '0' + Convert.ToString((int?)line.SalesOrder.ItemDate.Month) :
+                                                     Convert.ToString((int?)line.SalesOrder.ItemDate.Month),
+                 xYear = Convert.ToString((int?)line.SalesOrder.ItemDate.Year),
+                 line.SalesOrder.account,
+                 line.SalesOrder.CompanyId,
+                 line.VatCode
+             } into g
+             orderby
+                 g.Key.id
+             select new ValidateDocsViewModel()
+             {
+                 ItemID = g.Key.id,
+                 ItemType = g.Key.ItemType,
+                 DueDate = Convert.ToDateTime(g.Key.ItemDate),
+                 Periode = g.Key.xYear + g.Key.xMonth,
+                 SupplierID = g.Key.account,
+                 CompanyID = g.Key.CompanyId,
+                 VAT = g.Key.VatCode,
+                 TotalVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity * p.line.Article.Vat.PVat)),
+                 TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity))
+             }), o => o.ItemID).ToList();
+            return BL;
+        }
+        public static List<ValidateDocsViewModel> GetBillOfDelivery(string uiCulture, bool IsValidated)
+        {
+            List<ValidateDocsViewModel> BL = Queryable.OrderBy(
+            (from line in IWSEntities.LineBillOfDeliveries
+             where line.BillOfDelivery.IsValidated == IsValidated
+             from Item in IWSEntities.Localizations
+             where Item.ItemName == DocsType.BillOfDelivery.ToString() && Item.UICulture == uiCulture
+             group new
+             {
+                 line.BillOfDelivery,
+                 line,
+                 line.Article.Vat
+             } by new
+             {
+                 line.BillOfDelivery.id,
+                 ItemType = Item.LocalName,
+                 ItemDate = (DateTime?)line.BillOfDelivery.ItemDate,
+                 xMonth = (Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month)).Length == 1 ?
+                                                     '0' + Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month) :
+                                                     Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month),
+                 xYear = Convert.ToString((int?)line.BillOfDelivery.ItemDate.Year),
+                 line.BillOfDelivery.account,
+                 line.BillOfDelivery.CompanyId,
+                 line.VatCode
+             } into g
+             orderby
+                g.Key.id
+             select new ValidateDocsViewModel()
+             {
+                 ItemID = g.Key.id,
+                 ItemType = g.Key.ItemType,
+                 DueDate = Convert.ToDateTime(g.Key.ItemDate),
+                 Periode = g.Key.xYear + g.Key.xMonth,
+                 SupplierID = g.Key.account,
+                 CompanyID = g.Key.CompanyId,
+                 VAT = g.Key.VatCode,
+                 TotalVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity * p.line.Article.Vat.PVat)),
+                 TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity))
+             }), o => o.ItemID).ToList();
+            return BL;
+        }
+        public static List<ValidateDocsViewModel> GetSalesInvoice(string uiCulture, bool IsValidated)
+        {
+            List<ValidateDocsViewModel> BL = Queryable.OrderBy(
+                (from line in IWSEntities.LineSalesInvoices
+                 where line.SalesInvoice.IsValidated == IsValidated
+                 from Item in IWSEntities.Localizations
+                 where Item.ItemName == DocsType.SalesInvoice.ToString() && Item.UICulture == uiCulture
+                 group new
+                 {
+                     line.SalesInvoice,
+                     line,
+                     line.Article.Vat
+                 } by new
+                 {
+                     line.SalesInvoice.id,
+                     ItemType = Item.LocalName,
+                     ItemDate = (DateTime?)line.SalesInvoice.ItemDate,
+                     xMonth = (Convert.ToString((int?)line.SalesInvoice.ItemDate.Month)).Length == 1 ?
+                                                         '0' + Convert.ToString((int?)line.SalesInvoice.ItemDate.Month) :
+                                                         Convert.ToString((int?)line.SalesInvoice.ItemDate.Month),
+                     xYear = Convert.ToString((int?)line.SalesInvoice.ItemDate.Year),
+                     line.SalesInvoice.account,
+                     line.SalesInvoice.CompanyId,
+                     line.VATCode
+                 } into g
+                 orderby
+                    g.Key.id
+                 select new ValidateDocsViewModel()
+                 {
+                     ItemID = g.Key.id,
+                     ItemType = g.Key.ItemType,
+                     DueDate = Convert.ToDateTime(g.Key.ItemDate),
+                     Periode = g.Key.xYear + g.Key.xMonth,
+                     SupplierID = g.Key.account,
+                     CompanyID = g.Key.CompanyId,
+                     VAT = g.Key.VATCode,
+                     TotalVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity * p.line.Article.Vat.PVat)),
+                     TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity))
+                 }), o => o.ItemID).ToList();
+            return BL;
+        }
+        public static List<ValidateDocsViewModel> GetCustomerInvoice(string uiCulture, bool IsValidated)
+        {
+            List<ValidateDocsViewModel> BL = Queryable.OrderBy(
+            (from line in IWSEntities.LineCustomerInvoices
+             where line.CustomerInvoice.IsValidated == IsValidated
+             from Item in IWSEntities.Localizations
+             where Item.ItemName == DocsType.CustomerInvoice.ToString() && Item.UICulture == uiCulture
+             group new
+             {
+                 line.CustomerInvoice,
+                 line
+             } by new
+             {
+                 line.CustomerInvoice.id,
+                 ItemType = Item.LocalName,
+                 ItemDate = (DateTime?)line.CustomerInvoice.ItemDate,
+                 xMonth = (Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month)).Length == 1 ?
+                                                  '0' + Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month) :
+                                                  Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month),
+                 xYear = Convert.ToString((int?)line.CustomerInvoice.ItemDate.Year),
+                 line.CustomerInvoice.account,
+                 line.CustomerInvoice.CompanyId
+             } into g
+             orderby
+                     g.Key.id
+             select new ValidateDocsViewModel()
+             {
+                 ItemID = g.Key.id,
+                 ItemType = g.Key.ItemType,
+                 DueDate = Convert.ToDateTime(g.Key.ItemDate),
+                 Periode = g.Key.xYear + g.Key.xMonth,
+                 SupplierID = g.Key.account,
+                 CompanyID = g.Key.CompanyId,
+                 VAT = "0",
+                 TotalVAT = 0,
+                 TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => (double)p.line.amount))
+             }), o => o.ItemID).ToList();
+            return BL;
+        }
+        public static List<ValidateDocsViewModel> GetSettlement(string uiCulture, bool IsValidated)
+        {
+            List<ValidateDocsViewModel> BL = Queryable.OrderBy(
+            (from line in IWSEntities.LineSettlements
+             where line.Settlement.IsValidated == IsValidated
+             from Item in IWSEntities.Localizations
+             where Item.ItemName == DocsType.Settlement.ToString() && Item.UICulture == uiCulture
+             group new
+             {
+                 line.Settlement,
+                 line
+             } by new
+             {
+                 line.Settlement.id,
+                 ItemType = Item.LocalName,
+                 ItemDate = (DateTime?)line.Settlement.ItemDate,
+                 xMonth = (Convert.ToString((int?)line.Settlement.ItemDate.Month)).Length == 1 ?
+                                                      '0' + Convert.ToString((int?)line.Settlement.ItemDate.Month) :
+                                                      Convert.ToString((int?)line.Settlement.ItemDate.Month),
+                 xYear = Convert.ToString((int?)line.Settlement.ItemDate.Year),
+                 line.Settlement.account,
+                 line.Settlement.CompanyId,
+             } into g
+             orderby
+                  g.Key.id
+             select new ValidateDocsViewModel()
+             {
+                 ItemID = g.Key.id,
+                 ItemType = g.Key.ItemType,
+                 DueDate = Convert.ToDateTime(g.Key.ItemDate),
+                 Periode = g.Key.xYear + g.Key.xMonth,
+                 SupplierID = g.Key.account,
+                 CompanyID = g.Key.CompanyId,
+                 VAT = "0",
+                 TotalVAT = 0,
+                 TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => (double)p.line.amount))
+             }), o => o.ItemID).ToList();
+            return BL;
+        }
         public static List<DocumentsViewModel> GetAccountingDocument(bool IsValidated) 
         {
             // get current thread UICulture
@@ -354,7 +581,12 @@
                                             Union(GetPurchaseOrder(uiCulture, IsValidated)).
                                             Union(GetPayment(uiCulture, IsValidated)).
                                             Union(GetInventoryInvoice(uiCulture, IsValidated)).
-                                            Union(GetGoodReceiving(uiCulture, IsValidated)).ToList();
+                                            Union(GetGoodReceiving(uiCulture, IsValidated)).
+                                            Union(GetSalesOrder(uiCulture, IsValidated)).
+                                            Union(GetBillOfDelivery(uiCulture, IsValidated)).
+                                            Union(GetSalesInvoice(uiCulture, IsValidated)).
+                                            Union(GetCustomerInvoice(uiCulture, IsValidated)).
+                                            Union(GetSettlement(uiCulture, IsValidated)).ToList();
             List<DocumentsViewModel> documents = (
                                             from doc in document
                                             group doc by new
@@ -378,12 +610,13 @@
             List<AccountBalanceViewModel> items = (from PeriodicAccountBalance in IWSEntities.PeriodicAccountBalances
                                                 select new AccountBalanceViewModel()
                                                 {
+                                                    pk=PeriodicAccountBalance.Id,
                                                     AccountID = (PeriodicAccountBalance.Account.id + "-" + 
                                                                         PeriodicAccountBalance.Account.name),
                                                     Periode = PeriodicAccountBalance.Periode,
                                                     Debit = PeriodicAccountBalance.Debit,
                                                     Credit = PeriodicAccountBalance.Credit
-                                                }).ToList();
+                                                }).OrderBy(o=>o.pk).ToList();
             return items;
         }
         public static IEnumerable GetJournal()
@@ -439,6 +672,10 @@
         {
             return IWSEntities.Articles.FirstOrDefault(c => c.id == id).price;
         }
+        public static decimal GetSalesPrice(string id)
+        {
+            return IWSEntities.Articles.FirstOrDefault(c => c.id == id).salesprice;
+        }
         public static string GetText(string id)
         {
             return IWSEntities.Articles.FirstOrDefault(c => c.id == id).description;
@@ -451,6 +688,25 @@
                 Name = item.PVat
             }).OrderBy(o => o.Name);
             return vat;
+        }
+
+        public enum DocsType
+        {
+            SalesInvoice,
+            SalesOrder,
+            BillOfDelivery,
+            GoodReceiving,
+            InventoryInvoice,
+            Payment,
+            PurchaseOrder,
+            CustomerInvoice,
+            Settlement,
+            VendorInvoice
+        }
+        public enum Side
+        {
+            Credit,
+            Debit
         }
     }
 }

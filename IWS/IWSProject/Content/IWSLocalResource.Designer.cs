@@ -70,7 +70,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Account Balance.
+        ///   Looks up a localized string similar to Periodic Account Balance.
         /// </summary>
         public static string AccountBalance {
             get {
@@ -205,6 +205,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bill of Delivery.
+        /// </summary>
+        public static string BillOfDelivery {
+            get {
+                return ResourceManager.GetString("BillOfDelivery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to New.
         /// </summary>
         public static string btnAddNew {
@@ -331,6 +340,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer Invoice.
+        /// </summary>
+        public static string CustomerInvoice {
+            get {
+                return ResourceManager.GetString("CustomerInvoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customer/Supplier.
         /// </summary>
         public static string CustSupplier {
@@ -385,6 +403,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Disable.
+        /// </summary>
+        public static string Disable {
+            get {
+                return ResourceManager.GetString("Disable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Download.
         /// </summary>
         public static string download {
@@ -430,7 +457,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sorry, an error occurred while processing your request..
+        ///   Looks up a localized string similar to Sorry, an error occurred while processing your request!.
         /// </summary>
         public static string GenericError {
             get {
@@ -453,6 +480,15 @@ namespace IWSProject.Content {
         public static string groupid {
             get {
                 return ResourceManager.GetString("groupid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Header.
+        /// </summary>
+        public static string HasAccess {
+            get {
+                return ResourceManager.GetString("HasAccess", resourceCulture);
             }
         }
         
@@ -480,6 +516,15 @@ namespace IWSProject.Content {
         public static string inputvataccountid {
             get {
                 return ResourceManager.GetString("inputvataccountid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Insufficient Stock.
+        /// </summary>
+        public static string InsufficientStock {
+            get {
+                return ResourceManager.GetString("InsufficientStock", resourceCulture);
             }
         }
         
@@ -520,7 +565,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Journal en-EN.
+        ///   Looks up a localized string similar to Journal.
         /// </summary>
         public static string journal {
             get {
@@ -534,6 +579,33 @@ namespace IWSProject.Content {
         public static string LastName {
             get {
                 return ResourceManager.GetString("LastName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Bill of delivery.
+        /// </summary>
+        public static string lineBillOfDelivery {
+            get {
+                return ResourceManager.GetString("lineBillOfDelivery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Cash Inflow.
+        /// </summary>
+        public static string linecashInflow {
+            get {
+                return ResourceManager.GetString("linecashInflow", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Customer Invoice.
+        /// </summary>
+        public static string LineCustomerInvoice {
+            get {
+                return ResourceManager.GetString("LineCustomerInvoice", resourceCulture);
             }
         }
         
@@ -567,9 +639,36 @@ namespace IWSProject.Content {
         /// <summary>
         ///   Looks up a localized string similar to Line Purchase Order.
         /// </summary>
-        public static string lineprchaseorder {
+        public static string linepurchaseorder {
             get {
-                return ResourceManager.GetString("lineprchaseorder", resourceCulture);
+                return ResourceManager.GetString("linepurchaseorder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Sales Invoice.
+        /// </summary>
+        public static string LineSalesInvoice {
+            get {
+                return ResourceManager.GetString("LineSalesInvoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Sales Order.
+        /// </summary>
+        public static string lineSalesOrder {
+            get {
+                return ResourceManager.GetString("lineSalesOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Settlement.
+        /// </summary>
+        public static string LineSettlement {
+            get {
+                return ResourceManager.GetString("LineSettlement", resourceCulture);
             }
         }
         
@@ -889,15 +988,6 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Roles Management.
-        /// </summary>
-        public static string RoleManagement1 {
-            get {
-                return ResourceManager.GetString("RoleManagement1", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Roles.
         /// </summary>
         public static string Roles {
@@ -934,11 +1024,47 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sales Invoice.
+        /// </summary>
+        public static string SalesInvoice {
+            get {
+                return ResourceManager.GetString("SalesInvoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sales Order.
+        /// </summary>
+        public static string SalesOrder {
+            get {
+                return ResourceManager.GetString("SalesOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sales Price.
         /// </summary>
         public static string salesprice {
             get {
                 return ResourceManager.GetString("salesprice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selling.
+        /// </summary>
+        public static string selling {
+            get {
+                return ResourceManager.GetString("selling", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settlement.
+        /// </summary>
+        public static string Settlement {
+            get {
+                return ResourceManager.GetString("Settlement", resourceCulture);
             }
         }
         
@@ -1137,15 +1263,6 @@ namespace IWSProject.Content {
         public static string usersmanagement {
             get {
                 return ResourceManager.GetString("usersmanagement", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Users Management.
-        /// </summary>
-        public static string UsersManagement1 {
-            get {
-                return ResourceManager.GetString("UsersManagement1", resourceCulture);
             }
         }
         

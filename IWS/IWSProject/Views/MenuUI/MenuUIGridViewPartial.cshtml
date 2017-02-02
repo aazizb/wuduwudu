@@ -146,6 +146,27 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "Disable";
+                    i.Caption = IWSLocalResource.Disable;
+                    i.NestedExtension().CheckBox(e =>
+                    {
+
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "HasAccess";
+                    i.Caption = IWSLocalResource.HasAccess;
+                    i.NestedExtension().CheckBox(e =>
+                    {
+
+                    });
+                });
+
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {

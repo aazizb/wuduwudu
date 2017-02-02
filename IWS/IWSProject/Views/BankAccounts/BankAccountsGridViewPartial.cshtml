@@ -71,7 +71,6 @@
                 p.DisplayFormatString = "c";
                 p.DisplayFormatInEditMode = true;
                 p.MinValue = 0;
-                p.MaxValue = UInt32.MaxValue;
                 p.SpinButtons.ShowLargeIncrementButtons = true;
                 p.Width = Unit.Percentage(100);
             });
@@ -85,7 +84,6 @@
                 p.DisplayFormatString = "c";
                 p.DisplayFormatInEditMode = true;
                 p.MinValue = 0;
-                p.MaxValue = UInt32.MaxValue;
                 p.SpinButtons.ShowLargeIncrementButtons = true;
                 p.Width = Unit.Percentage(100);
             });
@@ -165,10 +163,12 @@
                 {
                     i.FieldName = "debit";
                     i.Caption = IWSLocalResource.debit;
-                    i.NestedExtension().TextBox(s =>
+                    i.NestedExtension().SpinEdit(s =>
                     {
+                        s.Properties.DisplayFormatString = "C";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
+                        s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
                         s.Width = Unit.Percentage(100);
                     });
                 });
@@ -179,9 +179,8 @@
                     i.NestedExtension().SpinEdit(s =>
                     {
                         s.Properties.DisplayFormatString = "C";
-                        s.Properties.MinValue = 0;
-                        s.Properties.MaxValue = UInt32.MaxValue;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
                         s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
                         s.Width = Unit.Percentage(100);
                     });

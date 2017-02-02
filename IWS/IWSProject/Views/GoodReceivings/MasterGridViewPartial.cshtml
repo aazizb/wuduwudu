@@ -42,6 +42,12 @@
             }
         };
 
+        settings.InitNewRow = (s, e) =>
+        {
+            e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
+            e.NewValues["oid"] = 0;
+        };
+
         settings.KeyFieldName = "id";
 
         settings.Settings.ShowFilterRow = true;
@@ -72,11 +78,11 @@
 
         settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
         settings.SettingsDetail.ShowDetailRow = true;
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "IsValidated";
-            column.Visible = false;
-        });
+        //settings.Columns.Add(column =>
+        //{
+        //    column.FieldName = "IsValidated";
+        //    column.Visible = false;
+        //});
 
         settings.Columns.Add(column =>
         {
@@ -172,7 +178,11 @@
 
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
-
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "oid";
+                    i.Caption = IWSLocalResource.oid;
+                });
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "store";

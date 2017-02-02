@@ -31,6 +31,10 @@
                 e.Enabled = false.Equals(value);
             }
         };
+        settings.InitNewRow = (s, e) =>
+        {
+            e.NewValues["duedate"] = DateTime.Today.AddDays(14);
+        };
         settings.KeyFieldName = "id";
 
         settings.Width = Unit.Percentage(100);

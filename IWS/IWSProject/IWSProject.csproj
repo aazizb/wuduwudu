@@ -564,6 +564,27 @@
     <Content Include="Views\Balance\AccountBalancePartialView.cshtml" />
     <Content Include="Views\Journal\Index.cshtml" />
     <Content Include="Views\Journal\JournalPartialView.cshtml" />
+    <Content Include="Views\CustomerOrders\Index.cshtml" />
+    <Content Include="Views\CustomerOrders\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\CustomerOrders\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\CustomerInvoices\Index.cshtml" />
+    <Content Include="Views\CustomerInvoices\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\CustomerInvoices\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\BuyerInvoices\Index.cshtml" />
+    <Content Include="Views\BuyerInvoices\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\BuyerInvoices\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\Settlements\Index.cshtml" />
+    <Content Include="Views\Settlements\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\Settlements\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\SalesInvoices\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\SalesInvoices\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\SalesInvoices\Index.cshtml" />
+    <Content Include="Views\BillOfDeliveries\Index.cshtml" />
+    <Content Include="Views\BillOfDeliveries\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\BillOfDeliveries\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\SalesOrders\Index.cshtml" />
+    <Content Include="Views\SalesOrders\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\SalesOrders\DetailGridViewPartial.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -609,9 +630,14 @@
     <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\BanksController.cs" />
+    <Compile Include="Controllers\SalesInvoicesController.cs" />
+    <Compile Include="Controllers\SettlementsController.cs" />
     <Compile Include="Controllers\CompaniesController.cs" />
     <Compile Include="Controllers\CostCentersController.cs" />
+    <Compile Include="Controllers\CustomerInvoicesController.cs" />
+    <Compile Include="Controllers\SalesOrdersController.cs" />
     <Compile Include="Controllers\CustomersController.cs" />
+    <Compile Include="Controllers\BillOfDeliveriesController.cs" />
     <Compile Include="Controllers\GoodReceivingsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\InventoryInvoicesController.cs" />

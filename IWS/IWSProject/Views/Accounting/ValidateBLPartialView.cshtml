@@ -21,7 +21,7 @@
         settings.CommandColumn.ShowSelectCheckbox = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.SettingsPager.PageSize = 24;
+        
         settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
         settings.Settings.VerticalScrollableHeight = 350;
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
@@ -69,15 +69,15 @@
         settings.Columns.Add(column =>
         {
             column.FieldName = "SupplierID";
-            column.Caption = IWSLocalResource.supplier;
+            column.Caption = IWSLocalResource.CustSupplier;
             column.EditorProperties().ComboBox(combo =>
             {
                 combo.TextField = "Name";
                 combo.ValueField = "id";
                 combo.ValueType = typeof(string);
-                combo.DataSource = IWSLookUp.GetSuppliers();
+                combo.DataSource = IWSLookUp.GetCustSuppliers();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
-                combo.Columns.Add("name").Caption = IWSLocalResource.supplier;
+                combo.Columns.Add("name").Caption = IWSLocalResource.CustSupplier;
                 combo.TextFormatString = "{0}-{1}";
             });
         });

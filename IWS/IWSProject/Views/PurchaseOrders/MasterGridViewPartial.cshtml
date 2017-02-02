@@ -30,6 +30,12 @@
                 e.Enabled = false.Equals(value);
             }
         };
+        //set default value
+        settings.InitNewRow = (s, e) =>
+        {
+            e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
+            e.NewValues["oid"] = 0;
+        };
 
         settings.KeyFieldName = "id";
 
@@ -121,6 +127,22 @@
         });
         settings.Columns.Add(column =>
         {
+            column.FieldName = "CompanyId";
+            column.Caption = IWSLocalResource.company;
+
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetCompanies();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.company;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
+        settings.Columns.Add(column =>
+        {
             column.FieldName = "ItemDate";
             column.Caption = IWSLocalResource.duedate;
             column.ColumnType = MVCxGridViewColumnType.DateEdit;
@@ -150,6 +172,12 @@
 
                 formLayoutSettings.Items.Add(i =>
                 {
+                    i.FieldName = "oid";
+                    i.Caption = IWSLocalResource.oid;
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
                     i.FieldName = "store";
                     i.Caption = IWSLocalResource.store;
                     i.NestedExtension().ComboBox(s =>
@@ -161,6 +189,7 @@
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.TextFormatString = "{0}-{1}";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                     });
@@ -179,15 +208,36 @@
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.TextFormatString = "{0}-{1}";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
                 {
+                    i.FieldName = "CompanyId";
+                    i.Caption = IWSLocalResource.company;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "Name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetCompanies();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+
                     i.FieldName = "ItemDate";
                     i.Caption = IWSLocalResource.duedate;
                     i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+
                     i.NestedExtension().DateEdit(s =>
                     {
                         s.Properties.UseMaskBehavior = true;
@@ -198,8 +248,6 @@
                         s.Properties.AllowMouseWheel = true;
                     });
                 });
-
-                formLayoutSettings.Items.AddEmptyItem();
 
                 formLayoutSettings.Items.Add(i =>
                 {

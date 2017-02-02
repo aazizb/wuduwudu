@@ -24,7 +24,8 @@ namespace IWSProject.Controllers
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Payment item)
         {
             var model = db.Payments;
-
+            item.IsValidated = false;
+            item.modelid = 114;
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
@@ -100,18 +101,18 @@ namespace IWSProject.Controllers
             return PartialView("DetailGridViewPartial", db.LinePayments.Where(p => p.transid == transid).ToList());
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LinePayment linePayment, int transId)
+        public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LinePayment line, int transId)
         {
             var model = db.LinePayments;
 
-            linePayment.transid = transId;
-
-            ViewData["linePayment"] = linePayment;
+            line.transid = transId;
+            line.modelid = 115;
+            ViewData["linePayment"] = line;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    model.InsertOnSubmit(linePayment);
+                    model.InsertOnSubmit(line);
                     db.SubmitChanges();
                 }
                 catch (Exception e)
@@ -178,25 +179,6 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LinePayments.Where(p => p.transid == transId).ToList());
         }
-        public ActionResult PackUnit(string selectedItemIndex)
-        {
-            return Json(IWSLookUp.GetPackUnit(selectedItemIndex));
-        }
-        public ActionResult QttyUnit(string selectedItemIndex)
-        {
-            return Json(IWSLookUp.GetQttyUnit(selectedItemIndex));
-        }
-        public ActionResult Vat(string selectedItemIndex)
-        {
-            return Json(IWSLookUp.GetVatCode(selectedItemIndex));
-        }
-        public ActionResult Price(string selectedItemIndex)
-        {
-            return Json(IWSLookUp.GetPrice(selectedItemIndex));
-        }
-        public ActionResult Text(string selectedItemIndex)
-        {
-            return Json(IWSLookUp.GetText(selectedItemIndex));
-        }
+
     }
 }

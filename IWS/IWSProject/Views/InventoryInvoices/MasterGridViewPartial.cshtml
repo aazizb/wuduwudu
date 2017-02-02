@@ -30,6 +30,11 @@
                 e.Enabled = false.Equals(value);
             }
         };
+        settings.InitNewRow = (s, e) =>
+        {
+            e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
+            e.NewValues["oid"] = 0;
+        };
         settings.KeyFieldName = "id";
 
         settings.Settings.ShowFilterRow = true;
@@ -166,7 +171,11 @@
 
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
-
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "oid";
+                    i.Caption = IWSLocalResource.oid;
+                });
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "store";
@@ -185,7 +194,6 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
-
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "account";
@@ -248,6 +256,7 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
