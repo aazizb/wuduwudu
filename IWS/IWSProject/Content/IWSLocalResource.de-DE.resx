@@ -531,4 +531,49 @@
   <data name="LineSettlement" xml:space="preserve">
     <value>Line Settlement de-DE</value>
   </data>
+  <data name="IsService" xml:space="preserve">
+    <value>Is Service de-DE</value>
+  </data>
+  <data name="GeneralLedger" xml:space="preserve">
+    <value>General Ledger de-DE</value>
+  </data>
+  <data name="lineGeneralLedger" xml:space="preserve">
+    <value>Line General Ledger de-DE</value>
+  </data>
+  <data name="PeriodFrom" xml:space="preserve">
+    <value>Period From de-DE:</value>
+  </data>
+  <data name="PeriodTo" xml:space="preserve">
+    <value>Period To de-DE:</value>
+  </data>
+  <data name="Consultation" xml:space="preserve">
+    <value>Consultation de-DE</value>
+  </data>
+  <data name="PreviewPrint" xml:space="preserve">
+    <value>Preview and Print de-DE</value>
+  </data>
+  <data name="AccountFrom" xml:space="preserve">
+    <value>Account From de-DE:</value>
+  </data>
+  <data name="AccountTo" xml:space="preserve">
+    <value>Account To de-DE:</value>
+  </data>
+  <data name="ItemCount" xml:space="preserve">
+    <value>Item Count de-DE</value>
+  </data>
+  <data name="Subtotal" xml:space="preserve">
+    <value>Subtotal de-DE</value>
+  </data>
+  <data name="CompanyInfo" xml:space="preserve">
+    <value>Company Information de-DE</value>
+  </data>
+  <data name="CompanyLogo" xml:space="preserve">
+    <value>Company Logo de-DE</value>
+  </data>
+  <data name="ChooseLogo" xml:space="preserve">
+    <value>Choose company's Logo de-DE</value>
+  </data>
+  <data name="SetLogo" xml:space="preserve">
+    <value>Set company's Logo de-DE</value>
+  </data>
 </root>

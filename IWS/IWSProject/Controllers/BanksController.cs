@@ -27,6 +27,7 @@ namespace IWSProject.Controllers
         {
             var model = db.Banks;
             ViewData["bank"] = item;
+            item.modelid = 11;
             if (ModelState.IsValid)
             {
                 try

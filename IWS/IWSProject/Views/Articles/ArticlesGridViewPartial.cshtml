@@ -61,6 +61,14 @@
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("name").Caption = IWSLocalResource.item;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "IsService";
+            column.Caption = IWSLocalResource.IsService;
+            column.EditorProperties().CheckBox(checkBox =>
+            {
+            });
+        });
         settings.Columns.Add("description").Caption = IWSLocalResource.description;
         settings.Columns.Add(column =>
         {
@@ -128,7 +136,6 @@
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
         {
-            var editItem = ViewData["article"] != null ? ViewData["article"] : templateContent.DataItem;
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
@@ -160,8 +167,18 @@
                 });
                 formLayoutSettings.Items.Add(i =>
                 {
+                    i.FieldName = "IsService";
+                    i.Caption = IWSLocalResource.IsService;
+                    i.NestedExtension().CheckBox(e =>
+                    {
+
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
                     i.FieldName = "modelid";
                     i.Caption = IWSLocalResource.modelid;
+                    i.Visible = false;
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -276,6 +293,8 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;

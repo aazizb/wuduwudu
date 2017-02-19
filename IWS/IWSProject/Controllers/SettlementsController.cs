@@ -7,6 +7,7 @@ using IWSProject.Content;
 
 namespace IWSProject.Controllers
 {
+    [Authorize]
     public class SettlementsController : Controller
     {
         IWSDataContext db = new IWSDataContext();

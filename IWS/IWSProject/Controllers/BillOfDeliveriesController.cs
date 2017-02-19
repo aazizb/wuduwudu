@@ -6,6 +6,7 @@ using IWSProject.Models;
 using IWSProject.Content;
 namespace IWSProject.Controllers
 {
+    [Authorize]
     public class BillOfDeliveriesController : Controller
     {
         private IWSDataContext db = new IWSDataContext();
@@ -20,7 +21,7 @@ namespace IWSProject.Controllers
             return PartialView("MasterGridViewPartial", db.BillOfDeliveries.ToList());
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] BillOfDelivery item)
+        public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Models.BillOfDelivery item)
         {
             var model = db.BillOfDeliveries;
             item.IsValidated = false;
@@ -45,7 +46,7 @@ namespace IWSProject.Controllers
             return PartialView("MasterGridViewPartial", model.ToList());
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult MasterGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] BillOfDelivery item)
+        public ActionResult MasterGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Models.BillOfDelivery item)
         {
             var model = db.BillOfDeliveries;
             ViewData["item"] = item;

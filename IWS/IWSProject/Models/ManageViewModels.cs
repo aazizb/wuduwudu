@@ -15,7 +15,6 @@ namespace IWSProject.Models
         public bool TwoFactor { get; set; }
         public bool BrowserRemembered { get; set; }
     }
-
     public class ManageLoginsViewModel
     {
         public IList<UserLoginInfo> CurrentLogins { get; set; }
@@ -84,6 +83,13 @@ namespace IWSProject.Models
         public ICollection<System.Web.Mvc.SelectListItem> Providers { get; set; }
     }
 
+    public class SetLogoViewModel
+    {
+        public string CompanyID { get; set; }
+
+        [NotMapped]
+        public byte[] Logo { get; set; }
+    }
     public class ValidateDocsViewModel
     {
         [Key]
@@ -95,6 +101,7 @@ namespace IWSProject.Models
         public DateTime DueDate { get; set; }
         public string Periode { get; set; }
         public string SupplierID { get; set; }
+        public bool Area { get; set; }
         public string CompanyID { get; set; }
         public string VAT { get; set; }
         public decimal TotalVAT { get; set; }
@@ -111,6 +118,7 @@ namespace IWSProject.Models
         public string ItemType { get; set; }
         public DateTime DueDate { get; set; }
         public string SupplierID { get; set; }
+        public bool Area { get; set; }
         public string CompanyID { get; set; }
         public decimal TotalVAT { get; set; }
         public decimal TotalHVAT { get; set; }

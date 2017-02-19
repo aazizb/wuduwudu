@@ -35,7 +35,7 @@
         settings.SettingsBehavior.ConfirmDelete = true;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
-        settings.Width = Unit.Percentage(100);
+        settings.Width = Unit.Percentage(80);
         settings.Height = Unit.Percentage(300);
         settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
         settings.Settings.VerticalScrollableHeight = 350;
@@ -59,7 +59,6 @@
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("name").Caption = IWSLocalResource.name;
-        //settings.Columns.Add("modelid").Caption = IWSLocalResource.modelid;
         settings.Columns.Add("street").Caption = IWSLocalResource.street;
         settings.Columns.Add("city").Caption = IWSLocalResource.city;
         settings.Columns.Add("state").Caption = IWSLocalResource.state;
@@ -181,8 +180,8 @@
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
                 formLayoutSettings.Name = "CompaniesViewEdit";
-                formLayoutSettings.Width = Unit.Percentage(100);
-                formLayoutSettings.ColCount = 6;
+                formLayoutSettings.Width = Unit.Percentage(80);
+                formLayoutSettings.ColCount = 2;
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "id";
@@ -191,7 +190,7 @@
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -202,18 +201,19 @@
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "modelid";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.modelid;
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -224,7 +224,7 @@
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -235,7 +235,7 @@
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -246,7 +246,7 @@
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -257,7 +257,7 @@
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -275,7 +275,7 @@
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -293,7 +293,7 @@
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -311,7 +311,7 @@
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -329,7 +329,7 @@
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -347,7 +347,7 @@
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -358,7 +358,7 @@
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -369,7 +369,7 @@
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -387,7 +387,7 @@
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -405,7 +405,7 @@
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(80);
                     });
                 });
                 formLayoutSettings.Items.AddEmptyItem();

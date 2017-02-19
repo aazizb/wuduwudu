@@ -151,7 +151,7 @@
     <value>Ligne Bon de Réception</value>
   </data>
   <data name="modelid" xml:space="preserve">
-    <value>Model ID fr-FR</value>
+    <value>Model ID</value>
   </data>
   <data name="oid" xml:space="preserve">
     <value>OID</value>
@@ -208,16 +208,16 @@
     <value>Compte Banquaire</value>
   </data>
   <data name="costcenters" xml:space="preserve">
-    <value>Cost Center fr-FR</value>
+    <value>Centre de coût</value>
   </data>
   <data name="PurchaseOrder" xml:space="preserve">
-    <value>Purchase Order fr-FR</value>
+    <value>Bon de commande</value>
   </data>
   <data name="lineprchaseorder" xml:space="preserve">
     <value>Ligne Bon de Commande</value>
   </data>
   <data name="accountid" xml:space="preserve">
-    <value>Account ID fr-FR</value>
+    <value>Compte#</value>
   </data>
   <data name="city" xml:space="preserve">
     <value>Ville</value>
@@ -289,16 +289,16 @@
     <value>Pourcent</value>
   </data>
   <data name="quantityunit" xml:space="preserve">
-    <value>Quantity Unit fr-FR</value>
+    <value>Unité</value>
   </data>
   <data name="revenueaccountid" xml:space="preserve">
     <value>Revenue Account fr-FR</value>
   </data>
   <data name="stockaccountid" xml:space="preserve">
-    <value>Stock Account fr-FR</value>
+    <value>Compte Stock</value>
   </data>
   <data name="bankaccountid" xml:space="preserve">
-    <value>Bank Account fr-FR</value>
+    <value>Compte Banquaire</value>
   </data>
   <data name="nextperiode" xml:space="preserve">
     <value>Next Period fr-FR</value>
@@ -307,7 +307,7 @@
     <value>Payment Clearing Account fr-FR</value>
   </data>
   <data name="periode" xml:space="preserve">
-    <value>Periode fr-FR</value>
+    <value>Periode</value>
   </data>
   <data name="purchasingclearingaccountid" xml:space="preserve">
     <value>Purchasing Clearing Account fr-FR</value>
@@ -322,7 +322,7 @@
     <value>Tax Code fr-FR</value>
   </data>
   <data name="vatcode" xml:space="preserve">
-    <value>VAT Code fr-FR</value>
+    <value>Code TVA</value>
   </data>
   <data name="company" xml:space="preserve">
     <value>Compagnie</value>
@@ -334,7 +334,7 @@
     <value>Min Stock</value>
   </data>
   <data name="administration" xml:space="preserve">
-    <value>Administration fr-FR</value>
+    <value>Administration</value>
   </data>
   <data name="dashboard" xml:space="preserve">
     <value>Dashboard fr-FR</value>
@@ -346,10 +346,10 @@
     <value>Achat</value>
   </data>
   <data name="rolesmanagement" xml:space="preserve">
-    <value>Roles Management fr-FR</value>
+    <value>Gestion des Rôles</value>
   </data>
   <data name="usersmanagement" xml:space="preserve">
-    <value>Users Management fr-FR</value>
+    <value>Gestion des Utilisateurs</value>
   </data>
   <data name="masterfiles" xml:space="preserve">
     <value>Master Files fr-FR</value>
@@ -373,7 +373,7 @@
     <value>Gestion du Ménu</value>
   </data>
   <data name="banks" xml:space="preserve">
-    <value>Banks</value>
+    <value>Banque</value>
   </data>
   <data name="download" xml:space="preserve">
     <value>Download</value>
@@ -392,9 +392,6 @@
   </data>
   <data name="support" xml:space="preserve">
     <value>Support</value>
-  </data>
-  <data name="UsersManagement1" xml:space="preserve">
-    <value>Users Management</value>
   </data>
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
@@ -469,7 +466,7 @@
     <value>Store And Stock</value>
   </data>
   <data name="PeriodicAccountBalance" xml:space="preserve">
-    <value>Periodic Account Balance fr-FR</value>
+    <value>Balance Périodique des Comptes</value>
   </data>
   <data name="TotHVAT" xml:space="preserve">
     <value>Total HTVA</value>
@@ -484,10 +481,10 @@
     <value>Type Document</value>
   </data>
   <data name="Count" xml:space="preserve">
-    <value>Count fr-FR</value>
+    <value>Nombre</value>
   </data>
   <data name="Total" xml:space="preserve">
-    <value>Total fr-FR</value>
+    <value>Total</value>
   </data>
   <data name="journal" xml:space="preserve">
     <value>Journal des Comptes</value>
@@ -502,7 +499,7 @@
     <value>Encaissement</value>
   </data>
   <data name="SalesInvoice" xml:space="preserve">
-    <value>Facture Client Compta</value>
+    <value>Facture Client Logistic</value>
   </data>
   <data name="SalesOrder" xml:space="preserve">
     <value>Commande Client</value>
@@ -539,5 +536,50 @@
   </data>
   <data name="LineSettlement" xml:space="preserve">
     <value>Lignes Encaissement</value>
+  </data>
+  <data name="IsService" xml:space="preserve">
+    <value>Stockable?</value>
+  </data>
+  <data name="GeneralLedger" xml:space="preserve">
+    <value>Comptes Généraux</value>
+  </data>
+  <data name="lineGeneralLedger" xml:space="preserve">
+    <value>Ligne Comptes Généraux</value>
+  </data>
+  <data name="PeriodFrom" xml:space="preserve">
+    <value>Période de:</value>
+  </data>
+  <data name="PeriodTo" xml:space="preserve">
+    <value>Période à:</value>
+  </data>
+  <data name="Consultation" xml:space="preserve">
+    <value>Consultation</value>
+  </data>
+  <data name="PreviewPrint" xml:space="preserve">
+    <value>Aperçu et Impression</value>
+  </data>
+  <data name="AccountFrom" xml:space="preserve">
+    <value>Comptes de:</value>
+  </data>
+  <data name="AccountTo" xml:space="preserve">
+    <value>Comptes à:</value>
+  </data>
+  <data name="ItemCount" xml:space="preserve">
+    <value>Nombre d'articles</value>
+  </data>
+  <data name="Subtotal" xml:space="preserve">
+    <value>Sous Total</value>
+  </data>
+  <data name="CompanyInfo" xml:space="preserve">
+    <value>Company Information</value>
+  </data>
+  <data name="CompanyLogo" xml:space="preserve">
+    <value>Company Logo</value>
+  </data>
+  <data name="ChooseLogo" xml:space="preserve">
+    <value>Choisir le logo de l'entreprise</value>
+  </data>
+  <data name="SetLogo" xml:space="preserve">
+    <value>Définir le logo de l'entreprise</value>
   </data>
 </root>

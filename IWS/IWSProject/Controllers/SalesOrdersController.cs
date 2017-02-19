@@ -7,6 +7,7 @@ using IWSProject.Content;
 
 namespace IWSProject.Controllers
 {
+    [Authorize]
     public class SalesOrdersController : Controller
     {
         private IWSDataContext db = new IWSDataContext();

@@ -79,6 +79,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Account From:.
+        /// </summary>
+        public static string AccountFrom {
+            get {
+                return ResourceManager.GetString("AccountFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Account ID.
         /// </summary>
         public static string accountid {
@@ -93,6 +102,15 @@ namespace IWSProject.Content {
         public static string Accounting {
             get {
                 return ResourceManager.GetString("Accounting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Account To:.
+        /// </summary>
+        public static string AccountTo {
+            get {
+                return ResourceManager.GetString("AccountTo", resourceCulture);
             }
         }
         
@@ -259,6 +277,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Choose company&apos;s Logo.
+        /// </summary>
+        public static string ChooseLogo {
+            get {
+                return ResourceManager.GetString("ChooseLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to City.
         /// </summary>
         public static string city {
@@ -277,11 +304,38 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Company Information.
+        /// </summary>
+        public static string CompanyInfo {
+            get {
+                return ResourceManager.GetString("CompanyInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Company Logo.
+        /// </summary>
+        public static string CompanyLogo {
+            get {
+                return ResourceManager.GetString("CompanyLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Confirm Password.
         /// </summary>
         public static string ConfirmPassword {
             get {
                 return ResourceManager.GetString("ConfirmPassword", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Consultation.
+        /// </summary>
+        public static string Consultation {
+            get {
+                return ResourceManager.GetString("Consultation", resourceCulture);
             }
         }
         
@@ -457,6 +511,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to General Ledger.
+        /// </summary>
+        public static string GeneralLedger {
+            get {
+                return ResourceManager.GetString("GeneralLedger", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Sorry, an error occurred while processing your request!.
         /// </summary>
         public static string GenericError {
@@ -547,6 +610,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Is Service.
+        /// </summary>
+        public static string IsService {
+            get {
+                return ResourceManager.GetString("IsService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to IsValidated.
         /// </summary>
         public static string IsValidated {
@@ -561,6 +633,15 @@ namespace IWSProject.Content {
         public static string item {
             get {
                 return ResourceManager.GetString("item", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Count.
+        /// </summary>
+        public static string ItemCount {
+            get {
+                return ResourceManager.GetString("ItemCount", resourceCulture);
             }
         }
         
@@ -606,6 +687,15 @@ namespace IWSProject.Content {
         public static string LineCustomerInvoice {
             get {
                 return ResourceManager.GetString("LineCustomerInvoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line General Ledger.
+        /// </summary>
+        public static string lineGeneralLedger {
+            get {
+                return ResourceManager.GetString("lineGeneralLedger", resourceCulture);
             }
         }
         
@@ -880,6 +970,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Period From:.
+        /// </summary>
+        public static string PeriodFrom {
+            get {
+                return ResourceManager.GetString("PeriodFrom", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Periodic Account Balance.
         /// </summary>
         public static string PeriodicAccountBalance {
@@ -889,11 +988,29 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Period To:.
+        /// </summary>
+        public static string PeriodTo {
+            get {
+                return ResourceManager.GetString("PeriodTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Phone.
         /// </summary>
         public static string PhoneNumber {
             get {
                 return ResourceManager.GetString("PhoneNumber", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview and Print.
+        /// </summary>
+        public static string PreviewPrint {
+            get {
+                return ResourceManager.GetString("PreviewPrint", resourceCulture);
             }
         }
         
@@ -1060,6 +1177,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Set company&apos;s Logo.
+        /// </summary>
+        public static string SetLogo {
+            get {
+                return ResourceManager.GetString("SetLogo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Settlement.
         /// </summary>
         public static string Settlement {
@@ -1146,6 +1272,15 @@ namespace IWSProject.Content {
         public static string street {
             get {
                 return ResourceManager.GetString("street", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Subtotal.
+        /// </summary>
+        public static string Subtotal {
+            get {
+                return ResourceManager.GetString("Subtotal", resourceCulture);
             }
         }
         

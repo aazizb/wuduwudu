@@ -4,6 +4,7 @@ using IWSProject.Models;
 
 namespace IWSProject.Controllers
 {
+    [Authorize]
     public class BalanceController : Controller
     {
         // GET: Balance
@@ -17,6 +18,7 @@ namespace IWSProject.Controllers
             }
             return View(model);
         }
+        [ValidateInput(false)]
         public ActionResult AccountBalancePartialView()
         {
             var items = IWSLookUp.GetAccountBalance();

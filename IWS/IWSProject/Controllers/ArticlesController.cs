@@ -9,7 +9,7 @@ namespace IWSProject.Controllers
     [Authorize]
     public class ArticlesController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db = new IWSDataContext();
         
         // GET: articles
         public ActionResult Index()
@@ -28,6 +28,7 @@ namespace IWSProject.Controllers
         {
             var model = db.Articles;
             item.modelid = 7;
+            item.IsService = item.IsService != true ? false : true;
             ViewData["article"] = item;
             if (ModelState.IsValid)
             {

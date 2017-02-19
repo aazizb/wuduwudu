@@ -20,6 +20,7 @@ namespace IWSProject.Controllers
             }
             return View(model);
         }
+        [ValidateInput(false)]
         public ActionResult StocksPartialView()
         {
             var SV = IWSLookUp.GetStock();

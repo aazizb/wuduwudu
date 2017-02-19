@@ -9,7 +9,7 @@ namespace IWSProject.Controllers
     [Authorize]
     public class BankAccountsController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db = new IWSDataContext();
         // GET: bankaccounts
         public ActionResult Index()
         {
@@ -26,6 +26,7 @@ namespace IWSProject.Controllers
         public ActionResult BankAccountsGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] BankAccount item)
         {
             var model = db.BankAccounts;
+            item.modelid = 12;
             ViewData["bankAccount"] = item;
             if (ModelState.IsValid)
             {
@@ -73,7 +74,7 @@ namespace IWSProject.Controllers
             return PartialView("BankAccountsGridViewPartial", model);
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult BankAccountsGridViewPartialDelete(System.String id)
+        public ActionResult BankAccountsGridViewPartialDelete(string id)
         {
             var model = db.BankAccounts;
             if (id != null)

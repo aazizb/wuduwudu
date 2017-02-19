@@ -393,9 +393,6 @@
   <data name="support" xml:space="preserve">
     <value>Support</value>
   </data>
-  <data name="UsersManagement1" xml:space="preserve">
-    <value>Users Management</value>
-  </data>
   <data name="Roles" xml:space="preserve">
     <value>Roles</value>
   </data>
@@ -498,9 +495,6 @@
   <data name="selling" xml:space="preserve">
     <value>Selling</value>
   </data>
-  <data name="String1" xml:space="preserve">
-    <value>Venta</value>
-  </data>
   <data name="Settlement" xml:space="preserve">
     <value>Settlement es-ES</value>
   </data>
@@ -542,5 +536,50 @@
   </data>
   <data name="LineSettlement" xml:space="preserve">
     <value>Line Settlement es-ES</value>
+  </data>
+  <data name="IsService" xml:space="preserve">
+    <value>Es Servicio</value>
+  </data>
+  <data name="GeneralLedger" xml:space="preserve">
+    <value>Comptes Généraux es-ES</value>
+  </data>
+  <data name="lineGeneralLedger" xml:space="preserve">
+    <value>Ligne Comptes Généraux es-ES</value>
+  </data>
+  <data name="PeriodFrom" xml:space="preserve">
+    <value>Período desde:</value>
+  </data>
+  <data name="PeriodTo" xml:space="preserve">
+    <value>Período hasta:</value>
+  </data>
+  <data name="Consultation" xml:space="preserve">
+    <value>Consulta</value>
+  </data>
+  <data name="PreviewPrint" xml:space="preserve">
+    <value>Vista Previa e Impresión</value>
+  </data>
+  <data name="AccountFrom" xml:space="preserve">
+    <value>Cuenta Desde:</value>
+  </data>
+  <data name="AccountTo" xml:space="preserve">
+    <value>Cuenta Hasta:</value>
+  </data>
+  <data name="ItemCount" xml:space="preserve">
+    <value>Número de artículos</value>
+  </data>
+  <data name="Subtotal" xml:space="preserve">
+    <value>Total Parcial</value>
+  </data>
+  <data name="CompanyInfo" xml:space="preserve">
+    <value>Empresa Informacion</value>
+  </data>
+  <data name="CompanyLogo" xml:space="preserve">
+    <value>Empresa Logo</value>
+  </data>
+  <data name="ChooseLogo" xml:space="preserve">
+    <value>Elija el logo de la empresa</value>
+  </data>
+  <data name="SetLogo" xml:space="preserve">
+    <value>Establecer el logo de la empresa</value>
   </data>
 </root>

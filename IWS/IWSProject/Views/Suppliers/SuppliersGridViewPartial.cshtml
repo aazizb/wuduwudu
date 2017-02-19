@@ -67,7 +67,6 @@
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
         {
-            var editItem = ViewData["Supplier"] != null ? ViewData["Supplier"] : templateContent.DataItem;
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
@@ -89,7 +88,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "name";
-                    i.Caption = IWSLocalResource.item;
+                    i.Caption = IWSLocalResource.name;
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -101,6 +100,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "modelid";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.modelid;
                     i.NestedExtension().TextBox(s =>
                     {
@@ -113,7 +113,7 @@
                 {
                     i.FieldName = "street";
                     i.Caption = IWSLocalResource.street;
-                    i.NestedExtension().Memo(s =>
+                    i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
@@ -124,7 +124,7 @@
                 {
                     i.FieldName = "city";
                     i.Caption = IWSLocalResource.city;
-                    i.NestedExtension().Memo(s =>
+                    i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
@@ -135,7 +135,7 @@
                 {
                     i.FieldName = "state";
                     i.Caption = IWSLocalResource.state;
-                    i.NestedExtension().Memo(s =>
+                    i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
@@ -146,7 +146,7 @@
                 {
                     i.FieldName = "zip";
                     i.Caption = IWSLocalResource.zip;
-                    i.NestedExtension().Memo(s =>
+                    i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;

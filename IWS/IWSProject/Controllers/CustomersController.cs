@@ -27,6 +27,7 @@ namespace IWSProject.Controllers
         public ActionResult CustomersGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))]Customer item)
         {
             var model = db.Customers;
+            item.modelid = 3;
             ViewData["customer"] = item;
             if (ModelState.IsValid)
             {

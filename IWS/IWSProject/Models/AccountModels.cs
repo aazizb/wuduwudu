@@ -14,6 +14,8 @@ namespace IWSProject.Models
         public DbSet<UserProfile> UserProfiles { get; set; }
 
         public System.Data.Entity.DbSet<IWSProject.Models.Article> Articles { get; set; }
+
+        public System.Data.Entity.DbSet<IWSProject.Models.SetLogoViewModel> SetLogoViewModels { get; set; }
     }
     [Table("UserProfile")]
     public class UserProfile
@@ -116,6 +118,7 @@ namespace IWSProject.Models
             set { rememberMe = value; }
         }
     }
+
     public class RegisterModel {
         public DateTime? BirthDate { get; set; }
         public string FirstName { get; set; }
@@ -129,20 +132,20 @@ namespace IWSProject.Models
         public string UserName { get; set; }
 
         [Required]
-        [RegularExpression("\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", ErrorMessage ="*")]// "Please enter a valid email address.")]
+        [RegularExpression("\\w+([-+.']\\w+)*@\\w+([-.]\\w+)*\\.\\w+([-.]\\w+)*", ErrorMessage ="*")]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "Email address")]
         public string Email { get; set; }
 
         [Required]
-        [StringLength(100, ErrorMessage = "*")]//"The {0} must be at least {2} characters long.", MinimumLength = 6)]
+        [StringLength(100, ErrorMessage = "*")]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
-        [Compare("Password", ErrorMessage ="*")]// "The password and confirmation password do not match.")]
+        [Compare("Password", ErrorMessage ="*")]
         public string ConfirmPassword { get; set; }
     }
     public class EditUserViewModel
@@ -176,6 +179,7 @@ namespace IWSProject.Models
         public string Company { get; set; }
 
     }
+
     public class UserRolesViewModel
     {
         public UserRolesViewModel()

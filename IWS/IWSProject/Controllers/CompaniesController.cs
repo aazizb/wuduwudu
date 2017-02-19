@@ -1,11 +1,15 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
+using System.Web;
 using System.Web.Mvc;
 using DevExpress.Web.Mvc;
-using IWSProject.Models;
 using IWSProject.Content;
+using IWSProject.Models;
+
 namespace IWSProject.Controllers
 {
+
     [Authorize]
     public class CompaniesController : Controller
     {
@@ -16,7 +20,38 @@ namespace IWSProject.Controllers
         {
             return View(db.Companies);
         }
+        [ValidateInput(false)]
+        public ActionResult SetLogo()
+        {
+            ViewData["Companies"] = IWSLookUp.GetCompanies();
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult SetLogo(SetLogoViewModel logo)
+        {
+            if (ModelState.IsValid)
+            {
+                byte[] imageData = null;
+                if (Request.Files.Count > 0)
+                {
+                    HttpPostedFileBase poImgFile = Request.Files["Logo"];
 
+                    using (var binary = new BinaryReader(poImgFile.InputStream))
+                    {
+                        imageData = binary.ReadBytes(poImgFile.ContentLength);
+                        logo.Logo = imageData;
+                    }
+                }
+                var logoImage = new SetLogoViewModel
+                {
+                    CompanyID = logo.CompanyID,
+                    Logo = logo.Logo
+                };
+            }
+            return View();
+        }
+        
         [ValidateInput(false)]
         public ActionResult CompaniesGridViewPartial()
         {
@@ -27,7 +62,7 @@ namespace IWSProject.Controllers
         public ActionResult CompaniesGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))]Company item)
         {
             var model = db.Companies;
-
+            item.modelid = 10;
             ViewData["company"] = item;
             if (ModelState.IsValid)
             {

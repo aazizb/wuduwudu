@@ -438,6 +438,10 @@
       <LastGenOutput>IWSDataCX.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
     <None Include="Scripts\jquery-1.8.0.intellisense.js" />
     <Content Include="Scripts\jquery-1.8.0.js" />
     <Content Include="Scripts\jquery-1.8.0.min.js" />
@@ -559,7 +563,6 @@
     <Content Include="Views\Account\UsersList.cshtml" />
     <Content Include="Views\Accounting\Index.cshtml" />
     <Content Include="Views\Accounting\ValidateBLPartialView.cshtml" />
-    <Content Include="Views\Home\GoodReceiving.cshtml" />
     <Content Include="Views\Balance\Index.cshtml" />
     <Content Include="Views\Balance\AccountBalancePartialView.cshtml" />
     <Content Include="Views\Journal\Index.cshtml" />
@@ -585,6 +588,19 @@
     <Content Include="Views\SalesOrders\Index.cshtml" />
     <Content Include="Views\SalesOrders\MasterGridViewPartial.cshtml" />
     <Content Include="Views\SalesOrders\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\ComptesGeneraux\Index.cshtml" />
+    <Content Include="Views\ComptesGeneraux\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\ComptesGeneraux\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\GeneralLedgerIn\Index.cshtml" />
+    <Content Include="Views\GeneralLedgerIn\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\GeneralLedgerIn\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\GeneralLedgerOut\Index.cshtml" />
+    <Content Include="Views\GeneralLedgerOut\MasterGridViewPartial.cshtml" />
+    <Content Include="Views\GeneralLedgerOut\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\Home\PeriodicBalance.cshtml" />
+    <Content Include="Views\Home\BillOfDelivery.cshtml" />
+    <Content Include="Views\Home\SalesInvoice.cshtml" />
+    <Content Include="Views\Companies\SetLogo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -630,6 +646,8 @@
     <Compile Include="Controllers\BankAccountsController.cs" />
     <Compile Include="Controllers\AccountsController.cs" />
     <Compile Include="Controllers\BanksController.cs" />
+    <Compile Include="Controllers\GeneralLedgerInController.cs" />
+    <Compile Include="Controllers\GeneralLedgerOutController.cs" />
     <Compile Include="Controllers\SalesInvoicesController.cs" />
     <Compile Include="Controllers\SettlementsController.cs" />
     <Compile Include="Controllers\CompaniesController.cs" />
@@ -686,7 +704,18 @@
       <DependentUpon>IWSData.dbml</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reports\GoodReceiving.cs">
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\SalesInvoice.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\PeriodicBalance.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\BillOfDelivery.cs">
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Startup.cs" />
@@ -736,8 +765,14 @@
       <DependentUpon>201612100457140_dataLength.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="Reports\GoodReceiving.resx">
-      <DependentUpon>GoodReceiving.cs</DependentUpon>
+    <EmbeddedResource Include="Reports\SalesInvoice.resx">
+      <DependentUpon>SalesInvoice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\PeriodicBalance.resx">
+      <DependentUpon>PeriodicBalance.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\BillOfDelivery.resx">
+      <DependentUpon>BillOfDelivery.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

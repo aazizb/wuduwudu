@@ -7,6 +7,7 @@ using IWSProject.Content;
 
 namespace IWSProject.Controllers
 {
+    [Authorize]
     public class SalesInvoicesController : Controller
     {
         IWSDataContext db = new IWSDataContext();
@@ -179,7 +180,6 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LineSalesInvoices.Where(p => p.transid == transId).ToList());
         }
-
 
         #region Helper
         public ActionResult PackUnit(string selectedItemIndex)

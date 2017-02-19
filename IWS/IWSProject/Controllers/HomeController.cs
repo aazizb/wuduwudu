@@ -10,10 +10,22 @@ namespace IWSProject.Controllers
         {
             return View();
         }
-        public ActionResult GoodReceiving()
+        [ValidateInput(false)]
+        public ActionResult SalesInvoice()
         {
             return View();
         }
+        [ValidateInput(false)]
+        public ActionResult BillOfDelivery()
+        {
+            return View();
+        }
+        [ValidateInput(false)]
+        public ActionResult PeriodicBalance()
+        {
+            return View();
+        }
+        [ValidateInput(false)]
         public ActionResult About(string id)
         {
             return View();

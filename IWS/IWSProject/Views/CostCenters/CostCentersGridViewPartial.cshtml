@@ -85,7 +85,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "name";
-                    i.Caption = IWSLocalResource.item;
+                    i.Caption = IWSLocalResource.name;
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -97,6 +97,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "modelid";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.modelid;
                     i.NestedExtension().TextBox(s =>
                     {

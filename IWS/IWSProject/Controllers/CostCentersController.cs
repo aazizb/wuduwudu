@@ -28,6 +28,7 @@ namespace IWSProject.Controllers
         public ActionResult CostCentersGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))]CostCenter item)
         {
             var model = db.CostCenters;
+            item.modelid = 6;
             ViewData["costCenters"] = item;
             if (ModelState.IsValid)
             {

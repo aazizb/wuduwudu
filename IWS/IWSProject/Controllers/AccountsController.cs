@@ -9,14 +9,13 @@ namespace IWSProject.Controllers
     [Authorize]
     public class AccountsController : Controller
     {
+        IWSDataContext db = new IWSDataContext();
         // GET: Accounts
         public ActionResult Index()
         {
             return View(db.Accounts);
         }
-
-        IWSDataContext db = new IWSDataContext();
-
+        
         [ValidateInput(false)]
         public ActionResult AccountsGridViewPartial()
         {
@@ -27,6 +26,7 @@ namespace IWSProject.Controllers
         public ActionResult AccountsGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Account item)
         {
             var model = db.Accounts;
+            item.modelid = 9;
             ViewData["accounts"] = item;
             if (ModelState.IsValid)
             {

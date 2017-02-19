@@ -7,6 +7,7 @@ using IWSProject.Models;
 
 namespace IWSProject.Controllers
 {
+    [Authorize]
     public class JournalController : Controller
     {
         // GET: Balance
@@ -20,6 +21,7 @@ namespace IWSProject.Controllers
             }
             return View(model);
         }
+        [ValidateInput(false)]
         public ActionResult JournalPartialView()
         {
             var journal = IWSLookUp.GetJournal();

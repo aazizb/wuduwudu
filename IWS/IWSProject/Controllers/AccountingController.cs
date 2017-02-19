@@ -8,6 +8,7 @@ using System.Collections;
 
 namespace IWSProject.Controllers
 {
+    [Authorize]
     public class AccountingController : Controller
     {
         IWSDataContext db = new IWSDataContext();
@@ -24,11 +25,12 @@ namespace IWSProject.Controllers
             }
             return View(model);
         }
-        [HttpPost]
+
+        [HttpPost, ValidateInput(false)]
         public ActionResult Index(string selectedIDsHF)
         {
             string selectedItems = selectedIDsHF;
-            //check if items are selected previously
+            //check if items were selected previously
             if (!string.IsNullOrEmpty(selectedItems))
             {
                 IList<string> items = new List<string>(selectedItems.Split(new string[] { ";" }, StringSplitOptions.None));
@@ -72,6 +74,7 @@ namespace IWSProject.Controllers
             }
             return View(model);
         }
+        [ValidateInput(false)]
         public ActionResult ValidateBLPartialView()
         {
             var docs = IWSLookUp.GetAccountingDocument(false);
@@ -129,6 +132,10 @@ namespace IWSProject.Controllers
             if (ItemType.Equals(IWSLookUp.DocsType.Settlement.ToString()))
             {
                 return ValidateSettlement(ItemID);
+            }
+            if (ItemType.Equals(IWSLookUp.DocsType.GeneralLedger.ToString()))
+            {
+                return ValidateGeneralLedger(ItemID);
             }
             return true;
         }
@@ -286,6 +293,15 @@ namespace IWSProject.Controllers
                         return true;
                     }
                 }
+                if (ItemType.Equals(IWSLookUp.DocsType.GeneralLedger.ToString()))
+                {
+                    var docs = db.GeneralLedgers.Single(item => item.id == ItemID);
+                    if (docs != null)
+                    {
+                        docs.IsValidated = true;
+                        return true;
+                    }
+                }
             }
             catch (Exception e)
             {
@@ -315,21 +331,22 @@ namespace IWSProject.Controllers
             var docs = db.PeriodicAccountBalances.FirstOrDefault(p => p.Periode == Periode && p.AccountId == AccountID);
             if (docs == null)
             {
+                string name = db.Accounts.Where(a => a.id == AccountID).Select(n => n.name).Single();
                 docs = new PeriodicAccountBalance
                 {
-                    Name = "NA",
+                    Name = name,
                     ModelId = 106,
                     Periode = Periode,
-                    AccountId = AccountID
+                    AccountId = AccountID,
+                    Debit = 0,
+                    Credit = 0
                 };
                 if (IsDebit)
                 {
                     docs.Debit = amount;
-                    docs.Credit = 0;
                 }
                 else
                 {
-                    docs.Debit = 0;
                     docs.Credit = amount;
                 }
                 try
@@ -426,8 +443,6 @@ namespace IWSProject.Controllers
             {
                 foreach (var item in items.Where(i=>i.IsService==false))
                 {
-                    //if (!item.IsService)
-                    //{
                         var stock = db.Stocks.FirstOrDefault(s => s.storeid == item.StoreID && s.itemid == item.ItemID);
                         if (stock != null)
                         {
@@ -448,7 +463,6 @@ namespace IWSProject.Controllers
                             ViewData["GenericError"] = IWSLocalResource.InsufficientStock + ": " + item.ItemID + "-" + item.ItemName;
                             return false;
                         }
-                    //}
                 }
                 return true;
             }
@@ -928,7 +942,6 @@ namespace IWSProject.Controllers
                                                               duedate = item.ItemDate,
                                                               text = item.Text
                                                           }).ToList();
-
                     string accountID = salesInvoice.Select(a => a.CreditAccountID ).First();
 
                     string oAccountID = salesInvoice.Select(a => a.DebitAccountID).First();
@@ -1461,8 +1474,8 @@ namespace IWSProject.Controllers
                  select new
                  {
                      Description = g.Key.text,
-                     AccountId = g.Key.oaccount,// g.Key.account,
-                     OAccountId = g.Key.account,// g.Key.oaccount,
+                     AccountId = g.Key.oaccount,
+                     OAccountId = g.Key.account,
                      Periode = g.Key.xYear + g.Key.xMonth,
                      Amount = g.Key.amount
                  }).ToList();
@@ -1477,14 +1490,14 @@ namespace IWSProject.Controllers
                     foreach (var doc in docs)
                     {
                         debitPeriodic = UpdatePeriodicAccountBalance(doc.Periode,
-                                        doc.AccountId, doc.Amount, true);
+                                        doc.AccountId, doc.Amount, false);              
                         updateAccount = UpdateAccountBalance(doc.AccountId, doc.Amount);
                     }
                     var periode = docs.Select(p => p.Periode).First();
 
                     var creditAccount = docs.Select(c => c.OAccountId).FirstOrDefault();
                     var ttc = docs.Sum(s => s.Amount);
-                    creditPeriodic = UpdatePeriodicAccountBalance(periode, creditAccount, ttc, false);
+                    creditPeriodic = UpdatePeriodicAccountBalance(periode, creditAccount, ttc, true);  
 
                     return debitPeriodic && creditPeriodic && updateAccount;
                 }
@@ -1548,9 +1561,7 @@ namespace IWSProject.Controllers
                     results = UpdatePeriodicAccountBalance(periode, creditAccount, ttc, true);
                     if (!results)
                         return results;
-                    //creditAccount = docs.Select(c => c.BankAccountID).FirstOrDefault();
-                    //results = UpdatePeriodicAccountBalance(periode, creditAccount, ttc, false);
-
+               
                     if (!results)
                         return results;
                     var journals =
@@ -1679,11 +1690,11 @@ namespace IWSProject.Controllers
                     results = UpdatePeriodicAccountBalance(periode, creditAccount, ttc, true);
                     if (!results)
                         return results;
-                    creditAccount = docs.Select(c => c.BankAccountID).FirstOrDefault();
-                    results = UpdatePeriodicAccountBalance(periode, creditAccount, ttc, false);
+                    //creditAccount = docs.Select(c => c.BankAccountID).FirstOrDefault();
+                    //results = UpdatePeriodicAccountBalance(periode, creditAccount, ttc, false);
 
-                    if (!results)
-                        return results;
+                    //if (!results)
+                    //    return results;
                     var journals =
                          (from line in db.LineSettlements
                           group new { line, line.Settlement } by new
@@ -1748,6 +1759,132 @@ namespace IWSProject.Controllers
                             ItemType = IWSLookUp. DocsType.Settlement.ToString(),
                             Side = IWSLookUp. Side.Credit.ToString() } };
 
+                        results = SendToJournal(journal);
+                        if (!results)
+                            return results;
+                    }
+                }
+                catch (Exception e)
+                {
+                    ViewData["GenericError"] = e.Message;
+                }
+            }
+            return results;
+        }
+        private bool ValidateGeneralLedger(int ledgerID)
+        {
+            bool results = false;
+            var docs =
+                (from line in db.LineGeneralLedgers
+                 group new { line, line.GeneralLedger } by new
+                 {
+                     line.GeneralLedger.id,
+                     line.text,
+                     line.account,
+                     line.side,
+                     line.oaccount,
+                     line.amount,
+                     line.duedate,
+                     xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
+                                             '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
+                                             Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
+                     xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year)
+                 } into g
+                 where g.Key.id == ledgerID
+                 select new
+                 {
+                     Description = g.Key.text,
+                     AccountId = g.Key.account,
+                     OAccountId = g.Key.oaccount,
+                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Amount = g.Key.amount
+                 }).ToList();
+
+            if (docs.Any())
+            {
+                try
+                {
+
+                    foreach (var doc in docs)
+                    {
+                        results = UpdatePeriodicAccountBalance(doc.Periode,
+                                            doc.OAccountId, doc.Amount, false);
+                        if (!results)
+                            return results;
+                        results = UpdateAccountBalance(doc.OAccountId, doc.Amount);
+                        if (!results)
+                            return results;
+                    }
+                    var periode = docs.Select(p => p.Periode).First();
+                    var creditAccount = docs.Select(c => c.AccountId).FirstOrDefault();
+                    var ttc = docs.Sum(s => s.Amount);
+                    results = UpdatePeriodicAccountBalance(periode, creditAccount, ttc, true);
+                    if (!results)
+                        return results;
+
+                    var journals =
+                         (from line in db.LineGeneralLedgers
+                          group new { line, line.GeneralLedger } by new
+                          {
+                              line.GeneralLedger.id,
+                              line.GeneralLedger.oid,
+                              line.GeneralLedger.modelid,
+                              line.GeneralLedger.CostCenter,
+                              SupplierID = line.GeneralLedger.Area,
+                              line.GeneralLedger.text,
+                              line.GeneralLedger.ItemDate,
+                              line.GeneralLedger.CompanyId,
+                              line.account,
+                              line.oaccount,
+                              line.amount,
+                              line.GeneralLedger.Company.bankaccountid,
+                              xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
+                                                      '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
+                                                      Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
+                              xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year)
+                          } into g
+                          where g.Key.id == ledgerID
+                          select new
+                          {
+                              ItemID = g.Key.id,
+                              OID = (int)g.Key.oid,
+                              ModelID = g.Key.modelid,
+                              ItemType = IWSLookUp.DocsType.GeneralLedger.ToString(),
+                              CustSupplierID = g.Key.SupplierID,
+                              StoreID = g.Key.CostCenter,
+                              TransDate = g.Key.ItemDate,
+                              Periode = g.Key.xYear + g.Key.xMonth,
+                              Account = g.Key.account,
+                              OAccount = g.Key.oaccount,
+                              Amount = g.Key.amount
+                          }).ToList();
+
+                    foreach (var item in journals)
+                    {
+                        List<Journal> journal = new List<Journal> {
+                            new Journal { ItemID=item.ItemID,
+                            OID =item.OID,
+                            ModelID =item.ModelID,
+                            CustSupplierID=item.CustSupplierID,
+                            StoreID =item.StoreID,
+                            TransDate =item.TransDate,
+                            Periode=item.Periode,
+                            Account =item.Account,
+                            OAccount =item.OAccount,
+                            Amount =item.Amount,
+                            ItemType =IWSLookUp. DocsType.GeneralLedger.ToString(),
+                            Side =IWSLookUp. Side.Debit.ToString()},
+                        new Journal { ItemID=item.ItemID,
+                            OID =item.OID, ModelID=item.ModelID,
+                            CustSupplierID=item.CustSupplierID,
+                            StoreID =item.StoreID,
+                            TransDate =item.TransDate,
+                            Periode=item.Periode,
+                            Account =item.OAccount,
+                            OAccount =item.Account,
+                            Amount =item.Amount,
+                            ItemType = IWSLookUp. DocsType.GeneralLedger.ToString(),
+                            Side = IWSLookUp. Side.Credit.ToString() } };
                         results = SendToJournal(journal);
                         if (!results)
                             return results;

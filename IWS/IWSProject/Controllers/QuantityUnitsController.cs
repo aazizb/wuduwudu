@@ -27,7 +27,7 @@ namespace IWSProject.Controllers
         public ActionResult QuantityUnitsGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] QuantityUnit item)
         {
             var model = db.QuantityUnits;
-
+            item.modelid = 4;
             ViewData["quantityunit"] = item;
             if (ModelState.IsValid)
             {
