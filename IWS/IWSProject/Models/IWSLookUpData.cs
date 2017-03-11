@@ -3,6 +3,7 @@
     using System;
     using System.Collections;
     using System.Collections.Generic;
+    using System.Diagnostics;
     using System.Linq;
     using System.Threading;
     using System.Web;
@@ -23,6 +24,21 @@
                 return (IWSDataContext)HttpContext.Current.Items[IWSDataContext];
             }
         }
+        public static IEnumerable GetAccounts()
+        {
+            var account = IWSEntities.Accounts.AsEnumerable().Select(item => new
+            {
+                Id = item.id,
+                Name = item.name,
+                CompanyID=item.CompanyID
+            })
+            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+            .OrderBy(o => o.Id);
+
+ //           Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).
+ //           OrderBy(o => o.Name);
+            return account;
+        }
         public static IEnumerable GetArticle()
         {
             var article = IWSEntities.Articles.AsEnumerable().Select(item => new
@@ -32,9 +48,201 @@
                 Price = item.price,
                 Unit = item.qttyunit,
                 Pack = item.packunit,
-                Vat = item.VatCode
-            }).OrderBy(o => o.Name);
+                Vat = item.VatCode,
+                CompanyID = item.CompanyID
+            }).
+            Where(c=>c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).
+            OrderBy(o => o.Name);
             return article;
+        }
+        public static Article GetArticle(string id)
+        {
+            var article = IWSEntities.Articles.AsEnumerable<Article>().Select(item => new
+            {
+                Id = item.id,
+                Name = item.name,
+                Price = item.price,
+                Unit = item.qttyunit,
+                Pack = item.packunit,
+                Vat = item.VatCode,
+                CompanyID=item.CompanyID
+            }).
+            Where(o => o.Id == id && o.CompanyID==(string)HttpContext.Current.Session["CompanyID"]);
+            return (Article)article;
+        }
+        public static IEnumerable GetBillOfDelivery()
+        {
+            var b = from o in IWSEntities.BillOfDeliveries
+                                 where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                                 select o;
+            return b;
+        }
+        public static IEnumerable GetCustomerInvoice()
+        {
+            var b = from o in IWSEntities.CustomerInvoices
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetGeneralLedger(string area)
+        {
+            var b = from o in IWSEntities.GeneralLedgers
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"] && o.Area == area
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetGoodReceiving()
+        {
+            var b = from o in IWSEntities.GoodReceivings
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetInventoryInvoice()
+        {
+            var b = from o in IWSEntities.InventoryInvoices
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetPayment()
+        {
+            var b = from o in IWSEntities.Payments
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetPurchaseOrder()
+        {
+            var b = from o in IWSEntities.PurchaseOrders
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetSalesInvoice()
+        {
+            var b = from o in IWSEntities.SalesInvoices
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetSalesOrder()
+        {
+            var b = from o in IWSEntities.SalesOrders
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetSettlement()
+        {
+            var b = from o in IWSEntities.Settlements
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetVendorInvoice()
+        {
+            var b = from o in IWSEntities.VendorInvoices
+                    where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static List<ValidateDocsViewModel> GetBillOfDelivery(string uiCulture, bool IsValidated)
+        {
+            List<ValidateDocsViewModel> BL = Queryable.OrderBy(
+            (from line in IWSEntities.LineBillOfDeliveries
+             where line.BillOfDelivery.IsValidated == IsValidated
+             from Item in IWSEntities.Localizations
+             where Item.ItemName == DocsType.BillOfDelivery.ToString() && Item.UICulture == uiCulture
+             group new
+             {
+                 line.BillOfDelivery,
+                 line,
+                 line.Article.Vat
+             } by new
+             {
+                 line.BillOfDelivery.id,
+                 ItemType = Item.LocalName,
+                 ItemDate = (DateTime?)line.BillOfDelivery.ItemDate,
+                 xMonth = (Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month)).Length == 1 ?
+                                                     '0' + Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month) :
+                                                     Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month),
+                 xYear = Convert.ToString((int?)line.BillOfDelivery.ItemDate.Year),
+                 line.BillOfDelivery.account,
+                 line.BillOfDelivery.CompanyId,
+                 line.VatCode
+             } into g
+             orderby
+                g.Key.id
+             select new ValidateDocsViewModel()
+             {
+                 ItemID = g.Key.id,
+                 ItemType = g.Key.ItemType,
+                 DueDate = Convert.ToDateTime(g.Key.ItemDate),
+                 Periode = g.Key.xYear + g.Key.xMonth,
+                 Area = false,
+                 SupplierID = g.Key.account,
+                 CompanyID = g.Key.CompanyId,
+                 VAT = g.Key.VatCode,
+                 TotalVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity * p.line.Article.Vat.PVat)),
+                 TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity))
+             }), o => o.ItemID).ToList();
+            return BL;
+        }
+        public static IEnumerable GetCustSuppliers()
+        {
+            var CustSupplier = IWSEntities.Suppliers.AsEnumerable().
+                        Select(item => new
+                        {
+                            Id = item.id,
+                            Name = item.name,
+                            CompanyID=item.CompanyID
+                        }).
+                        Union(IWSEntities.Customers.AsEnumerable().
+                        Select(item =>new
+                        {
+                            Id = item.id,
+                            Name = item.name,
+                            CompanyID=item.CompanyID
+                        }))
+                        .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+                        .OrderBy(o => o.Id);
+            return CustSupplier;
+        }
+        public static IEnumerable GetCustomers()
+        {
+            var customer = IWSEntities.Customers.AsEnumerable().Select(item => new
+            {
+                Id = item.id,
+                Name = item.name,
+                CompanyID=item.CompanyID
+            })
+            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+            .OrderBy(o => o.Id);
+            return customer;
+        }
+        public static IEnumerable GetCompanies()
+        {
+            var company = IWSEntities.Companies.AsEnumerable().Select(item => new
+            {
+                Id=item.id,
+                Name = item.name
+            })
+            .OrderBy(o => o.Name)
+            .ToList();
+            return company;
+        }
+        public static IEnumerable GetCostCenters()
+        {
+            var account = IWSEntities.CostCenters.AsEnumerable().Select(item => new
+            {
+                Id = item.id,
+                Name = item.name,
+                CompanyID=item.CompanyID
+            })
+            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+            .OrderBy(o => o.Name);
+            return account;
         }
         public static IEnumerable GetRoles()
         {
@@ -58,9 +266,19 @@
                                        select new IWSUserModel
                                        {
                                             Id = user.Id,
-                                            UserName = user.UserName
+                                            UserName = user.UserName,
                                        }).ToList();
             return User;
+        }
+        public static IEnumerable GetUserRoles(string userId)
+        {
+            var UserRoles = IWSEntities.AspNetUserRoles.Where(item => 
+                                item.UserId == userId).Select(item => new
+                                {
+                                    UserId = item.UserId, 
+                                    RoleId = item.RoleId
+                                    }).ToList();
+            return UserRoles;
         }
         public static IEnumerable GetUserRolesModel(string userId)
         {
@@ -73,46 +291,26 @@
                                             }).ToList();
             return userRoles;
         }
-        public static IEnumerable GetUserRoles(string userId)
-        {
-            var UserRoles = IWSEntities.AspNetUserRoles.Where(item => 
-                                item.UserId == userId).Select(item => new
-                                {
-                                    UserId = item.UserId, 
-                                    RoleId = item.RoleId
-                                    }).ToList();
-            return UserRoles;
-        }
-        public static Article GetArticle(string id)
-        {
-            var article = IWSEntities.Articles.AsEnumerable<Article>().Select(item => new
-            {
-                Id = item.id,
-                Name = item.name,
-                Price = item.price,
-                Unit = item.qttyunit,
-                Pack = item.packunit,
-                Vat = item.VatCode
-            }).Where(o => o.Id == id);
-            return (Article)article;
-        }
         public static IEnumerable GetStore()
         {
             var store = IWSEntities.Stores.AsEnumerable().Select(item => new
             {
                 Id = item.id,
-                Name = item.name
-            }).OrderBy(o => o.Name);
+                Name = item.name,
+                CompanyID=item.CompanyID
+            }).
+            Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).
+            OrderBy(o => o.Name);
             return store;
         }
-        public static List<Menu> GetMenu()
+        public static List<Menu> GetMenu(string CompanyID)
         {
             if (HttpContext.Current.Session["Menus"] == null)
             {
                 List<Menu> menus = new List<Menu>();
-
-                menus = IWSEntities.Menus.Where(m=>m.Disable==false).ToList();
-
+                menus = IWSEntities.Menus
+                        .Where(c=>c.CompanyID == CompanyID && c.Disable==false)
+                        .ToList();
                 HttpContext.Current.Session["Menus"] = menus;
             }
             return (List<Menu>)HttpContext.Current.Session["Menus"];
@@ -122,70 +320,23 @@
             var supplier = IWSEntities.Suppliers.AsEnumerable().Select(item => new
             {
                 Id = item.id,
-                Name = item.name
-            }).OrderBy(o => o.Id);
+                Name = item.name,
+                CompanyID =item.CompanyID
+            })
+            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+            .OrderBy(o => o.Id);
             return supplier;
-        }
-        public static IEnumerable GetCustSuppliers()
-        {
-            var CustSupplier = IWSEntities.Suppliers.AsEnumerable().
-                        Select(item => new
-                        {
-                            Id = item.id,
-                            Name = item.name
-                        }).
-                        Union(IWSEntities.Customers.AsEnumerable().
-                        Select(item =>new
-                        {
-                            Id = item.id,
-                            Name = item.name
-                        })).
-                        OrderBy(o => o.Id);
-            return CustSupplier;
-        }
-        public static IEnumerable GetCustomers()
-        {
-            var customer = IWSEntities.Customers.AsEnumerable().Select(item => new
-            {
-                Id = item.id,
-                Name = item.name
-            }).OrderBy(o => o.Id);
-            return customer;
-        }
-        public static IEnumerable GetCompanies()
-        {
-            var company = IWSEntities.Companies.AsEnumerable().Select(item => new
-            {
-                Id=item.id,
-                Name = item.name
-            }).OrderBy(o => o.Name).ToList();
-            return company;
-        }
-        public static IEnumerable GetAccounts()
-        {
-            var account = IWSEntities.Accounts.AsEnumerable().Select(item => new
-            {
-                Id = item.id,
-                Name = item.name
-            }).OrderBy(o => o.Id);
-            return account;
-        }
-        public static IEnumerable GetCostCenters()
-        {
-            var account = IWSEntities.CostCenters.AsEnumerable().Select(item => new
-            {
-                Id = item.id,
-                Name = item.name
-            }).OrderBy(o => o.Name);
-            return account;
         }
         public static IEnumerable GetVAT()
         {
             var vat = IWSEntities.Vats.AsEnumerable().Select(item => new
             {
                 Id = item.id,
-                Name = item.PVat
-            }).OrderBy(o => o.Name);
+                Name = item.PVat,
+                CompanyID=item.CompanyID
+            })
+            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+            .OrderBy(o => o.Name);
             return vat;
         }
         public static List<ValidateDocsViewModel> GetVendorInvoice(string uiCulture, bool IsValidated)
@@ -437,48 +588,6 @@
              }), o => o.ItemID).ToList();
             return BL;
         }
-        public static List<ValidateDocsViewModel> GetBillOfDelivery(string uiCulture, bool IsValidated)
-        {
-            List<ValidateDocsViewModel> BL = Queryable.OrderBy(
-            (from line in IWSEntities.LineBillOfDeliveries
-             where line.BillOfDelivery.IsValidated == IsValidated
-             from Item in IWSEntities.Localizations
-             where Item.ItemName == DocsType.BillOfDelivery.ToString() && Item.UICulture == uiCulture
-             group new
-             {
-                 line.BillOfDelivery,
-                 line,
-                 line.Article.Vat
-             } by new
-             {
-                 line.BillOfDelivery.id,
-                 ItemType = Item.LocalName,
-                 ItemDate = (DateTime?)line.BillOfDelivery.ItemDate,
-                 xMonth = (Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month)).Length == 1 ?
-                                                     '0' + Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month) :
-                                                     Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.BillOfDelivery.ItemDate.Year),
-                 line.BillOfDelivery.account,
-                 line.BillOfDelivery.CompanyId,
-                 line.VatCode
-             } into g
-             orderby
-                g.Key.id
-             select new ValidateDocsViewModel()
-             {
-                 ItemID = g.Key.id,
-                 ItemType = g.Key.ItemType,
-                 DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode = g.Key.xYear + g.Key.xMonth,
-                 Area = false,
-                 SupplierID = g.Key.account,
-                 CompanyID = g.Key.CompanyId,
-                 VAT = g.Key.VatCode,
-                 TotalVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity * p.line.Article.Vat.PVat)),
-                 TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity))
-             }), o => o.ItemID).ToList();
-            return BL;
-        }
         public static List<ValidateDocsViewModel> GetSalesInvoice(string uiCulture, bool IsValidated)
         {
             List<ValidateDocsViewModel> BL = Queryable.OrderBy(
@@ -605,7 +714,7 @@
         {
             List<ValidateDocsViewModel> BL = Queryable.OrderBy(
             (from line in IWSEntities.LineGeneralLedgers
-             where line.GeneralLedger.IsValidated == IsValidated && line.GeneralLedger.Area== Area.Selling.ToString()
+             where line.GeneralLedger.IsValidated == IsValidated && line.GeneralLedger.Area == Area.Selling.ToString()
              from Item in IWSEntities.Localizations
              where Item.ItemName == DocsType.GeneralLedger.ToString() && Item.UICulture == uiCulture
              group new
@@ -632,6 +741,7 @@
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
                  Periode = g.Key.xYear + g.Key.xMonth,
                  Area = false,
+                 SupplierID = Area.Selling.ToString(),
                  CompanyID = g.Key.CompanyId,
                  VAT = "0",
                  TotalVAT = 0,
@@ -670,6 +780,7 @@
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
                  Periode = g.Key.xYear + g.Key.xMonth,
                  Area = false,
+                 SupplierID = Area.Purchasing.ToString(),
                  CompanyID = g.Key.CompanyId,
                  VAT = "0",
                  TotalVAT = 0,
@@ -693,7 +804,9 @@
                                             Union(GetCustomerInvoice(uiCulture, IsValidated)).
                                             Union(GetSettlement(uiCulture, IsValidated)).
                                             Union(GetGeneralLedgerIn(uiCulture, IsValidated)).
-                                            Union(GetGeneralLedgerOut(uiCulture, IsValidated)).ToList();
+                                            Union(GetGeneralLedgerOut(uiCulture, IsValidated)).
+                                            Where(c=>c.CompanyID==(string)HttpContext.Current.Session["CompanyID"]).
+                                            ToList();
             List<DocumentsViewModel> documents = (
                                             from doc in document
                                             group doc by new
@@ -712,88 +825,117 @@
                                             }).ToList();
             return documents;
         }
-        public static IEnumerable GetAccountBalance()
+        public static IEnumerable GetAccountBalance(string CompanyID)
         {
-            List<AccountBalanceViewModel> items = (from PeriodicAccountBalance in IWSEntities.PeriodicAccountBalances
+            List<AccountBalanceViewModel> items = (from p in IWSEntities.PeriodicAccountBalances
                                                 select new AccountBalanceViewModel()
                                                 {
-                                                    pk=PeriodicAccountBalance.Id,
-                                                    AccountID = PeriodicAccountBalance.AccountId + "-" +
-                                                                PeriodicAccountBalance.Name,
-                                                    Periode = PeriodicAccountBalance.Periode,
-                                                    Debit = PeriodicAccountBalance.Debit,
-                                                    Credit = PeriodicAccountBalance.Credit
-                                                }).OrderBy(o=>o.pk).ToList();
+                                                    pk=p.Id,
+                                                    AccountID = p.AccountId + "-" +
+                                                                p.Name,
+                                                    Periode = p.Periode,
+                                                    Debit = p.Debit,
+                                                    Credit = p.Credit,
+                                                    CompanyID=p.CompanyID
+                                                })
+                                                .Where(c=>c.CompanyID== CompanyID)
+                                                .OrderBy(o=>o.pk).ToList();
             return items;
         }
-        public static IEnumerable GetJournal()
+        public static IEnumerable GetJournal(string CompanyID)
         {
             // get current thread UICulture
             string uiCulture = Thread.CurrentThread.CurrentUICulture.Name;
 
             List<JournalViewModel> journals = 
-                (from journal in IWSEntities.Journals
+                (from j in IWSEntities.Journals
                 from item in IWSEntities.Localizations
-                where item.ItemName == journal.ItemType && item.UICulture == uiCulture
+                where item.ItemName == j.ItemType && item.UICulture == uiCulture
                 select new JournalViewModel()
                 {
-                ItemID = journal.ItemID,
-                OID = journal.OID,
+                ItemID = j.ItemID,
+                OID = j.OID,
                 ItemType = item.LocalName,
-                CustSupplierID = journal.CustSupplierID,
-                TransDate = journal.TransDate,
-                Periode = journal.Periode,
-                Account = journal.Account,
-                OAccount = journal.OAccount,
-                Amount = journal.Amount,
-                Side = journal.Side
-            }).ToList();
+                CustSupplierID = j.CustSupplierID,
+                TransDate = j.TransDate,
+                Periode = j.Periode,
+                Account = j.Account,
+                OAccount = j.OAccount,
+                Amount = j.Amount,
+                Side = j.Side,
+                CompanyID=j.CompanyID
+            })
+            .Where(c=>c.CompanyID==CompanyID)
+            .ToList();
             return journals;
         }
-        public static IEnumerable GetStock()
+        public static IEnumerable GetStock(string CompanyID)
         {
-            List<StockViewModel> SV = (from Stock in IWSEntities.Stocks
+            List<StockViewModel> SV = (from s in IWSEntities.Stocks
                                        select new StockViewModel()
                                        {
-                                           ItemName = (Stock.Article.id + "-" + Stock.Article.name),
-                                           StoreName = (Stock.Store.id + "-" + Stock.Store.name),
-                                           Quantity = Convert.ToInt32(Stock.quantity),
-                                           ItemUnit = Stock.Article.packunit,
-                                           AveragePrice = Convert.ToDecimal(Stock.Article.avgprice)
-                                       }).ToList();
+                                           ItemName = (s.Article.id + "-" + s.Article.name),
+                                           StoreName = (s.Store.id + "-" + s.Store.name),
+                                           Quantity = Convert.ToInt32(s.quantity),
+                                           ItemUnit = s.Article.packunit,
+                                           AveragePrice = Convert.ToDecimal(s.Article.avgprice),
+                                           CompanyID=s.CompanyID
+                                       })
+                                       .Where(c=>c.CompanyID==CompanyID)
+                                       .ToList();
             return SV;
         }
         public static string GetPackUnit(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id).packunit;
+            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).packunit;
+        }
+        public static string GetCompany(string UserName)
+        {
+            return IWSEntities.AspNetUsers.FirstOrDefault(c => c.UserName == UserName).Company;
         }
         public static string GetQttyUnit(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id).qttyunit;
+            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).qttyunit;
         }
         public static string GetVatCode(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id).VatCode;
+            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).VatCode;
         }
         public static decimal GetPrice(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id).price;
+            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).price;
         }
         public static decimal GetSalesPrice(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id).salesprice;
+            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).salesprice;
         }
         public static string GetText(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id).description;
+            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).description;
         }
         public static string GetPeriodMax()
         {
-            return IWSEntities.PeriodicAccountBalances.Max(p => p.Periode).ToString();
+            var periode = IWSEntities.PeriodicAccountBalances
+                .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+                .FirstOrDefault();
+            if (periode == null)
+                return "N/A";
+            return IWSEntities.PeriodicAccountBalances
+                .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+                .Max(p => p.Periode)
+                .ToString();
         }
         public static string GetPeriodMin()
         {
-            return IWSEntities.PeriodicAccountBalances.Min(p => p.Periode).ToString();
+            var periode = IWSEntities.PeriodicAccountBalances
+                .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+                .FirstOrDefault();
+            if (periode == null)
+                return "N/A";
+            return IWSEntities.PeriodicAccountBalances
+                .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+                .Min(p => p.Periode)
+                .ToString();
         }
         public enum DocsType
         {
@@ -825,6 +967,5 @@
             AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".eps", ".ps" },
             MaxFileSize = 4194304
         };
-
     }
 }

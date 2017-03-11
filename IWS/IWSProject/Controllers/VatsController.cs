@@ -14,13 +14,13 @@ namespace IWSProject.Controllers
         // GET: Vats
         public ActionResult Index()
         {
-            return View(db.Vats);
+            return View(db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [ValidateInput(false)]
         public ActionResult VatsGridViewPartial()
         {
-            return PartialView("VatsGridViewPartial", db.Vats);
+            return PartialView("VatsGridViewPartial", db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [HttpPost, ValidateInput(false)]
@@ -28,6 +28,7 @@ namespace IWSProject.Controllers
         {
             var model = db.Vats;
             item.modelid = 5;
+            item.CompanyID = (string)Session["CompanyID"];
             ViewData["vats"] = item;
             if (ModelState.IsValid)
             {
@@ -46,7 +47,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("VatsGridViewPartial", model);
+            return PartialView("VatsGridViewPartial", db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult VatsGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Vat item)
@@ -75,7 +76,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("VatsGridViewPartial", model);
+            return PartialView("VatsGridViewPartial", db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult VatsGridViewPartialDelete(string id)
@@ -96,7 +97,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("VatsGridViewPartial", model);
+            return PartialView("VatsGridViewPartial", db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
     }
 }

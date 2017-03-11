@@ -5,6 +5,7 @@
     using System.Data.Linq;
     using System.Data.Linq.Mapping;
 
+
     [global::System.Data.Linq.Mapping.DatabaseAttribute(Name = "iws")]
     public partial class IWSDataContext : System.Data.Linq.DataContext
     {
@@ -43,6 +44,9 @@
         partial void InsertBankAccount(BankAccount instance);
         partial void UpdateBankAccount(BankAccount instance);
         partial void DeleteBankAccount(BankAccount instance);
+        partial void InsertBankStatement(BankStatement instance);
+        partial void UpdateBankStatement(BankStatement instance);
+        partial void DeleteBankStatement(BankStatement instance);
         partial void InsertBillOfDelivery(BillOfDelivery instance);
         partial void UpdateBillOfDelivery(BillOfDelivery instance);
         partial void DeleteBillOfDelivery(BillOfDelivery instance);
@@ -124,9 +128,6 @@
         partial void InsertPeriodicAccountBalance(PeriodicAccountBalance instance);
         partial void UpdatePeriodicAccountBalance(PeriodicAccountBalance instance);
         partial void DeletePeriodicAccountBalance(PeriodicAccountBalance instance);
-        partial void InsertPerson(Person instance);
-        partial void UpdatePerson(Person instance);
-        partial void DeletePerson(Person instance);
         partial void InsertPurchaseOrder(PurchaseOrder instance);
         partial void UpdatePurchaseOrder(PurchaseOrder instance);
         partial void DeletePurchaseOrder(PurchaseOrder instance);
@@ -263,6 +264,14 @@
             get
             {
                 return this.GetTable<BankAccount>();
+            }
+        }
+
+        public System.Data.Linq.Table<BankStatement> BankStatements
+        {
+            get
+            {
+                return this.GetTable<BankStatement>();
             }
         }
 
@@ -482,14 +491,6 @@
             }
         }
 
-        public System.Data.Linq.Table<Person> Persons
-        {
-            get
-            {
-                return this.GetTable<Person>();
-            }
-        }
-
         public System.Data.Linq.Table<PurchaseOrder> PurchaseOrders
         {
             get
@@ -585,6 +586,8 @@
 
         private decimal _balance;
 
+        private string _CompanyID;
+
         private EntitySet<Journal> _Journals;
 
         private EntitySet<Journal> _Journals1;
@@ -611,6 +614,8 @@
         partial void OndateofcloseChanged();
         partial void OnbalanceChanging(decimal value);
         partial void OnbalanceChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Account()
@@ -777,6 +782,26 @@
                     this._balance = value;
                     this.SendPropertyChanged("balance");
                     this.OnbalanceChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
                 }
             }
         }
@@ -1312,6 +1337,8 @@
 
         private bool _IsService;
 
+        private string _CompanyID;
+
         private EntitySet<LineBillOfDelivery> _LineBillOfDeliveries;
 
         private EntitySet<LineGoodReceiving> _LineGoodReceivings;
@@ -1356,6 +1383,8 @@
         partial void OnVatCodeChanged();
         partial void OnIsServiceChanging(bool value);
         partial void OnIsServiceChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Article()
@@ -1611,6 +1640,26 @@
                     this._IsService = value;
                     this.SendPropertyChanged("IsService");
                     this.OnIsServiceChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
                 }
             }
         }
@@ -2997,6 +3046,8 @@
 
         private string _description;
 
+        private string _CompanyID;
+
         #region Extensibility Method Definitions
         partial void OnLoaded();
         partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3009,6 +3060,8 @@
         partial void OnmodelidChanged();
         partial void OndescriptionChanging(string value);
         partial void OndescriptionChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Bank()
@@ -3096,6 +3149,26 @@
             }
         }
 
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
+                }
+            }
+        }
+
         public event PropertyChangingEventHandler PropertyChanging;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -3137,6 +3210,8 @@
 
         private decimal _credit;
 
+        private string _CompanyID;
+
         #region Extensibility Method Definitions
         partial void OnLoaded();
         partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3155,6 +3230,8 @@
         partial void OndebitChanged();
         partial void OncreditChanging(decimal value);
         partial void OncreditChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public BankAccount()
@@ -3298,6 +3375,352 @@
                     this._credit = value;
                     this.SendPropertyChanged("credit");
                     this.OncreditChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
+                }
+            }
+        }
+
+        public event PropertyChangingEventHandler PropertyChanging;
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void SendPropertyChanging()
+        {
+            if ((this.PropertyChanging != null))
+            {
+                this.PropertyChanging(this, emptyChangingEventArgs);
+            }
+        }
+
+        protected virtual void SendPropertyChanged(String propertyName)
+        {
+            if ((this.PropertyChanged != null))
+            {
+                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+
+    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.BankStatement")]
+    public partial class BankStatement : INotifyPropertyChanging, INotifyPropertyChanged
+    {
+
+        private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
+
+        private string _Auftragskonto;
+
+        private string _Buchungstag;
+
+        private string _Valutadatum;
+
+        private string _Buchungstext;
+
+        private string _Verwendungszweck;
+
+        private string _BeguenstigterZahlungspflichtiger;
+
+        private string _Kontonummer;
+
+        private string _BLZ;
+
+        private string _Betrag;
+
+        private string _Waehrung;
+
+        private string _Info;
+
+        private int _BankStatementID;
+
+        #region Extensibility Method Definitions
+        partial void OnLoaded();
+        partial void OnValidate(System.Data.Linq.ChangeAction action);
+        partial void OnCreated();
+        partial void OnAuftragskontoChanging(string value);
+        partial void OnAuftragskontoChanged();
+        partial void OnBuchungstagChanging(string value);
+        partial void OnBuchungstagChanged();
+        partial void OnValutadatumChanging(string value);
+        partial void OnValutadatumChanged();
+        partial void OnBuchungstextChanging(string value);
+        partial void OnBuchungstextChanged();
+        partial void OnVerwendungszweckChanging(string value);
+        partial void OnVerwendungszweckChanged();
+        partial void OnBeguenstigterZahlungspflichtigerChanging(string value);
+        partial void OnBeguenstigterZahlungspflichtigerChanged();
+        partial void OnKontonummerChanging(string value);
+        partial void OnKontonummerChanged();
+        partial void OnBLZChanging(string value);
+        partial void OnBLZChanged();
+        partial void OnBetragChanging(string value);
+        partial void OnBetragChanged();
+        partial void OnWaehrungChanging(string value);
+        partial void OnWaehrungChanged();
+        partial void OnInfoChanging(string value);
+        partial void OnInfoChanged();
+        partial void OnBankStatementIDChanging(int value);
+        partial void OnBankStatementIDChanged();
+        #endregion
+
+        public BankStatement()
+        {
+            OnCreated();
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Auftragskonto", DbType = "NVarChar(50)")]
+        public string Auftragskonto
+        {
+            get
+            {
+                return this._Auftragskonto;
+            }
+            set
+            {
+                if ((this._Auftragskonto != value))
+                {
+                    this.OnAuftragskontoChanging(value);
+                    this.SendPropertyChanging();
+                    this._Auftragskonto = value;
+                    this.SendPropertyChanged("Auftragskonto");
+                    this.OnAuftragskontoChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Buchungstag", DbType = "NChar(10)")]
+        public string Buchungstag
+        {
+            get
+            {
+                return this._Buchungstag;
+            }
+            set
+            {
+                if ((this._Buchungstag != value))
+                {
+                    this.OnBuchungstagChanging(value);
+                    this.SendPropertyChanging();
+                    this._Buchungstag = value;
+                    this.SendPropertyChanged("Buchungstag");
+                    this.OnBuchungstagChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Valutadatum", DbType = "NChar(10)")]
+        public string Valutadatum
+        {
+            get
+            {
+                return this._Valutadatum;
+            }
+            set
+            {
+                if ((this._Valutadatum != value))
+                {
+                    this.OnValutadatumChanging(value);
+                    this.SendPropertyChanging();
+                    this._Valutadatum = value;
+                    this.SendPropertyChanged("Valutadatum");
+                    this.OnValutadatumChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Buchungstext", DbType = "NVarChar(200)")]
+        public string Buchungstext
+        {
+            get
+            {
+                return this._Buchungstext;
+            }
+            set
+            {
+                if ((this._Buchungstext != value))
+                {
+                    this.OnBuchungstextChanging(value);
+                    this.SendPropertyChanging();
+                    this._Buchungstext = value;
+                    this.SendPropertyChanged("Buchungstext");
+                    this.OnBuchungstextChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Verwendungszweck", DbType = "NVarChar(250)")]
+        public string Verwendungszweck
+        {
+            get
+            {
+                return this._Verwendungszweck;
+            }
+            set
+            {
+                if ((this._Verwendungszweck != value))
+                {
+                    this.OnVerwendungszweckChanging(value);
+                    this.SendPropertyChanging();
+                    this._Verwendungszweck = value;
+                    this.SendPropertyChanged("Verwendungszweck");
+                    this.OnVerwendungszweckChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_BeguenstigterZahlungspflichtiger", DbType = "NVarChar(250)")]
+        public string BeguenstigterZahlungspflichtiger
+        {
+            get
+            {
+                return this._BeguenstigterZahlungspflichtiger;
+            }
+            set
+            {
+                if ((this._BeguenstigterZahlungspflichtiger != value))
+                {
+                    this.OnBeguenstigterZahlungspflichtigerChanging(value);
+                    this.SendPropertyChanging();
+                    this._BeguenstigterZahlungspflichtiger = value;
+                    this.SendPropertyChanged("BeguenstigterZahlungspflichtiger");
+                    this.OnBeguenstigterZahlungspflichtigerChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Kontonummer", DbType = "NVarChar(50)")]
+        public string Kontonummer
+        {
+            get
+            {
+                return this._Kontonummer;
+            }
+            set
+            {
+                if ((this._Kontonummer != value))
+                {
+                    this.OnKontonummerChanging(value);
+                    this.SendPropertyChanging();
+                    this._Kontonummer = value;
+                    this.SendPropertyChanged("Kontonummer");
+                    this.OnKontonummerChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_BLZ", DbType = "NVarChar(50)")]
+        public string BLZ
+        {
+            get
+            {
+                return this._BLZ;
+            }
+            set
+            {
+                if ((this._BLZ != value))
+                {
+                    this.OnBLZChanging(value);
+                    this.SendPropertyChanging();
+                    this._BLZ = value;
+                    this.SendPropertyChanged("BLZ");
+                    this.OnBLZChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Betrag", DbType = "NVarChar(50)")]
+        public string Betrag
+        {
+            get
+            {
+                return this._Betrag;
+            }
+            set
+            {
+                if ((this._Betrag != value))
+                {
+                    this.OnBetragChanging(value);
+                    this.SendPropertyChanging();
+                    this._Betrag = value;
+                    this.SendPropertyChanged("Betrag");
+                    this.OnBetragChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Waehrung", DbType = "NVarChar(200)")]
+        public string Waehrung
+        {
+            get
+            {
+                return this._Waehrung;
+            }
+            set
+            {
+                if ((this._Waehrung != value))
+                {
+                    this.OnWaehrungChanging(value);
+                    this.SendPropertyChanging();
+                    this._Waehrung = value;
+                    this.SendPropertyChanged("Waehrung");
+                    this.OnWaehrungChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Info", DbType = "NVarChar(250)")]
+        public string Info
+        {
+            get
+            {
+                return this._Info;
+            }
+            set
+            {
+                if ((this._Info != value))
+                {
+                    this.OnInfoChanging(value);
+                    this.SendPropertyChanging();
+                    this._Info = value;
+                    this.SendPropertyChanged("Info");
+                    this.OnInfoChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_BankStatementID", AutoSync = AutoSync.OnInsert, DbType = "Int NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true)]
+        public int BankStatementID
+        {
+            get
+            {
+                return this._BankStatementID;
+            }
+            set
+            {
+                if ((this._BankStatementID != value))
+                {
+                    this.OnBankStatementIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._BankStatementID = value;
+                    this.SendPropertyChanged("BankStatementID");
+                    this.OnBankStatementIDChanged();
                 }
             }
         }
@@ -3718,6 +4141,8 @@
 
         private string _description;
 
+        private string _CompanyID;
+
         #region Extensibility Method Definitions
         partial void OnLoaded();
         partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -3730,6 +4155,8 @@
         partial void OnmodelidChanged();
         partial void OndescriptionChanging(string value);
         partial void OndescriptionChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Category()
@@ -3813,6 +4240,26 @@
                     this._description = value;
                     this.SendPropertyChanged("description");
                     this.OndescriptionChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
                 }
             }
         }
@@ -4582,6 +5029,8 @@
 
         private string _description;
 
+        private string _CompanyID;
+
         private EntitySet<CustomerInvoice> _CustomerInvoices;
 
         #region Extensibility Method Definitions
@@ -4596,6 +5045,8 @@
         partial void OnmodelidChanged();
         partial void OndescriptionChanging(string value);
         partial void OndescriptionChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public CostCenter()
@@ -4684,6 +5135,26 @@
             }
         }
 
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
+                }
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "CostCenter_CustomerInvoice", Storage = "_CustomerInvoices", ThisKey = "id", OtherKey = "store")]
         public EntitySet<CustomerInvoice> CustomerInvoices
         {
@@ -4744,6 +5215,8 @@
 
         private decimal _gnp;
 
+        private string _CompanyID;
+
         #region Extensibility Method Definitions
         partial void OnLoaded();
         partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -4756,6 +5229,8 @@
         partial void OnpopulationChanged();
         partial void OngnpChanging(decimal value);
         partial void OngnpChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Country()
@@ -4843,6 +5318,26 @@
             }
         }
 
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50)")]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
+                }
+            }
+        }
+
         public event PropertyChangingEventHandler PropertyChanging;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -4886,6 +5381,8 @@
 
         private int _accountid;
 
+        private string _CompanyID;
+
         private EntitySet<BillOfDelivery> _BillOfDeliveries;
 
         private EntitySet<CustomerInvoice> _CustomerInvoices;
@@ -4914,6 +5411,8 @@
         partial void OnzipChanged();
         partial void OnaccountidChanging(int value);
         partial void OnaccountidChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Customer()
@@ -5081,6 +5580,26 @@
                     this._accountid = value;
                     this.SendPropertyChanged("accountid");
                     this.OnaccountidChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
                 }
             }
         }
@@ -5771,7 +6290,6 @@
         }
 
         [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_text", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
-        
         public string text
         {
             get
@@ -6753,6 +7271,8 @@
 
         private string _Side;
 
+        private string _CompanyID;
+
         private EntityRef<Account> _Account1;
 
         private EntityRef<Account> _Account2;
@@ -6787,6 +7307,8 @@
         partial void OnAmountChanged();
         partial void OnSideChanging(string value);
         partial void OnSideChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Journal()
@@ -7064,6 +7586,26 @@
             }
         }
 
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
+                }
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Account_Journal", Storage = "_Account1", ThisKey = "Account", OtherKey = "id", IsForeignKey = true)]
         public Account Account1
         {
@@ -7195,6 +7737,8 @@
 
         private string _Side;
 
+        private string _CompanyID;
+
         #region Extensibility Method Definitions
         partial void OnLoaded();
         partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -7235,6 +7779,8 @@
         partial void OnAmountChanged();
         partial void OnSideChanging(string value);
         partial void OnSideChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public JournalStock()
@@ -7602,6 +8148,26 @@
             }
         }
 
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50)")]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
+                }
+            }
+        }
+
         public event PropertyChangingEventHandler PropertyChanging;
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -7649,6 +8215,8 @@
 
         private string _text;
 
+        private string _CompanyID;
+
         private EntityRef<Article> _Article;
 
         private EntityRef<BillOfDelivery> _BillOfDelivery;
@@ -7677,6 +8245,8 @@
         partial void OnduedateChanged();
         partial void OntextChanging(string value);
         partial void OntextChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public LineBillOfDelivery()
@@ -7890,6 +8460,26 @@
                     this._text = value;
                     this.SendPropertyChanged("text");
                     this.OntextChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50)")]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
                 }
             }
         }
@@ -11392,6 +11982,8 @@
 
         private System.Nullable<int> _MenuOrder;
 
+        private string _CompanyID;
+
         #region Extensibility Method Definitions
         partial void OnLoaded();
         partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -11414,6 +12006,8 @@
         partial void OnParentChanged();
         partial void OnMenuOrderChanging(System.Nullable<int> value);
         partial void OnMenuOrderChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Menu()
@@ -11597,6 +12191,26 @@
                     this._MenuOrder = value;
                     this.SendPropertyChanged("MenuOrder");
                     this.OnMenuOrderChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false, IsPrimaryKey = true)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
                 }
             }
         }
@@ -12008,6 +12622,8 @@
 
         private decimal _Credit;
 
+        private string _CompanyID;
+
         private EntityRef<Account> _Account;
 
         #region Extensibility Method Definitions
@@ -12030,6 +12646,8 @@
         partial void OnDebitChanged();
         partial void OnCreditChanging(decimal value);
         partial void OnCreditChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public PeriodicAccountBalance()
@@ -12202,6 +12820,26 @@
             }
         }
 
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false, IsPrimaryKey = true)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
+                }
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Account_PeriodicAccountBalance", Storage = "_Account", ThisKey = "AccountId", OtherKey = "id", IsForeignKey = true)]
         public Account Account
         {
@@ -12232,116 +12870,6 @@
                         this._AccountId = default(string);
                     }
                     this.SendPropertyChanged("Account");
-                }
-            }
-        }
-
-        public event PropertyChangingEventHandler PropertyChanging;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected virtual void SendPropertyChanging()
-        {
-            if ((this.PropertyChanging != null))
-            {
-                this.PropertyChanging(this, emptyChangingEventArgs);
-            }
-        }
-
-        protected virtual void SendPropertyChanged(String propertyName)
-        {
-            if ((this.PropertyChanged != null))
-            {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-
-    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.Person")]
-    public partial class Person : INotifyPropertyChanging, INotifyPropertyChanged
-    {
-
-        private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
-
-        private int _id;
-
-        private string _name;
-
-        private System.Nullable<short> _age;
-
-        #region Extensibility Method Definitions
-        partial void OnLoaded();
-        partial void OnValidate(System.Data.Linq.ChangeAction action);
-        partial void OnCreated();
-        partial void OnidChanging(int value);
-        partial void OnidChanged();
-        partial void OnnameChanging(string value);
-        partial void OnnameChanged();
-        partial void OnageChanging(System.Nullable<short> value);
-        partial void OnageChanged();
-        #endregion
-
-        public Person()
-        {
-            OnCreated();
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_id", AutoSync = AutoSync.OnInsert, DbType = "Int NOT NULL IDENTITY", IsPrimaryKey = true, IsDbGenerated = true)]
-        public int id
-        {
-            get
-            {
-                return this._id;
-            }
-            set
-            {
-                if ((this._id != value))
-                {
-                    this.OnidChanging(value);
-                    this.SendPropertyChanging();
-                    this._id = value;
-                    this.SendPropertyChanged("id");
-                    this.OnidChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_name", DbType = "NVarChar(255)")]
-        public string name
-        {
-            get
-            {
-                return this._name;
-            }
-            set
-            {
-                if ((this._name != value))
-                {
-                    this.OnnameChanging(value);
-                    this.SendPropertyChanging();
-                    this._name = value;
-                    this.SendPropertyChanged("name");
-                    this.OnnameChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_age", DbType = "SmallInt")]
-        public System.Nullable<short> age
-        {
-            get
-            {
-                return this._age;
-            }
-            set
-            {
-                if ((this._age != value))
-                {
-                    this.OnageChanging(value);
-                    this.SendPropertyChanging();
-                    this._age = value;
-                    this.SendPropertyChanged("age");
-                    this.OnageChanged();
                 }
             }
         }
@@ -12680,6 +13208,8 @@
 
         private string _description;
 
+        private string _CompanyID;
+
         #region Extensibility Method Definitions
         partial void OnLoaded();
         partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -12692,6 +13222,8 @@
         partial void OnmodelidChanged();
         partial void OndescriptionChanging(string value);
         partial void OndescriptionChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public QuantityUnit()
@@ -12775,6 +13307,26 @@
                     this._description = value;
                     this.SendPropertyChanged("description");
                     this.OndescriptionChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
                 }
             }
         }
@@ -13013,7 +13565,7 @@
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyId", DbType = "NVarChar(50)")]
         public string CompanyId
         {
             get
@@ -13890,6 +14442,8 @@
 
         private short _minstock;
 
+        private string _CompanyID;
+
         private EntityRef<Article> _Article;
 
         private EntityRef<Store> _Store;
@@ -13914,6 +14468,8 @@
         partial void OnquantityChanged();
         partial void OnminstockChanging(short value);
         partial void OnminstockChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Stock()
@@ -14091,6 +14647,26 @@
             }
         }
 
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
+                }
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Article_Stock", Storage = "_Article", ThisKey = "itemid", OtherKey = "id", IsForeignKey = true)]
         public Article Article
         {
@@ -14202,6 +14778,8 @@
 
         private string _accountid;
 
+        private string _CompanyID;
+
         private EntitySet<VendorInvoice> _VendorInvoices;
 
         private EntitySet<BillOfDelivery> _BillOfDeliveries;
@@ -14234,6 +14812,8 @@
         partial void OnmodelidChanged();
         partial void OnaccountidChanging(string value);
         partial void OnaccountidChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Store()
@@ -14403,6 +14983,26 @@
                     this._accountid = value;
                     this.SendPropertyChanged("accountid");
                     this.OnaccountidChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
                 }
             }
         }
@@ -14600,6 +15200,8 @@
 
         private string _accountid;
 
+        private string _CompanyID;
+
         private EntitySet<VendorInvoice> _VendorInvoices;
 
         private EntitySet<GoodReceiving> _GoodReceivings;
@@ -14628,6 +15230,8 @@
         partial void OnzipChanged();
         partial void OnaccountidChanging(string value);
         partial void OnaccountidChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Supplier()
@@ -14799,6 +15403,26 @@
             }
         }
 
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
+                }
+            }
+        }
+
         [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Supplier_VendorInvoice", Storage = "_VendorInvoices", ThisKey = "id", OtherKey = "account")]
         public EntitySet<VendorInvoice> VendorInvoices
         {
@@ -14946,6 +15570,8 @@
 
         private string _expenseaccountid;
 
+        private string _CompanyID;
+
         private EntitySet<Article> _Articles;
 
         #region Extensibility Method Definitions
@@ -14972,6 +15598,8 @@
         partial void OnstockaccountidChanged();
         partial void OnexpenseaccountidChanging(string value);
         partial void OnexpenseaccountidChanged();
+        partial void OnCompanyIDChanging(string value);
+        partial void OnCompanyIDChanged();
         #endregion
 
         public Vat()
@@ -15176,6 +15804,26 @@
                     this._expenseaccountid = value;
                     this.SendPropertyChanged("expenseaccountid");
                     this.OnexpenseaccountidChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyID
+        {
+            get
+            {
+                return this._CompanyID;
+            }
+            set
+            {
+                if ((this._CompanyID != value))
+                {
+                    this.OnCompanyIDChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyID = value;
+                    this.SendPropertyChanged("CompanyID");
+                    this.OnCompanyIDChanged();
                 }
             }
         }

@@ -47,7 +47,6 @@ public class BillOfDeliveryXR : DevExpress.XtraReports.UI.XtraReport
     private XRTableCell xrTableCell11;
     private XRTableCell xrTableCell12;
     private XRTableCell xrTableCell20;
-    private XRPictureBox xrPictureBox1;
 
     /// <summary>
     /// Required designer variable.
@@ -130,7 +129,6 @@ public class BillOfDeliveryXR : DevExpress.XtraReports.UI.XtraReport
             this.xrLabel13 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLine1 = new DevExpress.XtraReports.UI.XRLine();
             this.xrControlStyle1 = new DevExpress.XtraReports.UI.XRControlStyle();
-            this.xrPictureBox1 = new DevExpress.XtraReports.UI.XRPictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
@@ -575,7 +573,6 @@ public class BillOfDeliveryXR : DevExpress.XtraReports.UI.XtraReport
             // PageHeader
             // 
             this.PageHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
-            this.xrPictureBox1,
             this.xrLabel13,
             this.xrLine1});
             this.PageHeader.Dpi = 100F;
@@ -610,15 +607,6 @@ public class BillOfDeliveryXR : DevExpress.XtraReports.UI.XtraReport
             // 
             this.xrControlStyle1.BackColor = System.Drawing.Color.WhiteSmoke;
             this.xrControlStyle1.Name = "xrControlStyle1";
-            // 
-            // xrPictureBox1
-            // 
-            this.xrPictureBox1.Dpi = 100F;
-            this.xrPictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("xrPictureBox1.Image")));
-            this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 23.33333F);
-            this.xrPictureBox1.Name = "xrPictureBox1";
-            this.xrPictureBox1.SizeF = new System.Drawing.SizeF(269.611F, 83.33333F);
-            this.xrPictureBox1.Sizing = DevExpress.XtraPrinting.ImageSizeMode.StretchImage;
             // 
             // BillOfDeliveryXR
             // 

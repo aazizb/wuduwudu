@@ -75,6 +75,7 @@ namespace IWSProject.Models
         public string OAccount { get; set; }
         public decimal Amount { get; set; }
         public string Side { get; set; }
+        public string CompanyID { get; set; }
     }
 
     public class ConfigureTwoFactorViewModel
@@ -165,6 +166,7 @@ namespace IWSProject.Models
         public string Periode { get; set; }
         public decimal Debit { get; set; }
         public decimal Credit { get; set; }
+        public string CompanyID { get; set; }
     }
     public class StockViewModel
     {
@@ -174,5 +176,6 @@ namespace IWSProject.Models
         public int Quantity { get; set; }
         public string ItemUnit { get; set; }
         public decimal AveragePrice { get; set; }
+        public string CompanyID { get; set; }
     }
 }

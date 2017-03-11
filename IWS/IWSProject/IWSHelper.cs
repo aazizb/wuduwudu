@@ -102,6 +102,7 @@
             {
                 return new string[] { };
             }
+
             RoleManager = new RoleManager<IdentityRole>(
                       new RoleStore<IdentityRole>(new ApplicationDbContext()));
 
