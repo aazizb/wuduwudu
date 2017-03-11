@@ -23,7 +23,6 @@ namespace IWSProject.Controllers
         [ValidateInput(false)]
         public ActionResult SetLogo()
         {
-            ViewData["Companies"] = IWSLookUp.GetCompanies();
             return View();
         }
         [HttpPost]
@@ -63,6 +62,7 @@ namespace IWSProject.Controllers
         {
             var model = db.Companies;
             item.modelid = 10;
+            //item.CompanyID = (string)Session["CompanyID"];
             ViewData["company"] = item;
             if (ModelState.IsValid)
             {

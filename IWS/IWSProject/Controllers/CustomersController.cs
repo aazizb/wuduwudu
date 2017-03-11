@@ -14,7 +14,7 @@ namespace IWSProject.Controllers
         // GET: Customers
         public ActionResult Index()
         {
-            return View(db.Customers);
+            return View(db.Customers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [ValidateInput(false)]
@@ -43,7 +43,7 @@ namespace IWSProject.Controllers
             }
             else
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("CustomersGridViewPartial", model);
+            return PartialView("CustomersGridViewPartial", db.Customers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CustomersGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))]Customer item)
@@ -68,7 +68,7 @@ namespace IWSProject.Controllers
             }
             else
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("CustomersGridViewPartial", model);
+            return PartialView("CustomersGridViewPartial", db.Customers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CustomersGridViewPartialDelete(string id)
@@ -88,7 +88,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("CustomersGridViewPartial", model);
+            return PartialView("CustomersGridViewPartial", db.Customers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
     }
 }

@@ -4,6 +4,8 @@ using System.Web.Mvc;
 using DevExpress.Web.Mvc;
 using IWSProject.Models;
 using IWSProject.Content;
+using System.Diagnostics;
+
 namespace IWSProject.Controllers
 {
     [Authorize]
@@ -14,13 +16,13 @@ namespace IWSProject.Controllers
         // GET: articles
         public ActionResult Index()
         {
-            return View(db.Articles);
+            return View(db.Articles.Where(c=>c.CompanyID==(string)Session["CompanyID"]));
         }
 
         [ValidateInput(false)]
         public ActionResult ArticlesGridViewPartial()
         {
-            return PartialView("ArticlesGridViewPartial", db.Articles);
+            return PartialView("ArticlesGridViewPartial", db.Articles.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [HttpPost, ValidateInput(false)]
@@ -28,6 +30,8 @@ namespace IWSProject.Controllers
         {
             var model = db.Articles;
             item.modelid = 7;
+            item.CompanyID = (string)Session["CompanyID"];
+            string ss = item.CompanyID;
             item.IsService = item.IsService != true ? false : true;
             ViewData["article"] = item;
             if (ModelState.IsValid)
@@ -47,7 +51,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("ArticlesGridViewPartial", model);
+            return PartialView("ArticlesGridViewPartial", db.Articles.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult ArticlesGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Article item)

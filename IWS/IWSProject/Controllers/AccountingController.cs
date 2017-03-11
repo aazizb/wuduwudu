@@ -328,16 +328,24 @@ namespace IWSProject.Controllers
         }
         private bool UpdatePeriodicAccountBalance(string Periode, string AccountID, decimal amount, bool IsDebit)
         {
-            var docs = db.PeriodicAccountBalances.FirstOrDefault(p => p.Periode == Periode && p.AccountId == AccountID);
+            string companyID = (string)Session["CompanyID"];
+            var docs = db.PeriodicAccountBalances
+                       .FirstOrDefault(p => p.Periode == Periode 
+                        && p.AccountId == AccountID 
+                        && p.CompanyID==companyID);
             if (docs == null)
             {
-                string name = db.Accounts.Where(a => a.id == AccountID).Select(n => n.name).Single();
+                string name = db.Accounts
+                    .Where(a => a.id == AccountID && a.CompanyID == companyID)
+                    .Select(n => n.name)
+                    .Single();
                 docs = new PeriodicAccountBalance
                 {
                     Name = name,
                     ModelId = 106,
                     Periode = Periode,
                     AccountId = AccountID,
+                    CompanyID = companyID,
                     Debit = 0,
                     Credit = 0
                 };
@@ -391,7 +399,9 @@ namespace IWSProject.Controllers
             {
                 foreach (var item in items)
                 {
-                    var article = db.Articles.FirstOrDefault(i => i.id == item.ItemID);
+                    var article = db.Articles
+                        .FirstOrDefault(i => i.id == item.ItemID 
+                        && i.CompanyID== (string)Session["CompanyID"]);
                     if (item.IsService)
                     {
                         //for IsService=true items
@@ -402,12 +412,20 @@ namespace IWSProject.Controllers
                     {
                         //for IsService=false items
                         float currentStock = 0;
-                        bool isItemInStock = db.Stocks.Any(i => i.itemid == item.ItemID);
+                        bool isItemInStock = db.Stocks.
+                            Any(i => i.itemid == item.ItemID
+                            && i.CompanyID== (string)Session["CompanyID"]);
                         if (isItemInStock)
                         {
-                            currentStock = db.Stocks.Where(i => i.itemid == item.ItemID).Sum(q => q.quantity);
+                            currentStock = db.Stocks
+                                .Where(i => i.itemid == item.ItemID 
+                                && i.CompanyID== (string)Session["CompanyID"])
+                                .Sum(q => q.quantity);
                         }
-                        var stock = db.Stocks.FirstOrDefault(s => s.storeid == item.StoreID && s.itemid == item.ItemID);
+                        var stock = db.Stocks
+                            .FirstOrDefault(s => s.storeid == item.StoreID 
+                            && s.itemid == item.ItemID 
+                            && s.CompanyID== (string)Session["CompanyID"]);
                         if (stock == null)
                         {
                             stock = new Stock()
@@ -416,6 +434,7 @@ namespace IWSProject.Controllers
                                 name = item.ItemName,
                                 modelid = 107,
                                 storeid = item.StoreID,
+                                CompanyID=(string)Session["CompanyID"],
                                 quantity = (float)item.Quantity
                             };
                             db.Stocks.InsertOnSubmit(stock);
@@ -1906,6 +1925,7 @@ namespace IWSProject.Controllers
                 {
                     foreach (Journal item in journal)
                     {
+                        item.CompanyID = (string)Session["CompanyID"];
                         db.Journals.InsertOnSubmit(item);
                     }
                     results = true;

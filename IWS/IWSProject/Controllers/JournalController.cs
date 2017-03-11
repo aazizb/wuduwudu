@@ -13,7 +13,7 @@ namespace IWSProject.Controllers
         // GET: Balance
         public ActionResult Index()
         {
-            var journal = IWSLookUp.GetJournal();
+            var journal = IWSLookUp.GetJournal((string)Session["CompanyID"]);
             var model = new List<JournalViewModel>();
             foreach (JournalViewModel item in journal)
             {
@@ -24,7 +24,7 @@ namespace IWSProject.Controllers
         [ValidateInput(false)]
         public ActionResult JournalPartialView()
         {
-            var journal = IWSLookUp.GetJournal();
+            var journal = IWSLookUp.GetJournal((string)Session["CompanyID"]);
             var model = new List<JournalViewModel>();
             foreach (JournalViewModel item in journal)
             {

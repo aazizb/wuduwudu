@@ -1,4 +1,6 @@
-﻿@model IWSProject.Models.SetLogoViewModel
+﻿
+@using IWSProject.Models
+@model SetLogoViewModel
 
 @using IWSProject.Content
 
@@ -32,38 +34,41 @@
     {
         @Html.AntiForgeryToken()
         @Html.DevExpress().FormLayout(settings =>
-    {
-    settings.Name = "formSetLogo";
+   {
+   settings.Name = "formSetLogo";
 
-    settings.Items.AddGroupItem(group =>
-    {
-    group.Caption = IWSLocalResource.CompanyInfo;
-    group.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
+   settings.Items.AddGroupItem(group =>
+   {
+   group.Caption = IWSLocalResource.CompanyInfo;
+   group.GroupBoxDecoration = GroupBoxDecoration.HeadingLine;
 
-    group.Items.Add(combo =>
-{
-    combo.Name = "CompanyID";
-    combo.Caption = IWSLocalResource.company;
-    combo.NestedExtension().ComboBox(s =>
-    {
-        s.Properties.TextField = "Name";
-        s.Properties.ValueField = "Name";
-        s.Properties.ValueType = typeof(string);
-        s.Properties.DataSource = ViewData["Companies"];
-        s.Properties.DropDownStyle = DropDownStyle.DropDownList;
-    });
-});
+   group.Items.Add(combo =>
+   {
+       combo.Name = "CompanyID";
+       combo.Caption = IWSLocalResource.company;
+       combo.NestedExtension().ComboBox(s =>
+       {
+           s.Properties.TextField = "Name";
+           s.Properties.ValueField = "Name";
+           s.Properties.ValueType = typeof(string);
+           //s.Properties.DataSource = ViewData["Companies"];
+           s.Properties.DataSource = IWSLookUp.GetCompanies(); //ViewData["Companies"];
+           s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+           s.Properties.Columns.Add("name").Caption = IWSLocalResource.company;
+           s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+       });
+   });
 
-//group.Items.Add(button =>
-//{
-//    button.Name = "btnLogo";
+   //group.Items.Add(button =>
+   //{
+   //    button.Name = "btnLogo";
 
-//    button.Caption = "  ";
-//    button.NestedExtension().Button(b =>
-//    {
-//        b.Text = IWSLocalResource.ChooseLogo;
-//    });
-//});
+   //    button.Caption = "  ";
+   //    button.NestedExtension().Button(b =>
+   //    {
+   //        b.Text = IWSLocalResource.ChooseLogo;
+   //    });
+   //});
     @**@
 //    @using(Html.BeginForm("UploadControlUpload", "Home"))
 //{

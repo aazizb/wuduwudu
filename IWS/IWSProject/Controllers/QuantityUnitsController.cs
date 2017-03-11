@@ -14,13 +14,13 @@ namespace IWSProject.Controllers
         // GET: QuantityUnits
         public ActionResult Index()
         {
-            return View(db.QuantityUnits);
+            return View(db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [ValidateInput(false)]
         public ActionResult QuantityUnitsGridViewPartial()
         {
-            return PartialView("QuantityUnitsGridViewPartial", db.QuantityUnits);
+            return PartialView("QuantityUnitsGridViewPartial", db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [HttpPost, ValidateInput(false)]
@@ -28,6 +28,7 @@ namespace IWSProject.Controllers
         {
             var model = db.QuantityUnits;
             item.modelid = 4;
+            item.CompanyID = (string)Session["CompanyID"];
             ViewData["quantityunit"] = item;
             if (ModelState.IsValid)
             {
@@ -46,7 +47,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("QuantityUnitsGridViewPartial", model);
+            return PartialView("QuantityUnitsGridViewPartial", db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult QuantityUnitsGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] QuantityUnit item)
@@ -75,7 +76,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("QuantityUnitsGridViewPartial", model);
+            return PartialView("QuantityUnitsGridViewPartial", db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult QuantityUnitsGridViewPartialDelete(string id)
@@ -96,7 +97,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("QuantityUnitsGridViewPartial", model);
+            return PartialView("QuantityUnitsGridViewPartial", db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
     }
 }

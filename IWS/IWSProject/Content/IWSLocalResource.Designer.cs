@@ -214,6 +214,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bank Statement.
+        /// </summary>
+        public static string BankStatement {
+            get {
+                return ResourceManager.GetString("BankStatement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to BIC.
         /// </summary>
         public static string bic {
@@ -403,6 +412,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Customer Order.
+        /// </summary>
+        public static string CustomerOrder {
+            get {
+                return ResourceManager.GetString("CustomerOrder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Customer/Supplier.
         /// </summary>
         public static string CustSupplier {
@@ -417,6 +435,15 @@ namespace IWSProject.Content {
         public static string dashboard {
             get {
                 return ResourceManager.GetString("dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Data Importation.
+        /// </summary>
+        public static string DataImportation {
+            get {
+                return ResourceManager.GetString("DataImportation", resourceCulture);
             }
         }
         
@@ -574,6 +601,24 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to rows were successfully imported into the database..
+        /// </summary>
+        public static string Imported {
+            get {
+                return ResourceManager.GetString("Imported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No rows have been imported, verify your data and duplicated data rows and try again!.
+        /// </summary>
+        public static string ImportedNone {
+            get {
+                return ResourceManager.GetString("ImportedNone", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Input VAT Account.
         /// </summary>
         public static string inputvataccountid {
@@ -687,6 +732,15 @@ namespace IWSProject.Content {
         public static string LineCustomerInvoice {
             get {
                 return ResourceManager.GetString("LineCustomerInvoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Line Customer Order.
+        /// </summary>
+        public static string LineCustomerOrder {
+            get {
+                return ResourceManager.GetString("LineCustomerOrder", resourceCulture);
             }
         }
         
@@ -1168,6 +1222,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Please select a file.
+        /// </summary>
+        public static string SelectFile {
+            get {
+                return ResourceManager.GetString("SelectFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Selling.
         /// </summary>
         public static string selling {
@@ -1362,6 +1425,15 @@ namespace IWSProject.Content {
         public static string unit {
             get {
                 return ResourceManager.GetString("unit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload to database.
+        /// </summary>
+        public static string UploadToDB {
+            get {
+                return ResourceManager.GetString("UploadToDB", resourceCulture);
             }
         }
         

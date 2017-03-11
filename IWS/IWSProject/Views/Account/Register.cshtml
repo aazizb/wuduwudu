@@ -1,5 +1,6 @@
 @using IWSProject.Content
-@model IWSProject.Models.RegisterModel
+@using IWSProject.Models
+@model RegisterModel
 
 <div class="accountHeader">
     <h2>@IWSLocalResource.NewUser </h2>
@@ -44,10 +45,11 @@
             combo.NestedExtension().ComboBox(s =>
             {
                 s.Properties.TextField = "Name";
-                s.Properties.ValueField = "Name";
+                s.Properties.ValueField = "Id";
                 s.Properties.ValueType = typeof(string);
-                s.Properties.DataSource = ViewData["Companies"];
-                s.Properties.DropDownStyle = DropDownStyle.DropDownList;
+                s.Properties.DataSource = IWSLookUp.GetCompanies(); 
+                s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                s.Properties.Columns.Add("name").Caption = IWSLocalResource.company;
             });
         });
 

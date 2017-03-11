@@ -10,7 +10,7 @@ namespace IWSProject.Controllers
         // GET: Balance
         public ActionResult Index()
         {
-            var items = IWSLookUp.GetAccountBalance();
+            var items = IWSLookUp.GetAccountBalance((string)Session["CompanyID"]);
             var model = new List<AccountBalanceViewModel>();
             foreach (AccountBalanceViewModel item in items)
             {
@@ -21,7 +21,7 @@ namespace IWSProject.Controllers
         [ValidateInput(false)]
         public ActionResult AccountBalancePartialView()
         {
-            var items = IWSLookUp.GetAccountBalance();
+            var items = IWSLookUp.GetAccountBalance((string)Session["CompanyID"]);
             var model = new List<AccountBalanceViewModel>();
             foreach (AccountBalanceViewModel item in items)
             {

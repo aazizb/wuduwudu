@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
@@ -50,7 +49,8 @@ namespace IWSProject.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Login(LoginModel model, string returnUrl) {
+        public async Task<ActionResult> Login(LoginModel model, string returnUrl)
+        {
             if(ModelState.IsValid)
             {
                 // This doesn't count login failures towards account lockout
@@ -59,6 +59,13 @@ namespace IWSProject.Controllers
                 switch (result)
                 {
                     case SignInStatus.Success:
+                        string companyID= IWSLookUp.GetCompany(model.UserName);
+                        Session["CompanyID"] = companyID;
+                        if (Session["Menus"] != null)
+                        {
+                            Session["Menus"] = null;
+                        }
+                        Session["Menus"] = IWSLookUp.GetMenu(companyID);
                         return RedirectToLocal(returnUrl);
                     case SignInStatus.LockedOut:
                         return View("Lockout");
@@ -70,15 +77,14 @@ namespace IWSProject.Controllers
                         return View();
                 }
             }
-            return View();//model
+            return View(model);
         }
-
         //
         // GET: /Account/LogOff
-
         public ActionResult LogOff() {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
             Session["Menus"] = null;
+            Session["CompanyID"] = null;
             return Redirect("/");
         }
 
@@ -87,7 +93,6 @@ namespace IWSProject.Controllers
 
         [AllowAnonymous]
         public ActionResult Register() {
-            ViewData["Companies"] = IWSLookUp.GetCompanies();
             return View();
         }
 

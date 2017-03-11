@@ -576,4 +576,31 @@
   <data name="SetLogo" xml:space="preserve">
     <value>Set company's Logo de-DE</value>
   </data>
+  <data name="CustomerOrder" xml:space="preserve">
+    <value>Customer Order de-DE</value>
+  </data>
+  <data name="LineCustomerOrder" xml:space="preserve">
+    <value>Line Customer Order de-DE</value>
+  </data>
+  <data name="LineCustomerOrder1" xml:space="preserve">
+    <value>Line Customer Order de-DE</value>
+  </data>
+  <data name="Imported" xml:space="preserve">
+    <value>rows were successfully imported into the database. de-DE</value>
+  </data>
+  <data name="DataImportation" xml:space="preserve">
+    <value>Data Importation de-DE</value>
+  </data>
+  <data name="ImportedNone" xml:space="preserve">
+    <value>No rows have been imported, verify your data and duplicated data rows and try again! de-DE</value>
+  </data>
+  <data name="SelectFile" xml:space="preserve">
+    <value>Please select a file de-DE</value>
+  </data>
+  <data name="BankStatement" xml:space="preserve">
+    <value>Bank Statement de-DE</value>
+  </data>
+  <data name="UploadToDB" xml:space="preserve">
+    <value>Upload to database de-DE</value>
+  </data>
 </root>

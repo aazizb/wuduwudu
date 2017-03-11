@@ -13,12 +13,12 @@ namespace IWSProject.Controllers
         // GET: goodreceivings
         public ActionResult Index()
         {
-            return View(db.GoodReceivings.ToList());
+            return View(IWSLookUp.GetGoodReceiving());
         }
         [ValidateInput(false)]
         public ActionResult MasterGridViewPartial()
         {
-            return PartialView("MasterGridViewPartial", db.GoodReceivings.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGoodReceiving());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Models.GoodReceiving item)
@@ -26,6 +26,7 @@ namespace IWSProject.Controllers
             var model = db.GoodReceivings;
             item.IsValidated = false;
             item.modelid = 104;
+            item.CompanyId = (string)Session["CompanyID"];
             item.oid = item.oid ?? 0;
             ViewData["item"] = item;
             if (ModelState.IsValid)
@@ -44,7 +45,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGoodReceiving());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Models.GoodReceiving item)
@@ -72,7 +73,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGoodReceiving());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialDelete(Int32 id)
@@ -94,7 +95,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGoodReceiving());
         }
         [ValidateInput(false)]
         public ActionResult DetailGridViewPartial(int transid)

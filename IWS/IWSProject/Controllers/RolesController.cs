@@ -34,6 +34,7 @@ namespace IWSProject.Controllers
         {
             var roleManager=new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(context));
             ViewData["role"] = item;
+            //item.CompanyID = (string)Session["CompanyID"];
             if (ModelState.IsValid)
             {
                 if (roleManager.RoleExists(item.Name.Trim()))

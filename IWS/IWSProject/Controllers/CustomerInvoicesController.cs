@@ -14,12 +14,12 @@ namespace IWSProject.Controllers
         // GET: CustomerInvoices
         public ActionResult Index()
         {
-            return View(db.CustomerInvoices);
+            return View(IWSLookUp.GetCustomerInvoice());
         }
         [ValidateInput(false)]
         public ActionResult MasterGridViewPartial()
         {
-            return PartialView("MasterGridViewPartial", db.CustomerInvoices.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetCustomerInvoice());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] CustomerInvoice item)
@@ -27,6 +27,7 @@ namespace IWSProject.Controllers
             var model = db.CustomerInvoices;
             item.IsValidated = false;
             item.modelid = 1110;
+            item.CompanyId = (string)Session["CompanyID"];
             item.oid = item.oid ?? 0;
             ViewData["item"] = item;
             if (ModelState.IsValid)
@@ -45,7 +46,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetCustomerInvoice());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] CustomerInvoice item)
@@ -73,7 +74,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetCustomerInvoice());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialDelete(int id)
@@ -95,7 +96,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetCustomerInvoice());
         }
         [ValidateInput(false)]
         public ActionResult DetailGridViewPartial(int transid)

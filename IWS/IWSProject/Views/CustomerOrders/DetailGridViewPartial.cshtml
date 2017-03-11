@@ -1,12 +1,11 @@
-﻿
-@using IWSProject.Content
+﻿@using IWSProject.Content
 @using IWSProject.Models
 
 @{
     var grid = Html.DevExpress().GridView(settings =>
     {
         settings.Name = "DetailGridView";
-        settings.Caption = IWSLocalResource.lineCustomerOrder;
+        settings.Caption = IWSLocalResource.LineCustomerInvoice;
         settings.SettingsDetail.MasterGridName = "MasterGridViewPartial";
         settings.CallbackRouteValues = new { Controller = "CustomerOrders", Action = "DetailGridViewPartial", transid = Session["transid"] };
 
@@ -172,8 +171,6 @@
         #region Template
         settings.SetEditFormTemplateContent(templateContent =>
         {
-            //var editItem = ViewData["lineCustomerOrders"] != null ? ViewData["lineCustomerOrders"] : templateContent.DataItem;
-
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
                 formLayoutSettings.Name = "DetailGridViewEdit";
@@ -327,7 +324,7 @@
 
         settings.DataBinding = (sender, e) =>
         {
-            ((MVCxGridView)sender).ForceDataRowType(typeof(LineCustomerOrder));
+            ((MVCxGridView)sender).ForceDataRowType(typeof(LineCustomerInvoice));
         };
     });
 

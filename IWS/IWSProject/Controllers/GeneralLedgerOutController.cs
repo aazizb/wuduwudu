@@ -16,12 +16,12 @@ namespace IWSProject.Controllers
         // GET: GeneralLedgers
         public ActionResult Index()
         {
-            return View(db.GeneralLedgers.Where(a => a.Area == IWSLookUp.Area.Purchasing.ToString()));
+            return View(IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Purchasing.ToString()));
         }
         [ValidateInput(false)]
         public ActionResult MasterGridViewPartial()
         {
-            return PartialView("MasterGridViewPartial", db.GeneralLedgers.Where(a => a.Area == IWSLookUp.Area.Purchasing.ToString()));
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Purchasing.ToString()));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] GeneralLedger item)
@@ -29,6 +29,7 @@ namespace IWSProject.Controllers
             var model = db.GeneralLedgers;
             item.IsValidated = false;
             item.modelid = 2020;
+            item.CompanyId = (string)Session["CompanyID"];
             item.Area = IWSLookUp.Area.Purchasing.ToString();
             ViewData["item"] = item;
             if (ModelState.IsValid)
@@ -47,7 +48,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.Where(a=>a.Area==IWSLookUp.Area.Purchasing.ToString()).ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Purchasing.ToString()));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] GeneralLedger item)
@@ -75,7 +76,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Purchasing.ToString()));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialDelete(Int32 id)
@@ -97,7 +98,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Purchasing.ToString()));
         }
         [ValidateInput(false)]
         public ActionResult DetailGridViewPartial(int transid)

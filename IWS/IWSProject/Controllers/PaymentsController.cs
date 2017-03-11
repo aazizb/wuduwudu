@@ -13,12 +13,12 @@ namespace IWSProject.Controllers
         // GET: Payments
         public ActionResult Index()
         {
-            return View(db.Payments);
+            return View(IWSLookUp.GetPayment());
         }
         [ValidateInput(false)]
         public ActionResult MasterGridViewPartial()
         {
-            return PartialView("MasterGridViewPartial", db.Payments);
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetPayment());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Payment item)
@@ -26,6 +26,7 @@ namespace IWSProject.Controllers
             var model = db.Payments;
             item.IsValidated = false;
             item.modelid = 114;
+            item.CompanyId = (string)Session["CompanyID"];
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
@@ -43,7 +44,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetPayment());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Payment item)
@@ -71,7 +72,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetPayment());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialDelete(Int32 id)
@@ -93,7 +94,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("MasterGridViewPartial", model.ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetPayment());
         }
         [ValidateInput(false)]
         public ActionResult DetailGridViewPartial(int transid)

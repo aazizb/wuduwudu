@@ -15,13 +15,12 @@ namespace IWSProject.Controllers
         // GET: costcenters
         public ActionResult Index()
         {
-            return View(db.CostCenters);
+            return View(db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [ValidateInput(false)]
         public ActionResult CostCentersGridViewPartial()
         {
-            var model = db.CostCenters;
-            return PartialView("CostCentersGridViewPartial", model.ToList());
+            return PartialView("CostCentersGridViewPartial", db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [HttpPost, ValidateInput(false)]
@@ -29,6 +28,7 @@ namespace IWSProject.Controllers
         {
             var model = db.CostCenters;
             item.modelid = 6;
+            item.CompanyID = (string)Session["CompanyID"];
             ViewData["costCenters"] = item;
             if (ModelState.IsValid)
             {
@@ -44,7 +44,7 @@ namespace IWSProject.Controllers
             }
             else
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("CostCentersGridViewPartial", model.ToList());
+            return PartialView("CostCentersGridViewPartial", db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CostCentersGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))]CostCenter item)
@@ -69,7 +69,7 @@ namespace IWSProject.Controllers
             }
             else
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("CostCentersGridViewPartial", model);
+            return PartialView("CostCentersGridViewPartial", db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CostCentersGridViewPartialDelete(System.String id)
@@ -89,7 +89,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("CostCentersGridViewPartial", model);
+            return PartialView("CostCentersGridViewPartial", db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
     }
 }

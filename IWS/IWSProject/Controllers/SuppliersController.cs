@@ -14,13 +14,13 @@ namespace IWSProject.Controllers
         // GET: suppliers
         public ActionResult Index()
         {
-            return View(db.Suppliers);
+            return View(db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [ValidateInput(false)]
         public ActionResult SuppliersGridViewPartial()
         {
-            return PartialView("SuppliersGridViewPartial", db.Suppliers);
+            return PartialView("SuppliersGridViewPartial", db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [HttpPost, ValidateInput(false)]
@@ -28,6 +28,7 @@ namespace IWSProject.Controllers
         {
             var model = db.Suppliers;
             item.modelid = 1;
+            item.CompanyID = (string)Session["CompanyID"];
             ViewData["supplier"] = item;
             if (ModelState.IsValid)
             {
@@ -43,7 +44,7 @@ namespace IWSProject.Controllers
             }
             else
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("SuppliersGridViewPartial", model);
+            return PartialView("SuppliersGridViewPartial", db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult SuppliersGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))]Supplier item)
@@ -68,7 +69,7 @@ namespace IWSProject.Controllers
             }
             else
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("SuppliersGridViewPartial", model);
+            return PartialView("SuppliersGridViewPartial", db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult SuppliersGridViewPartialDelete(string id)
@@ -88,7 +89,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("SuppliersGridViewPartial", model);
+            return PartialView("SuppliersGridViewPartial", db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
     }
 }

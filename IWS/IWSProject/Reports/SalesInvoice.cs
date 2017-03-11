@@ -60,7 +60,6 @@ public class SalesInvoiceXR : DevExpress.XtraReports.UI.XtraReport
     private XRTableCell xrTableCell13;
     private XRLabel xrLabel17;
     private XRLabel xrLabel18;
-    private XRPictureBox xrPictureBox1;
 
     /// <summary>
     /// Required designer variable.
@@ -143,7 +142,6 @@ public class SalesInvoiceXR : DevExpress.XtraReports.UI.XtraReport
             this.paramItemID = new DevExpress.XtraReports.Parameters.Parameter();
             this.formattingRule1 = new DevExpress.XtraReports.UI.FormattingRule();
             this.PageHeader = new DevExpress.XtraReports.UI.PageHeaderBand();
-            this.xrPictureBox1 = new DevExpress.XtraReports.UI.XRPictureBox();
             this.xrLabel18 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLine1 = new DevExpress.XtraReports.UI.XRLine();
             this.xrControlStyle1 = new DevExpress.XtraReports.UI.XRControlStyle();
@@ -619,21 +617,11 @@ public class SalesInvoiceXR : DevExpress.XtraReports.UI.XtraReport
             // PageHeader
             // 
             this.PageHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
-            this.xrPictureBox1,
             this.xrLabel18,
             this.xrLine1});
             this.PageHeader.Dpi = 100F;
             this.PageHeader.HeightF = 120.83F;
             this.PageHeader.Name = "PageHeader";
-            // 
-            // xrPictureBox1
-            // 
-            this.xrPictureBox1.Dpi = 100F;
-            this.xrPictureBox1.Image = ((System.Drawing.Image)(resources.GetObject("xrPictureBox1.Image")));
-            this.xrPictureBox1.LocationFloat = new DevExpress.Utils.PointFloat(0F, 23.33F);
-            this.xrPictureBox1.Name = "xrPictureBox1";
-            this.xrPictureBox1.SizeF = new System.Drawing.SizeF(269.611F, 83.33333F);
-            this.xrPictureBox1.Sizing = DevExpress.XtraPrinting.ImageSizeMode.StretchImage;
             // 
             // xrLabel18
             // 
@@ -709,7 +697,7 @@ public class SalesInvoiceXR : DevExpress.XtraReports.UI.XtraReport
             this.xrLabel17.SizeF = new System.Drawing.SizeF(266.6111F, 23F);
             this.xrLabel17.StylePriority.UseBackColor = false;
             this.xrLabel17.StylePriority.UsePadding = false;
-            xrSummary2.FormatString = IWSLocalResource.ItemCount + ": {0}";
+            xrSummary2.FormatString = "Item Count: {0}";
             xrSummary2.Func = DevExpress.XtraReports.UI.SummaryFunc.Count;
             xrSummary2.IgnoreNullValues = true;
             xrSummary2.Running = DevExpress.XtraReports.UI.SummaryRunning.Group;

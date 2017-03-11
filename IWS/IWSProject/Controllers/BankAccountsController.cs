@@ -13,13 +13,13 @@ namespace IWSProject.Controllers
         // GET: bankaccounts
         public ActionResult Index()
         {
-            return View(db.BankAccounts);
+            return View(db.BankAccounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [ValidateInput(false)]
         public ActionResult BankAccountsGridViewPartial()
         {
-            return PartialView("BankAccountsGridViewPartial", db.BankAccounts);
+            return PartialView("BankAccountsGridViewPartial", db.BankAccounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [HttpPost, ValidateInput(false)]
@@ -27,6 +27,7 @@ namespace IWSProject.Controllers
         {
             var model = db.BankAccounts;
             item.modelid = 12;
+            item.CompanyID = (string)Session["CompanyID"];
             ViewData["bankAccount"] = item;
             if (ModelState.IsValid)
             {
@@ -44,7 +45,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("BankAccountsGridViewPartial", model);
+            return PartialView("BankAccountsGridViewPartial", db.BankAccounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult BankAccountsGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] BankAccount item)
@@ -71,7 +72,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("BankAccountsGridViewPartial", model);
+            return PartialView("BankAccountsGridViewPartial", db.BankAccounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult BankAccountsGridViewPartialDelete(string id)
@@ -92,7 +93,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("BankAccountsGridViewPartial", model);
+            return PartialView("BankAccountsGridViewPartial", db.BankAccounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
     }
 }

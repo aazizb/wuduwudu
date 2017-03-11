@@ -14,12 +14,12 @@ namespace IWSProject.Controllers
         // GET: GeneralLedgers
         public ActionResult Index()
         {
-            return View(db.GeneralLedgers.Where(a=>a.Area==IWSLookUp.Area.Selling.ToString()));
+            return View(IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Selling.ToString()));
         }
         [ValidateInput(false)]
         public ActionResult MasterGridViewPartial()
         {
-            return PartialView("MasterGridViewPartial", db.GeneralLedgers.Where(a => a.Area == IWSLookUp.Area.Selling.ToString()));
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Selling.ToString()));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] GeneralLedger item)
@@ -27,6 +27,7 @@ namespace IWSProject.Controllers
             var model = db.GeneralLedgers;
             item.IsValidated = false;
             item.modelid = 2000;
+            item.CompanyId = (string)Session["CompanyID"];
             item.Area = IWSLookUp.Area.Selling.ToString();
             ViewData["item"] = item;
             if (ModelState.IsValid)

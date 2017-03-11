@@ -14,19 +14,20 @@ namespace IWSProject.Controllers
         // GET: MenuUI
         public ActionResult Index()
         {
-            return View(db.Menus);
+            return View(db.Menus.Where(c=>c.CompanyID== (string)Session["CompanyID"]));
         }
 
         [ValidateInput(false)]
         public ActionResult MenuUIGridViewPartial()
         {
-            return PartialView("MenuUIGridViewPartial", db.Menus);
+            return PartialView("MenuUIGridViewPartial", db.Menus.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [HttpPost, ValidateInput(false)]
         public ActionResult MenuUIGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Menu item)
         {
             var model = db.Menus;
+            item.CompanyID = (string)Session["CompanyID"];
             ViewData["menus"] = item;
             if (ModelState.IsValid)
             {
@@ -45,7 +46,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MenuUIGridViewPartial", model);
+            return PartialView("MenuUIGridViewPartial", db.Menus.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MenuUIGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Menu item)
@@ -73,7 +74,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MenuUIGridViewPartial", model);
+            return PartialView("MenuUIGridViewPartial", db.Menus.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MenuUIGridViewPartialDelete(int id)
@@ -91,7 +92,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = e.Message;
             }
-            return PartialView("MenuUIGridViewPartial", model);
+            return PartialView("MenuUIGridViewPartial", db.Menus.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
     }
 }

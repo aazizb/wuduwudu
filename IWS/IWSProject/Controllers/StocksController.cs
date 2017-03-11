@@ -12,7 +12,7 @@ namespace IWSProject.Controllers
         // GET: Stocks
         public ActionResult Index()
         {
-            var SV = IWSLookUp.GetStock();
+            var SV = IWSLookUp.GetStock((string)Session["CompanyID"]);
             var model = new List<StockViewModel>();
             foreach (StockViewModel item in SV)
             {
@@ -23,7 +23,7 @@ namespace IWSProject.Controllers
         [ValidateInput(false)]
         public ActionResult StocksPartialView()
         {
-            var SV = IWSLookUp.GetStock();
+            var SV = IWSLookUp.GetStock((string)Session["CompanyID"]);
             var model = new List<StockViewModel>();
             foreach (StockViewModel item in SV)
             {

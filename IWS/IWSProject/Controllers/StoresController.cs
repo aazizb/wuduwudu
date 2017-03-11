@@ -14,13 +14,13 @@ namespace IWSProject.Controllers
         // GET: stores
         public ActionResult Index()
         {
-            return View(db.Stores);
+            return View(db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [ValidateInput(false)]
         public ActionResult StoresGridViewPartial()
         {
-            return PartialView("StoresGridViewPartial", db.Stores);
+            return PartialView("StoresGridViewPartial", db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
 
         [HttpPost, ValidateInput(false)]
@@ -28,6 +28,7 @@ namespace IWSProject.Controllers
         {
             var model = db.Stores;
             item.modelid = 2;
+            item.CompanyID = (string)Session["CompanyID"];
             ViewData["stores"] = item;
             if (ModelState.IsValid)
             {
@@ -45,7 +46,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("StoresGridViewPartial", model);
+            return PartialView("StoresGridViewPartial", db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult StoresGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Store item)
@@ -72,7 +73,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("StoresGridViewPartial", model);
+            return PartialView("StoresGridViewPartial", db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult StoresGridViewPartialDelete(string id)
@@ -92,7 +93,7 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("StoresGridViewPartial", model);
+            return PartialView("StoresGridViewPartial", db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
     }
 }
