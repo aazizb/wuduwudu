@@ -1,0 +1,6 @@
+﻿
+@Html.DevExpress().WebDocumentViewer(settings =>
+{
+    settings.Name = "WebDocumentViewer";
+    //settings.MobileMode = true;
+}).Bind(new SalesInvoiceXR()).GetHtml()

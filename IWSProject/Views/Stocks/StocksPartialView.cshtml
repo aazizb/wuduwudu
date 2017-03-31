@@ -1,0 +1,60 @@
+﻿
+@using IWSProject.Content
+
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "StockView";
+        settings.Caption = IWSLocalResource.StockAndStore;
+        settings.CallbackRouteValues = new { Controller = "Stocks", Action = "StocksPartialView" };
+
+        settings.KeyFieldName = "ItemName;StoreName";
+
+        settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowFilterRowMenu = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
+
+        settings.Width = Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 24;
+        settings.Settings.VerticalScrollableHeight = 350;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+
+
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+        settings.SettingsBehavior.EnableRowHotTrack = true;
+
+        settings.Styles.RowHotTrack.Cursor = "pointer";
+        settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
+
+        settings.Columns.Add("ItemName").Caption = IWSLocalResource.name;
+        settings.Columns.Add("StoreName").Caption = IWSLocalResource.store;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Quantity";
+            column.Caption = IWSLocalResource.quantity;
+            column.EditorProperties().TextBox(textBox =>
+            {
+                textBox.DisplayFormatString = "N";
+            });
+        });
+        settings.Columns.Add("ItemUnit").Caption = IWSLocalResource.unit;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "AveragePrice";
+            column.Caption = IWSLocalResource.AveragePrice;
+            column.EditorProperties().TextBox(textBox =>
+            {
+                textBox.DisplayFormatString = "N";
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Currency";
+            column.Caption = IWSLocalResource.Currency;
+        });
+    }).Bind(Model).GetHtml()
+
+

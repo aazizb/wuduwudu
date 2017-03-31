@@ -1,0 +1,39 @@
+﻿@using IWSProject.Content
+@using IWSProject.Models
+@Html.DevExpress().GridView(
+    settings =>
+    {
+        settings.Name = "AccountBalanceGridView";
+        settings.CallbackRouteValues = new { Controller = "Accounting", Action = "AccountBalanceView" };
+
+        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
+        settings.SettingsResizing.Visualization = ResizingMode.Postponed;
+
+        settings.KeyFieldName = "AccountID";
+        settings.Width = System.Web.UI.WebControls.Unit.Percentage(100);
+        settings.SettingsPager.PageSize = 32;
+        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Visible;
+        settings.Settings.VerticalScrollableHeight = 350;
+        settings.ControlStyle.Paddings.Padding = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.Border.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(0);
+        settings.ControlStyle.BorderBottom.BorderWidth = System.Web.UI.WebControls.Unit.Pixel(1);
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "AccountID";
+            column.Caption = IWSLocalResource.account;
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetAccounts();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.account;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
+        settings.Columns.Add("Periode").Caption = IWSLocalResource.periode;
+        settings.Columns.Add("Debit").Caption = IWSLocalResource.debit;
+        settings.Columns.Add("Credit").Caption = IWSLocalResource.credit;
+
+    }).Bind(Model).GetHtml()

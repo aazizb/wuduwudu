@@ -1,0 +1,38 @@
+﻿@model List<string>
+Key Value is @ViewData["Key"]
+<br /><br /><br />
+@Html.ActionLink("<< Home", "Index")
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#SelectionMode").change(function() { $("form").submit(); });
+    });
+    function FeaturesSelectionChanged(s, e) {
+        var selectedFeatures = s.GetSelectedValues();
+        lbModels.PerformCallback({ "selectedFeatures": selectedFeatures ? selectedFeatures.join() : null });
+    }
+</script>
+
+@using (Html.BeginForm())
+{
+    <div style="margin-bottom: 32px">
+        <label for="SelectionMode">Selection mode:</label>
+    </div>
+    <div style="float: left">
+        @Html.DevExpress().ListBox(
+            settings =>
+            {
+                settings.Name = "lbFeatures";
+                settings.Width = 250;
+                settings.Height = 210;
+                settings.Properties.Caption = "Phone features:";
+                settings.Properties.CaptionSettings.Position = EditorCaptionPosition.Top;
+                settings.Properties.ValueField = "ID";
+                settings.Properties.ValueType = typeof(string);
+                settings.Properties.TextField = "Name";
+                settings.Properties.ClientSideEvents.SelectedIndexChanged = "FeaturesSelectionChanged";
+            }
+        ).BindList(Model).GetHtml()
+    </div>
+
+}

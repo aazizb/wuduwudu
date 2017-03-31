@@ -1,0 +1,65 @@
+﻿@using IWSProject.Content
+
+@Html.DevExpress().GridView(settings =>
+{
+    settings.Name = "AccountBlanacePartialView";
+    settings.Caption = IWSLocalResource.AccountBalance;
+
+    settings.CallbackRouteValues = new { Controller = "Balance", Action = "AccountBalancePartialView" };
+
+    settings.KeyFieldName = "AccountID";
+
+    settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
+    settings.SettingsResizing.Visualization = ResizingMode.Postponed;
+
+    settings.SettingsBehavior.AllowSelectByRowClick = true;
+    settings.SettingsBehavior.EnableRowHotTrack = true;
+
+    settings.Styles.RowHotTrack.Cursor = "pointer";
+    settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
+
+    settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowFilterRowMenu = true;
+    settings.SettingsBehavior.AllowFocusedRow = true;
+
+    settings.Width = Unit.Percentage(100);
+    settings.SettingsPager.PageSize = 24;
+    settings.Settings.VerticalScrollableHeight = 350;
+    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+    settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
+    settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
+    settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "AccountID";
+        column.Caption = IWSLocalResource.account;
+    });
+    settings.Columns.Add("Periode").Caption = IWSLocalResource.periode;
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Debit";
+        column.Caption = IWSLocalResource.debit;
+
+        column.EditorProperties().TextBox(textBox =>
+        {
+            textBox.DisplayFormatString = "N";
+        });
+    });
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Credit";
+        column.Caption = IWSLocalResource.credit;
+
+        column.EditorProperties().TextBox(textBox =>
+        {
+            textBox.DisplayFormatString = "N";
+        });
+    });
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Currency";
+        column.Caption = IWSLocalResource.Currency;
+    });
+
+}).Bind(Model).GetHtml()

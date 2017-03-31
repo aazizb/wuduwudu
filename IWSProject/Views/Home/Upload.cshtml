@@ -1,0 +1,25 @@
+﻿
+@using IWSProject.Content;
+@{
+    ViewBag.Title = IWSLocalResource.DataImportation;
+}
+
+<h2>@ViewBag.Title</h2>
+
+<br /><br /><br />
+
+@using (Html.BeginForm("Upload", "Home", null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+
+    <div class="form-group">
+        <input type="file" id="dataFile" name="upload" />
+        <input type="submit" value="Upload" class="btn btn-default" />
+    </div>
+
+    <br />
+
+    <h2>@ViewData["data"]</h2>
+
+}
