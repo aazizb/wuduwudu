@@ -156,6 +156,7 @@ namespace ASP
         {
             column.FieldName = "oid";
             column.Caption = IWSLocalResource.oid;
+
             column.EditorProperties().ComboBox(combo =>
             {
                 combo.TextField = "Name";
@@ -256,7 +257,7 @@ namespace ASP
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                         s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
-                        
+
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -369,7 +370,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 310 "..\..\Views\GoodReceivings\MasterGridViewPartial.cshtml"
+            #line 311 "..\..\Views\GoodReceivings\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

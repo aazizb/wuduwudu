@@ -284,42 +284,43 @@ namespace ASP
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(210);
+                        s.Width = Unit.Percentage(100);
                     });
                 });
 
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
-
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
-
                     Html.DevExpress().Button(
-                btnSettings =>
+                b =>
                 {
-                    btnSettings.Name = "btnUpdate";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnUpdate;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ BankAccountsGridView.UpdateEdit(); }";
+                    b.Name = "btnUpdate";
+                    b.Text = "";
+                    b.ToolTip = IWSLocalResource.btnUpdate;
+                    b.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                    b.Images.Image.IconID = IconID.ActionsApply16x16;
+                    b.Width = Unit.Pixel(70);
+                    b.ClientSideEvents.Click = "function(s, e){ BankAccountsGridView.UpdateEdit(); }";
                 }).Render();
 
                     Html.DevExpress().Button(
-                btnSettings =>
+                b =>
                 {
-                    btnSettings.Name = "btnCancel";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnCancel;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ BankAccountsGridView.CancelEdit(); }";
+                    b.Name = "btnCancel";
+                    b.Text = "";
+                    b.ToolTip = IWSLocalResource.btnCancel;
+                    b.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                    b.Images.Image.IconID = IconID.ActionsCancel16x16;
+                    b.Width = Unit.Pixel(70);
+                    b.ClientSideEvents.Click = "function(s, e){ BankAccountsGridView.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
                 });
             })
             .Bind(ViewData["bankAccount"] ?? templateContent.DataItem)
@@ -346,7 +347,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 287 "..\..\Views\BankAccounts\BankAccountsGridViewPartial.cshtml"
+            #line 288 "..\..\Views\BankAccounts\BankAccountsGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

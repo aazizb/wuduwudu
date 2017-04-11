@@ -143,6 +143,7 @@ namespace ASP
 
         settings.Columns.Add(column =>
         {
+            column.Visible = false;
             column.FieldName = "CompanyID";
             column.Caption = IWSLocalResource.company;
             column.EditorProperties().ComboBox(combo =>
@@ -196,7 +197,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 137 "..\..\Views\Accounting\ValidateBLPartialView.cshtml"
+            #line 138 "..\..\Views\Accounting\ValidateBLPartialView.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

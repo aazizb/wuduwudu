@@ -100,6 +100,7 @@
         {
             column.FieldName = "oid";
             column.Caption = IWSLocalResource.oid;
+
             column.EditorProperties().ComboBox(combo =>
             {
                 combo.TextField = "Name";
@@ -200,7 +201,7 @@
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                         s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
-                        
+
                     });
                 });
                 formLayoutSettings.Items.Add(i =>

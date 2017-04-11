@@ -78,7 +78,6 @@ namespace IWSProject.Models
         public string CompanyID { get; set; }
         public string Currency { get; set; }
     }
-
     public class ConfigureTwoFactorViewModel
     {
         public string SelectedProvider { get; set; }
@@ -185,4 +184,38 @@ namespace IWSProject.Models
         public string Currency { get; set; }
         public string CompanyID { get; set; }
     }
+    public class BankStatementViewModel
+    {
+        [Key]
+        public int id { get; set; }
+        public string Auftragskonto { get; set; }
+        public DateTime? Buchungstag { get; set; }
+        public DateTime? Valutadatum { get; set; }
+        public string Buchungstext { get; set; }
+        public string Verwendungszweck { get; set; }
+        public string BeguenstigterZahlungspflichtiger { get; set; }
+        public string Kontonummer { get; set; }
+        public string BLZ { get; set; }
+        public decimal? Betrag { get; set; }
+        public string Waehrung { get; set; }
+        public string Info { get; set; }
+        public string CompanyID { get; set; }
+        public int modelid { get; set; }
+        public bool? IsValidated { get; set; }
+    }
+    public class StatementDetailViewModel
+    {
+        public string Id { get; set; }
+        public string AccountID { get; set; }
+        public string BankAccountID { get; set; }
+        public string Info { get; set; }
+        public string Waehrung { get; set; }
+        public decimal Betrag { get; set; }
+        public DateTime Buchungstag { get; set; }
+        public DateTime Valutadatum { get; set; }
+        public string Periode { get; set; }
+        public string Buchungstext { get; set; }
+        public string IBAN { get; set; }
+    }
 }
+

@@ -70,7 +70,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Periodic Account Balance.
+        ///   Looks up a localized string similar to Account Balance.
         /// </summary>
         public static string AccountBalance {
             get {
@@ -255,6 +255,15 @@ namespace IWSProject.Content {
         public static string BillOfDelivery {
             get {
                 return ResourceManager.GetString("BillOfDelivery", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Bank ID.
+        /// </summary>
+        public static string BLZ {
+            get {
+                return ResourceManager.GetString("BLZ", resourceCulture);
             }
         }
         
@@ -466,7 +475,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dashboard.
+        ///   Looks up a localized string similar to Accounting.
         /// </summary>
         public static string dashboard {
             get {
@@ -1123,7 +1132,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Periodic Account Balance.
+        ///   Looks up a localized string similar to Account Balance.
         /// </summary>
         public static string PeriodicAccountBalance {
             get {

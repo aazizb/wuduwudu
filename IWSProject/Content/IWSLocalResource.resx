@@ -337,7 +337,7 @@
     <value>Administration</value>
   </data>
   <data name="dashboard" xml:space="preserve">
-    <value>Dashboard</value>
+    <value>Accounting</value>
   </data>
   <data name="invoice" xml:space="preserve">
     <value>Invoice</value>
@@ -454,7 +454,7 @@
     <value>IsValidated</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
-    <value>Periodic Account Balance</value>
+    <value>Account Balance</value>
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Average Price</value>
@@ -463,7 +463,7 @@
     <value>Store And Stock</value>
   </data>
   <data name="PeriodicAccountBalance" xml:space="preserve">
-    <value>Periodic Account Balance</value>
+    <value>Account Balance</value>
   </data>
   <data name="TotHVAT" xml:space="preserve">
     <value>Total Without Taxes</value>
@@ -638,5 +638,8 @@
   </data>
   <data name="DropFiles" xml:space="preserve">
     <value>Drop File(s) here</value>
+  </data>
+  <data name="BLZ" xml:space="preserve">
+    <value>Bank ID</value>
   </data>
 </root>

@@ -205,7 +205,7 @@
     <value>Article</value>
   </data>
   <data name="bankaccount" xml:space="preserve">
-    <value>Compte Banquaire</value>
+    <value>Compte Bancaire</value>
   </data>
   <data name="costcenters" xml:space="preserve">
     <value>Centre de coût</value>
@@ -337,7 +337,7 @@
     <value>Administration</value>
   </data>
   <data name="dashboard" xml:space="preserve">
-    <value>Dashboard fr-FR</value>
+    <value>Comptabilité</value>
   </data>
   <data name="invoice" xml:space="preserve">
     <value>Facture Client Logistic</value>
@@ -457,7 +457,7 @@
     <value>Validé</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
-    <value>Solde Périodique des Comptes</value>
+    <value>Solde des Comptes</value>
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Prix Moyen</value>
@@ -466,7 +466,7 @@
     <value>Store And Stock</value>
   </data>
   <data name="PeriodicAccountBalance" xml:space="preserve">
-    <value>Balance Périodique des Comptes</value>
+    <value>Balance des Comptes</value>
   </data>
   <data name="TotHVAT" xml:space="preserve">
     <value>Total HTVA</value>
@@ -644,5 +644,8 @@
   </data>
   <data name="DropFiles" xml:space="preserve">
     <value>Choisir fichier(s) ici</value>
+  </data>
+  <data name="BLZ" xml:space="preserve">
+    <value>N° Banque</value>
   </data>
 </root>

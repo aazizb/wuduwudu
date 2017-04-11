@@ -101,7 +101,7 @@ namespace ASP
         {
 
             var value = (s as MVCxGridView).GetRowValues(e.VisibleIndex, "IsValidated");
-            if (e.ButtonType == ColumnCommandButtonType.Edit || e.ButtonType == ColumnCommandButtonType.Delete)
+            if (e.ButtonType == ColumnCommandButtonType.Edit || e.ButtonType == ColumnCommandButtonType.Delete )
             {
                 e.Enabled = false.Equals(value);
             }
@@ -171,15 +171,15 @@ namespace ASP
         settings.Columns.Add(column =>
         {
             column.FieldName = "store";
-            column.Caption = IWSLocalResource.store;
+            column.Caption = IWSLocalResource.costcenters;
             column.EditorProperties().ComboBox(combo =>
             {
                 combo.TextField = "Name";
                 combo.ValueField = "id";
                 combo.ValueType = typeof(string);
-                combo.DataSource = IWSLookUp.GetStore();
+                combo.DataSource = IWSLookUp.GetCostCenters();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
-                combo.Columns.Add("name").Caption = IWSLocalResource.store;
+                combo.Columns.Add("name").Caption = IWSLocalResource.name;
                 combo.TextFormatString = "{0}-{1}";
             });
         });
@@ -229,6 +229,7 @@ namespace ASP
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
+
                 formLayoutSettings.Name = "PaymentEdit";
 
                 formLayoutSettings.Width = Unit.Percentage(100);
@@ -242,13 +243,13 @@ namespace ASP
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "store";
-                    i.Caption = IWSLocalResource.store;
+                    i.Caption = IWSLocalResource.costcenters;
                     i.NestedExtension().ComboBox(s =>
                     {
                         s.Properties.TextField = "Name";
                         s.Properties.ValueField = "id";
                         s.Properties.ValueType = typeof(string);
-                        s.Properties.DataSource = IWSLookUp.GetStore();
+                        s.Properties.DataSource = IWSLookUp.GetCostCenters();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -286,7 +287,7 @@ namespace ASP
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Properties.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(100);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -359,7 +360,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 300 "..\..\Views\Payments\MasterGridViewPartial.cshtml"
+            #line 301 "..\..\Views\Payments\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

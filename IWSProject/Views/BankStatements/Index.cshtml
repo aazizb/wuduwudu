@@ -1,1 +1,31 @@
-﻿@Html.Action("BankStatementsGridViewPartial")
+﻿@using IWSProject.Content
+<script type="text/javascript">
+        var selectedIDs;
+        function OnBeginCallback(s, e) {
+            e.customArgs["selectedIDs"] = selectedIDs;
+        }
+        function OnSelectionChanged(s, e) {
+            s.GetSelectedFieldValues("id;Betrag", GetSelectedFieldValuesCallback);
+        }
+        function GetSelectedFieldValuesCallback(values) {
+            selectedIDs = values.join(';');
+        }
+        function OnSubmitClick(s, e) {
+            $("#selectedIDsHF").val(selectedIDs);
+        }
+</script>
+
+@using (Html.BeginForm("Index", "BankStatements"))
+{
+    @Html.Hidden("selectedIDsHF");
+    @Html.DevExpress().Button(settings =>
+{
+    settings.Name = "btnSubmit";
+    settings.Text = IWSLocalResource.Validate;
+    settings.Width = Unit.Pixel(150);
+    settings.UseSubmitBehavior = true;
+    settings.ClientSideEvents.Click = "OnSubmitClick";
+}).GetHtml()
+}
+
+@Html.Action("BankStatementsGridViewPartial")

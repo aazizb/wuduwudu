@@ -1,15 +1,14 @@
 ﻿namespace IWSProject.Models
 {
-    using System;
-    using System.Collections;
-    using System.Collections.Generic;
-    using System.Diagnostics;
-    using System.Linq;
-    using System.Threading;
-    using System.Web;
     using DevExpress.Web;
     using Microsoft.AspNet.Identity;
     using Microsoft.AspNet.Identity.EntityFramework;
+    using System;
+    using System.Collections;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading;
+    using System.Web;
     public static class IWSLookUp
     {
 
@@ -26,17 +25,14 @@
         }
         public static IEnumerable GetAccounts()
         {
-            var account = IWSEntities.Accounts.AsEnumerable().Select(item => new
+            var account = IWSEntities.Accounts.AsEnumerable().Select(i => new
             {
-                Id = item.id,
-                Name = item.name,
-                CompanyID=item.CompanyID
+                Id = i.id,
+                Name = i.name,
+                CompanyID=i.CompanyID
             })
             .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
             .OrderBy(o => o.Id);
-
- //           Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).
- //           OrderBy(o => o.Name);
             return account;
         }
         public static IEnumerable GetArticle()
@@ -70,6 +66,7 @@
             Where(o => o.Id == id && o.CompanyID==(string)HttpContext.Current.Session["CompanyID"]);
             return (Article)article;
         }
+
         public static IEnumerable GetBillOfDelivery()
         {
             var b = from o in IWSEntities.BillOfDeliveries
@@ -308,6 +305,88 @@
             .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
             .OrderBy(o => o.Name);
             return currency;
+        }
+        public static StatementDetailViewModel GetStatementDetail(int bankStatementID, string area)
+        {
+
+            if (area.Equals(IWSLookUp.Area.Selling.ToString()))
+            {
+                StatementDetailViewModel BS =
+                    (from c in IWSEntities.Companies
+                     join b in IWSEntities.BankStatements on new { id = c.id } equals new { id = b.CompanyID }
+                     join s in IWSEntities.Customers
+                         on new { c.id, b.Kontonummer }
+                     equals new { id = s.CompanyID, Kontonummer = s.IBAN }
+                     where
+                     b.IsValidated.Equals(false) &&
+                     b.id.Equals(bankStatementID)
+                     select new StatementDetailViewModel()
+                     {
+                         Id = s.id,
+                         AccountID = s.accountid,
+                         BankAccountID = c.bankaccountid,
+                         Info = b.Info,
+                         Waehrung = b.Waehrung,
+                         Betrag = (decimal)b.Betrag,
+                         Buchungstag = (DateTime)b.Buchungstag,
+                         Valutadatum = (DateTime)b.Valutadatum,
+                         Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
+                                     Convert.ToString((int?)b.Buchungstag.Value.Month),
+                         Buchungstext = b.Buchungstext,
+                         IBAN = s.IBAN
+                     }).Single();    //.AsEnumerable();
+                return BS;
+            }
+
+            if (area.Equals(IWSLookUp.Area.Purchasing.ToString()))
+            {
+                StatementDetailViewModel BS =
+                (from c in IWSEntities.Companies
+                 join b in IWSEntities.BankStatements on new { id = c.id } equals new { id = b.CompanyID }
+                 join s in IWSEntities.Suppliers
+                       on new { c.id, b.Kontonummer }
+                   equals new { id = s.CompanyID, Kontonummer = s.IBAN }
+                 where
+                   b.IsValidated.Equals(false) &&
+                   b.id.Equals(bankStatementID)
+                 select new StatementDetailViewModel()
+                 {
+                     Id = s.id,
+                     AccountID = s.accountid,
+                     BankAccountID = c.bankaccountid,
+                     Info = b.Info,
+                     Waehrung = b.Waehrung,
+                     Betrag = Math.Abs((decimal)b.Betrag),
+                     Buchungstag = (DateTime)b.Buchungstag,
+                     Valutadatum = (DateTime)b.Valutadatum,
+                     Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
+                                     Convert.ToString((int?)b.Buchungstag.Value.Month),
+                     Buchungstext = b.Buchungstext,
+                     IBAN = s.IBAN
+                 }).Single();
+                return BS;
+            }
+            return null;
+        }
+        public static List<BankStatementViewModel> GetBankStatements(string companyID,bool isValidated)
+        {
+            List<BankStatementViewModel> doc = 
+                (from b in IWSEntities.BankStatements
+                where
+                    b.IsValidated.Equals(isValidated) && b.CompanyID.Equals(companyID)
+                orderby
+                    b.id
+                select new BankStatementViewModel()
+                {
+                    id = b.id, Auftragskonto = b.Auftragskonto,
+                    Buchungstag = b.Buchungstag, Valutadatum = b.Valutadatum,
+                    Buchungstext = b.Buchungstext, Verwendungszweck = b.Verwendungszweck,
+                    BeguenstigterZahlungspflichtiger = b.BeguenstigterZahlungspflichtiger,
+                    Kontonummer = b.Kontonummer, BLZ = b.BLZ, Betrag = b.Betrag,
+                    Waehrung = b.Waehrung, Info = b.Info, CompanyID = b.CompanyID,
+                    modelid = b.modelid, IsValidated = b.IsValidated
+                }).ToList();
+            return doc;
         }
         public static List<ValidateDocsViewModel> GetBillOfDelivery(string uiCulture, bool IsValidated)
         {
@@ -1021,7 +1100,8 @@
             CustomerInvoice,
             Settlement,
             VendorInvoice,
-            GeneralLedger
+            GeneralLedger,
+            BankStatement
         }
         public enum Side
         {

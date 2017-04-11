@@ -131,12 +131,26 @@ namespace ASP
         settings.SettingsPager.PageSize = 24;
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
-        settings.Columns.Add("name").Caption = IWSLocalResource.item;
+        settings.Columns.Add("name").Caption = IWSLocalResource.name;
         settings.Columns.Add("street").Caption = IWSLocalResource.street;
         settings.Columns.Add("city").Caption = IWSLocalResource.city;
         settings.Columns.Add("state").Caption = IWSLocalResource.state;
         settings.Columns.Add("zip").Caption = IWSLocalResource.zip;
-        settings.Columns.Add("accountid").Caption = IWSLocalResource.accountid;
+        settings.Columns.Add(c =>
+        {
+            c.FieldName = "accountid";
+            c.Caption = IWSLocalResource.accountid;
+            c.EditorProperties().ComboBox(o =>
+            {
+                o.TextField = "Name";
+                o.ValueField = "id";
+                o.ValueType = typeof(string);
+                o.DataSource = IWSLookUp.GetCurrency();
+                o.Columns.Add("id").Caption = IWSLocalResource.id;
+                o.Columns.Add("name").Caption = IWSLocalResource.name;
+                o.TextFormatString = "{0}-{1}";
+            });
+        });
 
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
@@ -232,6 +246,24 @@ namespace ASP
                 {
                     i.FieldName = "accountid";
                     i.Caption = IWSLocalResource.accountid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.name;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "IBAN";
+                    i.Caption = IWSLocalResource.IBAN;
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -240,35 +272,40 @@ namespace ASP
                     });
                 });
                 formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
-                btnSettings =>
+                b =>
                 {
-                    btnSettings.Name = "btnUpdate";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnUpdate;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ SuppliersGridView.UpdateEdit(); }";
+                    b.Name = "btnUpdate";
+                    b.Text = "";
+                    b.ToolTip = IWSLocalResource.btnUpdate;
+                    b.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                    b.Images.Image.IconID = IconID.ActionsApply16x16;
+                    b.Width = Unit.Pixel(70);
+                    b.ClientSideEvents.Click = "function(s, e){ SuppliersGridView.UpdateEdit(); }";
                 }).Render();
 
                     Html.DevExpress().Button(
-                btnSettings =>
+                b =>
                 {
-                    btnSettings.Name = "btnCancel";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnCancel;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ SuppliersGridView.CancelEdit(); }";
+                    b.Name = "btnCancel";
+                    b.Text = "";
+                    b.ToolTip = IWSLocalResource.btnCancel;
+                    b.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                    b.Images.Image.IconID = IconID.ActionsCancel16x16;
+                    b.Width = Unit.Pixel(70);
+                    b.ClientSideEvents.Click = "function(s, e){ SuppliersGridView.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
                 });
             })
             .Bind(ViewData["supplier"] ?? templateContent.DataItem)
@@ -292,7 +329,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 233 "..\..\Views\Suppliers\SuppliersGridViewPartial.cshtml"
+            #line 270 "..\..\Views\Suppliers\SuppliersGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

@@ -4,6 +4,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+//
+using DevExpress.Web;
+using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
+using System.Collections;
+using System.Threading;
+using System.Web;
 
 namespace IWSProject.Controllers
 {
@@ -15,7 +22,6 @@ namespace IWSProject.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-
             var docs = IWSLookUp.GetAccountingDocument(false);
             var model = new List<DocumentsViewModel>();
             foreach (DocumentsViewModel doc in docs)
@@ -73,6 +79,7 @@ namespace IWSProject.Controllers
             }
             return View(model);
         }
+
         [ValidateInput(false)]
         public ActionResult ValidateBLPartialView()
         {
@@ -652,7 +659,8 @@ namespace IWSProject.Controllers
                                 Amount =doc.Amount,
                                 Currency=doc.Currency,
                                 ItemType = IWSLookUp.DocsType.GoodReceiving.ToString(),
-                                Side = IWSLookUp. Side.Debit.ToString()},
+                                Side = IWSLookUp. Side.Debit.ToString(),
+                                CompanyID=(string)Session["CompanyID"]},
                             new Journal { ItemID=doc.ItemID,
                                 OID =doc.OID, ModelID=doc.ModelID,
                                 CustSupplierID=doc.CustSupplierID,
@@ -664,7 +672,8 @@ namespace IWSProject.Controllers
                                 Amount =doc.Amount,
                                 Currency=doc.Currency,
                                 ItemType = IWSLookUp. DocsType.GoodReceiving.ToString(),
-                                Side =IWSLookUp. Side.Credit.ToString() } };
+                                Side =IWSLookUp. Side.Credit.ToString(),
+                                CompanyID=(string)Session["CompanyID"]} };
                         
                         results = SendToJournal(journal);
 
@@ -766,7 +775,8 @@ namespace IWSProject.Controllers
                                 Amount =doc.Amount,
                                 Currency =doc.Currency,
                                 ItemType = IWSLookUp. DocsType.BillOfDelivery.ToString(),
-                                Side = IWSLookUp. Side.Debit.ToString()},
+                                Side = IWSLookUp. Side.Debit.ToString(),
+                                CompanyID=(string)Session["CompanyID"]},
                             new Journal { ItemID=doc.ItemID,
                                 OID =doc.OID,
                                 ModelID =doc.ModelID,
@@ -779,7 +789,8 @@ namespace IWSProject.Controllers
                                 Amount =doc.Amount,
                                 Currency=doc.Currency,
                                 ItemType = IWSLookUp. DocsType.BillOfDelivery.ToString(),
-                                Side = IWSLookUp. Side.Credit.ToString() } };
+                                Side = IWSLookUp. Side.Credit.ToString(),
+                                CompanyID=(string)Session["CompanyID"]} };
                         results = SendToJournal(journal);
 
                         if (!results)
@@ -1040,7 +1051,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType =IWSLookUp. DocsType.Payment.ToString(),
-                            Side =IWSLookUp. Side.Debit.ToString()},
+                            Side =IWSLookUp. Side.Debit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]},
                         new Journal { ItemID=item.ItemID,
                             OID =item.OID, ModelID=item.ModelID,
                             CustSupplierID=item.CustSupplierID,
@@ -1052,7 +1064,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType = IWSLookUp. DocsType.Payment.ToString(),
-                            Side = IWSLookUp. Side.Credit.ToString() } };
+                            Side = IWSLookUp. Side.Credit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]} };
                         results = SendToJournal(journal);
                         if (!results)
                             return results;
@@ -1173,7 +1186,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType =IWSLookUp. DocsType.Settlement.ToString(),
-                            Side =IWSLookUp. Side.Debit.ToString()},
+                            Side =IWSLookUp. Side.Debit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]},
                         new Journal { ItemID=item.ItemID,
                             OID =item.OID, ModelID=item.ModelID,
                             CustSupplierID=item.CustSupplierID,
@@ -1185,7 +1199,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType = IWSLookUp. DocsType.Settlement.ToString(),
-                            Side = IWSLookUp. Side.Credit.ToString() } };
+                            Side = IWSLookUp. Side.Credit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]} };
 
                         results = SendToJournal(journal);
                         if (!results)
@@ -1307,7 +1322,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType =IWSLookUp. DocsType.GeneralLedger.ToString(),
-                            Side =IWSLookUp. Side.Debit.ToString()},
+                            Side =IWSLookUp. Side.Debit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]},
                         new Journal { ItemID=item.ItemID,
                             OID =item.OID, ModelID=item.ModelID,
                             CustSupplierID=item.CustSupplierID,
@@ -1319,7 +1335,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType = IWSLookUp. DocsType.GeneralLedger.ToString(),
-                            Side = IWSLookUp. Side.Credit.ToString() } };
+                            Side = IWSLookUp. Side.Credit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]} };
                         results = SendToJournal(journal);
                         if (!results)
                             return results;
@@ -1655,7 +1672,6 @@ namespace IWSProject.Controllers
                      TotTVA = g.Sum(a=>a.line.amount)
                  }).ToList();
 
-
             if (vendorInvoice.Any())
             {
                 int itemID = 0;
@@ -1746,7 +1762,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType = IWSLookUp. DocsType.VendorInvoice.ToString(),
-                            Side = IWSLookUp. Side.Debit.ToString()},
+                            Side = IWSLookUp. Side.Debit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]},
                         new Journal { ItemID=item.ItemID,
                             OID =item.OID, ModelID=item.ModelID,
                             CustSupplierID=item.CustSupplierID,
@@ -1758,7 +1775,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType = IWSLookUp. DocsType.VendorInvoice.ToString(),
-                            Side = IWSLookUp. Side.Credit.ToString() } };
+                            Side = IWSLookUp. Side.Credit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]} };
 
                     results = SendToJournal(journal);
                     if (!results)
@@ -1767,7 +1785,7 @@ namespace IWSProject.Controllers
             }
             return results;
         }
-        private int MakePaymentHeader(Payment payment)
+        public int MakePaymentHeader(Payment payment)
         {
             int id = 0;
             try
@@ -1782,7 +1800,7 @@ namespace IWSProject.Controllers
             }
             return id;
         }
-        private int MakePaymentLine(List<LinePayment> linePayment)
+        public int MakePaymentLine(List<LinePayment> linePayment)
         {
             int id = 0;
             try
@@ -1929,7 +1947,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType = IWSLookUp. DocsType.CustomerInvoice.ToString(),
-                            Side = IWSLookUp. Side.Debit.ToString()},
+                            Side = IWSLookUp. Side.Debit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]},
                         new Journal { ItemID=item.ItemID,
                             OID =item.OID, ModelID=item.ModelID,
                             CustSupplierID=item.CustSupplierID,
@@ -1941,7 +1960,8 @@ namespace IWSProject.Controllers
                             Amount =item.Amount,
                             Currency=item.Currency,
                             ItemType = IWSLookUp. DocsType.CustomerInvoice.ToString(),
-                            Side = IWSLookUp. Side.Credit.ToString() } };
+                            Side = IWSLookUp. Side.Credit.ToString(),
+                            CompanyID=(string)Session["CompanyID"]} };
                     results = SendToJournal(journal);
                     if (!results)
                         return results;
@@ -1949,7 +1969,7 @@ namespace IWSProject.Controllers
             }
             return results;
         }
-        private int MakeSettlementHeader(Settlement settlement)
+        public int MakeSettlementHeader(Settlement settlement)
         {
             int id = 0;
             try
@@ -1964,7 +1984,7 @@ namespace IWSProject.Controllers
             }
             return id;
         }
-        private int MakeSettlementLine(List<LineSettlement> lineSettlement)
+        public int MakeSettlementLine(List<LineSettlement> lineSettlement)
         {
             int id = 0;
             try
@@ -1983,7 +2003,7 @@ namespace IWSProject.Controllers
                 return 0;
             }
         }
-        private bool SendToJournal(List<Journal> journal)
+        public bool SendToJournal(List<Journal> journal)
         {
             bool results = false;
             if (ModelState.IsValid)
@@ -1992,9 +2012,9 @@ namespace IWSProject.Controllers
                 {
                     foreach (Journal item in journal)
                     {
-                        item.CompanyID = (string)Session["CompanyID"];
-                        if (item.Currency == null)
-                            item.Currency = (string)Session["Currency"];
+                        //item.CompanyID = (string)Session["CompanyID"];
+                        //if (item.Currency == null)
+                        //    item.Currency = (string)Session["Currency"];
                         db.Journals.InsertOnSubmit(item);
                     }
                     results = true;

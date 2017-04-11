@@ -328,7 +328,7 @@
     <value>Administration de-DE</value>
   </data>
   <data name="dashboard" xml:space="preserve">
-    <value>Dashboard de-DE</value>
+    <value>Buchhaltung</value>
   </data>
   <data name="invoice" xml:space="preserve">
     <value>Invoice de-DE</value>
@@ -451,7 +451,7 @@
     <value>IsValidated de-DE</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
-    <value>Periodic Account Balance de-DE</value>
+    <value>Account Balance de-DE</value>
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Average Price de-DE</value>
@@ -460,7 +460,7 @@
     <value>Store And Stock</value>
   </data>
   <data name="PeriodicAccountBalance" xml:space="preserve">
-    <value>Periodic Account Balance</value>
+    <value>Account Balance de-DE</value>
   </data>
   <data name="TotHVAT" xml:space="preserve">
     <value>Gesamtsteuer</value>
@@ -638,5 +638,8 @@
   </data>
   <data name="DropFiles" xml:space="preserve">
     <value>Drop File(s) here de-DE</value>
+  </data>
+  <data name="BLZ" xml:space="preserve">
+    <value>Bank ID de-DE</value>
   </data>
 </root>

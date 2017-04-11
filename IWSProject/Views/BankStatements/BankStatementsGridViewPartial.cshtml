@@ -22,10 +22,13 @@
         settings.CommandColumn.Visible = true;
         settings.CommandColumn.Width = Unit.Pixel(70);
 
-        settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
         settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
 
+        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
+        settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
         settings.ClientSideEvents.RowDblClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
 
@@ -82,7 +85,8 @@
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
         settings.SettingsPager.PageSize = 24;
-        //settings.Columns.Add("Auftragskonto").Caption = IWSLocalResource.OrderAccount;
+        settings.Columns.Add("id").Caption = IWSLocalResource.id;
+        settings.Columns.Add("Auftragskonto").Caption = IWSLocalResource.OrderAccount;
         settings.Columns.Add(column =>
         {
             column.FieldName = "Buchungstag";
@@ -118,8 +122,8 @@
         settings.Columns.Add("Buchungstext").Caption = IWSLocalResource.BookingText;
         settings.Columns.Add("Verwendungszweck").Caption = IWSLocalResource.Usage;
         settings.Columns.Add("BeguenstigterZahlungspflichtiger").Caption = IWSLocalResource.BeneficiaryOfPayment;
-        settings.Columns.Add("Kontonummer").Caption = IWSLocalResource.AccountNumber;
-        settings.Columns.Add("BLZ").Caption = IWSLocalResource.IBAN;
+        settings.Columns.Add("Kontonummer").Caption = IWSLocalResource.IBAN;
+        settings.Columns.Add("BLZ").Caption = IWSLocalResource.BLZ;
         settings.Columns.Add(column =>
         {
             column.FieldName = "Betrag";
@@ -132,7 +136,6 @@
             });
         });
         settings.Columns.Add("Waehrung").Caption = IWSLocalResource.Currency;
-        settings.Columns.Add("Info").Caption = IWSLocalResource.Info;
 
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
@@ -175,7 +178,7 @@
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Width = Unit.Percentage(85);
+                        s.Width = Unit.Percentage(94);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -190,7 +193,7 @@
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Width = Unit.Percentage(85);
+                        s.Width = Unit.Percentage(94);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -231,7 +234,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "Kontonummer";
-                    i.Caption = IWSLocalResource.AccountNumber;
+                    i.Caption = IWSLocalResource.IBAN;
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -242,7 +245,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "BLZ";
-                    i.Caption = IWSLocalResource.IBAN;
+                    i.Caption = IWSLocalResource.BLZ;
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -291,45 +294,46 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
+                    Html.DevExpress().Button(
+                        b =>
+                        {
+                            b.Name = "btnUpdate";
+                            b.Text = "";
+                            b.ToolTip = IWSLocalResource.btnUpdate;
+                            b.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                            b.Images.Image.IconID = IconID.ActionsApply16x16;
+                            b.Width = Unit.Pixel(70);
+                            b.ClientSideEvents.Click = "function(s, e){ BankStatementsGridView.UpdateEdit(); }";
+                        }).Render();
 
                     Html.DevExpress().Button(
-                btnSettings =>
-                {
-                    btnSettings.Name = "btnUpdate";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnUpdate;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ BankStatementsGridView.UpdateEdit(); }";
-                }).Render();
-
-                    Html.DevExpress().Button(
-                btnSettings =>
-                {
-                    btnSettings.Name = "btnCancel";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnCancel;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ BankStatementsGridView.CancelEdit(); }";
-                }).Render();
-                    ViewContext.Writer.Write("</div>");
+                        b =>
+                        {
+                            b.Name = "btnCancel";
+                            b.Text = "";
+                            b.ToolTip = IWSLocalResource.btnCancel;
+                            b.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                            b.Images.Image.IconID = IconID.ActionsCancel16x16;
+                            b.Width = Unit.Pixel(70);
+                            b.ClientSideEvents.Click = "function(s, e){ BankStatementsGridView.CancelEdit(); }";
+                        }).Render();
                 });
             })
-            .Bind(ViewData["BankStatement"] ?? templateContent.DataItem)
-            .Render();
+        .Bind(ViewData["BankStatement"] ?? templateContent.DataItem)
+        .Render();
         });
         #endregion
-        settings.DataBinding = (sender, e) =>
-        {
-            ((MVCxGridView)sender).ForceDataRowType(typeof(BankStatement));
-        };
+        //settings.DataBinding = (sender, e) =>
+        //{
+        //    ((MVCxGridView)sender).ForceDataRowType(typeof(BankStatement));
+        //};
     });
     if (ViewData["GenericError"] != null)
     {

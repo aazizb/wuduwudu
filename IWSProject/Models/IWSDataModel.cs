@@ -5716,9 +5716,11 @@
 
         private string _zip;
 
-        private int _accountid;
+        private string _accountid;
 
         private string _CompanyID;
+
+        private string _IBAN;
 
         private EntitySet<BillOfDelivery> _BillOfDeliveries;
 
@@ -5746,10 +5748,12 @@
         partial void OnstateChanged();
         partial void OnzipChanging(string value);
         partial void OnzipChanged();
-        partial void OnaccountidChanging(int value);
+        partial void OnaccountidChanging(string value);
         partial void OnaccountidChanged();
         partial void OnCompanyIDChanging(string value);
         partial void OnCompanyIDChanged();
+        partial void OnIBANChanging(string value);
+        partial void OnIBANChanged();
         #endregion
 
         public Customer()
@@ -5901,8 +5905,8 @@
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_accountid", DbType = "Int NOT NULL")]
-        public int accountid
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_accountid", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string accountid
         {
             get
             {
@@ -5937,6 +5941,26 @@
                     this._CompanyID = value;
                     this.SendPropertyChanged("CompanyID");
                     this.OnCompanyIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_IBAN", DbType = "NVarChar(50)")]
+        public string IBAN
+        {
+            get
+            {
+                return this._IBAN;
+            }
+            set
+            {
+                if ((this._IBAN != value))
+                {
+                    this.OnIBANChanging(value);
+                    this.SendPropertyChanging();
+                    this._IBAN = value;
+                    this.SendPropertyChanged("IBAN");
+                    this.OnIBANChanged();
                 }
             }
         }
@@ -15861,7 +15885,7 @@
 
         private string _name;
 
-        private short _modelid;
+        private int _modelid;
 
         private string _street;
 
@@ -15874,6 +15898,8 @@
         private string _accountid;
 
         private string _CompanyID;
+
+        private string _IBAN;
 
         private EntitySet<VendorInvoice> _VendorInvoices;
 
@@ -15891,7 +15917,7 @@
         partial void OnidChanged();
         partial void OnnameChanging(string value);
         partial void OnnameChanged();
-        partial void OnmodelidChanging(short value);
+        partial void OnmodelidChanging(int value);
         partial void OnmodelidChanged();
         partial void OnstreetChanging(string value);
         partial void OnstreetChanged();
@@ -15905,6 +15931,8 @@
         partial void OnaccountidChanged();
         partial void OnCompanyIDChanging(string value);
         partial void OnCompanyIDChanged();
+        partial void OnIBANChanging(string value);
+        partial void OnIBANChanged();
         #endregion
 
         public Supplier()
@@ -15956,8 +15984,8 @@
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_modelid", DbType = "SmallInt NOT NULL")]
-        public short modelid
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_modelid", DbType = "Int NOT NULL")]
+        public int modelid
         {
             get
             {
@@ -16092,6 +16120,26 @@
                     this._CompanyID = value;
                     this.SendPropertyChanged("CompanyID");
                     this.OnCompanyIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_IBAN", DbType = "NVarChar(50)")]
+        public string IBAN
+        {
+            get
+            {
+                return this._IBAN;
+            }
+            set
+            {
+                if ((this._IBAN != value))
+                {
+                    this.OnIBANChanging(value);
+                    this.SendPropertyChanging();
+                    this._IBAN = value;
+                    this.SendPropertyChanged("IBAN");
+                    this.OnIBANChanged();
                 }
             }
         }

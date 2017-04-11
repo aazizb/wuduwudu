@@ -949,18 +949,34 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>AccountBalanceView.generated.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\Home\Upload.cshtml" />
-    <Content Include="Views\Home\IndexView.cshtml" />
-    <Content Include="Views\Currencies\Index.cshtml" />
+    <Content Include="Views\Home\IndexView.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>IndexView.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\Currencies\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
     <Content Include="Views\Currencies\CurrenciesGridViewPartial.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>CurrenciesGridViewPartial.generated.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\BankStatements\Index.cshtml" />
-    <Content Include="Views\BankStatements\BankStatementsGridViewPartial.cshtml" />
-    <Content Include="Views\BankStatements\ImportCSVPartial.cshtml" />
-    <Content Include="Views\BankStatements\ImportCSV.cshtml" />
-    <Content Include="Views\BankStatements\ImportCSVFeedbackPartial.cshtml" />
+    <Content Include="Views\BankStatements\Index.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>Index.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\BankStatements\BankStatementsGridViewPartial.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>BankStatementsGridViewPartial.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\BankStatements\ImportCSVPartial.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>ImportCSVPartial.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="Views\BankStatements\ImportCSV.cshtml">
+      <Generator>RazorGenerator</Generator>
+      <LastGenOutput>ImportCSV.generated.cs</LastGenOutput>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1221,6 +1237,26 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Index.cshtml</DependentUpon>
     </Compile>
+    <Compile Include="Views\BankStatements\BankStatementsGridViewPartial.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BankStatementsGridViewPartial.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BankStatements\ImportCSV.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportCSV.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BankStatements\ImportCSVPartial.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ImportCSVPartial.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BankStatements\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
     <Compile Include="Views\Banks\BanksGridViewPartial.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1290,6 +1326,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CurrenciesGridViewPartial.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Currencies\Index.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Index.cshtml</DependentUpon>
     </Compile>
     <Compile Include="Views\CustomerInvoices\DetailGridViewPartial.generated.cs">
       <AutoGen>True</AutoGen>
@@ -1390,6 +1431,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Index.cshtml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Home\IndexView.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IndexView.cshtml</DependentUpon>
     </Compile>
     <Compile Include="Views\Home\ListBoxPartial.generated.cs">
       <AutoGen>True</AutoGen>

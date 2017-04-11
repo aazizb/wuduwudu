@@ -196,16 +196,16 @@
     <value>BIC</value>
   </data>
   <data name="credit" xml:space="preserve">
-    <value>Crédito</value>
+    <value>Haber</value>
   </data>
   <data name="debit" xml:space="preserve">
-    <value>Débito</value>
+    <value>Debe</value>
   </data>
   <data name="articles" xml:space="preserve">
     <value>Article</value>
   </data>
   <data name="bankaccount" xml:space="preserve">
-    <value>Compte Banquaire</value>
+    <value>Cuenta bancaria</value>
   </data>
   <data name="costcenters" xml:space="preserve">
     <value>Cost Center es-ES</value>
@@ -337,16 +337,16 @@
     <value>Administration es-ES</value>
   </data>
   <data name="dashboard" xml:space="preserve">
-    <value>Dashboard es-ES</value>
+    <value>Contabilidad</value>
   </data>
   <data name="invoice" xml:space="preserve">
-    <value>Invoice es-ES</value>
+    <value>Factura</value>
   </data>
   <data name="purchasing" xml:space="preserve">
     <value>Compra</value>
   </data>
   <data name="rolesmanagement" xml:space="preserve">
-    <value>Roles Management es-ES</value>
+    <value>Gestión de roles</value>
   </data>
   <data name="usersmanagement" xml:space="preserve">
     <value>Users Management es-ES</value>
@@ -373,22 +373,22 @@
     <value>Administración Menú</value>
   </data>
   <data name="banks" xml:space="preserve">
-    <value>Banks</value>
+    <value>Banco</value>
   </data>
   <data name="download" xml:space="preserve">
-    <value>Download</value>
+    <value>Descargar</value>
   </data>
   <data name="home" xml:space="preserve">
     <value>Home</value>
   </data>
   <data name="manage" xml:space="preserve">
-    <value>Manage Users</value>
+    <value>Gestión de usuarios</value>
   </data>
   <data name="product" xml:space="preserve">
     <value>Product</value>
   </data>
   <data name="RoleManagement" xml:space="preserve">
-    <value>Roles Management</value>
+    <value>Gestión de roles</value>
   </data>
   <data name="support" xml:space="preserve">
     <value>Support</value>
@@ -457,7 +457,7 @@
     <value>Validado</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
-    <value>Saldo periodico de las cuentas</value>
+    <value>Saldo de las cuentas</value>
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Precio Promedio</value>
@@ -466,7 +466,7 @@
     <value>Store And Stock</value>
   </data>
   <data name="PeriodicAccountBalance" xml:space="preserve">
-    <value>Periodic Account Balance es-ES</value>
+    <value>Account Balance es-ES</value>
   </data>
   <data name="TotHVAT" xml:space="preserve">
     <value>Total Without Taxes es-ES</value>
@@ -487,13 +487,13 @@
     <value>Total es-ES</value>
   </data>
   <data name="journal" xml:space="preserve">
-    <value>Journal es-ES</value>
+    <value>Diario</value>
   </data>
   <data name="CustSupplier" xml:space="preserve">
     <value>Cliente/Provedor</value>
   </data>
   <data name="selling" xml:space="preserve">
-    <value>Selling</value>
+    <value>Venta</value>
   </data>
   <data name="Settlement" xml:space="preserve">
     <value>Settlement es-ES</value>
@@ -508,7 +508,7 @@
     <value>Bill of Delivery es-ES</value>
   </data>
   <data name="Disable" xml:space="preserve">
-    <value>Disable</value>
+    <value>Inhabilitar</value>
   </data>
   <data name="HasAccess" xml:space="preserve">
     <value>Is Header</value>
@@ -644,5 +644,8 @@
   </data>
   <data name="DropFiles" xml:space="preserve">
     <value>Descarga archivos aquí</value>
+  </data>
+  <data name="BLZ" xml:space="preserve">
+    <value>N° Banco</value>
   </data>
 </root>

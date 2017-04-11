@@ -285,7 +285,7 @@ namespace ASP
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(90);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -380,33 +380,38 @@ namespace ASP
                 });
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
                     ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
-                btnSettings =>
+                b =>
                 {
-                    btnSettings.Name = "btnUpdate";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnUpdate;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ VatsGridView.UpdateEdit(); }";
+                    b.Name = "btnUpdate";
+                    b.Text = "";
+                    b.ToolTip = IWSLocalResource.btnUpdate;
+                    b.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                    b.Images.Image.IconID = IconID.ActionsApply16x16; ;
+                    b.Width = Unit.Pixel(70);
+                    b.ClientSideEvents.Click = "function(s, e){ VatsGridView.UpdateEdit(); }";
                 }).Render();
 
                     Html.DevExpress().Button(
-                btnSettings =>
+                b =>
                 {
-                    btnSettings.Name = "btnCancel";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnCancel;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ VatsGridView.CancelEdit(); }";
+                    b.Name = "btnCancel";
+                    b.Text = "";
+                    b.ToolTip = IWSLocalResource.btnCancel;
+                    b.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                    b.Images.Image.IconID = IconID.ActionsCancel16x16;
+                    b.Width = Unit.Pixel(70);
+                    b.ClientSideEvents.Click = "function(s, e){ VatsGridView.CancelEdit(); }";
                 }).Render();
                     ViewContext.Writer.Write("</div>");
                 });
@@ -432,7 +437,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 373 "..\..\Views\Vats\VatsGridViewPartial.cshtml"
+            #line 378 "..\..\Views\Vats\VatsGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             
