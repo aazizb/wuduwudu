@@ -16,6 +16,7 @@ namespace IWSProject.Controllers
             {
                 model.Add(item);
             }
+            //List<AccountBalanceViewModel> model = IWSLookUp.GetAccountBalance((string)Session["CompanyID"]);
             return View(model);
         }
         [ValidateInput(false)]

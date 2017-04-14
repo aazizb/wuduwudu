@@ -929,10 +929,6 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>SalesInvoice.generated.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\Companies\SetLogo.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>SetLogo.generated.cs</LastGenOutput>
-    </Content>
     <Content Include="Views\Accounting\AccountBalance.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>AccountBalance.generated.cs</LastGenOutput>
@@ -1291,11 +1287,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Companies\SetLogo.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SetLogo.cshtml</DependentUpon>
     </Compile>
     <Compile Include="Views\ComptesGeneraux\DetailGridViewPartial.generated.cs">
       <AutoGen>True</AutoGen>

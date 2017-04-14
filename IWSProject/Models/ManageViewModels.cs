@@ -64,7 +64,7 @@ namespace IWSProject.Models
     {
         public int pk { get; set; }
         public int ItemID { get; set; }
-        public int OID { get; set; }
+        public string OID { get; set; }
         public int ModelID { get; set; }
         public string ItemType { get; set; }
         public string CustSupplierID { get; set; }
@@ -216,6 +216,23 @@ namespace IWSProject.Models
         public string Periode { get; set; }
         public string Buchungstext { get; set; }
         public string IBAN { get; set; }
+    }
+    public class DetailViewModel
+    {
+        public int TransID { get; set; }
+        public int ModelID { get; set; }
+        public string Item { get; set; }
+        public string Unit { get; set; }
+        public decimal Price { get; set; }
+        public decimal Quantity { get; set; }
+        public string VATCode { get; set; }
+        public DateTime DueDate { get; set; }
+        public string Text { get; set; }
+        public string Currency { get; set; }
+        public string Account { get; set; }
+        public bool Side { get; set; }
+        public string OAccount { get; set; }
+        public decimal Amount { get; set; }
     }
 }
 

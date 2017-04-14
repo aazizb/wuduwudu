@@ -208,13 +208,15 @@ WriteLiteral("\r\n");
             column.FieldName = "text";
             column.Caption = IWSLocalResource.text;
         });
+
         #region Template
+
         settings.SetEditFormTemplateContent(c =>
         {
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
-                formLayoutSettings.Name = "GeneralLedgerInEdit";
+                formLayoutSettings.Name = "GeneralLedgerOutEdit";
 
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
@@ -222,6 +224,12 @@ WriteLiteral("\r\n");
                 {
                     i.FieldName = "oid";
                     i.Caption = IWSLocalResource.oid;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
                 });
 
                 formLayoutSettings.Items.Add(i =>
@@ -252,7 +260,7 @@ WriteLiteral("\r\n");
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Properties.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(94);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -261,7 +269,7 @@ WriteLiteral("\r\n");
                 {
                     i.FieldName = "text";
                     i.Caption = IWSLocalResource.text;
-                    i.NestedExtension().TextBox(s =>
+                    i.NestedExtension().Memo(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
@@ -272,9 +280,9 @@ WriteLiteral("\r\n");
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
                 btnSettings =>
@@ -283,7 +291,7 @@ WriteLiteral("\r\n");
                     btnSettings.Text = "";
                     btnSettings.ToolTip = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                    btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ GeneralLedgerOut.UpdateEdit(); }";
                 }).Render();
 
@@ -297,7 +305,7 @@ WriteLiteral("\r\n");
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ GeneralLedgerOut.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
+
                 });
             })
             .Bind(ViewData["item"] ?? c.DataItem)
@@ -324,7 +332,7 @@ WriteLiteral("\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 264 "..\..\Views\GeneralLedgerOut\MasterGridViewPartial.cshtml"
+            #line 272 "..\..\Views\GeneralLedgerOut\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

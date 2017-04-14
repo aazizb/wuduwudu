@@ -203,7 +203,7 @@ WriteLiteral("\r\n");
                 combo.DataSource = IWSLookUp.GetCurrency();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
                 combo.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                combo.TextFormatString = "{0}-{1}";
+                combo.TextFormatString = "{0}";
             });
         });
         settings.Columns.Add(column =>
@@ -244,7 +244,9 @@ WriteLiteral("\r\n");
         };
         settings.Settings.ShowFooter = true;
         settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
+
         #region Template
+
         settings.SetEditFormTemplateContent(templateContent =>
         {
             var editItem = ViewData["linePayment"] != null ? ViewData["linePayment"] : templateContent.DataItem;
@@ -253,7 +255,7 @@ WriteLiteral("\r\n");
             {
                 formLayoutSettings.Name = "DetailGridViewEdit";
                 formLayoutSettings.Width = Unit.Percentage(100);
-                formLayoutSettings.ColCount = 2;
+                formLayoutSettings.ColCount = 3;
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "account";
@@ -266,7 +268,7 @@ WriteLiteral("\r\n");
                         s.Properties.DataSource = IWSLookUp.GetAccounts();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.item;
-                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -307,6 +309,7 @@ WriteLiteral("\r\n");
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                        s.Properties.DisplayFormatString = "N";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                     });
@@ -323,7 +326,7 @@ WriteLiteral("\r\n");
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -339,7 +342,7 @@ WriteLiteral("\r\n");
                         d.Properties.EditFormatString = "MM/dd/yyyy";
                         d.Properties.NullDisplayText = "MM/dd/yyyy";
                         d.Properties.EditFormat = EditFormat.Custom;
-                        d.Width = Unit.Percentage(100);
+                        d.Width = Unit.Percentage(92);
                         d.Properties.DisplayFormatString = "yyyy-MM-dd";
                         d.Properties.DisplayFormatInEditMode = true;
                         d.Properties.AllowUserInput = true;
@@ -358,14 +361,13 @@ WriteLiteral("\r\n");
                         s.Width = Unit.Percentage(100);
                     });
                 });
-                formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
                 btnSettings =>
@@ -374,7 +376,7 @@ WriteLiteral("\r\n");
                     btnSettings.Text = "";
                     btnSettings.ToolTip = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                    btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ DetailGridView.UpdateEdit(); }";
                 }).Render();
 
@@ -388,7 +390,7 @@ WriteLiteral("\r\n");
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ DetailGridView.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
+
                 });
             })
             .Bind(ViewData["linePayment"] ?? templateContent.DataItem)
@@ -414,7 +416,7 @@ WriteLiteral("\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 354 "..\..\Views\Payments\DetailGridViewPartial.cshtml"
+            #line 356 "..\..\Views\Payments\DetailGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

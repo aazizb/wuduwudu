@@ -14,12 +14,12 @@ namespace IWSProject.Controllers
         // GET: GeneralLedgers
         public ActionResult Index()
         {
-            return View(IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Selling.ToString()));
+            return View(IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Sales.ToString()));
         }
         [ValidateInput(false)]
         public ActionResult MasterGridViewPartial()
         {
-            return PartialView("MasterGridViewPartial", IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Selling.ToString()));
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Sales.ToString()));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] GeneralLedger item)
@@ -28,7 +28,7 @@ namespace IWSProject.Controllers
             item.IsValidated = false;
             item.modelid = 2000;
             item.CompanyId = (string)Session["CompanyID"];
-            item.Area = IWSLookUp.Area.Selling.ToString();
+            item.Area = IWSLookUp.Area.Sales.ToString();
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
@@ -46,7 +46,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.Where(a => a.Area == IWSLookUp.Area.Selling.ToString()).ToList());
+            return PartialView("MasterGridViewPartial", model.Where(a => a.Area == IWSLookUp.Area.Sales.ToString()).ToList());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] GeneralLedger item)

@@ -21,20 +21,31 @@ namespace IWSProject.Controllers
             return PartialView("MasterGridViewPartial", IWSLookUp.GetGoodReceiving());
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Models.GoodReceiving item)
+        public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] GoodReceiving item)
         {
+
             var model = db.GoodReceivings;
             item.IsValidated = false;
             item.modelid = 104;
             item.CompanyId = (string)Session["CompanyID"];
             item.oid = item.oid ?? 0;
+            int itemOID = (int)item.oid;
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
+                bool result = false;
                 try
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    if (itemOID != 0)
+                    {
+                        int itemID = db.GoodReceivings.Max(i => i.id);
+                        
+                        result=InsertLines(itemID, itemOID, IWSLookUp.DocsType.GoodReceiving.ToString());
+                        if (result)
+                            db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -213,6 +224,29 @@ namespace IWSProject.Controllers
         public ActionResult Supplier(int selectedOIDIndex)
         {
             return Json(IWSLookUp.GetSUpplier(selectedOIDIndex));
+        }
+        public bool InsertLines(int itemID, int OID, string ItemType)
+        {
+            bool results = false;
+
+            if (ItemType.Equals(IWSLookUp.DocsType.GoodReceiving.ToString()))
+            {
+                try
+                {
+                    var items = IWSLookUp.GetNewLineGoodReceiving(itemID,OID);
+                    foreach (var item in items)
+                    {
+                        db.LineGoodReceivings.InsertOnSubmit((LineGoodReceiving)item);
+                    }
+                    
+                    results = true;
+                }
+                catch (Exception e)
+                {
+                    ViewData["GenericError"] = e.Message;
+                }
+            }
+            return results;
         }
         #endregion
     }

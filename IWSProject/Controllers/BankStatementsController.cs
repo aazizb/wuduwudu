@@ -18,7 +18,8 @@
         // GET: BankStatements
         public ActionResult Index()
         {
-            return View(IWSLookUp.GetBankStatements((string)Session["CompanyID"], false));
+            return View(IWSLookUp.GetBankStatements(
+                    (string)Session["CompanyID"], false));
         }
 
         [HttpPost, ValidateInput(false)]
@@ -32,8 +33,10 @@
                 string Area = null;
                 bool results = false;
 
-                IList<string> items = new List<string>(selectedItems.Split(new string[] { ";" },
-                                                                StringSplitOptions.None));
+                IList<string> items = new List<string>(
+                    selectedItems.Split(new string[] { ";" },
+                        StringSplitOptions.None));
+
                 foreach (string item in items)
                 {
 
@@ -48,7 +51,7 @@
 
                     if (Convert.ToDecimal(list[1]) >= 0)
                     {
-                        Area = IWSLookUp.Area.Selling.ToString();
+                        Area = IWSLookUp.Area.Sales.ToString();
                     }
                     if (Convert.ToDecimal(list[1]) <= 0)
                     {
@@ -407,7 +410,7 @@
                 }
             }
 
-            if (area.Equals(IWSLookUp.Area.Selling.ToString()))
+            if (area.Equals(IWSLookUp.Area.Sales.ToString()))
             {
                 Settlement settlement = new Settlement
                 {
@@ -428,9 +431,9 @@
                     { new LineSettlement{
                         transid = itemID,
                         modelid = 113,
-                        account = SD.AccountID,
+                        account = SD.BankAccountID,
                         side = true,
-                        oaccount = SD.BankAccountID,
+                        oaccount = SD.AccountID,
                         amount = SD.Betrag,
                         Currency = SD.Waehrung,
                         duedate = SD.Valutadatum,

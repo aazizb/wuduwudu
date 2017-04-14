@@ -66,6 +66,11 @@ namespace ASP
 
         //settings.ClientSideEvents.Init = "function(s, e) { s.PerformCallback(); }";
 
+
+        //settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        //settings.ClientSideEvents.EndCallback = "OnEndCallback";
+
+
         settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "goodreceivings", Action = "MasterGridViewPartialAddNew" };
         settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "goodreceivings", Action = "MasterGridViewPartialUpdate" };
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "goodreceivings", Action = "MasterGridViewPartialDelete" };
@@ -98,7 +103,6 @@ namespace ASP
         settings.SettingsCommandButton.DeleteButton.Text = " ";
         settings.CommandColumn.ShowDeleteButton = true;
 
-        //conditionally disable command buttons depending on IsValidated column value
         settings.CommandButtonInitialize = (s, e) =>
         {
 
@@ -167,7 +171,7 @@ namespace ASP
                 combo.Columns.Add("Supplier").Caption = IWSLocalResource.supplier;
                 combo.Columns.Add("Store").Caption = IWSLocalResource.store;
                 combo.Columns.Add("DueDate").Caption = IWSLocalResource.duedate;
-                combo.TextFormatString = "{0}";// -{1}-{2}-{3}";
+                combo.TextFormatString = "{0}";
             });
         });
         settings.Columns.Add(column =>
@@ -235,12 +239,21 @@ namespace ASP
             {
                 formLayoutSettings.Name = "GoodReceivingEdit";
 
+
+
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
+                formLayoutSettings.Items.Add(i=>
+                {
+                    i.Visible = false;
+                    i.FieldName = "id";
+                    i.NestedExtension().TextBox(s=> { });
+                });
 
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "oid";
+                    i.Name = "oid";
                     i.Caption = IWSLocalResource.oid;
                     i.NestedExtension().ComboBox(s =>
                     {
@@ -252,14 +265,14 @@ namespace ASP
                         s.Properties.Columns.Add("supplier").Caption = IWSLocalResource.supplier;
                         s.Properties.Columns.Add("store").Caption = IWSLocalResource.store;
                         s.Properties.Columns.Add("DueDate").Caption = IWSLocalResource.duedate;
-                        s.Properties.TextFormatString = "{0}";// -{1}-{2}-{3}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                         s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
-
                     });
                 });
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "store";
@@ -307,7 +320,7 @@ namespace ASP
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Properties.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(95);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -316,9 +329,9 @@ namespace ASP
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
                     btnSettings =>
@@ -327,7 +340,7 @@ namespace ASP
                         btnSettings.Text = "";
                         btnSettings.ToolTip= IWSLocalResource.btnUpdate;
                         btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                        btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                        btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                         btnSettings.ClientSideEvents.Click = "function(s, e){ GoodReceiving.UpdateEdit(); }";
                     }).Render();
 
@@ -343,12 +356,12 @@ namespace ASP
                 }).Render();
 
 
-                    ViewContext.Writer.Write("</div>");
                 });
             })
             .Bind(ViewData["item"] ?? c.DataItem)
             .Render();
         });
+
         #endregion
 
         settings.SetDetailRowTemplateContent(c =>
@@ -370,7 +383,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 311 "..\..\Views\GoodReceivings\MasterGridViewPartial.cshtml"
+            #line 324 "..\..\Views\GoodReceivings\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

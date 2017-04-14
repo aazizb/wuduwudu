@@ -141,7 +141,7 @@ namespace ASP
                 o.DataSource = IWSLookUp.GetCurrency();
                 o.Columns.Add("id").Caption = IWSLocalResource.id;
                 o.Columns.Add("name").Caption = IWSLocalResource.name;
-                o.TextFormatString = "{0}-{1}";
+                o.TextFormatString = "{0}";
             });
         });
         #region Template Edit

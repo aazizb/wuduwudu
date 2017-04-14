@@ -6499,7 +6499,7 @@
 
         private int _id;
 
-        private System.Nullable<int> _oid;
+        private string _oid;
 
         private int _modelid;
 
@@ -6525,7 +6525,7 @@
         partial void OnCreated();
         partial void OnidChanging(int value);
         partial void OnidChanged();
-        partial void OnoidChanging(System.Nullable<int> value);
+        partial void OnoidChanging(string value);
         partial void OnoidChanged();
         partial void OnmodelidChanging(int value);
         partial void OnmodelidChanged();
@@ -6570,8 +6570,8 @@
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_oid", DbType = "Int")]
-        public System.Nullable<int> oid
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_oid", DbType = "NVarChar(50)")]
+        public string oid
         {
             get
             {
@@ -7610,7 +7610,7 @@
 
         private int _ItemID;
 
-        private int _OID;
+        private string _OID;
 
         private int _ModelID;
 
@@ -7648,7 +7648,7 @@
         partial void OnIDChanged();
         partial void OnItemIDChanging(int value);
         partial void OnItemIDChanged();
-        partial void OnOIDChanging(int value);
+        partial void OnOIDChanging(string value);
         partial void OnOIDChanged();
         partial void OnModelIDChanging(int value);
         partial void OnModelIDChanged();
@@ -7723,8 +7723,8 @@
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_OID", DbType = "Int NOT NULL")]
-        public int OID
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_OID", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string OID
         {
             get
             {

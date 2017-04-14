@@ -224,7 +224,9 @@ namespace ASP
             column.FieldName = "text";
             column.Caption = IWSLocalResource.text;
         });
+
         #region Template
+
         settings.SetEditFormTemplateContent(c =>
         {
 
@@ -234,12 +236,29 @@ namespace ASP
 
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "oid";
                     i.Caption = IWSLocalResource.oid;
-                });
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "Name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(int);
+                        s.Properties.DataSource = IWSLookUp.GetSalesInvoiceOID();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("Customer").Caption = IWSLocalResource.customer;
+                        s.Properties.Columns.Add("store").Caption = IWSLocalResource.store;
+                        s.Properties.Columns.Add("DueDate").Caption = IWSLocalResource.duedate;
+                        s.Properties.TextFormatString = "{0}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                        //s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
 
+                    });
+                });
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "store";
@@ -289,7 +308,7 @@ namespace ASP
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Properties.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(95);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -298,21 +317,20 @@ namespace ASP
                 {
                     i.FieldName = "text";
                     i.Caption = IWSLocalResource.text;
-                    i.NestedExtension().TextBox(s =>
+                    i.NestedExtension().Memo(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                     });
                 });
-                formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
                 btnSettings =>
@@ -321,7 +339,7 @@ namespace ASP
                     btnSettings.Text = "";
                     btnSettings.ToolTip = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                    btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ SalesInvoice.UpdateEdit(); }";
                 }).Render();
 
@@ -335,7 +353,7 @@ namespace ASP
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ SalesInvoice.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
+
                 });
             })
             .Bind(ViewData["item"] ?? c.DataItem)
@@ -362,7 +380,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 303 "..\..\Views\SalesInvoices\MasterGridViewPartial.cshtml"
+            #line 321 "..\..\Views\SalesInvoices\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

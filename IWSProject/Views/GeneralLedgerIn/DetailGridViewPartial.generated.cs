@@ -247,7 +247,9 @@ WriteLiteral("\r\n");
         };
         settings.Settings.ShowFooter = true;
         settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
+
         #region Template
+
         settings.SetEditFormTemplateContent(templateContent =>
         {
 
@@ -326,7 +328,7 @@ WriteLiteral("\r\n");
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -366,9 +368,9 @@ WriteLiteral("\r\n");
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
                 btnSettings =>
@@ -377,7 +379,7 @@ WriteLiteral("\r\n");
                     btnSettings.Text = "";
                     btnSettings.ToolTip = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                    btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ DetailGridView.UpdateEdit(); }";
                 }).Render();
 
@@ -391,7 +393,7 @@ WriteLiteral("\r\n");
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ DetailGridView.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
+                    
                 });
             })
             .Bind(ViewData["lineGeneralLedger"] ?? templateContent.DataItem)
@@ -417,7 +419,7 @@ WriteLiteral("\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 356 "..\..\Views\GeneralLedgerIn\DetailGridViewPartial.cshtml"
+            #line 358 "..\..\Views\GeneralLedgerIn\DetailGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

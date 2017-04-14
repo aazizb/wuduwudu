@@ -218,7 +218,9 @@ namespace ASP
                 d.AllowMouseWheel = true;
             });
         });
+
         #region Template
+
         settings.SetEditFormTemplateContent(c =>
         {
 
@@ -233,6 +235,23 @@ namespace ASP
                 {
                     i.FieldName = "oid";
                     i.Caption = IWSLocalResource.oid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "Name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(int);
+                        s.Properties.DataSource = IWSLookUp.GetBillOfDeliveryOID();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("Customer").Caption = IWSLocalResource.customer;
+                        s.Properties.Columns.Add("store").Caption = IWSLocalResource.store;
+                        s.Properties.Columns.Add("DueDate").Caption = IWSLocalResource.duedate;
+                        s.Properties.TextFormatString = "{0}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                        //s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
+
+                    });
                 });
 
                 formLayoutSettings.Items.Add(i =>
@@ -284,7 +303,7 @@ namespace ASP
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Properties.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(95);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -293,9 +312,9 @@ namespace ASP
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
                 btnSettings =>
@@ -304,7 +323,7 @@ namespace ASP
                     btnSettings.Text = "";
                     btnSettings.ToolTip = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                    btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ BillOfDelivery.UpdateEdit(); }";
                 }).Render();
 
@@ -318,7 +337,7 @@ namespace ASP
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ BillOfDelivery.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
+
                 });
             })
             .Bind(ViewData["item"] ?? c.DataItem)
@@ -345,7 +364,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 286 "..\..\Views\BillOfDeliveries\MasterGridViewPartial.cshtml"
+            #line 305 "..\..\Views\BillOfDeliveries\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

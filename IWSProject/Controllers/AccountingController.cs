@@ -4,13 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
-//
-using DevExpress.Web;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using System.Collections;
-using System.Threading;
-using System.Web;
+
 
 namespace IWSProject.Controllers
 {
@@ -22,12 +16,7 @@ namespace IWSProject.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            var docs = IWSLookUp.GetAccountingDocument(false);
-            var model = new List<DocumentsViewModel>();
-            foreach (DocumentsViewModel doc in docs)
-            {
-                model.Add(doc);
-            }
+            List<DocumentsViewModel> model = IWSLookUp.GetAccountingDocument(false);
             return View(model);
         }
 
@@ -83,12 +72,7 @@ namespace IWSProject.Controllers
         [ValidateInput(false)]
         public ActionResult ValidateBLPartialView()
         {
-            var docs = IWSLookUp.GetAccountingDocument(false);
-            var model = new List<DocumentsViewModel>();
-            foreach (DocumentsViewModel doc in docs)
-            {
-                model.Add(doc);
-            }
+            List<DocumentsViewModel> model = IWSLookUp.GetAccountingDocument(false);
             return PartialView(model);
         }
     
@@ -400,7 +384,9 @@ namespace IWSProject.Controllers
         }
         private string GetItemType(string ItemType)
         {
-            return db.Localizations.Where(i => i.LocalName == ItemType).Select(i => i.ItemName).FirstOrDefault();
+            return db.Localizations.Where(i => i.LocalName == ItemType)
+                                                .Select(i => i.ItemName)
+                                                .FirstOrDefault();
         }
         private bool StockIn(List<ValidateStockViewModel> items)
         {
@@ -607,7 +593,7 @@ namespace IWSProject.Controllers
                        select new JournalViewModel
                        {
                            ItemID = g.Key.id,
-                           OID = Convert.ToInt32( g.Key.oid),
+                           OID = Convert.ToString( g.Key.oid),
                            ModelID = g.Key.modelid,
                            CustSupplierID=g.Key.account,
                            StoreID=g.Key.store,
@@ -723,7 +709,7 @@ namespace IWSProject.Controllers
                                            select new JournalViewModel
                                            {
                                                ItemID = g.Key.id,
-                                               OID = Convert.ToInt32(g.Key.oid),
+                                               OID = Convert.ToString(g.Key.oid),
                                                ModelID = g.Key.modelid,
                                                CustSupplierID = g.Key.account,
                                                StoreID = g.Key.store,
@@ -1040,7 +1026,7 @@ namespace IWSProject.Controllers
                     {
                         List<Journal> journal = new List<Journal> {
                             new Journal { ItemID=item.ItemID,
-                            OID =item.OID,
+                            OID = Convert.ToString(item.OID),
                             ModelID =item.ModelID,
                             CustSupplierID=item.CustSupplierID,
                             StoreID =item.StoreID,
@@ -1054,7 +1040,7 @@ namespace IWSProject.Controllers
                             Side =IWSLookUp. Side.Debit.ToString(),
                             CompanyID=(string)Session["CompanyID"]},
                         new Journal { ItemID=item.ItemID,
-                            OID =item.OID, ModelID=item.ModelID,
+                            OID =Convert.ToString(item.OID), ModelID=item.ModelID,
                             CustSupplierID=item.CustSupplierID,
                             StoreID =item.StoreID,
                             TransDate =item.TransDate,
@@ -1175,7 +1161,7 @@ namespace IWSProject.Controllers
                     {
                         List<Journal> journal = new List<Journal> {
                             new Journal { ItemID=item.ItemID,
-                            OID =item.OID,
+                            OID =Convert.ToString(item.OID),
                             ModelID =item.ModelID,
                             CustSupplierID=item.CustSupplierID,
                             StoreID =item.StoreID,
@@ -1189,7 +1175,7 @@ namespace IWSProject.Controllers
                             Side =IWSLookUp. Side.Debit.ToString(),
                             CompanyID=(string)Session["CompanyID"]},
                         new Journal { ItemID=item.ItemID,
-                            OID =item.OID, ModelID=item.ModelID,
+                            OID =Convert.ToString(item.OID), ModelID=item.ModelID,
                             CustSupplierID=item.CustSupplierID,
                             StoreID =item.StoreID,
                             TransDate =item.TransDate,
@@ -1294,7 +1280,7 @@ namespace IWSProject.Controllers
                           select new
                           {
                               ItemID = g.Key.id,
-                              OID = (int)g.Key.oid,
+                              OID = g.Key.oid,
                               ModelID = g.Key.modelid,
                               ItemType = IWSLookUp.DocsType.GeneralLedger.ToString(),
                               CustSupplierID = g.Key.SupplierID,
@@ -1751,7 +1737,7 @@ namespace IWSProject.Controllers
                 {
                     List<Journal> journal = new List<Journal> {
                             new Journal { ItemID=item.ItemID,
-                            OID =item.OID,
+                            OID =Convert.ToString(item.OID),
                             ModelID =item.ModelID,
                             CustSupplierID=item.CustSupplierID,
                             StoreID =item.StoreID,
@@ -1765,7 +1751,7 @@ namespace IWSProject.Controllers
                             Side = IWSLookUp. Side.Debit.ToString(),
                             CompanyID=(string)Session["CompanyID"]},
                         new Journal { ItemID=item.ItemID,
-                            OID =item.OID, ModelID=item.ModelID,
+                            OID =Convert.ToString(item.OID), ModelID=item.ModelID,
                             CustSupplierID=item.CustSupplierID,
                             StoreID =item.StoreID,
                             TransDate =item.TransDate,
@@ -1936,7 +1922,7 @@ namespace IWSProject.Controllers
                 {
                     List<Journal> journal = new List<Journal> {
                         new Journal { ItemID=item.ItemID,
-                            OID =item.OID,
+                            OID =Convert.ToString(item.OID),
                             ModelID =item.ModelID,
                             CustSupplierID=item.CustSupplierID,
                             StoreID =item.StoreID,
@@ -1950,7 +1936,7 @@ namespace IWSProject.Controllers
                             Side = IWSLookUp. Side.Debit.ToString(),
                             CompanyID=(string)Session["CompanyID"]},
                         new Journal { ItemID=item.ItemID,
-                            OID =item.OID, ModelID=item.ModelID,
+                            OID =Convert.ToString(item.OID), ModelID=item.ModelID,
                             CustSupplierID=item.CustSupplierID,
                             StoreID =item.StoreID,
                             TransDate =item.TransDate,
@@ -2012,9 +1998,6 @@ namespace IWSProject.Controllers
                 {
                     foreach (Journal item in journal)
                     {
-                        //item.CompanyID = (string)Session["CompanyID"];
-                        //if (item.Currency == null)
-                        //    item.Currency = (string)Session["Currency"];
                         db.Journals.InsertOnSubmit(item);
                     }
                     results = true;

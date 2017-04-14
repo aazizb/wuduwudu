@@ -203,7 +203,7 @@ WriteLiteral("\r\n");
                 combo.DataSource = IWSLookUp.GetCurrency();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
                 combo.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                combo.TextFormatString = "{0}-{1}";
+                combo.TextFormatString = "{0}";
             });
         });
         settings.Columns.Add(column =>
@@ -244,7 +244,9 @@ WriteLiteral("\r\n");
         };
         settings.Settings.ShowFooter = true;
         settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
+
         #region Template
+
         settings.SetEditFormTemplateContent(templateContent =>
         {
 
@@ -322,7 +324,7 @@ WriteLiteral("\r\n");
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -364,7 +366,6 @@ WriteLiteral("\r\n");
                     i.ShowCaption = DefaultBoolean.False;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
                 btnSettings =>
@@ -373,7 +374,7 @@ WriteLiteral("\r\n");
                     btnSettings.Text = "";
                     btnSettings.ToolTip = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                    btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ DetailGridView.UpdateEdit(); }";
                 }).Render();
 
@@ -387,7 +388,7 @@ WriteLiteral("\r\n");
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ DetailGridView.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
+
                 });
             })
             .Bind(ViewData["lineGeneralLedger"] ?? templateContent.DataItem)
@@ -413,7 +414,7 @@ WriteLiteral("\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 353 "..\..\Views\GeneralLedgerOut\DetailGridViewPartial.cshtml"
+            #line 354 "..\..\Views\GeneralLedgerOut\DetailGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

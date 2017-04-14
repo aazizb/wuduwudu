@@ -96,7 +96,6 @@ namespace ASP
         settings.SettingsCommandButton.DeleteButton.Text = " ";
         settings.CommandColumn.ShowDeleteButton = true;
 
-        //conditionally disable command buttons depending on IsValidated column value
         settings.CommandButtonInitialize = (s, e) =>
         {
 
@@ -220,6 +219,25 @@ namespace ASP
                 d.AllowMouseWheel = true;
             });
         });
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Total";
+            column.Caption = IWSLocalResource.Total;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "N";
+        });
+
+        settings.CustomUnboundColumnData = (s, e) =>
+        {
+            if (e.Column.FieldName == "Total")
+            {
+                e.Value = ViewData["Total"];
+            }
+        };
+        settings.Settings.ShowFooter = true;
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.None, "Total");
+
         #region Template
         settings.SetEditFormTemplateContent(c =>
         {
@@ -235,6 +253,10 @@ namespace ASP
                 {
                     i.FieldName = "oid";
                     i.Caption = IWSLocalResource.oid;
+                    i.NestedExtension().TextBox(textBox =>
+                    {
+
+                    });
                 });
 
                 formLayoutSettings.Items.Add(i =>
@@ -286,7 +308,7 @@ namespace ASP
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Properties.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(95);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -295,9 +317,9 @@ namespace ASP
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
                 btnSettings =>
@@ -306,7 +328,7 @@ namespace ASP
                     btnSettings.Text = "";
                     btnSettings.ToolTip = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                    btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ PurchaseOrder.UpdateEdit(); }";
                 }).Render();
 
@@ -320,7 +342,7 @@ namespace ASP
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ PurchaseOrder.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
+
                 });
             })
             .Bind(ViewData["item"] ?? c.DataItem)
@@ -347,7 +369,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 288 "..\..\Views\PurchaseOrders\MasterGridViewPartial.cshtml"
+            #line 310 "..\..\Views\PurchaseOrders\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

@@ -160,14 +160,21 @@ namespace ASP
         {
             column.FieldName = "oid";
             column.Caption = IWSLocalResource.oid;
-            column.Width = Unit.Pixel(60);
+            column.Width = Unit.Pixel(100);
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "ID";
+                combo.ValueType = typeof(int);
+                combo.DataSource = IWSLookUp.GetVendorInvoiceOID();
+                combo.Columns.Add("ID").Caption = IWSLocalResource.id;
+                combo.Columns.Add("Supplier").Caption = IWSLocalResource.supplier;
+                combo.Columns.Add("Store").Caption = IWSLocalResource.store;
+                combo.Columns.Add("DueDate").Caption = IWSLocalResource.duedate;
+                combo.TextFormatString = "{0}";
+            });
         });
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "modelid";
-            column.Caption = IWSLocalResource.modelid;
-            column.Visible = false;
-        });
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "store";
@@ -223,22 +230,43 @@ namespace ASP
         {
             column.FieldName = "text";
             column.Caption = IWSLocalResource.text;
-        });
+         });
+
         #region Template
+
         settings.SetEditFormTemplateContent(c =>
         {
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
-                formLayoutSettings.Name = "PaymentEdit";
+                formLayoutSettings.Name = "VendorInvoiceEdit";
 
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "oid";
                     i.Caption = IWSLocalResource.oid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "Name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(int);
+                        s.Properties.DataSource = IWSLookUp.GetVendorInvoiceOID();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("supplier").Caption = IWSLocalResource.supplier;
+                        s.Properties.Columns.Add("store").Caption = IWSLocalResource.store;
+                        s.Properties.Columns.Add("DueDate").Caption = IWSLocalResource.duedate;
+                        s.Properties.TextFormatString = "{0}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                        //s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
+
+                    });
                 });
+
 
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -287,7 +315,7 @@ namespace ASP
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Properties.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(95);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -296,7 +324,7 @@ namespace ASP
                 {
                     i.FieldName = "text";
                     i.Caption = IWSLocalResource.text;
-                    i.NestedExtension().TextBox(s =>
+                    i.NestedExtension().Memo(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
@@ -308,9 +336,9 @@ namespace ASP
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
+                    i.HorizontalAlign = FormLayoutHorizontalAlign.Center;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
                     Html.DevExpress().Button(
                 btnSettings =>
@@ -319,7 +347,7 @@ namespace ASP
                     btnSettings.Text = "";
                     btnSettings.ToolTip = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
+                    btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ VendorInvoices.UpdateEdit(); }";
                 }).Render();
 
@@ -333,7 +361,7 @@ namespace ASP
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ VendorInvoices.CancelEdit(); }";
                 }).Render();
-                    ViewContext.Writer.Write("</div>");
+
                 });
             })
             .Bind(ViewData["item"] ?? c.DataItem)
@@ -360,7 +388,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 301 "..\..\Views\VendorInvoices\MasterGridViewPartial.cshtml"
+            #line 329 "..\..\Views\VendorInvoices\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

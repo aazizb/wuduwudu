@@ -333,7 +333,7 @@ namespace ASP
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);

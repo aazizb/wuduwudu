@@ -224,6 +224,7 @@ namespace ASP
         });
 
         #region Template Edit
+
         settings.SetEditFormTemplateContent(templateContent =>
         {
 
@@ -324,7 +325,7 @@ namespace ASP
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -457,7 +458,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 398 "..\..\Views\Articles\ArticlesGridViewPartial.cshtml"
+            #line 399 "..\..\Views\Articles\ArticlesGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

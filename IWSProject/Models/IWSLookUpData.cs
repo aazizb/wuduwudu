@@ -309,7 +309,7 @@
         public static StatementDetailViewModel GetStatementDetail(int bankStatementID, string area)
         {
 
-            if (area.Equals(IWSLookUp.Area.Selling.ToString()))
+            if (area.Equals(IWSLookUp.Area.Sales.ToString()))
             {
                 StatementDetailViewModel BS =
                     (from c in IWSEntities.Companies
@@ -467,7 +467,7 @@
                     Area = true,
                     SupplierID = g.Key.account,
                     CompanyID = g.Key.CompanyId,
-                    VAT="0",
+                    VAT = "0",
                     TotalVAT = 0,
                     TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => (double)p.line.amount)),
                     Currency=g.Key.Currency
@@ -825,7 +825,7 @@
         {
             List<ValidateDocsViewModel> BL = Queryable.OrderBy(
             (from line in IWSEntities.LineGeneralLedgers
-             where line.GeneralLedger.IsValidated == IsValidated && line.GeneralLedger.Area == Area.Selling.ToString()
+             where line.GeneralLedger.IsValidated == IsValidated && line.GeneralLedger.Area == Area.Sales.ToString()
              from Item in IWSEntities.Localizations
              where Item.ItemName == DocsType.GeneralLedger.ToString() && Item.UICulture == uiCulture
              group new
@@ -853,7 +853,7 @@
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
                  Periode = g.Key.xYear + g.Key.xMonth,
                  Area = false,
-                 SupplierID = Area.Selling.ToString(),
+                 SupplierID = Area.Sales.ToString(),
                  CompanyID = g.Key.CompanyId,
                  VAT = "0",
                  TotalVAT = 0,
@@ -908,11 +908,12 @@
             // get current thread UICulture
             string uiCulture = Thread.CurrentThread.CurrentUICulture.Name;
 
-            List<ValidateDocsViewModel> document = GetVendorInvoice(uiCulture, IsValidated).
-                                            Union(GetPurchaseOrder(uiCulture, IsValidated)).
-                                            Union(GetPayment(uiCulture, IsValidated)).
-                                            Union(GetInventoryInvoice(uiCulture, IsValidated)).
+            List<ValidateDocsViewModel> document = 
+                                            GetPurchaseOrder(uiCulture, IsValidated).
                                             Union(GetGoodReceiving(uiCulture, IsValidated)).
+                                            Union(GetInventoryInvoice(uiCulture, IsValidated)).
+                                            Union(GetVendorInvoice(uiCulture, IsValidated)).
+                                            Union(GetPayment(uiCulture, IsValidated)).
                                             Union(GetSalesOrder(uiCulture, IsValidated)).
                                             Union(GetBillOfDelivery(uiCulture, IsValidated)).
                                             Union(GetSalesInvoice(uiCulture, IsValidated)).
@@ -940,6 +941,27 @@
                                             }).ToList();
             return documents;
         }
+
+        public static IEnumerable GetNewLineGoodReceiving(int  itemID, int oid)
+        {
+            List<LinePurchaseOrder> items = new List<LinePurchaseOrder>();
+            items = IWSEntities.LinePurchaseOrders
+                    .Where(c => c.transid == oid)
+                    .ToList();
+            List<LineGoodReceiving> docs = 
+                (from item in items
+                select new LineGoodReceiving()
+                {
+                    transid = itemID, modelid=item.modelid,
+                    item=item.item, unit=item.unit,
+                    price=item.price, quantity=item.quantity,
+                    VatCode=item.VatCode, duedate=item.duedate,
+                    text=item.text, Currency=item.Currency
+                }
+                ).ToList();
+            return docs;
+        }
+
         public static IEnumerable GetAccountBalance(string CompanyID)
         {
             List<AccountBalanceViewModel> items = (from p in IWSEntities.PeriodicAccountBalances
@@ -955,7 +977,7 @@
                                                     CompanyID = p.CompanyID
                                                 })
                                                 .Where(c=>c.CompanyID== CompanyID)
-                                                .OrderBy(o=>o.pk).ToList();
+                                                .ToList();  //.OrderBy(o=>o.pk)
             return items;
         }
         public static IEnumerable GetJournal(string CompanyID)
@@ -1005,11 +1027,13 @@
         }
         public static string GetPackUnit(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).packunit;
+            return IWSEntities.Articles.FirstOrDefault(c => 
+                c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).packunit;
         }
         public static string GetCompany(string UserName)
         {
-            return IWSEntities.AspNetUsers.FirstOrDefault(c => c.UserName == UserName).Company;
+            return IWSEntities.AspNetUsers.FirstOrDefault(c => 
+                                c.UserName == UserName).Company;
         }
         public static string GetCurrency(string UserName)
         {
@@ -1018,31 +1042,38 @@
         }
         public static string GetQttyUnit(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).qttyunit;
+            return IWSEntities.Articles.FirstOrDefault(c => 
+                c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).qttyunit;
         }
         public static string GetVatCode(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).VatCode;
+            return IWSEntities.Articles.FirstOrDefault(c => 
+                c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).VatCode;
         }
         public static decimal GetPrice(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).price;
+            return IWSEntities.Articles.FirstOrDefault(c => 
+                c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).price;
         }
         public static decimal GetSalesPrice(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).salesprice;
+            return IWSEntities.Articles.FirstOrDefault(c => 
+                c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).salesprice;
         }
         public static string GetText(string id)
         {
-            return IWSEntities.Articles.FirstOrDefault(c => c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).description;
+            return IWSEntities.Articles.FirstOrDefault(c => 
+                c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).description;
         }
         public static string GetStore(int id)
         {
-            return IWSEntities.PurchaseOrders.FirstOrDefault(c => c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).store;
+            return IWSEntities.PurchaseOrders.FirstOrDefault(c => 
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).store;
         }
         public static string GetSUpplier(int id)
         {
-            return IWSEntities.PurchaseOrders.FirstOrDefault(c => c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).account;
+            return IWSEntities.PurchaseOrders.FirstOrDefault(c => 
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).account;
         }
         public static string GetPeriodMax()
         {
@@ -1071,19 +1102,152 @@
         public static IEnumerable GetGoodReceivingOID()
         {
             var query =
-            from Stores in IWSEntities.Stores
-            join PurchaseOrders in IWSEntities.PurchaseOrders on new { id = Stores.id } equals new { id = PurchaseOrders.store }
-            join Suppliers in IWSEntities.Suppliers on new { account = PurchaseOrders.account } equals new { account = Suppliers.id }
+            from s in IWSEntities.Stores
+            join p in IWSEntities.PurchaseOrders on new { id = s.id } equals new { id = p.store }
+            join r in IWSEntities.Suppliers on new { account = p.account } equals new { account = r.id }
             where
-              PurchaseOrders.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+              p.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
             orderby
-              PurchaseOrders.id
+              p.id
             select new
             {
-                ID = PurchaseOrders.id,
-                Supplier = Suppliers.name,
-                Store = Stores.name,
-                DueDate = PurchaseOrders.ItemDate.ToShortDateString()
+                ID = p.id,
+                Supplier = r.name,
+                Store = s.name,
+                DueDate = p.ItemDate.ToShortDateString()
+            };
+            return query;
+        }
+        public static IEnumerable GetInventoryInvoiceOID()
+        {
+            var query =
+            from s in IWSEntities.Stores
+            join g in IWSEntities.GoodReceivings on new { id = s.id } equals new { id = g.store }
+            join r in IWSEntities.Suppliers on new { account = g.account } equals new { account = r.id }
+            where
+              g.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+            orderby
+              g.id
+            select new
+            {
+                ID = g.id,
+                Supplier = r.name,
+                Store = s.name,
+                DueDate = g.ItemDate.ToShortDateString()
+            };
+            return query;
+        }
+        public static IEnumerable GetVendorInvoiceOID()
+        {
+            var query =
+            from s in IWSEntities.Stores
+            join p in IWSEntities.InventoryInvoices on new { id = s.id } equals new { id = p.store }
+            join r in IWSEntities.Suppliers on new { account = p.account } equals new { account = r.id }
+            where
+              p.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+            orderby
+              p.id
+            select new
+            {
+                ID = p.id,
+                Supplier = r.name,
+                Store = s.name,
+                DueDate = p.ItemDate.ToShortDateString()
+            };
+            return query;
+        }
+        public static IEnumerable GetPaymentsOID()
+        {
+            var query =
+            from s in IWSEntities.Stores
+            join p in IWSEntities.VendorInvoices on new { id = s.id } equals new { id = p.store }
+            join r in IWSEntities.Suppliers on new { account = p.account } equals new { account = r.id }
+            where
+              p.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+            orderby
+              p.id
+            select new
+            {
+                ID = p.id,
+                Supplier = r.name,
+                Store = s.name,
+                DueDate = p.ItemDate.ToShortDateString()
+            };
+            return query;
+        }
+        public static IEnumerable GetBillOfDeliveryOID()
+        {
+            var query =
+            from s in IWSEntities.Stores
+            join p in IWSEntities.SalesOrders on new { id = s.id } equals new { id = p.store }
+            join r in IWSEntities.Customers on new { account = p.account } equals new { account = r.id }
+            where
+              p.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+            orderby
+              p.id
+            select new
+            {
+                ID = p.id,
+                Customer = r.name,
+                Store = s.name,
+                DueDate = p.ItemDate.ToShortDateString()
+            };
+            return query;
+        }
+        public static IEnumerable GetSalesInvoiceOID()
+        {
+            var query =
+            from s in IWSEntities.Stores
+            join p in IWSEntities.BillOfDeliveries on new { id = s.id } equals new { id = p.store }
+            join r in IWSEntities.Customers on new { account = p.account } equals new { account = r.id }
+            where
+              p.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+            orderby
+              p.id
+            select new
+            {
+                ID = p.id,
+                Customer = r.name,
+                Store = s.name,
+                DueDate = p.ItemDate.ToShortDateString()
+            };
+            return query;
+        }
+        public static IEnumerable GetCustomerInvoiceOID()
+        {
+            var query =
+            from s in IWSEntities.Stores
+            join p in IWSEntities.SalesInvoices on new { id = s.id } equals new { id = p.store }
+            join r in IWSEntities.Customers on new { account = p.account } equals new { account = r.id }
+            where
+              p.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+            orderby
+              p.id
+            select new
+            {
+                ID = p.id,
+                Customer = r.name,
+                Store = s.name,
+                DueDate = p.ItemDate.ToShortDateString()
+            };
+            return query;
+        }
+        public static IEnumerable GetSettlementOID()
+        {
+            var query =
+            from s in IWSEntities.Stores
+            join p in IWSEntities.CustomerInvoices on new { id = s.id } equals new { id = p.store }
+            join r in IWSEntities.Customers on new { account = p.account } equals new { account = r.id }
+            where
+              p.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+            orderby
+              p.id
+            select new
+            {
+                ID = p.id,
+                Customer = r.name,
+                Store = s.name,
+                DueDate = p.ItemDate.ToShortDateString()
             };
             return query;
         }
@@ -1111,13 +1275,7 @@
         public enum Area
         {
             Purchasing,
-            Selling
+            Sales
         }
-
-        public static UploadControlValidationSettings Settings = new UploadControlValidationSettings()
-        {
-            AllowedFileExtensions = new string[] { ".jpg", ".jpeg", ".png", ".bmp", ".tiff", ".eps", ".ps" },
-            MaxFileSize = 4194304
-        };
     }
 }
