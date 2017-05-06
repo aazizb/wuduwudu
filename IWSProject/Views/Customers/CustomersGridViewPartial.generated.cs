@@ -141,9 +141,10 @@ namespace ASP
                 o.DataSource = IWSLookUp.GetCurrency();
                 o.Columns.Add("id").Caption = IWSLocalResource.id;
                 o.Columns.Add("name").Caption = IWSLocalResource.name;
-                o.TextFormatString = "{0}";
+                o.TextFormatString = "{0}-{1}";
             });
         });
+        settings.Columns.Add("IBAN").Caption = IWSLocalResource.IBAN;
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
         {
@@ -323,7 +324,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 264 "..\..\Views\Customers\CustomersGridViewPartial.cshtml"
+            #line 265 "..\..\Views\Customers\CustomersGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

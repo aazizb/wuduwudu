@@ -70,6 +70,9 @@ namespace ASP
 
         settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
 
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+        settings.ClientSideEvents.CustomizationWindowCloseUp= "CustomizationWindowCloseUp";
+
         settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
         settings.SettingsResizing.Visualization = ResizingMode.Postponed;
 
@@ -386,10 +389,10 @@ namespace ASP
         .Render();
         });
         #endregion
-        //settings.DataBinding = (sender, e) =>
-        //{
-        //    ((MVCxGridView)sender).ForceDataRowType(typeof(BankStatement));
-        //};
+        settings.DataBinding = (sender, e) =>
+        {
+            ((MVCxGridView)sender).ForceDataRowType(typeof(BankStatement));
+        };
     });
     if (ViewData["GenericError"] != null)
     {
@@ -402,7 +405,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 343 "..\..\Views\BankStatements\BankStatementsGridViewPartial.cshtml"
+            #line 346 "..\..\Views\BankStatements\BankStatementsGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

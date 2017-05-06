@@ -166,21 +166,32 @@
 
         settings.Columns.Add(column =>
         {
-            column.FieldName = "Total";
+            column.FieldName = "oTotal";
             column.Caption = IWSLocalResource.Total;
             column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
             column.PropertiesEdit.DisplayFormatString = "N";
         });
-
-        settings.CustomUnboundColumnData = (s, e) =>
+        settings.Columns.Add(column =>
         {
-            if (e.Column.FieldName == "Total")
-            {
-                e.Value = ViewData["Total"];
-            }
-        };
-        settings.Settings.ShowFooter = true;
-        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.None, "Total");
+            column.FieldName = "oCurrency";
+            column.Caption = IWSLocalResource.Currency;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+            
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "text";
+            column.Caption = IWSLocalResource.text;
+        });
+        //settings.CustomUnboundColumnData = (s, e) =>
+        //{
+        //    if (e.Column.FieldName == "Total")
+        //    {
+        //        e.Value = ViewData["Total"];
+        //    }
+        //};
+        //settings.Settings.ShowFooter = true;
+        //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.None, "Total");
 
         #region Template
         settings.SetEditFormTemplateContent(c =>

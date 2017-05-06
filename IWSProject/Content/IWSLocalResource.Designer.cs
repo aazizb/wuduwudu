@@ -637,6 +637,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide.
+        /// </summary>
+        public static string Hide {
+            get {
+                return ResourceManager.GetString("Hide", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Home.
         /// </summary>
         public static string home {
@@ -741,6 +750,15 @@ namespace IWSProject.Content {
         public static string IsService {
             get {
                 return ResourceManager.GetString("IsService", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Used.
+        /// </summary>
+        public static string IsUsed {
+            get {
+                return ResourceManager.GetString("IsUsed", resourceCulture);
             }
         }
         
@@ -1366,6 +1384,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show.
+        /// </summary>
+        public static string Show {
+            get {
+                return ResourceManager.GetString("Show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Side.
         /// </summary>
         public static string side {
@@ -1434,6 +1461,15 @@ namespace IWSProject.Content {
         public static string street {
             get {
                 return ResourceManager.GetString("street", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub Account Of.
+        /// </summary>
+        public static string SubAccountOf {
+            get {
+                return ResourceManager.GetString("SubAccountOf", resourceCulture);
             }
         }
         
@@ -1623,6 +1659,15 @@ namespace IWSProject.Content {
         public static string vendorinvoice {
             get {
                 return ResourceManager.GetString("vendorinvoice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Customization.
+        /// </summary>
+        public static string WindowCustomization {
+            get {
+                return ResourceManager.GetString("WindowCustomization", resourceCulture);
             }
         }
         

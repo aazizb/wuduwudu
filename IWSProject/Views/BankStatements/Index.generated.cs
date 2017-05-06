@@ -53,25 +53,43 @@ WriteLiteral("<script");
 WriteLiteral(" type=\"text/javascript\"");
 
 WriteLiteral(@">
-        var selectedIDs;
-        function OnBeginCallback(s, e) {
-            e.customArgs[""selectedIDs""] = selectedIDs;
-        }
-        function OnSelectionChanged(s, e) {
-            s.GetSelectedFieldValues(""id;Betrag"", GetSelectedFieldValuesCallback);
-        }
-        function GetSelectedFieldValuesCallback(values) {
-            selectedIDs = values.join(';');
-        }
-        function OnSubmitClick(s, e) {
-            $(""#selectedIDsHF"").val(selectedIDs);
-        }
+    var selectedIDs;
+
+    function onButtonClick() {
+        if (BankStatementsGridView.IsCustomizationWindowVisible())
+            BankStatementsGridView.HideCustomizationWindow();
+        else
+            BankStatementsGridView.ShowCustomizationWindow();
+        UpdateButtonText();
+    }
+    function CustomizationWindowCloseUp(s, e) {
+        UpdateButtonText();
+    }
+    function UpdateButtonText() {
+        var text = BankStatementsGridView.IsCustomizationWindowVisible() ? ""Hide"" : ""Show"";
+        text += "" Customization"";
+        btShowCustomizationWindow.SetText(text);
+    }
+
+    function OnBeginCallback(s, e) {
+        e.customArgs[""selectedIDs""] = selectedIDs;
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues(""id;Betrag"", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = values.join(';');
+    }
+    function OnSubmitClick(s, e) {
+        $(""#selectedIDsHF"").val(selectedIDs);
+    }
+
 </script>
 
 ");
 
             
-            #line 18 "..\..\Views\BankStatements\Index.cshtml"
+            #line 36 "..\..\Views\BankStatements\Index.cshtml"
  using (Html.BeginForm("Index", "BankStatements"))
 {
     
@@ -79,21 +97,22 @@ WriteLiteral(@">
             #line default
             #line hidden
             
-            #line 20 "..\..\Views\BankStatements\Index.cshtml"
+            #line 38 "..\..\Views\BankStatements\Index.cshtml"
 Write(Html.Hidden("selectedIDsHF"));
 
             
             #line default
             #line hidden
             
-            #line 20 "..\..\Views\BankStatements\Index.cshtml"
+            #line 38 "..\..\Views\BankStatements\Index.cshtml"
                                  ;
+
     
             
             #line default
             #line hidden
             
-            #line 21 "..\..\Views\BankStatements\Index.cshtml"
+            #line 40 "..\..\Views\BankStatements\Index.cshtml"
 Write(Html.DevExpress().Button(settings =>
 {
     settings.Name = "btnSubmit";
@@ -107,22 +126,43 @@ Write(Html.DevExpress().Button(settings =>
             #line default
             #line hidden
             
-            #line 28 "..\..\Views\BankStatements\Index.cshtml"
+            #line 47 "..\..\Views\BankStatements\Index.cshtml"
+            
+
+    
+            
+            #line default
+            #line hidden
+            
+            #line 49 "..\..\Views\BankStatements\Index.cshtml"
+Write(Html.DevExpress().Button(settings =>   
+{
+    settings.Name = "btShowCustomizationWindow";
+    settings.UseSubmitBehavior = false;
+    settings.Text = IWSLocalResource.WindowCustomization;
+    settings.ClientSideEvents.Click = "onButtonClick";
+}).GetHtml());
+
+            
+            #line default
+            #line hidden
+            
+            #line 55 "..\..\Views\BankStatements\Index.cshtml"
             
 }
 
             
             #line default
             #line hidden
-WriteLiteral("\r\n");
-
             
-            #line 31 "..\..\Views\BankStatements\Index.cshtml"
+            #line 57 "..\..\Views\BankStatements\Index.cshtml"
 Write(Html.Action("BankStatementsGridViewPartial"));
 
             
             #line default
             #line hidden
+WriteLiteral("\r\n");
+
         }
     }
 }

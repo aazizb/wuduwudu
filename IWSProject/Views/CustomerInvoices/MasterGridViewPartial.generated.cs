@@ -221,6 +221,19 @@ namespace ASP
         });
         settings.Columns.Add(column =>
         {
+            column.FieldName = "oTotal";
+            column.Caption = IWSLocalResource.Total;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "N";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "oCurrency";
+            column.Caption = IWSLocalResource.Currency;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        });
+        settings.Columns.Add(column =>
+        {
             column.FieldName = "text";
             column.Caption = IWSLocalResource.text;
         });
@@ -381,7 +394,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 322 "..\..\Views\CustomerInvoices\MasterGridViewPartial.cshtml"
+            #line 335 "..\..\Views\CustomerInvoices\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

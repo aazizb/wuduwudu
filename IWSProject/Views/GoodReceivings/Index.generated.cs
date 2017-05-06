@@ -144,9 +144,6 @@ WriteLiteral(@"',
             data: { selectedOIDIndex: s.GetValue() },
             success: function (data) {
                 store.SetText(data);
-                var cbxOID = oid.GetValue();
-                alert(cbxOID);
-                $(""#cbxOID"").val(cbxOID);
             },
             error: function (xhr, textStatus, errorThrown) {
                 alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
@@ -156,7 +153,7 @@ WriteLiteral(@"',
             url: '");
 
             
-            #line 65 "..\..\Views\GoodReceivings\Index.cshtml"
+            #line 62 "..\..\Views\GoodReceivings\Index.cshtml"
              Write(Url.Action("Supplier", "GoodReceivings"));
 
             
@@ -180,7 +177,7 @@ WriteLiteral(@"',
 ");
 
             
-            #line 80 "..\..\Views\GoodReceivings\Index.cshtml"
+            #line 77 "..\..\Views\GoodReceivings\Index.cshtml"
  using (Html.BeginForm("MasterGridViewPartialAddNew", "GoodReceivings"))
 {
     
@@ -188,14 +185,14 @@ WriteLiteral(@"',
             #line default
             #line hidden
             
-            #line 82 "..\..\Views\GoodReceivings\Index.cshtml"
+            #line 79 "..\..\Views\GoodReceivings\Index.cshtml"
 Write(Html.Hidden("cbxOID"));
 
             
             #line default
             #line hidden
             
-            #line 82 "..\..\Views\GoodReceivings\Index.cshtml"
+            #line 79 "..\..\Views\GoodReceivings\Index.cshtml"
                           ;
 }
 
@@ -205,7 +202,7 @@ Write(Html.Hidden("cbxOID"));
 WriteLiteral("\r\n");
 
             
-            #line 85 "..\..\Views\GoodReceivings\Index.cshtml"
+            #line 82 "..\..\Views\GoodReceivings\Index.cshtml"
 Write(Html.Partial("MasterGridViewPartial"));
 
             

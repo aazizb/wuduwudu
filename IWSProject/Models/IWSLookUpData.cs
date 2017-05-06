@@ -29,9 +29,11 @@
             {
                 Id = i.id,
                 Name = i.name,
-                CompanyID=i.CompanyID
+                CompanyID=i.CompanyID,
+                IsUsed=i.IsUsed
             })
-            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"] 
+                            && c.IsUsed.Equals(true))
             .OrderBy(o => o.Id);
             return account;
         }
@@ -309,7 +311,7 @@
         public static StatementDetailViewModel GetStatementDetail(int bankStatementID, string area)
         {
 
-            if (area.Equals(IWSLookUp.Area.Sales.ToString()))
+            if (area.Equals(Area.Sales.ToString()))
             {
                 StatementDetailViewModel BS =
                     (from c in IWSEntities.Companies
@@ -338,7 +340,7 @@
                 return BS;
             }
 
-            if (area.Equals(IWSLookUp.Area.Purchasing.ToString()))
+            if (area.Equals(Area.Purchasing.ToString()))
             {
                 StatementDetailViewModel BS =
                 (from c in IWSEntities.Companies

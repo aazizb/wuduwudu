@@ -14,6 +14,9 @@
 
         settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
 
+        settings.SettingsBehavior.EnableCustomizationWindow = true;
+        settings.ClientSideEvents.CustomizationWindowCloseUp= "CustomizationWindowCloseUp";
+
         settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
         settings.SettingsResizing.Visualization = ResizingMode.Postponed;
 
@@ -277,7 +280,7 @@
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -330,10 +333,10 @@
         .Render();
         });
         #endregion
-        //settings.DataBinding = (sender, e) =>
-        //{
-        //    ((MVCxGridView)sender).ForceDataRowType(typeof(BankStatement));
-        //};
+        settings.DataBinding = (sender, e) =>
+        {
+            ((MVCxGridView)sender).ForceDataRowType(typeof(BankStatement));
+        };
     });
     if (ViewData["GenericError"] != null)
     {

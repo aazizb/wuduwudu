@@ -103,6 +103,7 @@ namespace ASP
             e.NewValues["dateofclose"] = DateTime.Now;
             e.NewValues["Currency"] = (string)Session["Currency"];
             e.NewValues["balance"] = 0;
+            e.NewValues["Isused"] = true;
         };
 
 
@@ -143,6 +144,29 @@ namespace ASP
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("name").Caption = IWSLocalResource.name;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ParentId";
+            column.Caption = IWSLocalResource.SubAccountOf;
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetAccounts();
+                combo.Columns.Add("id").Caption = IWSLocalResource.id;
+                combo.Columns.Add("name").Caption = IWSLocalResource.SubAccountOf;
+                combo.TextFormatString = "{0}-{1}";
+            });
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "IsUsed";
+            column.Caption = IWSLocalResource.IsUsed;
+            column.EditorProperties().CheckBox(checkBox =>
+            {
+            });
+        });
         settings.Columns.Add("description").Caption = IWSLocalResource.description;
         settings.Columns.Add("groupid").Caption = IWSLocalResource.groupid;
 
@@ -205,7 +229,7 @@ namespace ASP
                 combo.DataSource = IWSLookUp.GetCurrency();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
                 combo.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                combo.TextFormatString = "{0}";
+                combo.TextFormatString = "{0}-{1}";
             });
         });
 
@@ -242,7 +266,33 @@ namespace ASP
                         s.Width = Unit.Percentage(100);
                     });
                 });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "ParentId";
+                    i.Caption = IWSLocalResource.SubAccountOf;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
+                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.SubAccountOf;
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "IsUsed";
+                    i.Caption = IWSLocalResource.IsUsed;
+                    i.NestedExtension().CheckBox(e =>
+                    {
 
+                    });
+                });
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "modelid";
@@ -321,7 +371,7 @@ namespace ASP
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}";
+                        s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -393,7 +443,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 334 "..\..\Views\Accounts\AccountsGridViewPartial.cshtml"
+            #line 384 "..\..\Views\Accounts\AccountsGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

@@ -32,6 +32,7 @@
                 int ItemID = 0;
                 string Area = null;
                 bool results = false;
+                Decimal amount;
 
                 IList<string> items = new List<string>(
                     selectedItems.Split(new string[] { ";" },
@@ -43,22 +44,26 @@
                     var list = item.Split(new string[] { "," }, StringSplitOptions.None);
 
                     ItemID = Convert.ToInt32(list[0]);
-                    if (Convert.ToDecimal(list[1]) == 0 || list[1] == null)
+
+                    amount = Convert.ToDecimal(list[1]);
+
+                    if (amount == 0 )
                     {
                         ViewData["GenericError"] = IWSLocalResource.GenericError;
                         return RedirectToAction("Index");
                     }
 
-                    if (Convert.ToDecimal(list[1]) >= 0)
+                    if (amount > 0)
                     {
                         Area = IWSLookUp.Area.Sales.ToString();
                     }
-                    if (Convert.ToDecimal(list[1]) <= 0)
+                    if (amount < 0)
                     {
                         Area = IWSLookUp.Area.Purchasing.ToString();
                     }
 
                     results = MakePayment(ItemID, Area);
+
                     if (!results)
                     {
                         ViewData["GenericError"] = IWSLocalResource.GenericError;
@@ -90,7 +95,9 @@
             item.modelid = 1600;
             if (item.Waehrung == null)
                 item.Waehrung = (string)Session["Currency"];
+
             item.CompanyID = (string)Session["CompanyID"];
+
             ViewData["BankStatement"] = item;
             if (ModelState.IsValid)
             {
@@ -108,8 +115,9 @@
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("BankStatementsGridViewPartial", db.BankStatements.Where(c => c.CompanyID == (string)Session["CompanyID"]));
-        }
+            return PartialView("BankStatementsGridViewPartial", 
+                    IWSLookUp.GetBankStatements((string)Session["CompanyID"], false));
+                    }
         [HttpPost, ValidateInput(false)]
         public ActionResult BankStatementsGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] BankStatement item)
         {
@@ -136,7 +144,8 @@
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("BankStatementsGridViewPartial", db.BankStatements.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("BankStatementsGridViewPartial", 
+                    IWSLookUp.GetBankStatements((string)Session["CompanyID"], false));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult BankStatementsGridViewPartialDelete(int id)
@@ -157,7 +166,8 @@
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("BankStatementsGridViewPartial", db.BankStatements.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("BankStatementsGridViewPartial", 
+                    IWSLookUp.GetBankStatements((string)Session["CompanyID"], false)); 
         }
 
         private object RootFolder = "~/Content/Uploads";
@@ -174,7 +184,10 @@
         [HttpPost, ValidateInput(false)]
         public ActionResult UploadToDB(string[] files)
         {
-
+            const string bankStatement = "Auftragskonto;Buchungstag;Valutadatum;" +
+                "Buchungstext;Verwendungszweck;Beguenstigter/Zahlungspflichtiger;" +
+                "Kontonummer;BLZ;Betrag;Waehrung;Info";
+            const string accounts = "AccountId;AccountName";
             //foreach (var item in files)
             //{
             string fullPath = files[0].ToString();
@@ -193,66 +206,113 @@
                 string path = Path.Combine(Server.MapPath(Helper.RootFolder), fileName);
                 string[] Lines = System.IO.File.ReadAllLines(path);
                 string[] Fields;
-
                 string Buchungstag;
                 string Valutadatum;
                 string Betrag;
-
-                Lines = Lines.Skip(1).ToArray();                    //remove headers
-                List<BankStatement> BankStatement = new List<Models.BankStatement>();
-                foreach (var line in Lines)
-                {          
-                    Fields = line.Split(new char[] { ';' });
-                    Buchungstag = Fields[1].Replace("\"", "");
-                    if (Regex.IsMatch(Buchungstag, Pattern))
-                    {
-                        Buchungstag = (Buchungstag.Substring(0, 6) + "20" + Buchungstag.Substring(6, 2)).Replace(".", "/");
-                    }
-                    Valutadatum = Fields[2].Replace("\"", "");
-                    if(Regex.IsMatch(Valutadatum, Pattern))
-                    {
-                        Valutadatum = (Valutadatum.Substring(0, 6) + "20" + Valutadatum.Substring(6, 2)).Replace(".", "/");
-                    }
-                    Betrag = Fields[8].Replace("\"", "");
-                    BankStatement.Add(new BankStatement
-                    {
-                        Auftragskonto = Fields[0].Replace("\"", ""),
-                        Buchungstag = Convert.ToDateTime(DateTime.ParseExact(Buchungstag, "dd/MM/yyyy", CultureInfo.InvariantCulture)),
-                        Valutadatum = Convert.ToDateTime(DateTime.ParseExact(Valutadatum, "dd/MM/yyyy", CultureInfo.InvariantCulture)),
-                        Buchungstext = Fields[3].Replace("\"", ""),
-                        Verwendungszweck = Fields[4].Replace("\"", ""),
-                        BeguenstigterZahlungspflichtiger = Fields[5].Replace("\"", ""),
-                        Kontonummer = Fields[6].Replace("\"", ""),
-                        BLZ = Fields[7].Replace("\"", ""),
-                        Betrag = Convert.ToDecimal(Betrag),
-                        Waehrung = Fields[9].Replace("\"", ""),
-                        Info = Fields[10].Replace("\"", ""),
-                        CompanyID = (string)Session["CompanyID"]
-                    });
-                }
                 int count = 0;
-                foreach (var n in BankStatement)
+                string Headers = Lines.FirstOrDefault().ToString();
+
+                Lines = Lines.Skip(1).ToArray();                    //skip headers
+
+                if (Headers.Equals(bankStatement))
                 {
-                    var u = db.BankStatements.Where(o => o.Auftragskonto.Equals(n.Auftragskonto)
-                                && o.BeguenstigterZahlungspflichtiger.Equals(n.BeguenstigterZahlungspflichtiger)
-                                && o.Betrag.Equals(n.Betrag)
-                                && o.BLZ.Equals(n.BLZ)
-                                && o.Buchungstag.Equals(n.Buchungstag)
-                                && o.Buchungstext.Equals(n.Buchungstext)
-                                && o.Info.Equals(n.Info)
-                                && o.Kontonummer.Equals(n.Kontonummer)
-                                && o.Valutadatum.Equals(n.Valutadatum)
-                                && o.Verwendungszweck.Equals(n.Verwendungszweck)
-                                && o.Waehrung.Equals(n.Waehrung)
-                                && o.CompanyID.Equals(n.CompanyID)).FirstOrDefault();
-                    if (u == null)          // add new record
-                    {
-                        n.modelid = 1600;
-                        n.IsValidated = false;
-                        db.BankStatements.InsertOnSubmit(n);
-                        count += 1;         //and counts inserted record
+
+                    List<BankStatement> BankStatement = new List<BankStatement>();
+                    foreach (var line in Lines)
+                    {          
+                        Fields = line.Split(new char[] { ';' });
+                        Buchungstag = Fields[1].Replace("\"", "");
+                        if (Regex.IsMatch(Buchungstag, Pattern))
+                        {
+                            Buchungstag = (Buchungstag.Substring(0, 6) + "20" + Buchungstag.Substring(6, 2)).Replace(".", "/");
+                        }
+                        Valutadatum = Fields[2].Replace("\"", "");
+                        if(Regex.IsMatch(Valutadatum, Pattern))
+                        {
+                            Valutadatum = (Valutadatum.Substring(0, 6) + "20" + Valutadatum.Substring(6, 2)).Replace(".", "/");
+                        }
+                        Betrag = Fields[8].Replace("\"", "");
+                        BankStatement.Add(new BankStatement
+                        {
+                            Auftragskonto = Fields[0].Replace("\"", ""),
+                            Buchungstag = Convert.ToDateTime(DateTime.ParseExact(Buchungstag, "dd/MM/yyyy", CultureInfo.InvariantCulture)),
+                            Valutadatum = Convert.ToDateTime(DateTime.ParseExact(Valutadatum, "dd/MM/yyyy", CultureInfo.InvariantCulture)),
+                            Buchungstext = Fields[3].Replace("\"", ""),
+                            Verwendungszweck = Fields[4].Replace("\"", ""),
+                            BeguenstigterZahlungspflichtiger = Fields[5].Replace("\"", ""),
+                            Kontonummer = Fields[6].Replace("\"", ""),
+                            BLZ = Fields[7].Replace("\"", ""),
+                            Betrag = Convert.ToDecimal(Betrag),
+                            Waehrung = Fields[9].Replace("\"", ""),
+                            Info = Fields[10].Replace("\"", ""),
+                            CompanyID = (string)Session["CompanyID"]
+                        });
                     }
+
+                    foreach (var n in BankStatement)
+                    {
+                        var u = db.BankStatements.Where(o => o.Auftragskonto.Equals(n.Auftragskonto)
+                                    && o.BeguenstigterZahlungspflichtiger.Equals(n.BeguenstigterZahlungspflichtiger)
+                                    && o.Betrag.Equals(n.Betrag)
+                                    && o.BLZ.Equals(n.BLZ)
+                                    && o.Buchungstag.Equals(n.Buchungstag)
+                                    && o.Buchungstext.Equals(n.Buchungstext)
+                                    && o.Info.Equals(n.Info)
+                                    && o.Kontonummer.Equals(n.Kontonummer)
+                                    && o.Valutadatum.Equals(n.Valutadatum)
+                                    && o.Verwendungszweck.Equals(n.Verwendungszweck)
+                                    && o.Waehrung.Equals(n.Waehrung)
+                                    && o.CompanyID.Equals(n.CompanyID)).FirstOrDefault();
+                        if (u == null)          // add new record
+                        {
+                            n.modelid = 1600;
+                            n.IsValidated = false;
+                            db.BankStatements.InsertOnSubmit(n);
+                            count += 1;         //and counts inserted record
+                        }
+                    }
+
                 }
+
+                if (Headers.Equals(accounts))
+                {
+                    
+                    List<Account> Account = new List<Account>();
+                    foreach (var line in Lines)
+                    {
+                        Fields = line.Split(new char[] { ';' });
+
+                        Account.Add(new Account
+                        {
+                            id = Fields[0],
+                            name = Fields[1],
+                            modelid = 9,
+                            description = string.Empty,
+                            groupid = "0000",
+                            dateofopen = DateTime.Now,
+                            dateofclose = DateTime.Now, 
+                            balance=0,
+                            Currency=string.Empty,
+                            CompanyID = (string)Session["CompanyID"],
+                            ParentId=string.Empty,
+                            IsUsed = true
+                        });
+                        
+                    }
+
+                    foreach (var n in Account)
+                    {
+                        var u = db.Accounts.Where(o => o.id.Equals(n.id)
+                                   && o.CompanyID.Equals(n.CompanyID)).FirstOrDefault();
+                        if (u == null)
+                        {
+                            db.Accounts.InsertOnSubmit(n);
+                            count += 1;
+                        }
+                    }
+
+                }
+
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
                 if (count > 0)
                 {
@@ -292,7 +352,7 @@
 
             try
             {
-                var query =
+                var bankStatement =
                     (from b in db.BankStatements
                      where
                         b.BeguenstigterZahlungspflichtiger.Length > 0 &&
@@ -305,9 +365,9 @@
                          IsCustomer = Math.Sign((int)b.Betrag) <0 ? false : true
                      }).Distinct();
 
-                    foreach (var r in query)
+                    foreach (var r in bankStatement)
                     {
-                    if (r.IsCustomer.Equals(true))
+                    if (r.IsCustomer.Equals(true)  )
                     {
                         var u = db.Customers.FirstOrDefault(o => o.IBAN.Equals(r.IBAN) 
                                                         && o.CompanyID.Equals(companyID));

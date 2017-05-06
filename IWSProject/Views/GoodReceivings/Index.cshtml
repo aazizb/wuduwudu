@@ -53,9 +53,6 @@
             data: { selectedOIDIndex: s.GetValue() },
             success: function (data) {
                 store.SetText(data);
-                var cbxOID = oid.GetValue();
-                alert(cbxOID);
-                $("#cbxOID").val(cbxOID);
             },
             error: function (xhr, textStatus, errorThrown) {
                 alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);

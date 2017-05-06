@@ -23,16 +23,15 @@ namespace IWSProject.Controllers
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] GoodReceiving item)
         {
-
-            var model = db.GoodReceivings;
-            item.IsValidated = false;
-            item.modelid = 104;
-            item.CompanyId = (string)Session["CompanyID"];
-            item.oid = item.oid ?? 0;
-            int itemOID = (int)item.oid;
-            ViewData["item"] = item;
             if (ModelState.IsValid)
             {
+                var model = db.GoodReceivings;
+                item.IsValidated = false;
+                item.modelid = 104;
+                item.CompanyId = (string)Session["CompanyID"];
+                item.oid = item.oid ?? 0;
+                int itemOID = (int)item.oid;
+                ViewData["item"] = item;
                 bool result = false;
                 try
                 {
@@ -233,12 +232,11 @@ namespace IWSProject.Controllers
             {
                 try
                 {
-                    var items = IWSLookUp.GetNewLineGoodReceiving(itemID,OID);
+                    var items = IWSLookUp.GetNewLineGoodReceiving(itemID, OID);
                     foreach (var item in items)
                     {
                         db.LineGoodReceivings.InsertOnSubmit((LineGoodReceiving)item);
                     }
-                    
                     results = true;
                 }
                 catch (Exception e)

@@ -221,6 +221,24 @@ WriteLiteral("\r\n");
                 d.AllowMouseWheel = true;
             });
         });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "oTotal";
+            column.Caption = IWSLocalResource.Total;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "N";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "oCurrency";
+            column.Caption = IWSLocalResource.Currency;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "text";
+            column.Caption = IWSLocalResource.text;
+        });
         #region Template
         settings.SetEditFormTemplateContent(c =>
         {
@@ -348,7 +366,7 @@ WriteLiteral("\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 288 "..\..\Views\CustomerOrders\MasterGridViewPartial.cshtml"
+            #line 306 "..\..\Views\CustomerOrders\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

@@ -642,4 +642,19 @@
   <data name="BLZ" xml:space="preserve">
     <value>Bank ID de-DE</value>
   </data>
+  <data name="WindowCustomization" xml:space="preserve">
+    <value>Customization de-DE</value>
+  </data>
+  <data name="Hide" xml:space="preserve">
+    <value>Hide de-DE</value>
+  </data>
+  <data name="Show" xml:space="preserve">
+    <value>Show de-DE</value>
+  </data>
+  <data name="IsUsed" xml:space="preserve">
+    <value>Is Used de-De</value>
+  </data>
+  <data name="SubAccountOf" xml:space="preserve">
+    <value>Sub Account Of</value>
+  </data>
 </root>
