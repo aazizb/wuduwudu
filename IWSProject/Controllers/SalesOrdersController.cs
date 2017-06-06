@@ -209,7 +209,7 @@ namespace IWSProject.Controllers
         }
         public ActionResult Text(string selectedItemIndex)
         {
-            return Json(IWSLookUp.GetText(selectedItemIndex));
+            return Json(IWSLookUp.GetLineText(selectedItemIndex));
         }
 
         #endregion

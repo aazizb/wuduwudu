@@ -211,13 +211,13 @@
     <value>Cost Center es-ES</value>
   </data>
   <data name="PurchaseOrder" xml:space="preserve">
-    <value>Purchase Order es-ES</value>
+    <value>Orden de compra</value>
   </data>
   <data name="lineprchaseorder" xml:space="preserve">
     <value>Detalle Nota de Pedido</value>
   </data>
   <data name="accountid" xml:space="preserve">
-    <value>Account ID es-ES</value>
+    <value>Código</value>
   </data>
   <data name="city" xml:space="preserve">
     <value>Ciudad</value>
@@ -307,7 +307,7 @@
     <value>Payment Clearing Account es-ES</value>
   </data>
   <data name="periode" xml:space="preserve">
-    <value>Periode es-ES</value>
+    <value>Período</value>
   </data>
   <data name="purchasingclearingaccountid" xml:space="preserve">
     <value>Purchasing Clearing Account es-ES</value>
@@ -319,10 +319,10 @@
     <value>Settlement Clearing Account es-ES</value>
   </data>
   <data name="taxcode" xml:space="preserve">
-    <value>Tax Code es-ES</value>
+    <value>Código Tributario</value>
   </data>
   <data name="vatcode" xml:space="preserve">
-    <value>VAT Code es-ES</value>
+    <value>Código IVA</value>
   </data>
   <data name="company" xml:space="preserve">
     <value>Empresa</value>
@@ -349,7 +349,7 @@
     <value>Gestión de roles</value>
   </data>
   <data name="usersmanagement" xml:space="preserve">
-    <value>Users Management es-ES</value>
+    <value>Gestión de Usuarios</value>
   </data>
   <data name="masterfiles" xml:space="preserve">
     <value>Master Files es-ES</value>
@@ -385,7 +385,7 @@
     <value>Gestión de usuarios</value>
   </data>
   <data name="product" xml:space="preserve">
-    <value>Product</value>
+    <value>Producto</value>
   </data>
   <data name="RoleManagement" xml:space="preserve">
     <value>Gestión de roles</value>
@@ -457,7 +457,7 @@
     <value>Validado</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
-    <value>Saldo de las cuentas</value>
+    <value>Saldo Cuentas</value>
   </data>
   <data name="AveragePrice" xml:space="preserve">
     <value>Precio Promedio</value>
@@ -469,10 +469,10 @@
     <value>Account Balance es-ES</value>
   </data>
   <data name="TotHVAT" xml:space="preserve">
-    <value>Total Without Taxes es-ES</value>
+    <value>Total sin IVA</value>
   </data>
   <data name="TotVAT" xml:space="preserve">
-    <value>Total VAT es-ES</value>
+    <value>Total IVA</value>
   </data>
   <data name="PartNumber" xml:space="preserve">
     <value>Nº Pieza</value>
@@ -484,7 +484,7 @@
     <value>Count es-ES</value>
   </data>
   <data name="Total" xml:space="preserve">
-    <value>Total es-ES</value>
+    <value>Total</value>
   </data>
   <data name="journal" xml:space="preserve">
     <value>Diario</value>
@@ -499,10 +499,10 @@
     <value>Settlement es-ES</value>
   </data>
   <data name="SalesInvoice" xml:space="preserve">
-    <value>Sales Invoice es-ES</value>
+    <value>Factura de venta</value>
   </data>
   <data name="SalesOrder" xml:space="preserve">
-    <value>Sales Order es-ES</value>
+    <value>Orden de venta</value>
   </data>
   <data name="BillOfdelivery" xml:space="preserve">
     <value>Bill of Delivery es-ES</value>
@@ -547,10 +547,10 @@
     <value>Ligne Comptes Généraux es-ES</value>
   </data>
   <data name="PeriodFrom" xml:space="preserve">
-    <value>Período desde:</value>
+    <value>Fecha Inicio</value>
   </data>
   <data name="PeriodTo" xml:space="preserve">
-    <value>Período hasta:</value>
+    <value>Fecha Fin</value>
   </data>
   <data name="Consultation" xml:space="preserve">
     <value>Consulta</value>
@@ -662,5 +662,41 @@
   </data>
   <data name="SubAccountOf" xml:space="preserve">
     <value>Subcuenta de</value>
+  </data>
+  <data name="gross" xml:space="preserve">
+    <value>Bruto</value>
+  </data>
+  <data name="net" xml:space="preserve">
+    <value>Neto</value>
+  </data>
+  <data name="CIF" xml:space="preserve">
+    <value>CIF</value>
+  </data>
+  <data name="page" xml:space="preserve">
+    <value>Página</value>
+  </data>
+  <data name="InvoiceDate" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="subtotals" xml:space="preserve">
+    <value>Subtotales</value>
+  </data>
+  <data name="PurchaseOrderDate" xml:space="preserve">
+    <value>Fecha del pedido</value>
+  </data>
+  <data name="ShipDate" xml:space="preserve">
+    <value>Fecha estimada de envío</value>
+  </data>
+  <data name="BillTo" xml:space="preserve">
+    <value>Cobrar a:</value>
+  </data>
+  <data name="ShipTo" xml:space="preserve">
+    <value>Enviar a:</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>Fecha</value>
+  </data>
+  <data name="totalMovement" xml:space="preserve">
+    <value>Total Movimiento</value>
   </data>
 </root>

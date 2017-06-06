@@ -117,23 +117,48 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="dsBillOfDelivery.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="purchaseOrderDS.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
   <data name="customSqlQuery1.Sql" xml:space="preserve">
-    <value>SELECT        BillOfDelivery.id, BillOfDelivery.ItemDate, Store.id + '-' + Store.name AS StoreName, Customer.id + '-' + Customer.name AS CustomerName, Customer.street, Customer.zip +'-'+ Customer.city AS Town, Customer.state
-FROM            BillOfDelivery AS BillOfDelivery INNER JOIN
-                         Store AS Store ON Store.id = BillOfDelivery.store INNER JOIN
-                         Customer AS Customer ON Customer.id = BillOfDelivery.account</value>
+    <value>select "Company"."zip" as "CompanyZip",
+       "Company"."vatcode" as "CompanyVatCode",
+       "Company"."taxcode" as "CompanyTaxCode",
+       "Company"."street" as "CompanyStreet",
+       "Company"."state" as "CompanyState",
+       "Company"."city" as "CompanyCity",
+       "Company"."name" as "CompanyName",
+       "Company"."IBAN" as "CompanyIBAN",
+       "Company"."CIF" as "CompanyCIF",
+       "Company"."bankaccountid" as "CompanyBank",
+       "PurchaseOrder"."oCurrency" as "PurchaseOrderCurrency",
+       "PurchaseOrder"."ItemDate" as "PurchaseOrderDate",
+       "PurchaseOrder"."id" as "PurchaseOrderId",
+       "PurchaseOrder"."HeaderText" as "PurchaseOrderText",
+       "PurchaseOrder"."oTotal" as "Total",
+       "Store"."city" as "StoreCity", "Store"."name" as "StoreName",
+       "Store"."state" as "StoreState",
+       "Store"."street" as "StoreStreet", "Store"."zip" as "StoreZip",
+       "Supplier"."Bank" as "SupplierBank",
+       "Supplier"."BIC" as "SupplierBIC",
+       "Supplier"."city" as "SupplierCity",
+       "Supplier"."Email" as "SupplierEmail",
+       "Supplier"."IBAN" as "SupplierIBAN",
+       "Supplier"."name" as "SupplierName",
+       "Supplier"."Phone" as "SupplierPhone",
+       "Supplier"."state" as "SupplierState",
+       "Supplier"."street" as "SupplierStreet",
+       "Supplier"."zip" as "SupplierZip"
+  from ((("dbo"."PurchaseOrder" "PurchaseOrder"
+  inner join "dbo"."Company" "Company"
+       on ("Company"."id" = "PurchaseOrder"."CompanyId"))
+  inner join "dbo"."Store" "Store"
+       on ("Store"."id" = "PurchaseOrder"."store"))
+  inner join "dbo"."Supplier" "Supplier"
+       on ("Supplier"."id" = "PurchaseOrder"."account"))
+</value>
   </data>
-  <data name="customSqlQuery2.Sql" xml:space="preserve">
-    <value>SELECT        Article.id+ '-' + Article.name AS Article, LineBillOfDelivery.id, LineBillOfDelivery.transid, LineBillOfDelivery.unit, LineBillOfDelivery.price, LineBillOfDelivery.quantity, LineBillOfDelivery.VatCode, Vat.PVat, 
-                         LineBillOfDelivery.duedate,LineBillOfDelivery.price * LineBillOfDelivery.quantity *(1+Vat.PVat) AS Total
-FROM            Article AS Article INNER JOIN
-                         LineBillOfDelivery ON Article.id = LineBillOfDelivery.item INNER JOIN
-                         Vat ON Article.VatCode = Vat.id</value>
-  </data>
-  <data name="dsBillOfDelivery.ResultSchemaSerializable" xml:space="preserve">
-    <value>PERhdGFTZXQgTmFtZT0iZHNCaWxsT2ZEZWxpdmVyeSI+PFZpZXcgTmFtZT0iQmlsbE9mRGVsaXZlcnkiPjxGaWVsZCBOYW1lPSJpZCIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9Ikl0ZW1EYXRlIiBUeXBlPSJEYXRlVGltZSIgLz48RmllbGQgTmFtZT0iU3RvcmVOYW1lIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkN1c3RvbWVyTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJzdHJlZXQiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iVG93biIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJzdGF0ZSIgVHlwZT0iU3RyaW5nIiAvPjwvVmlldz48VmlldyBOYW1lPSJMaW5lQmlsbE9mRGVsaXZlcnkiPjxGaWVsZCBOYW1lPSJBcnRpY2xlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9ImlkIiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0idHJhbnNpZCIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9InVuaXQiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0icHJpY2UiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9InF1YW50aXR5IiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJWYXRDb2RlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlBWYXQiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9ImR1ZWRhdGUiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJUb3RhbCIgVHlwZT0iRGVjaW1hbCIgLz48L1ZpZXc+PFJlbGF0aW9uIE1hc3Rlcj0iQmlsbE9mRGVsaXZlcnkiIERldGFpbD0iTGluZUJpbGxPZkRlbGl2ZXJ5Ij48S2V5Q29sdW1uIE1hc3Rlcj0iaWQiIERldGFpbD0idHJhbnNpZCIgLz48L1JlbGF0aW9uPjwvRGF0YVNldD4=</value>
+  <data name="purchaseOrderDS.ResultSchemaSerializable" xml:space="preserve">
+    <value>PERhdGFTZXQgTmFtZT0icHVyY2hhc2VPcmRlckRTIj48VmlldyBOYW1lPSJEZXRhaWxzIj48RmllbGQgTmFtZT0idHJhbnNpZCIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9Im5hbWUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0idW5pdCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJwcmljZSIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0icXVhbnRpdHkiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9IkN1cnJlbmN5IiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9InRleHQiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iZHVlZGF0ZSIgVHlwZT0iRGF0ZVRpbWUiIC8+PC9WaWV3PjxWaWV3IE5hbWU9Ik1hc3RlciI+PEZpZWxkIE5hbWU9IkNvbXBhbnlaaXAiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ29tcGFueVZhdENvZGUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ29tcGFueVRheENvZGUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ29tcGFueVN0cmVldCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJDb21wYW55U3RhdGUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ29tcGFueUNpdHkiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ29tcGFueU5hbWUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ29tcGFueUlCQU4iIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ29tcGFueUNJRiIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJDb21wYW55QmFuayIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJQdXJjaGFzZU9yZGVyQ3VycmVuY3kiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iUHVyY2hhc2VPcmRlckRhdGUiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJQdXJjaGFzZU9yZGVySWQiIFR5cGU9IkludDMyIiAvPjxGaWVsZCBOYW1lPSJQdXJjaGFzZU9yZGVyVGV4dCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJUb3RhbCIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iU3RvcmVDaXR5IiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlN0b3JlTmFtZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTdG9yZVN0YXRlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlN0b3JlU3RyZWV0IiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlN0b3JlWmlwIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlN1cHBsaWVyQmFuayIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTdXBwbGllckJJQyIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTdXBwbGllckNpdHkiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iU3VwcGxpZXJFbWFpbCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTdXBwbGllcklCQU4iIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iU3VwcGxpZXJOYW1lIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlN1cHBsaWVyUGhvbmUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iU3VwcGxpZXJTdGF0ZSIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTdXBwbGllclN0cmVldCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJTdXBwbGllclppcCIgVHlwZT0iU3RyaW5nIiAvPjwvVmlldz48UmVsYXRpb24gTWFzdGVyPSJNYXN0ZXIiIERldGFpbD0iRGV0YWlscyI+PEtleUNvbHVtbiBNYXN0ZXI9IlB1cmNoYXNlT3JkZXJJZCIgRGV0YWlsPSJ0cmFuc2lkIiAvPjwvUmVsYXRpb24+PC9EYXRhU2V0Pg==</value>
   </data>
 </root>

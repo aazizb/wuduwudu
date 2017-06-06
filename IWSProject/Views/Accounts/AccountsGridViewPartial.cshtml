@@ -112,7 +112,7 @@
             });
         });
         settings.Columns.Add("description").Caption = IWSLocalResource.description;
-        settings.Columns.Add("groupid").Caption = IWSLocalResource.groupid;
+        //settings.Columns.Add("groupid").Caption = IWSLocalResource.groupid;
 
         settings.Columns.Add(column =>
         {
@@ -164,6 +164,7 @@
         settings.Columns.Add(column =>
         {
             column.FieldName = "Currency";
+            column.Visible = false;
             column.Caption = IWSLocalResource.Currency;
             column.EditorProperties().ComboBox(combo =>
             {
@@ -173,7 +174,7 @@
                 combo.DataSource = IWSLookUp.GetCurrency();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
                 combo.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                combo.TextFormatString = "{0}-{1}";
+                combo.TextFormatString = "{0}";
             });
         });
 
@@ -253,6 +254,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "groupid";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.groupid;
                     i.NestedExtension().TextBox(s =>
                     {
@@ -306,6 +308,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "Currency";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.Currency;
                     i.NestedExtension().ComboBox(s =>
                     {
@@ -315,7 +318,7 @@
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);

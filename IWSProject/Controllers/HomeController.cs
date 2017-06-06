@@ -1,3 +1,4 @@
+using DevExpress.Web.Mvc;
 using System.Web.Mvc;
 namespace IWSProject.Controllers
 {
@@ -9,14 +10,13 @@ namespace IWSProject.Controllers
             return View();
         }
         [ValidateInput(false)]
-        public ActionResult SalesInvoice()
+        public ActionResult AccountBalance()
         {
-            return View();
-        }
-        [ValidateInput(false)]
-        public ActionResult BillOfDelivery()
-        {
-            return View();
+            AccountBalance accountBalance = new AccountBalance();
+ 
+            accountBalance.Parameters["CompanyID"].Value = (string)Session["CompanyID"];
+
+            return View(accountBalance);
         }
         [ValidateInput(false)]
         public ActionResult PeriodicBalance()
@@ -24,7 +24,12 @@ namespace IWSProject.Controllers
             return View();
         }
         [ValidateInput(false)]
-        public ActionResult About(string id)
+        public ActionResult SalesInvoiceXS()
+        {
+            return View();
+        }
+        [ValidateInput(false)]
+        public ActionResult PurchaseOrderXS()
         {
             return View();
         }

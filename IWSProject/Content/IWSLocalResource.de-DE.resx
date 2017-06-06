@@ -657,4 +657,40 @@
   <data name="SubAccountOf" xml:space="preserve">
     <value>Sub Account Of</value>
   </data>
+  <data name="gross" xml:space="preserve">
+    <value>Brutto</value>
+  </data>
+  <data name="net" xml:space="preserve">
+    <value>Netto</value>
+  </data>
+  <data name="CIF" xml:space="preserve">
+    <value>CIF</value>
+  </data>
+  <data name="page" xml:space="preserve">
+    <value>Seite</value>
+  </data>
+  <data name="InvoiceDate" xml:space="preserve">
+    <value>Rechnungsdatum</value>
+  </data>
+  <data name="subtotals" xml:space="preserve">
+    <value>Subtotals de-DE</value>
+  </data>
+  <data name="PurchaseOrderDate" xml:space="preserve">
+    <value>Purchase Order Date de-DE</value>
+  </data>
+  <data name="ShipDate" xml:space="preserve">
+    <value>Expected Ship Date de-DE</value>
+  </data>
+  <data name="BillTo" xml:space="preserve">
+    <value>Bill To:</value>
+  </data>
+  <data name="ShipTo" xml:space="preserve">
+    <value>Ship To:</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="totalMovement" xml:space="preserve">
+    <value>Gesamtbewegung</value>
+  </data>
 </root>

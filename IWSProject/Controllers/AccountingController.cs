@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
 
-
 namespace IWSProject.Controllers
 {
     [Authorize]
@@ -99,11 +98,9 @@ namespace IWSProject.Controllers
             {
                 return MakeVendorInvoice(ItemID);
             }
-            if (ItemType.Equals(IWSLookUp.DocsType.CustomerInvoice.ToString()))
+            if (ItemType.Equals(IWSLookUp.DocsType.SalesInvoice.ToString()))
             {
-                results = MakeSettlement(ItemID);
-                if (results)
-                    return ValidateCustmerInvoice(ItemID);
+                return MakeCustomerInvoice(ItemID);
             }
             if (ItemType.Equals(IWSLookUp.DocsType.VendorInvoice.ToString()))
             {
@@ -111,10 +108,12 @@ namespace IWSProject.Controllers
                 if(results)
                     return ValidateVendorInvoice(ItemID);
             }
-            if (ItemType.Equals(IWSLookUp.DocsType.SalesInvoice.ToString()))
+            if (ItemType.Equals(IWSLookUp.DocsType.CustomerInvoice.ToString()))
             {
-                return MakeCustomerInvoice(ItemID);
-             }
+                results = MakeSettlement(ItemID);
+                if (results)
+                    return ValidateCustmerInvoice(ItemID);
+            }
             if (ItemType.Equals(IWSLookUp.DocsType.Payment.ToString()))
             {
                 return ValidatePayment(ItemID);
@@ -493,13 +492,13 @@ namespace IWSProject.Controllers
                 (from line in db.LineInventoryInvoices
                  group new { line, line.Article.Vat, line.InventoryInvoice } by new
                  {
-                     line.VATCode,
+                     line.VatCode,
                      line.Currency,
                      line.InventoryInvoice.id,
                      line.InventoryInvoice.oid,
                      line.InventoryInvoice.store,
                      line.InventoryInvoice.account,
-                     line.InventoryInvoice.text,
+                     line.InventoryInvoice.HeaderText,
                      line.InventoryInvoice.ItemDate,
                      line.InventoryInvoice.CompanyId,
                      line.Article.Vat.inputvataccountid,
@@ -517,9 +516,9 @@ namespace IWSProject.Controllers
                      StoreID = g.Key.store,
                      SupplierID = g.Key.account,
                      ItemDate = g.Key.ItemDate,
-                     Text = g.Key.text,
+                     Text = g.Key.HeaderText,
                      CompanyID = g.Key.CompanyId,
-                     VatCode = g.Key.VATCode,
+                     VatCode = g.Key.VatCode,
                      VatAccountID = g.Key.inputvataccountid,
                      Periode = g.Key.xYear + g.Key.xMonth,
                      DebitAccountID = g.Key.purchasingclearingaccountid,
@@ -584,10 +583,11 @@ namespace IWSProject.Controllers
                            line.GoodReceiving.ItemDate,
                            line.GoodReceiving.Company.purchasingclearingaccountid,
                            line.Article.Vat.stockaccountid,
-                           xMonth = (Convert.ToString((int?)line.GoodReceiving.ItemDate.Month)).Length == 1 ?
-                                                   '0' + Convert.ToString((int?)line.GoodReceiving.ItemDate.Month) :
-                                                   Convert.ToString((int?)line.GoodReceiving.ItemDate.Month),
-                           xYear = Convert.ToString((int?)line.GoodReceiving.ItemDate.Year)
+                           line.GoodReceiving.oPeriode,
+                           //xMonth = (Convert.ToString((int?)line.GoodReceiving.ItemDate.Month)).Length == 1 ?
+                           //                        '0' + Convert.ToString((int?)line.GoodReceiving.ItemDate.Month) :
+                           //                        Convert.ToString((int?)line.GoodReceiving.ItemDate.Month),
+                           //xYear = Convert.ToString((int?)line.GoodReceiving.ItemDate.Year)
                        } into g
                        where g.Key.id == ItemID
                        select new JournalViewModel
@@ -598,7 +598,7 @@ namespace IWSProject.Controllers
                            CustSupplierID=g.Key.account,
                            StoreID=g.Key.store,
                            TransDate=g.Key.ItemDate,
-                           Periode = g.Key.xYear + g.Key.xMonth,
+                           Periode = g.Key.oPeriode, // g.Key.xYear + g.Key.xMonth,
                            Account = g.Key.stockaccountid,
                            OAccount=g.Key.purchasingclearingaccountid,
                            Amount = g.Sum(p => p.line.quantity * p.line.price),
@@ -611,16 +611,19 @@ namespace IWSProject.Controllers
                 {
                     bool results;
                     string accountID = string.Empty;
-                    var periode = docs.Select(p => p.Periode).FirstOrDefault().ToString();
+                    string periode = string.Empty;
+                    //var periode = docs.Select(p => p.Periode).FirstOrDefault().ToString();
                     decimal tvaAmount = 0;
                     string currency = string.Empty;
                     foreach (var doc in docs)
                     {
                         accountID = doc.Account;
 
+                        periode = doc.Periode;
+
                         tvaAmount = Math.Round(doc.Amount, 2);
 
-                        currency = (doc.Currency == null) ? (string)Session["Currency"] : doc.Currency;
+                        currency = doc.Currency ?? (string)Session["Currency"];
 
                         results= UpdatePeriodicAccountBalance(periode, accountID, tvaAmount, currency, true);
 
@@ -818,10 +821,11 @@ namespace IWSProject.Controllers
                      line.amount,
                      line.Currency,
                      line.duedate,
-                     xMonth = (Convert.ToString((int?)line.VendorInvoice.ItemDate.Month)).Length == 1 ?
-                                             '0' + Convert.ToString((int?)line.VendorInvoice.ItemDate.Month) :
-                                             Convert.ToString((int?)line.VendorInvoice.ItemDate.Month),
-                     xYear = Convert.ToString((int?)line.VendorInvoice.ItemDate.Year)
+                     line.VendorInvoice.oPeriode,
+                     //xMonth = (Convert.ToString((int?)line.VendorInvoice.ItemDate.Month)).Length == 1 ?
+                     //                        '0' + Convert.ToString((int?)line.VendorInvoice.ItemDate.Month) :
+                     //                        Convert.ToString((int?)line.VendorInvoice.ItemDate.Month),
+                     //xYear = Convert.ToString((int?)line.VendorInvoice.ItemDate.Year)
                  } into g
                  where g.Key.id == vendorInvoiceID
                  select new
@@ -829,7 +833,7 @@ namespace IWSProject.Controllers
                      Description=g.Key.text,
                      AccountId=g.Key.account,
                      OAccountId=g.Key.oaccount,
-                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Periode = g.Key.oPeriode,// g.Key.xYear + g.Key.xMonth,
                      Amount=g.Key.amount,
                      Currency=g.Key.Currency
                  }).ToList();
@@ -879,10 +883,11 @@ namespace IWSProject.Controllers
                      line.amount,
                      line.Currency,
                      line.duedate,
-                     xMonth = (Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month)).Length == 1 ?
-                                             '0' + Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month) :
-                                             Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month),
-                     xYear = Convert.ToString((int?)line.CustomerInvoice.ItemDate.Year)
+                     line.CustomerInvoice.oPeriode,
+                     //xMonth = (Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month)).Length == 1 ?
+                     //                        '0' + Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month) :
+                     //                        Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month),
+                     //xYear = Convert.ToString((int?)line.CustomerInvoice.ItemDate.Year)
                  } into g
                  where g.Key.id == customernvoiceID
                  select new
@@ -890,7 +895,7 @@ namespace IWSProject.Controllers
                      Description = g.Key.text,
                      AccountId = g.Key.oaccount,
                      OAccountId = g.Key.account,
-                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Periode = g.Key.oPeriode,// g.Key.xYear + g.Key.xMonth,
                      Amount = g.Key.amount,
                      Currency= g.Key.Currency
                  }).ToList();
@@ -942,10 +947,11 @@ namespace IWSProject.Controllers
                      line.amount,
                      line.Currency,
                      line.duedate,
-                     xMonth = (Convert.ToString((int?)line.Payment.ItemDate.Month)).Length == 1 ?
-                                             '0' + Convert.ToString((int?)line.Payment.ItemDate.Month) :
-                                             Convert.ToString((int?)line.Payment.ItemDate.Month),
-                     xYear = Convert.ToString((int?)line.Payment.ItemDate.Year)
+                     line.Payment.oPeriode,
+                     //xMonth = (Convert.ToString((int?)line.Payment.ItemDate.Month)).Length == 1 ?
+                     //                        '0' + Convert.ToString((int?)line.Payment.ItemDate.Month) :
+                     //                        Convert.ToString((int?)line.Payment.ItemDate.Month),
+                     //xYear = Convert.ToString((int?)line.Payment.ItemDate.Year)
                  } into g
                  where g.Key.id == paymentID
                  select new
@@ -954,7 +960,7 @@ namespace IWSProject.Controllers
                      BankAccountID=g.Key.bankaccountid,
                      AccountId = g.Key.account,
                      OAccountId = g.Key.oaccount,
-                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Periode = g.Key.oPeriode,// g.Key.xYear + g.Key.xMonth,
                      Amount = g.Key.amount,
                      Currency=g.Key.Currency
                  }).ToList();
@@ -992,7 +998,7 @@ namespace IWSProject.Controllers
                               line.Payment.modelid,
                               line.Payment.store,
                               SupplierID = line.Payment.account,
-                              line.Payment.text,
+                              line.Payment.HeaderText,
                               line.Payment.ItemDate,
                               line.Payment.CompanyId,
                               line.account,
@@ -1000,10 +1006,11 @@ namespace IWSProject.Controllers
                               line.amount,
                               line.Currency,
                               line.Payment.Company.bankaccountid,
-                              xMonth = (Convert.ToString((int?)line.Payment.ItemDate.Month)).Length == 1 ?
-                                                      '0' + Convert.ToString((int?)line.Payment.ItemDate.Month) :
-                                                      Convert.ToString((int?)line.Payment.ItemDate.Month),
-                              xYear = Convert.ToString((int?)line.Payment.ItemDate.Year)
+                              line.Payment.oPeriode,
+                              //xMonth = (Convert.ToString((int?)line.Payment.ItemDate.Month)).Length == 1 ?
+                              //                        '0' + Convert.ToString((int?)line.Payment.ItemDate.Month) :
+                              //                        Convert.ToString((int?)line.Payment.ItemDate.Month),
+                              //xYear = Convert.ToString((int?)line.Payment.ItemDate.Year)
                           } into g
                           where g.Key.id == paymentID
                           select new
@@ -1015,7 +1022,7 @@ namespace IWSProject.Controllers
                               CustSupplierID = g.Key.SupplierID,
                               StoreID = g.Key.store,
                               TransDate = g.Key.ItemDate,
-                              Periode = g.Key.xYear + g.Key.xMonth,
+                              Periode = g.Key.oPeriode,// g.Key.xYear + g.Key.xMonth,
                               Account = g.Key.account,
                               OAccount = g.Key.oaccount,
                               Amount = g.Key.amount,
@@ -1080,10 +1087,11 @@ namespace IWSProject.Controllers
                      line.amount,
                      line.Currency,
                      line.duedate,
-                     xMonth = (Convert.ToString((int?)line.Settlement.ItemDate.Month)).Length == 1 ?
-                                             '0' + Convert.ToString((int?)line.Settlement.ItemDate.Month) :
-                                             Convert.ToString((int?)line.Settlement.ItemDate.Month),
-                     xYear = Convert.ToString((int?)line.Settlement.ItemDate.Year)
+                     line.Settlement.oPeriode,
+                     //xMonth = (Convert.ToString((int?)line.Settlement.ItemDate.Month)).Length == 1 ?
+                     //                        '0' + Convert.ToString((int?)line.Settlement.ItemDate.Month) :
+                     //                        Convert.ToString((int?)line.Settlement.ItemDate.Month),
+                     //xYear = Convert.ToString((int?)line.Settlement.ItemDate.Year)
                  } into g
                  where g.Key.id == settlementID
                  select new
@@ -1092,7 +1100,7 @@ namespace IWSProject.Controllers
                      BankAccountID = g.Key.bankaccountid,
                      AccountId = g.Key.account,
                      OAccountId = g.Key.oaccount,
-                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Periode = g.Key.oPeriode,// g.Key.xYear + g.Key.xMonth,
                      Amount = g.Key.amount,
                      Currency=g.Key.Currency
                  }).ToList();
@@ -1127,7 +1135,7 @@ namespace IWSProject.Controllers
                               line.Settlement.modelid,
                               line.Settlement.store,
                               SupplierID = line.Settlement.account,
-                              line.Settlement.text,
+                              line.Settlement.HeaderText,
                               line.Settlement.ItemDate,
                               line.Settlement.CompanyId,
                               line.account,
@@ -1135,10 +1143,11 @@ namespace IWSProject.Controllers
                               line.amount,
                               line.Currency,
                               line.Settlement.Company.bankaccountid,
-                              xMonth = (Convert.ToString((int?)line.Settlement.ItemDate.Month)).Length == 1 ?
-                                                      '0' + Convert.ToString((int?)line.Settlement.ItemDate.Month) :
-                                                      Convert.ToString((int?)line.Settlement.ItemDate.Month),
-                              xYear = Convert.ToString((int?)line.Settlement.ItemDate.Year)
+                              line.Settlement.oPeriode,
+                              //xMonth = (Convert.ToString((int?)line.Settlement.ItemDate.Month)).Length == 1 ?
+                              //                        '0' + Convert.ToString((int?)line.Settlement.ItemDate.Month) :
+                              //                        Convert.ToString((int?)line.Settlement.ItemDate.Month),
+                              //xYear = Convert.ToString((int?)line.Settlement.ItemDate.Year)
                           } into g
                           where g.Key.id == settlementID
                           select new
@@ -1150,7 +1159,7 @@ namespace IWSProject.Controllers
                               CustSupplierID = g.Key.SupplierID,
                               StoreID = g.Key.store,
                               TransDate = g.Key.ItemDate,
-                              Periode = g.Key.xYear + g.Key.xMonth,
+                              Periode = g.Key.oPeriode,// g.Key.xYear + g.Key.xMonth,
                               Account = g.Key.account,
                               OAccount = g.Key.oaccount,
                               Amount = g.Key.amount,
@@ -1215,10 +1224,11 @@ namespace IWSProject.Controllers
                      line.amount,
                      line.Currency,
                      line.duedate,
-                     xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
-                                             '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
-                                             Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
-                     xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year)
+                     line.GeneralLedger.oPeriode,
+                     //xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
+                     //                        '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
+                     //                        Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
+                     //xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year)
                  } into g
                  where g.Key.id == ledgerID
                  select new
@@ -1226,7 +1236,7 @@ namespace IWSProject.Controllers
                      Description = g.Key.text,
                      AccountId = g.Key.account,
                      OAccountId = g.Key.oaccount,
-                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Periode = g.Key.oPeriode,// g.Key.xYear + g.Key.xMonth,
                      Amount = g.Key.amount,
                      Currency=g.Key.Currency
                  }).ToList();
@@ -1263,7 +1273,7 @@ namespace IWSProject.Controllers
                               line.GeneralLedger.modelid,
                               line.GeneralLedger.CostCenter,
                               SupplierID = line.GeneralLedger.Area,
-                              line.GeneralLedger.text,
+                              line.GeneralLedger.HeaderText,
                               line.GeneralLedger.ItemDate,
                               line.GeneralLedger.CompanyId,
                               line.account,
@@ -1271,10 +1281,11 @@ namespace IWSProject.Controllers
                               line.amount,
                               line.Currency,
                               line.GeneralLedger.Company.bankaccountid,
-                              xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
-                                                      '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
-                                                      Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
-                              xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year)
+                              line.GeneralLedger.oPeriode,
+                              //xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
+                              //                        '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
+                              //                        Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
+                              //xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year)
                           } into g
                           where g.Key.id == ledgerID
                           select new
@@ -1286,7 +1297,7 @@ namespace IWSProject.Controllers
                               CustSupplierID = g.Key.SupplierID,
                               StoreID = g.Key.CostCenter,
                               TransDate = g.Key.ItemDate,
-                              Periode = g.Key.xYear + g.Key.xMonth,
+                              Periode = g.Key.oPeriode,// g.Key.xYear + g.Key.xMonth,
                               Account = g.Key.account,
                               OAccount = g.Key.oaccount,
                               Amount = g.Key.amount,
@@ -1342,23 +1353,25 @@ namespace IWSProject.Controllers
                 (from line in db.LineSalesInvoices
                  group new { line, line.Article.Vat, line.SalesInvoice } by new
                  {
-                     line.VATCode,
+                     line.VatCode,
                      line.Currency,
                      line.SalesInvoice.id,
                      line.SalesInvoice.oid,
                      line.SalesInvoice.store,
                      line.SalesInvoice.account,
-                     line.SalesInvoice.text,
+                     line.SalesInvoice.HeaderText,
+                     Linetext=line.text,
                      line.SalesInvoice.ItemDate,
                      line.SalesInvoice.CompanyId,
                      line.Article.Vat.revenueaccountid,
                      line.Article.Vat.outputvataccountid,
                      line.SalesInvoice.Customer.accountid,
                      line.SalesInvoice.Company.salesclearingaccountid,
-                     xMonth = (Convert.ToString((int?)line.SalesInvoice.ItemDate.Month)).Length == 1 ?
-                                             '0' + Convert.ToString((int?)line.SalesInvoice.ItemDate.Month) :
-                                             Convert.ToString((int?)line.SalesInvoice.ItemDate.Month),
-                     xYear = Convert.ToString((int?)line.SalesInvoice.ItemDate.Year)
+                     line.SalesInvoice.oPeriode,
+                     //xMonth = (Convert.ToString((int?)line.SalesInvoice.ItemDate.Month)).Length == 1 ?
+                     //                        '0' + Convert.ToString((int?)line.SalesInvoice.ItemDate.Month) :
+                     //                        Convert.ToString((int?)line.SalesInvoice.ItemDate.Month),
+                     //xYear = Convert.ToString((int?)line.SalesInvoice.ItemDate.Year)
                  } into g
                  where g.Key.id == salesInvoiceItemID
                  select new ValidateInvoiceViewModel
@@ -1368,12 +1381,13 @@ namespace IWSProject.Controllers
                      StoreID = g.Key.store,
                      SupplierID = g.Key.account,
                      ItemDate = g.Key.ItemDate,
-                     Text = g.Key.text,
+                     Text = g.Key.HeaderText,
+                     LineText=g.Key.Linetext,
                      CompanyID = g.Key.CompanyId,
-                     VatCode = g.Key.VATCode,
+                     VatCode = g.Key.VatCode,
                      VatAccountID = g.Key.outputvataccountid,
                      CreditAccountID = g.Key.revenueaccountid, 
-                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Periode = g.Key.oPeriode,// g.Key.xYear + g.Key.xMonth,
                      DebitAccountID = Convert.ToString(g.Key.accountid),
                      TotHTVA = g.Sum(p => p.line.quantity * p.line.price),
                      TotTVA = g.Sum(p => p.line.quantity * p.line.price * p.line.Article.Vat.PVat),
@@ -1389,7 +1403,7 @@ namespace IWSProject.Controllers
                                                    modelid = 1112,
                                                    store = item.StoreID,
                                                    account = item.SupplierID,
-                                                   text = item.Text,
+                                                   HeaderText = item.Text,
                                                    ItemDate = item.ItemDate,
                                                    CompanyId = item.CompanyID,
                                                    IsValidated = false
@@ -1408,7 +1422,7 @@ namespace IWSProject.Controllers
                                                               amount = Math.Round(item.TotTVA, 2),
                                                               Currency=item.Currency,
                                                               duedate = item.ItemDate,
-                                                              text = item.Text
+                                                              text = item.LineText
                                                           }).ToList();
                     string accountID = salesInvoice.Select(a => a.CreditAccountID ).First();
 
@@ -1420,7 +1434,7 @@ namespace IWSProject.Controllers
 
                     DateTime dueDate = salesInvoice.Select(d => d.ItemDate).First();
 
-                    string text = salesInvoice.Select(t => t.Text).First();
+                    string text = salesInvoice.Select(t => t.LineText).First();
 
                     LineCustomerInvoice line = new LineCustomerInvoice
                     {
@@ -1485,22 +1499,20 @@ namespace IWSProject.Controllers
                 (from line in db.LineInventoryInvoices
                  group new { line, line.Article.Vat, line.InventoryInvoice } by new
                  {
-                     line.VATCode,
+                     line.VatCode,
                      line.Currency,
                      line.InventoryInvoice.id,
                      line.InventoryInvoice.oid,
                      line.InventoryInvoice.store,
                      line.InventoryInvoice.account,
-                     line.InventoryInvoice.text,
+                     line.InventoryInvoice.HeaderText,
+                     Linetext = line.text,
                      line.InventoryInvoice.ItemDate,
                      line.InventoryInvoice.CompanyId,
                      line.Article.Vat.inputvataccountid,
                      line.InventoryInvoice.Supplier.accountid,
                      line.InventoryInvoice.Company.purchasingclearingaccountid,
-                     xMonth = (Convert.ToString((int?)line.InventoryInvoice.ItemDate.Month)).Length == 1 ?
-                                             '0' + Convert.ToString((int?)line.InventoryInvoice.ItemDate.Month) :
-                                             Convert.ToString((int?)line.InventoryInvoice.ItemDate.Month),
-                     xYear = Convert.ToString((int?)line.InventoryInvoice.ItemDate.Year)
+                     line.InventoryInvoice.oPeriode
                  } into g
                  where g.Key.id == InventoryInvoiceItemID
                  select new ValidateInvoiceViewModel
@@ -1510,11 +1522,12 @@ namespace IWSProject.Controllers
                      StoreID = g.Key.store,
                      SupplierID = g.Key.account,
                      ItemDate = g.Key.ItemDate,
-                     Text = g.Key.text,
+                     Text = g.Key.HeaderText,
+                     LineText = g.Key.Linetext,
                      CompanyID = g.Key.CompanyId,
-                     VatCode = g.Key.VATCode,
+                     VatCode = g.Key.VatCode,
                      VatAccountID = g.Key.inputvataccountid,
-                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Periode = g.Key.oPeriode,
                      DebitAccountID = g.Key.purchasingclearingaccountid,
                      CreditAccountID = g.Key.accountid,
                      TotHTVA = g.Sum(p => p.line.quantity * p.line.price),
@@ -1532,9 +1545,10 @@ namespace IWSProject.Controllers
                                              modelid = 112,
                                              store = item.StoreID,
                                              account = item.SupplierID,
-                                             text = item.Text,
+                                             HeaderText = item.Text,
                                              ItemDate = item.ItemDate,
                                              CompanyId = item.CompanyID,
+                                             oCurrency=item.Currency,
                                              IsValidated =false
                                          }).FirstOrDefault();
                 itemID = MakeVendorInvoiceHeader(invoiceHeader);
@@ -1551,7 +1565,7 @@ namespace IWSProject.Controllers
                                                               amount = Math.Round(item.TotTVA, 2),
                                                               Currency=item.Currency,
                                                               duedate = item.ItemDate,
-                                                              text = item.Text
+                                                              text = item.LineText
                                                           }).ToList();
      
                     string accountID = inventoryInvoice.Select(a => a.DebitAccountID).First();
@@ -1564,7 +1578,7 @@ namespace IWSProject.Controllers
 
                     DateTime dueDate = inventoryInvoice.Select(d => d.ItemDate).First();
 
-                    string text = inventoryInvoice.Select(t => t.Text).First();
+                    string text = inventoryInvoice.Select(t => t.LineText).First();
 
                     LineVendorInvoice line = new LineVendorInvoice
                     {
@@ -1633,7 +1647,9 @@ namespace IWSProject.Controllers
                      line.VendorInvoice.id,
                      line.VendorInvoice.store,
                      SupplierID = line.VendorInvoice.account,
-                     line.VendorInvoice.text,
+                     line.VendorInvoice.HeaderText,
+                     LineText=line.text,
+                     line.Currency,
                      line.VendorInvoice.ItemDate,
                      line.VendorInvoice.CompanyId,
                      line.VendorInvoice.Supplier.accountid,
@@ -1651,7 +1667,9 @@ namespace IWSProject.Controllers
                      SupplierID = g.Key.SupplierID,
                      ItemDate = g.Key.ItemDate,
                      Periode=g.Key.xYear+g.Key.xMonth,
-                     Text = g.Key.text,
+                     Text = g.Key.HeaderText,
+                     LineText=g.Key.LineText,
+                     Currency=g.Key.Currency,
                      CompanyID = g.Key.CompanyId,
                      CreditAccountID =g.Key.bankaccountid,
                      DebitAccountID = g.Key.accountid,
@@ -1668,7 +1686,7 @@ namespace IWSProject.Controllers
                                              modelid = 114,
                                              store = item.StoreID,
                                              account = item.SupplierID,
-                                             text = item.Text,
+                                             HeaderText = item.Text,
                                              ItemDate = item.ItemDate,
                                              CompanyId = item.CompanyID,
                                              IsValidated = false
@@ -1685,16 +1703,16 @@ namespace IWSProject.Controllers
                                                               side = false,
                                                               oaccount = item.CreditAccountID,
                                                               amount = Math.Round(item.TotTVA, 2),
-                                                              Currency=item.Currency,
+                                                              Currency = item.Currency,
                                                               duedate = item.ItemDate,
-                                                              text = item.Text
+                                                              text = item.LineText
                                                           }).ToList();
                     int countLineID = MakePaymentLine(lineVendor);
                     results= (countLineID > 0);
                 }
                 if (!results)
                     return results;
-               var journals = 
+                    var journals = 
                     (from line in db.LineVendorInvoices
                      group new { line, line.VendorInvoice } by new
                      {
@@ -1703,7 +1721,7 @@ namespace IWSProject.Controllers
                          line.VendorInvoice.modelid,
                          line.VendorInvoice.store,
                          SupplierID = line.VendorInvoice.account,
-                         line.VendorInvoice.text,
+                         line.VendorInvoice.HeaderText,
                          line.VendorInvoice.ItemDate,
                          line.VendorInvoice.CompanyId,
                          line.account,
@@ -1815,7 +1833,8 @@ namespace IWSProject.Controllers
                      line.CustomerInvoice.id,
                      line.CustomerInvoice.store,
                      SupplierID = line.CustomerInvoice.account,
-                     line.CustomerInvoice.text,
+                     line.CustomerInvoice.HeaderText,
+                     LineText=line.text,
                      line.CustomerInvoice.ItemDate,
                      line.CustomerInvoice.CompanyId,
                      line.CustomerInvoice.Customer.accountid,
@@ -1834,7 +1853,8 @@ namespace IWSProject.Controllers
                      SupplierID = g.Key.SupplierID,
                      ItemDate = g.Key.ItemDate,
                      Periode = g.Key.xYear + g.Key.xMonth,
-                     Text = g.Key.text,
+                     Text = g.Key.HeaderText,
+                     LineText=g.Key.LineText,
                      CompanyID = g.Key.CompanyId,
                      CreditAccountID = Convert.ToString(g.Key.accountid),
                      DebitAccountID = g.Key.bankaccountid,
@@ -1853,7 +1873,7 @@ namespace IWSProject.Controllers
                                        modelid = 1114,
                                        store = item.StoreID,
                                        account = item.SupplierID,
-                                       text = item.Text,
+                                       HeaderText = item.Text,
                                        ItemDate = item.ItemDate,
                                        CompanyId = item.CompanyID,
                                        IsValidated = false
@@ -1872,7 +1892,7 @@ namespace IWSProject.Controllers
                                                         amount = Math.Round(item.TotTVA, 2),
                                                         Currency=item.Currency,
                                                         duedate = item.ItemDate,
-                                                        text = item.Text
+                                                        text = item.LineText
                                                     }).ToList();
                     int countLineID = MakeSettlementLine(lineSettlement);
                     results = (countLineID > 0);
@@ -1888,7 +1908,7 @@ namespace IWSProject.Controllers
                           line.CustomerInvoice.modelid,
                           line.CustomerInvoice.store,
                           SupplierID = line.CustomerInvoice.account,
-                          line.CustomerInvoice.text,
+                          line.CustomerInvoice.HeaderText,
                           line.CustomerInvoice.ItemDate,
                           line.CustomerInvoice.CompanyId,
                           line.account,

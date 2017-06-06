@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\GoodReceivings\MasterGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -117,6 +121,8 @@ namespace ASP
         {
             e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
             e.NewValues["oid"] = 0;
+
+
         };
 
         settings.KeyFieldName = "id";
@@ -244,9 +250,10 @@ namespace ASP
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "text";
+            column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
         });
+
         #region Template
 
         settings.SetEditFormTemplateContent(c =>
@@ -255,8 +262,6 @@ namespace ASP
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
                 formLayoutSettings.Name = "GoodReceivingEdit";
-
-
 
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
@@ -342,6 +347,18 @@ namespace ASP
                         s.Properties.AllowMouseWheel = true;
                     });
                 });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "HeaderText";
+                    i.Caption = IWSLocalResource.text;
+                    i.NestedExtension().Memo(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -400,7 +417,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 341 "..\..\Views\GoodReceivings\MasterGridViewPartial.cshtml"
+            #line 354 "..\..\Views\GoodReceivings\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

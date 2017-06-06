@@ -117,25 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="dsSalesInvoice.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 60</value>
+  <metadata name="sqlDataSource1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
   </metadata>
-  <data name="customSqlQuery1.Sql" xml:space="preserve">
-    <value>SELECT        Store.id + '-' + Store.name AS StoreName, Customer.id + '-' + Customer.name AS CustomerName, SalesInvoice.id, SalesInvoice.ItemDate, Company.name, Company.street, Company.city, Company.state, 
-                         Company.zip
-FROM            Store AS Store INNER JOIN
-                         SalesInvoice ON Store.id = SalesInvoice.store INNER JOIN
-                         Customer AS Customer ON SalesInvoice.account = Customer.id INNER JOIN
-                         Company ON SalesInvoice.CompanyId = Company.id</value>
-  </data>
-  <data name="customSqlQuery2.Sql" xml:space="preserve">
-    <value>SELECT        Article.id+ '-' + Article.name AS Article, Vat.PVat, LineSalesInvoice.id, LineSalesInvoice.transid, LineSalesInvoice.unit, LineSalesInvoice.price, LineSalesInvoice.quantity, LineSalesInvoice.VATCode, 
-                         LineSalesInvoice.duedate
-FROM            Article AS Article INNER JOIN
-                         Vat ON Article.VatCode = Vat.id INNER JOIN
-                         LineSalesInvoice ON Article.id = LineSalesInvoice.item</value>
-  </data>
-  <data name="dsSalesInvoice.ResultSchemaSerializable" xml:space="preserve">
-    <value>PERhdGFTZXQgTmFtZT0iZHNTYWxlc0ludm9pY2UiPjxWaWV3IE5hbWU9IkxpbmVTYWxlc0ludm9pY2UiPjxGaWVsZCBOYW1lPSJBcnRpY2xlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlBWYXQiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9ImlkIiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0idHJhbnNpZCIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9InVuaXQiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0icHJpY2UiIFR5cGU9IkRlY2ltYWwiIC8+PEZpZWxkIE5hbWU9InF1YW50aXR5IiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJWQVRDb2RlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9ImR1ZWRhdGUiIFR5cGU9IkRhdGVUaW1lIiAvPjwvVmlldz48VmlldyBOYW1lPSJTYWxlc0ludm9pY2UiPjxGaWVsZCBOYW1lPSJTdG9yZU5hbWUiIFR5cGU9IlN0cmluZyIgLz48RmllbGQgTmFtZT0iQ3VzdG9tZXJOYW1lIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9ImlkIiBUeXBlPSJJbnQzMiIgLz48RmllbGQgTmFtZT0iSXRlbURhdGUiIFR5cGU9IkRhdGVUaW1lIiAvPjxGaWVsZCBOYW1lPSJuYW1lIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9InN0cmVldCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJjaXR5IiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9InN0YXRlIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9InppcCIgVHlwZT0iU3RyaW5nIiAvPjwvVmlldz48UmVsYXRpb24gTWFzdGVyPSJTYWxlc0ludm9pY2UiIERldGFpbD0iTGluZVNhbGVzSW52b2ljZSI+PEtleUNvbHVtbiBNYXN0ZXI9ImlkIiBEZXRhaWw9InRyYW5zaWQiIC8+PC9SZWxhdGlvbj48L0RhdGFTZXQ+</value>
+  <data name="sqlDataSource1.ResultSchemaSerializable" xml:space="preserve">
+    <value>PERhdGFTZXQgTmFtZT0ic3FsRGF0YVNvdXJjZTEiPjxWaWV3IE5hbWU9ImFjY291bnQxVG83KEBzdGFydCwgQGVuZCwgQGNvbXBhbnlpZCkiPjxGaWVsZCBOYW1lPSJnciIgVHlwZT0iSW50MzIiIC8+PEZpZWxkIE5hbWU9IklEIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IkFjY291bnRJZCIgVHlwZT0iU3RyaW5nIiAvPjxGaWVsZCBOYW1lPSJOYW1lIiBUeXBlPSJTdHJpbmciIC8+PEZpZWxkIE5hbWU9IlREZWJpdCIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iVENyZWRpdCIgVHlwZT0iRGVjaW1hbCIgLz48RmllbGQgTmFtZT0iU0RlYml0IiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJTQ3JlZGl0IiBUeXBlPSJEZWNpbWFsIiAvPjxGaWVsZCBOYW1lPSJDdXJyZW5jeSIgVHlwZT0iU3RyaW5nIiAvPjwvVmlldz48L0RhdGFTZXQ+</value>
   </data>
 </root>

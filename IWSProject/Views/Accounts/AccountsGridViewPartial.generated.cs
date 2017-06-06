@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\Accounts\AccountsGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -168,7 +172,7 @@ namespace ASP
             });
         });
         settings.Columns.Add("description").Caption = IWSLocalResource.description;
-        settings.Columns.Add("groupid").Caption = IWSLocalResource.groupid;
+        //settings.Columns.Add("groupid").Caption = IWSLocalResource.groupid;
 
         settings.Columns.Add(column =>
         {
@@ -220,6 +224,7 @@ namespace ASP
         settings.Columns.Add(column =>
         {
             column.FieldName = "Currency";
+            column.Visible = false;
             column.Caption = IWSLocalResource.Currency;
             column.EditorProperties().ComboBox(combo =>
             {
@@ -229,7 +234,7 @@ namespace ASP
                 combo.DataSource = IWSLookUp.GetCurrency();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
                 combo.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                combo.TextFormatString = "{0}-{1}";
+                combo.TextFormatString = "{0}";
             });
         });
 
@@ -309,6 +314,7 @@ namespace ASP
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "groupid";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.groupid;
                     i.NestedExtension().TextBox(s =>
                     {
@@ -362,6 +368,7 @@ namespace ASP
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "Currency";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.Currency;
                     i.NestedExtension().ComboBox(s =>
                     {
@@ -371,7 +378,7 @@ namespace ASP
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -443,7 +450,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 384 "..\..\Views\Accounts\AccountsGridViewPartial.cshtml"
+            #line 387 "..\..\Views\Accounts\AccountsGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/BillOfDeliveries/Index.cshtml")]
@@ -127,12 +131,75 @@ WriteLiteral(@"',
             }
         });
     }
+        function OnOIDSelectedIndexChanged(s, e) {
+        $.ajax({
+            url: '");
+
+            
+            #line 50 "..\..\Views\BillOfDeliveries\Index.cshtml"
+             Write(Url.Action("Store", "BillOfDeliveries"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedOIDIndex: s.GetValue() },
+            success: function (data) {
+                store.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+        $.ajax({
+            url: '");
+
+            
+            #line 61 "..\..\Views\BillOfDeliveries\Index.cshtml"
+             Write(Url.Action("Supplier", "BillOfDeliveries"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedOIDIndex: s.GetValue() },
+            success: function (data) {
+                account.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+        $.ajax({
+            url: '");
+
+            
+            #line 72 "..\..\Views\BillOfDeliveries\Index.cshtml"
+             Write(Url.Action("HeaderText", "BillOfDeliveries"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedItemIndex: s.GetValue() },
+            success: function (data) {
+                HeaderText.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+    }
+
 </script>
 
 ");
 
             
-            #line 50 "..\..\Views\BillOfDeliveries\Index.cshtml"
+            #line 86 "..\..\Views\BillOfDeliveries\Index.cshtml"
 Write(Html.Partial("MasterGridViewPartial"));
 
             

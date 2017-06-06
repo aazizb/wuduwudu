@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\Accounting\ValidateBLPartialView.cshtml"
     using IWSProject.Content;
@@ -119,7 +123,7 @@ namespace ASP
         {
             column.FieldName = "DueDate";
             column.Caption = IWSLocalResource.duedate;
-            column.Width = Unit.Pixel(85);
+            column.Width = Unit.Pixel(90);
             column.EditorProperties().TextBox(textBox =>
             {
                 textBox.DisplayFormatString = "yyyy-MM-dd";
@@ -161,8 +165,8 @@ namespace ASP
         settings.Columns.Add(column =>
         {
             column.FieldName = "TotalHVAT";
-            column.Caption = IWSLocalResource.TotHVAT;
-            column.Width = Unit.Pixel(120);
+            column.Caption = IWSLocalResource.Total;
+            column.Width = Unit.Pixel(140);
             column.EditorProperties().TextBox(textBox =>
             {
                 textBox.DisplayFormatString = "N";
@@ -171,6 +175,7 @@ namespace ASP
 
         settings.Columns.Add(column =>
         {
+            column.Visible = false;
             column.FieldName = "TotalVAT";
             column.Caption = IWSLocalResource.TotVAT;
             column.Width = Unit.Pixel(120);
@@ -197,7 +202,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 138 "..\..\Views\Accounting\ValidateBLPartialView.cshtml"
+            #line 139 "..\..\Views\Accounting\ValidateBLPartialView.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

@@ -178,7 +178,7 @@
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "text";
+            column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
         });
 
@@ -272,7 +272,7 @@
                 });
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "text";
+                    i.FieldName = "HeaderText";
                     i.Caption = IWSLocalResource.text;
                     i.NestedExtension().Memo(s =>
                     {

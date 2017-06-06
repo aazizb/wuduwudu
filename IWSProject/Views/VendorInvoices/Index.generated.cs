@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/VendorInvoices/Index.cshtml")]
@@ -127,12 +131,76 @@ WriteLiteral(@"',
             }
         });
     }
+
+            function OnOIDSelectedIndexChanged(s, e) {
+        $.ajax({
+            url: '");
+
+            
+            #line 51 "..\..\Views\VendorInvoices\Index.cshtml"
+             Write(Url.Action("Store", "VendorInvoices"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedOIDIndex: s.GetValue() },
+            success: function (data) {
+                store.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+        $.ajax({
+            url: '");
+
+            
+            #line 62 "..\..\Views\VendorInvoices\Index.cshtml"
+             Write(Url.Action("Supplier", "VendorInvoices"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedOIDIndex: s.GetValue() },
+            success: function (data) {
+                account.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+        $.ajax({
+            url: '");
+
+            
+            #line 73 "..\..\Views\VendorInvoices\Index.cshtml"
+             Write(Url.Action("HeaderText", "VendorInvoices"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedItemIndex: s.GetValue() },
+            success: function (data) {
+                HeaderText.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+    }
+
 </script>
 
 ");
 
             
-            #line 50 "..\..\Views\VendorInvoices\Index.cshtml"
+            #line 87 "..\..\Views\VendorInvoices\Index.cshtml"
 Write(Html.Partial("MasterGridViewPartial"));
 
             

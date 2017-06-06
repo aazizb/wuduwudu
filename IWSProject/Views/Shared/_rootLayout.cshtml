@@ -6,21 +6,22 @@
     <meta charset="UTF-8" />
     <title>@ViewBag.Title</title>
     <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
-
-    
-                @Html.DevExpress().GetStyleSheets(
-            new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
-        //new StyleSheet { ExtensionType = ExtensionType.Report },
-        new StyleSheet { ExtensionType = ExtensionType.WebDocumentViewer }
-        )
-        @Html.DevExpress().GetScripts(
-            new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-new Script { ExtensionSuite = ExtensionSuite.GridView },
-    //new Script { ExtensionType = ExtensionType.Report },
+   
+@Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionType = ExtensionType.WebDocumentViewer }
+    )
+@Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.Report },
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
     new Script { ExtensionType = ExtensionType.WebDocumentViewer }
-        )
-    
+    )
+
 </head>
 <body>
     @Html.DevExpress().Splitter(settings => {

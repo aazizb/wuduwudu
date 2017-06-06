@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Shared/_rootLayout.cshtml")]
@@ -71,44 +75,42 @@ WriteLiteral(" rel=\"stylesheet\"");
 
 WriteLiteral(" type=\"text/css\"");
 
-WriteLiteral(" />\r\n\r\n    \r\n");
-
-WriteLiteral("                ");
+WriteLiteral(" />\r\n   \r\n");
 
             
-            #line 11 "..\..\Views\Shared\_rootLayout.cshtml"
-           Write(Html.DevExpress().GetStyleSheets(
-            new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
-        //new StyleSheet { ExtensionType = ExtensionType.Report },
-        new StyleSheet { ExtensionType = ExtensionType.WebDocumentViewer }
-        ));
+            #line 10 "..\..\Views\Shared\_rootLayout.cshtml"
+Write(Html.DevExpress().GetStyleSheets(
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Report },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.GridView },
+    new StyleSheet { ExtensionSuite = ExtensionSuite.Editors },
+    new StyleSheet { ExtensionType = ExtensionType.WebDocumentViewer }
+    ));
 
             
             #line default
             #line hidden
 WriteLiteral("\r\n");
 
-WriteLiteral("        ");
-
             
             #line 17 "..\..\Views\Shared\_rootLayout.cshtml"
-   Write(Html.DevExpress().GetScripts(
-            new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
-new Script { ExtensionSuite = ExtensionSuite.GridView },
-    //new Script { ExtensionType = ExtensionType.Report },
+Write(Html.DevExpress().GetScripts(
+    new Script { ExtensionSuite = ExtensionSuite.Report },
+    new Script { ExtensionSuite = ExtensionSuite.NavigationAndLayout },
+    new Script { ExtensionSuite = ExtensionSuite.GridView },
+    new Script { ExtensionSuite = ExtensionSuite.Editors },
     new Script { ExtensionType = ExtensionType.WebDocumentViewer }
-        ));
+    ));
 
             
             #line default
             #line hidden
-WriteLiteral("\r\n    \r\n</head>\r\n<body>\r\n");
+WriteLiteral("\r\n\r\n</head>\r\n<body>\r\n");
 
 WriteLiteral("    ");
 
             
-            #line 26 "..\..\Views\Shared\_rootLayout.cshtml"
+            #line 27 "..\..\Views\Shared\_rootLayout.cshtml"
 Write(Html.DevExpress().Splitter(settings => {
     settings.Name = "MainSplitter";
     settings.AllowResize = false;

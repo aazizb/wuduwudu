@@ -79,7 +79,7 @@
         settings.Columns.Add("city").Caption = IWSLocalResource.city;
         settings.Columns.Add("state").Caption = IWSLocalResource.state;
         settings.Columns.Add("zip").Caption = IWSLocalResource.zip;
-        settings.Columns.Add("accountid").Caption = IWSLocalResource.accountid;
+        //settings.Columns.Add("accountid").Caption = IWSLocalResource.accountid;
 
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
@@ -171,6 +171,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "accountid";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.accountid;
                     i.NestedExtension().TextBox(e =>
                     {
@@ -180,8 +181,7 @@
                     });
                 });
                 formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;

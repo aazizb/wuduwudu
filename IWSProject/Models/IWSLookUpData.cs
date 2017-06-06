@@ -586,7 +586,7 @@
                      xYear = Convert.ToString((int?)line.InventoryInvoice.ItemDate.Year),
                      line.InventoryInvoice.account,
                      line.InventoryInvoice.CompanyId,
-                     line.VATCode,
+                     line.VatCode,
                      line.Currency
                  } into g
                  orderby
@@ -600,7 +600,7 @@
                      Area = true,
                      SupplierID = g.Key.account,
                      CompanyID = g.Key.CompanyId,
-                     VAT = g.Key.VATCode,
+                     VAT = g.Key.VatCode,
                      Currency=g.Key.Currency,
                      TotalVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity * p.line.Article.Vat.PVat)),
                      TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity))
@@ -718,7 +718,7 @@
                      xYear = Convert.ToString((int?)line.SalesInvoice.ItemDate.Year),
                      line.SalesInvoice.account,
                      line.SalesInvoice.CompanyId,
-                     line.VATCode,
+                     line.VatCode,
                      line.Currency
                  } into g
                  orderby
@@ -732,7 +732,7 @@
                      Area = false,
                      SupplierID = g.Key.account,
                      CompanyID = g.Key.CompanyId,
-                     VAT = g.Key.VATCode,
+                     VAT = g.Key.VatCode,
                      Currency=g.Key.Currency,
                      TotalVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity * p.line.Article.Vat.PVat)),
                      TotalHVAT = Convert.ToDecimal(Enumerable.Sum(g, p => p.line.price * p.line.quantity))
@@ -954,12 +954,95 @@
                 (from item in items
                 select new LineGoodReceiving()
                 {
-                    transid = itemID, modelid=item.modelid,
+                    transid = itemID, modelid=105,
                     item=item.item, unit=item.unit,
                     price=item.price, quantity=item.quantity,
                     VatCode=item.VatCode, duedate=item.duedate,
                     text=item.text, Currency=item.Currency
                 }
+                ).ToList();
+            return docs;
+        }
+
+        public static IEnumerable GetNewLineBillOfDelivery(int itemID, int oid)
+        {
+            List<LineSalesOrder> items = new List<LineSalesOrder>();
+            items = IWSEntities.LineSalesOrders
+                    .Where(c => c.transid == oid)
+                    .ToList();
+            List<LineBillOfDelivery> docs =
+                (from item in items
+                 select new LineBillOfDelivery()
+                 {
+                     transid = itemID, modelid = 105,
+                     item = item.item, unit = item.unit,
+                     price = item.price, quantity = item.quantity,
+                     VatCode = item.VatCode, duedate = item.duedate,
+                     text = item.text, Currency = item.Currency
+                 }
+                ).ToList();
+            return docs;
+        }
+        public static IEnumerable GetNewLineSalesInvoice(int itemID, int oid)
+        {
+            List<LineBillOfDelivery> items = new List<LineBillOfDelivery>();
+            items = IWSEntities.LineBillOfDeliveries
+                    .Where(c => c.transid == oid)
+                    .ToList();
+            List<LineSalesInvoice> docs =
+                (from item in items
+                 select new LineSalesInvoice()
+                 {
+                     transid = itemID,
+                     modelid = 1111,
+                     item = item.item,
+                     unit = item.unit,
+                     price = item.price,
+                     quantity = item.quantity,
+                     VatCode = item.VatCode,
+                     duedate = item.duedate,
+                     text = item.text,
+                     Currency = item.Currency
+                 }
+                ).ToList();
+            return docs;
+        }
+        public static IEnumerable GetNewLineInventoryInvoice(int itemID, int oid)
+        {
+            List<LineGoodReceiving> items = new List<LineGoodReceiving>();
+            items = IWSEntities.LineGoodReceivings
+                    .Where(c => c.transid == oid)
+                    .ToList();
+            List<LineInventoryInvoice> docs =
+                (from item in items
+                 select new LineInventoryInvoice()
+                 {
+                     transid = itemID, modelid = 111,
+                     item = item.item, unit = item.unit,
+                     price = item.price, quantity = item.quantity,
+                     VatCode = item.VatCode, duedate = item.duedate,
+                     text = item.text, Currency = item.Currency
+                 }
+                ).ToList();
+            return docs;
+        }
+
+        public static IEnumerable GetNewLineVendorInvoice(int itemID, int oid)
+        {
+            List<LineInventoryInvoice> items = new List<LineInventoryInvoice>();
+            items = IWSEntities.LineInventoryInvoices
+                    .Where(c => c.transid == oid)
+                    .ToList();
+            List<LineVendorInvoice> docs =
+                (from item in items
+                 select new LineVendorInvoice()
+                 {
+                     transid = itemID,
+                     modelid = 113,
+                     duedate = item.duedate,
+                     text = item.text,
+                     Currency = item.Currency
+                 }
                 ).ToList();
             return docs;
         }
@@ -1062,20 +1145,113 @@
             return IWSEntities.Articles.FirstOrDefault(c => 
                 c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).salesprice;
         }
-        public static string GetText(string id)
+        public static string GetLineText(string id)
         {
             return IWSEntities.Articles.FirstOrDefault(c => 
                 c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).description;
         }
-        public static string GetStore(int id)
+        public static string GetHeaderText(int id, string ItemType)
         {
-            return IWSEntities.PurchaseOrders.FirstOrDefault(c => 
-                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).store;
+            if (ItemType.Equals(DocsType.GoodReceiving.ToString()))
+            {
+                return IWSEntities.PurchaseOrders.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).HeaderText;
+            }
+            if (ItemType.Equals(DocsType.BillOfDelivery.ToString()))
+            {
+                return IWSEntities.SalesOrders.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).HeaderText;
+            }
+            if (ItemType.Equals(DocsType.InventoryInvoice.ToString()))
+            {
+                return IWSEntities.GoodReceivings.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).HeaderText;
+            }
+            if (ItemType.Equals(DocsType.SalesInvoice.ToString()))
+            {
+                return IWSEntities.BillOfDeliveries.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).HeaderText;
+            }
+            if (ItemType.Equals(DocsType.VendorInvoice.ToString()))
+            {
+                return IWSEntities.InventoryInvoices.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).HeaderText;
+            }
+            if (ItemType.Equals(DocsType.CustomerInvoice.ToString()))
+            {
+                return IWSEntities.SalesInvoices.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).HeaderText;
+            }
+            return null;
         }
-        public static string GetSUpplier(int id)
+        public static string GetStore(int id, string ItemType)
         {
-            return IWSEntities.PurchaseOrders.FirstOrDefault(c => 
+            if (ItemType.Equals(DocsType.GoodReceiving.ToString()))
+            {
+                return IWSEntities.PurchaseOrders.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).store;
+            }
+            if (ItemType.Equals(DocsType.BillOfDelivery.ToString()))
+            {
+                return IWSEntities.SalesOrders.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).store;
+            }
+            if (ItemType.Equals(DocsType.InventoryInvoice.ToString()))
+            {
+                return IWSEntities.GoodReceivings.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).store;
+            }
+            if (ItemType.Equals(DocsType.SalesInvoice.ToString()))
+            {
+                return IWSEntities.BillOfDeliveries.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).store;
+            }
+            if (ItemType.Equals(DocsType.VendorInvoice.ToString()))
+            {
+                return IWSEntities.InventoryInvoices.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).store;
+            }
+            if (ItemType.Equals(DocsType.CustomerInvoice.ToString()))
+            {
+                return IWSEntities.SalesInvoices.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).store;
+            }
+            return null;
+           
+        }
+        public static string GetSupplier(int id, string ItemType)
+        {
+            if (ItemType.Equals(IWSLookUp.DocsType.GoodReceiving.ToString()))
+            {
+                return IWSEntities.PurchaseOrders.FirstOrDefault(c =>
                 c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).account;
+            }
+            if (ItemType.Equals(IWSLookUp.DocsType.BillOfDelivery.ToString()))
+            {
+                return IWSEntities.SalesOrders.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).account;
+            }
+            if (ItemType.Equals(IWSLookUp.DocsType.InventoryInvoice.ToString()))
+            {
+                return IWSEntities.GoodReceivings.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).account;
+            }
+            if (ItemType.Equals(IWSLookUp.DocsType.SalesInvoice.ToString()))
+            {
+                return IWSEntities.BillOfDeliveries.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).account;
+            }
+            if (ItemType.Equals(IWSLookUp.DocsType.VendorInvoice.ToString()))
+            {
+                return IWSEntities.InventoryInvoices.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).account;
+            }
+            if (ItemType.Equals(IWSLookUp.DocsType.CustomerInvoice.ToString()))
+            {
+                return IWSEntities.SalesInvoices.FirstOrDefault(c =>
+                c.id == id && c.CompanyId == (string)HttpContext.Current.Session["CompanyID"]).account;
+            }
+            return null;
         }
         public static string GetPeriodMax()
         {
@@ -1253,7 +1429,6 @@
             };
             return query;
         }
-
         public enum DocsType
         {
             SalesInvoice,

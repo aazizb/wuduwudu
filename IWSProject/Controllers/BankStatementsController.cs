@@ -444,7 +444,7 @@
                     modelid = 114,
                     store = "200",
                     account = SD.Id,
-                    text = SD.Info,
+                    HeaderText = SD.Info,
                     ItemDate = (DateTime)SD.Buchungstag,
                     CompanyId = (string)Session["CompanyID"],
                     IsValidated = false
@@ -478,7 +478,7 @@
                     modelid = 114,
                     store = "100",
                     account = SD.Id,
-                    text = SD.Info,
+                    HeaderText = SD.Info,
                     ItemDate = (DateTime)SD.Buchungstag,
                     CompanyId = (string)Session["CompanyID"],
                     IsValidated = false

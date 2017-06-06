@@ -340,7 +340,7 @@
     <value>Comptabilité</value>
   </data>
   <data name="invoice" xml:space="preserve">
-    <value>Facture Client Logistic</value>
+    <value>Facture</value>
   </data>
   <data name="purchasing" xml:space="preserve">
     <value>Achat</value>
@@ -662,5 +662,41 @@
   </data>
   <data name="SubAccountOf" xml:space="preserve">
     <value>Sous-Compte de</value>
+  </data>
+  <data name="gross" xml:space="preserve">
+    <value>Brut</value>
+  </data>
+  <data name="net" xml:space="preserve">
+    <value>Net</value>
+  </data>
+  <data name="CIF" xml:space="preserve">
+    <value>CIF</value>
+  </data>
+  <data name="page" xml:space="preserve">
+    <value>Page</value>
+  </data>
+  <data name="InvoiceDate" xml:space="preserve">
+    <value>Date facture</value>
+  </data>
+  <data name="subtotals" xml:space="preserve">
+    <value>Sous-Totaux</value>
+  </data>
+  <data name="PurchaseOrderDate" xml:space="preserve">
+    <value>Date Bon de commande</value>
+  </data>
+  <data name="ShipDate" xml:space="preserve">
+    <value>Date de livraison attendue</value>
+  </data>
+  <data name="BillTo" xml:space="preserve">
+    <value>Facturer à:</value>
+  </data>
+  <data name="ShipTo" xml:space="preserve">
+    <value>Expedier à:</value>
+  </data>
+  <data name="date" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="totalMovement" xml:space="preserve">
+    <value>Total Mouvement</value>
   </data>
 </root>

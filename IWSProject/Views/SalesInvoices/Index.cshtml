@@ -12,11 +12,11 @@
             }
         });
         $.ajax({
-            url: '@Url.Action("VATCode", "SalesInvoices")',
+            url: '@Url.Action("VatCode", "SalesInvoices")',
             type: "POST",
             data: { selectedItemIndex: s.GetValue() },
             success: function (data) {
-                VATCode.SetText(data);
+                VatCode.SetText(data);
             },
             error: function (xhr, textStatus, errorThrown) {
                 alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
@@ -45,6 +45,43 @@
             }
         });
     }
+
+    function OnOIDSelectedIndexChanged(s, e) {
+        $.ajax({
+            url: '@Url.Action("Store", "SalesInvoices")',
+            type: "POST",
+            data: { selectedOIDIndex: s.GetValue() },
+            success: function (data) {
+                store.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+        $.ajax({
+            url: '@Url.Action("Supplier", "SalesInvoices")',
+            type: "POST",
+            data: { selectedOIDIndex: s.GetValue() },
+            success: function (data) {
+                account.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+        $.ajax({
+            url: '@Url.Action("HeaderText", "SalesInvoices")',
+            type: "POST",
+            data: { selectedItemIndex: s.GetValue() },
+            success: function (data) {
+                HeaderText.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+    }
+
 </script>
 
 

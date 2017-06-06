@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 2 "..\..\Views\CustomerOrders\MasterGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -236,7 +240,7 @@ WriteLiteral("\r\n");
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "text";
+            column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
         });
         #region Template

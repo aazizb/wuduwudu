@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/GoodReceivings/Index.cshtml")]
@@ -169,6 +173,26 @@ WriteLiteral(@"',
                 alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
             }
         });
+        $.ajax({
+            url: '");
+
+            
+            #line 73 "..\..\Views\GoodReceivings\Index.cshtml"
+             Write(Url.Action("HeaderText", "GoodReceivings"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedItemIndex: s.GetValue() },
+            success: function (data) {
+                HeaderText.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
     }
 
 </script>
@@ -177,7 +201,7 @@ WriteLiteral(@"',
 ");
 
             
-            #line 77 "..\..\Views\GoodReceivings\Index.cshtml"
+            #line 88 "..\..\Views\GoodReceivings\Index.cshtml"
  using (Html.BeginForm("MasterGridViewPartialAddNew", "GoodReceivings"))
 {
     
@@ -185,14 +209,14 @@ WriteLiteral(@"',
             #line default
             #line hidden
             
-            #line 79 "..\..\Views\GoodReceivings\Index.cshtml"
+            #line 90 "..\..\Views\GoodReceivings\Index.cshtml"
 Write(Html.Hidden("cbxOID"));
 
             
             #line default
             #line hidden
             
-            #line 79 "..\..\Views\GoodReceivings\Index.cshtml"
+            #line 90 "..\..\Views\GoodReceivings\Index.cshtml"
                           ;
 }
 
@@ -202,7 +226,7 @@ Write(Html.Hidden("cbxOID"));
 WriteLiteral("\r\n");
 
             
-            #line 82 "..\..\Views\GoodReceivings\Index.cshtml"
+            #line 93 "..\..\Views\GoodReceivings\Index.cshtml"
 Write(Html.Partial("MasterGridViewPartial"));
 
             

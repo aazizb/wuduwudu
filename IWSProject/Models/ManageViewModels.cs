@@ -138,6 +138,7 @@ namespace IWSProject.Models
         public string CompanyID { get; set; }
         public DateTime ItemDate { get; set; }
         public string Text { get; set; }
+        public string LineText { get; set; }
         public string VatCode { get; set; }
         public string VatAccountID { get; set; }
         public string Periode { get; set; }
@@ -225,7 +226,7 @@ namespace IWSProject.Models
         public string Unit { get; set; }
         public decimal Price { get; set; }
         public decimal Quantity { get; set; }
-        public string VATCode { get; set; }
+        public string VatCode { get; set; }
         public DateTime DueDate { get; set; }
         public string Text { get; set; }
         public string Currency { get; set; }

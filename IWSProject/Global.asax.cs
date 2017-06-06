@@ -17,6 +17,7 @@ namespace IWSProject
     {
         protected void Application_Start()
         {
+            DevExpress.XtraReports.Web.WebDocumentViewer.Native.WebDocumentViewerBootstrapper.SessionState = System.Web.SessionState.SessionStateBehavior.Disabled;
             AreaRegistration.RegisterAllAreas();
 
             GlobalConfiguration.Configure(WebApiConfig.Register);

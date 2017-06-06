@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\Articles\ArticlesGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -137,7 +141,16 @@ namespace ASP
         settings.SettingsPager.PageSize = 24;
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
-        settings.Columns.Add("name").Caption = IWSLocalResource.item;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "name";
+            column.Caption = IWSLocalResource.item;
+            column.EditorProperties().TextBox(textBox =>
+            {
+                textBox.Width = Unit.Percentage(200);
+            });
+        });
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "IsService";
@@ -192,6 +205,7 @@ namespace ASP
         settings.Columns.Add(column =>
         {
             column.FieldName = "Currency";
+            column.Visible = false;
             column.Caption = IWSLocalResource.Currency;
             column.EditorProperties().ComboBox(combo =>
             {
@@ -201,12 +215,12 @@ namespace ASP
                 combo.DataSource = IWSLookUp.GetCurrency();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
                 combo.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                combo.TextFormatString = "{0}-{1}";
+                combo.TextFormatString = "{0}";
             });
         });
         settings.Columns.Add("qttyunit").Caption=IWSLocalResource.qttyunit;
         settings.Columns.Add("packunit").Caption=IWSLocalResource.packunit;
-        settings.Columns.Add("groupid").Caption=IWSLocalResource.groupid;
+        //settings.Columns.Add("groupid").Caption=IWSLocalResource.groupid;
         settings.Columns.Add(column =>
         {
             column.FieldName = "VatCode";
@@ -317,6 +331,7 @@ namespace ASP
                 {
                     i.FieldName = "Currency";
                     i.Caption = IWSLocalResource.Currency;
+                    i.Visible = false;
                     i.NestedExtension().ComboBox(s =>
                     {
                         s.Properties.TextField = "name";
@@ -356,6 +371,7 @@ namespace ASP
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "groupid";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.groupid;
                     i.NestedExtension().TextBox(s =>
                     {
@@ -458,7 +474,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 399 "..\..\Views\Articles\ArticlesGridViewPartial.cshtml"
+            #line 411 "..\..\Views\Articles\ArticlesGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

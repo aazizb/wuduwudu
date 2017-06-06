@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\PurchaseOrders\MasterGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -232,23 +236,13 @@ namespace ASP
             column.FieldName = "oCurrency";
             column.Caption = IWSLocalResource.Currency;
             column.UnboundType = DevExpress.Data.UnboundColumnType.String;
-            
+
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "text";
+            column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
         });
-        //settings.CustomUnboundColumnData = (s, e) =>
-        //{
-        //    if (e.Column.FieldName == "Total")
-        //    {
-        //        e.Value = ViewData["Total"];
-        //    }
-        //};
-        //settings.Settings.ShowFooter = true;
-        //settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.None, "Total");
-
         #region Template
         settings.SetEditFormTemplateContent(c =>
         {
@@ -324,6 +318,18 @@ namespace ASP
                         s.Properties.AllowMouseWheel = true;
                     });
                 });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "HeaderText";
+                    i.Caption = IWSLocalResource.text;
+                    i.NestedExtension().Memo(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -380,7 +386,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 321 "..\..\Views\PurchaseOrders\MasterGridViewPartial.cshtml"
+            #line 323 "..\..\Views\PurchaseOrders\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

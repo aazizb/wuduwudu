@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\Companies\CompaniesGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -215,16 +219,6 @@ namespace ASP
         {
             column.FieldName = "taxcode";
             column.Caption = IWSLocalResource.taxcode;
-            column.EditorProperties().ComboBox(combo =>
-            {
-                combo.TextField = "Name";
-                combo.ValueField = "id";
-                combo.ValueType = typeof(string);
-                combo.DataSource = IWSLookUp.GetAccounts();
-                combo.Columns.Add("id").Caption = IWSLocalResource.id;
-                combo.Columns.Add("name").Caption = IWSLocalResource.item;
-                combo.TextFormatString = "{0}-{1}";
-            });
         });
         settings.Columns.Add(column =>
         {
@@ -442,17 +436,32 @@ namespace ASP
                 });
                 formLayoutSettings.Items.Add(i =>
                 {
+                    i.FieldName = "IBAN";
+                    i.Caption = IWSLocalResource.IBAN;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "CIF";
+                    i.Caption = IWSLocalResource.CIF;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+                formLayoutSettings.Items.Add(i =>
+                {
                     i.FieldName = "taxcode";
                     i.Caption = IWSLocalResource.taxcode;
-                    i.NestedExtension().ComboBox(s =>
+                    i.NestedExtension().TextBox(s =>
                     {
-                        s.Properties.TextField = "name";
-                        s.Properties.ValueField = "id";
-                        s.Properties.ValueType = typeof(string);
-                        s.Properties.DataSource = IWSLookUp.GetAccounts();
-                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
-                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.item;
-                        s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(80);
@@ -550,7 +559,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 491 "..\..\Views\Companies\CompaniesGridViewPartial.cshtml"
+            #line 496 "..\..\Views\Companies\CompaniesGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

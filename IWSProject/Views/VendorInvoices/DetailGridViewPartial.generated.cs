@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\VendorInvoices\DetailGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -223,6 +227,7 @@ namespace ASP
         settings.Columns.Add("text").Caption = IWSLocalResource.text;
         settings.Columns.Add(column =>
         {
+            column.Visible = false;
             column.FieldName = "Total";
             column.Caption = IWSLocalResource.Total;
             column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
@@ -237,7 +242,7 @@ namespace ASP
                 e.Value = amount;
             }
         };
-        settings.Settings.ShowFooter = true;
+        settings.Settings.ShowFooter = false;
         settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
 
         #region Template
@@ -413,7 +418,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 354 "..\..\Views\VendorInvoices\DetailGridViewPartial.cshtml"
+            #line 355 "..\..\Views\VendorInvoices\DetailGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

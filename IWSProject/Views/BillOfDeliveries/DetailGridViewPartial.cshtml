@@ -182,6 +182,7 @@
         settings.Columns.Add("text").Caption = IWSLocalResource.text;
         settings.Columns.Add(column =>
         {
+            column.Visible = false;
             column.FieldName = "Total";
             column.Caption = IWSLocalResource.Total;
             column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
@@ -197,7 +198,7 @@
                 e.Value = price * quantity;
             }
         };
-        settings.Settings.ShowFooter = true;
+        settings.Settings.ShowFooter = false;
         settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
 
         #region Template

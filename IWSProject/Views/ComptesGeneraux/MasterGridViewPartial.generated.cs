@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 2 "..\..\Views\ComptesGeneraux\MasterGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -216,7 +220,7 @@ WriteLiteral("\r\n");
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "text";
+            column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
         });
         #region Template
@@ -301,14 +305,14 @@ WriteLiteral("\r\n");
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Properties.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(100);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "text";
+                    i.FieldName = "HeaderText";
                     i.Caption = IWSLocalResource.text;
                     i.NestedExtension().TextBox(s =>
                     {

@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\SalesOrders\MasterGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -234,7 +238,7 @@ namespace ASP
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "text";
+            column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
         });
 
@@ -314,6 +318,18 @@ namespace ASP
                         s.Properties.AllowMouseWheel = true;
                     });
                 });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "HeaderText";
+                    i.Caption = IWSLocalResource.text;
+                    i.NestedExtension().Memo(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -370,7 +386,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 311 "..\..\Views\SalesOrders\MasterGridViewPartial.cshtml"
+            #line 323 "..\..\Views\SalesOrders\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

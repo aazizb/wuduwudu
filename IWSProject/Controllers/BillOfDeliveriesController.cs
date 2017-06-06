@@ -23,17 +23,28 @@ namespace IWSProject.Controllers
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Models.BillOfDelivery item)
         {
-            var model = db.BillOfDeliveries;
-            item.IsValidated = false;
-            item.modelid = 1104;
-            item.CompanyId = (string)Session["CompanyID"];
-            ViewData["item"] = item;
             if (ModelState.IsValid)
             {
+                var model = db.BillOfDeliveries;
+                item.IsValidated = false;
+                item.modelid = 1104;
+                item.CompanyId = (string)Session["CompanyID"];
+                item.oid = item.oid ?? 0;
+                int itemOID = (int)item.oid;
+                ViewData["item"] = item;
+                bool result = false;
                 try
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    if (itemOID != 0)
+                    {
+                        int itemID = db.BillOfDeliveries.Max(i => i.id);
+
+                        result = InsertLines(itemID, itemOID, IWSLookUp.DocsType.BillOfDelivery.ToString());
+                        if (result)
+                            db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -205,9 +216,43 @@ namespace IWSProject.Controllers
         }
         public ActionResult Text(string selectedItemIndex)
         {
-            return Json(IWSLookUp.GetText(selectedItemIndex));
+            return Json(IWSLookUp.GetLineText(selectedItemIndex));
         }
 
+        public ActionResult HeaderText(int selectedItemIndex)
+        {
+            return Json(IWSLookUp.GetHeaderText(selectedItemIndex, IWSLookUp.DocsType.BillOfDelivery.ToString()));
+        }
+        public ActionResult Store(int selectedOIDIndex)
+        {
+            return Json(IWSLookUp.GetStore(selectedOIDIndex, IWSLookUp.DocsType.BillOfDelivery.ToString()));
+        }
+        public ActionResult Supplier(int selectedOIDIndex)
+        {
+            return Json(IWSLookUp.GetSupplier(selectedOIDIndex, IWSLookUp.DocsType.BillOfDelivery.ToString()));
+        }
+        public bool InsertLines(int itemID, int OID, string ItemType)
+        {
+            bool results = false;
+
+            if (ItemType.Equals(IWSLookUp.DocsType.BillOfDelivery.ToString()))
+            {
+                try
+                {
+                    var items = IWSLookUp.GetNewLineBillOfDelivery(itemID, OID);
+                    foreach (var item in items)
+                    {
+                        db.LineBillOfDeliveries.InsertOnSubmit((LineBillOfDelivery)item);
+                    }
+                    results = true;
+                }
+                catch (Exception e)
+                {
+                    ViewData["GenericError"] = e.Message;
+                }
+            }
+            return results;
+        }
         #endregion
 
     }

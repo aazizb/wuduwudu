@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\Stores\StoresGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -135,7 +139,7 @@ namespace ASP
         settings.Columns.Add("city").Caption = IWSLocalResource.city;
         settings.Columns.Add("state").Caption = IWSLocalResource.state;
         settings.Columns.Add("zip").Caption = IWSLocalResource.zip;
-        settings.Columns.Add("accountid").Caption = IWSLocalResource.accountid;
+        //settings.Columns.Add("accountid").Caption = IWSLocalResource.accountid;
 
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
@@ -227,6 +231,7 @@ namespace ASP
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "accountid";
+                    i.Visible = false;
                     i.Caption = IWSLocalResource.accountid;
                     i.NestedExtension().TextBox(e =>
                     {
@@ -236,8 +241,7 @@ namespace ASP
                     });
                 });
                 formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;

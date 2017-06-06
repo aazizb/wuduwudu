@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\Suppliers\SuppliersGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -145,7 +149,7 @@ namespace ASP
                 o.TextField = "Name";
                 o.ValueField = "id";
                 o.ValueType = typeof(string);
-                o.DataSource = IWSLookUp.GetCurrency();
+                o.DataSource = IWSLookUp.GetAccounts();
                 o.Columns.Add("id").Caption = IWSLocalResource.id;
                 o.Columns.Add("name").Caption = IWSLocalResource.name;
                 o.TextFormatString = "{0}-{1}";

@@ -108,12 +108,6 @@
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "modelid";
-            column.Caption = IWSLocalResource.modelid;
-            column.Visible = false;
-        });
-        settings.Columns.Add(column =>
-        {
             column.FieldName = "store";
             column.Caption = IWSLocalResource.store;
             column.EditorProperties().ComboBox(combo =>
@@ -178,7 +172,7 @@
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "text";
+            column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
         });
 
@@ -212,7 +206,7 @@
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
-                        //s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
+                        s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
 
                     });
                 });
@@ -272,7 +266,7 @@
                 });
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "text";
+                    i.FieldName = "HeaderText";
                     i.Caption = IWSLocalResource.text;
                     i.NestedExtension().Memo(s =>
                     {

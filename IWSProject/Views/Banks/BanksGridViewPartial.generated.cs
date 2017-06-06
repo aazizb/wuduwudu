@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\Banks\BanksGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -126,7 +130,6 @@ namespace ASP
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("name").Caption = IWSLocalResource.name;
-        //settings.Columns.Add("modelid").Caption = IWSLocalResource.modelid;
         settings.Columns.Add("description").Caption = IWSLocalResource.description;
 
         #region Template Edit
@@ -239,7 +242,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 180 "..\..\Views\Banks\BanksGridViewPartial.cshtml"
+            #line 179 "..\..\Views\Banks\BanksGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

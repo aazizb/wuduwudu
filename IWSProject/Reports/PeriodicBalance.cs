@@ -1,5 +1,5 @@
 ﻿using DevExpress.XtraReports.UI;
-using IWSProject.Content;
+//using IWSProject.Content;
 using IWSProject.Models;
 /// <summary>
 /// Summary description for PeriodicBalance

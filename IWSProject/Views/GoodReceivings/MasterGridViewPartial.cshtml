@@ -61,6 +61,8 @@
         {
             e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
             e.NewValues["oid"] = 0;
+
+
         };
 
         settings.KeyFieldName = "id";
@@ -188,9 +190,10 @@
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "text";
+            column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
         });
+
         #region Template
 
         settings.SetEditFormTemplateContent(c =>
@@ -199,8 +202,6 @@
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
                 formLayoutSettings.Name = "GoodReceivingEdit";
-
-
 
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
@@ -286,6 +287,18 @@
                         s.Properties.AllowMouseWheel = true;
                     });
                 });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "HeaderText";
+                    i.Caption = IWSLocalResource.text;
+                    i.NestedExtension().Memo(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {

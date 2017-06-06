@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\BillOfDeliveries\MasterGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -235,7 +239,7 @@ namespace ASP
 
         settings.Columns.Add(column =>
         {
-            column.FieldName = "text";
+            column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
         });
 
@@ -269,7 +273,7 @@ namespace ASP
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
-                        //s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
+                        s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
 
                     });
                 });
@@ -328,6 +332,18 @@ namespace ASP
                         s.Properties.AllowMouseWheel = true;
                     });
                 });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "HeaderText";
+                    i.Caption = IWSLocalResource.text;
+                    i.NestedExtension().Memo(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                    });
+                });
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -384,7 +400,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 325 "..\..\Views\BillOfDeliveries\MasterGridViewPartial.cshtml"
+            #line 337 "..\..\Views\BillOfDeliveries\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

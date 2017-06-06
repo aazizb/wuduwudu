@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\SalesInvoices\DetailGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -202,7 +206,7 @@ WriteLiteral("\r\n");
 
         settings.Columns.Add(column =>
         {
-            column.FieldName = "VATCode";
+            column.FieldName = "VatCode";
             column.Caption = IWSLocalResource.vatcode;
             column.EditorProperties().ComboBox(combo =>
             {
@@ -238,6 +242,7 @@ WriteLiteral("\r\n");
         settings.Columns.Add("text").Caption = IWSLocalResource.text;
         settings.Columns.Add(column =>
         {
+            column.Visible = false;
             column.FieldName = "Total";
             column.Caption = IWSLocalResource.Total;
             column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
@@ -253,7 +258,7 @@ WriteLiteral("\r\n");
                 e.Value = price * quantity;
             }
         };
-        settings.Settings.ShowFooter = true;
+        settings.Settings.ShowFooter = false;
         settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Total");
         #region Template
         settings.SetEditFormTemplateContent(templateContent =>
@@ -346,7 +351,7 @@ WriteLiteral("\r\n");
 
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "VATCode";
+                    i.FieldName = "VatCode";
                     i.Caption = IWSLocalResource.vatcode;
                     i.NestedExtension().ComboBox(s =>
                     {
@@ -447,7 +452,7 @@ WriteLiteral("\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 387 "..\..\Views\SalesInvoices\DetailGridViewPartial.cshtml"
+            #line 388 "..\..\Views\SalesInvoices\DetailGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

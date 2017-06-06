@@ -214,15 +214,19 @@ namespace IWSProject.Controllers
         }
         public ActionResult Text(string selectedItemIndex)
         {
-            return Json(IWSLookUp.GetText(selectedItemIndex));
+            return Json(IWSLookUp.GetLineText(selectedItemIndex));
+        }
+        public ActionResult HeaderText(int selectedItemIndex)
+        {
+            return Json(IWSLookUp.GetHeaderText(selectedItemIndex, IWSLookUp.DocsType.GoodReceiving.ToString()));
         }
         public ActionResult Store(int selectedOIDIndex)
         {
-            return Json(IWSLookUp.GetStore(selectedOIDIndex));
+            return Json(IWSLookUp.GetStore(selectedOIDIndex, IWSLookUp.DocsType.GoodReceiving.ToString()));
         }
         public ActionResult Supplier(int selectedOIDIndex)
         {
-            return Json(IWSLookUp.GetSUpplier(selectedOIDIndex));
+            return Json(IWSLookUp.GetSupplier(selectedOIDIndex, IWSLookUp.DocsType.GoodReceiving.ToString()));
         }
         public bool InsertLines(int itemID, int OID, string ItemType)
         {
