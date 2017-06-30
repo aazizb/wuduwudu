@@ -25,15 +25,24 @@ namespace IWSProject.Controllers
         {
             var model = db.Payments;
             item.IsValidated = false;
-            item.modelid = 114;
             item.CompanyId = (string)Session["CompanyID"];
+            int itemOID = item.oid;
             ViewData["item"] = item;
+            bool result;
             if (ModelState.IsValid)
             {
                 try
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    if (itemOID != 0)
+                    {
+                        int itemID = db.Payments.Max(i => i.id);
+
+                        result = InsertLines(itemID, itemOID, IWSLookUp.DocsType.Payment.ToString());
+                        if (result)
+                            db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -106,7 +115,6 @@ namespace IWSProject.Controllers
         {
             var model = db.LinePayments;
 
-            line.modelid = 115;
             line.transid = transId;
             if (line.Currency == null)
                 line.Currency = (string)Session["Currency"];
@@ -182,6 +190,45 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LinePayments.Where(p => p.transid == transId).ToList());
         }
+
+
+        #region Helper
+        public ActionResult HeaderText(int selectedItemIndex)
+        {
+            return Json(IWSLookUp.GetHeaderText(selectedItemIndex, IWSLookUp.DocsType.Payment.ToString()));
+        }
+        public ActionResult Supplier(int selectedOIDIndex)
+        {
+            return Json(IWSLookUp.GetSupplier(selectedOIDIndex, IWSLookUp.DocsType.Payment.ToString()));
+        }
+        public ActionResult CostCenter(int selectedOIDIndex)
+        {
+            return Json(IWSLookUp.GetCostCenter(selectedOIDIndex, IWSLookUp.DocsType.Payment.ToString()));
+        }
+        public bool InsertLines(int itemID, int OID, string ItemType)
+        {
+            bool results = false;
+
+            if (ItemType.Equals(IWSLookUp.DocsType.Payment.ToString()))
+            {
+                try
+                {
+                    var items = IWSLookUp.GetNewLinePayment(itemID, OID);
+                    foreach (var item in items)
+                    {
+                        db.LinePayments.InsertOnSubmit((LinePayment)item);
+                    }
+                    results = true;
+                }
+                catch (Exception e)
+                {
+                    ViewData["GenericError"] = e.Message;
+                }
+            }
+            return results;
+        }
+
+        #endregion
 
     }
 }

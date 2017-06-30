@@ -47,9 +47,21 @@
                 s.Properties.TextField = "Name";
                 s.Properties.ValueField = "Id";
                 s.Properties.ValueType = typeof(string);
-                s.Properties.DataSource = IWSLookUp.GetCompanies(); 
-                s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
-                s.Properties.Columns.Add("name").Caption = IWSLocalResource.company;
+                s.Properties.DataSource = IWSLookUp.GetCompanies();
+                s.Properties.Columns.Add(column =>
+                {
+                    column.FieldName = "id";
+                    column.Caption = IWSLocalResource.id;
+                    column.Width = Unit.Percentage(15);
+                    column.Visible = true;
+                });
+                s.Properties.Columns.Add(column =>
+                {
+                    column.FieldName = "name";
+                    column.Caption = IWSLocalResource.company;
+                    column.Width = Unit.Percentage(75);
+                });
+                s.Properties.TextFormatString = "{1}";
             });
         });
 

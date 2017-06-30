@@ -1,9 +1,4 @@
-﻿using System;
-using System.Drawing;
-using System.Collections;
-using System.ComponentModel;
-using DevExpress.XtraReports.UI;
-using System.Web;
+﻿using DevExpress.XtraReports.UI;
 
 /// <summary>
 /// Summary description for AccountBalance
@@ -207,7 +202,7 @@ public class AccountBalance : DevExpress.XtraReports.UI.XtraReport
             // xrTableCell5
             // 
             this.xrTableCell5.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "account1To7(@start, @end, @companyid).TDebit")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "account1To7(@start, @end, @companyid).TDebit", "{0:n2}")});
             this.xrTableCell5.Dpi = 100F;
             this.xrTableCell5.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
             this.xrTableCell5.Name = "xrTableCell5";
@@ -220,7 +215,7 @@ public class AccountBalance : DevExpress.XtraReports.UI.XtraReport
             // xrTableCell6
             // 
             this.xrTableCell6.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "account1To7(@start, @end, @companyid).TCredit")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "account1To7(@start, @end, @companyid).TCredit", "{0:n2}")});
             this.xrTableCell6.Dpi = 100F;
             this.xrTableCell6.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
             this.xrTableCell6.Name = "xrTableCell6";
@@ -233,7 +228,7 @@ public class AccountBalance : DevExpress.XtraReports.UI.XtraReport
             // xrTableCell7
             // 
             this.xrTableCell7.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "account1To7(@start, @end, @companyid).SDebit")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "account1To7(@start, @end, @companyid).SDebit", "{0:n2}")});
             this.xrTableCell7.Dpi = 100F;
             this.xrTableCell7.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
             this.xrTableCell7.Name = "xrTableCell7";
@@ -246,7 +241,7 @@ public class AccountBalance : DevExpress.XtraReports.UI.XtraReport
             // xrTableCell8
             // 
             this.xrTableCell8.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "account1To7(@start, @end, @companyid).SCredit")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "account1To7(@start, @end, @companyid).SCredit", "{0:n2}")});
             this.xrTableCell8.Dpi = 100F;
             this.xrTableCell8.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
             this.xrTableCell8.Name = "xrTableCell8";
@@ -420,7 +415,7 @@ public class AccountBalance : DevExpress.XtraReports.UI.XtraReport
             // 
             // sqlDataSource1
             // 
-            this.sqlDataSource1.ConnectionName = "IWSConnectionString (IWSProject)";
+            this.sqlDataSource1.ConnectionName = "IWSConnectionString";
             this.sqlDataSource1.Name = "sqlDataSource1";
             storedProcQuery1.Name = "account1To7(@start, @end, @companyid)";
             queryParameter1.Name = "@start";

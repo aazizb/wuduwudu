@@ -28,7 +28,6 @@ namespace IWSProject.Controllers
             var model = db.Banks;
             ViewData["bank"] = item;
             item.CompanyID = (string)Session["CompanyID"];
-            item.modelid = 11;
             if (ModelState.IsValid)
             {
                 try

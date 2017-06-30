@@ -64,19 +64,24 @@ namespace IWSProject.Models
     {
         public int pk { get; set; }
         public int ItemID { get; set; }
-        public string OID { get; set; }
-        public int ModelID { get; set; }
+        public int OID { get; set; }
+        //public int ModelID { get; set; }
         public string ItemType { get; set; }
         public string CustSupplierID { get; set; }
         public string StoreID { get; set; }
         public DateTime TransDate { get; set; }
+        public DateTime Itemdate { get; set; }
+        public DateTime EntryDate { get; set; }
         public string Periode { get; set; }
         public string Account { get; set; }
         public string OAccount { get; set; }
         public decimal Amount { get; set; }
         public string Side { get; set; }
         public string CompanyID { get; set; }
+        public string CompanyIBAN { get; set; }
+        public string IBAN { get; set; }
         public string Currency { get; set; }
+        public string Info { get; set; }
     }
     public class ConfigureTwoFactorViewModel
     {
@@ -104,7 +109,7 @@ namespace IWSProject.Models
         public string SupplierID { get; set; }
         public bool Area { get; set; }
         public string CompanyID { get; set; }
-        public string VAT { get; set; }
+        public decimal VAT { get; set; }
         public decimal TotalVAT { get; set; }
         public decimal TotalHVAT { get; set; }
         public string Currency { get; set; }
@@ -139,7 +144,7 @@ namespace IWSProject.Models
         public DateTime ItemDate { get; set; }
         public string Text { get; set; }
         public string LineText { get; set; }
-        public string VatCode { get; set; }
+        public decimal Vat { get; set; }
         public string VatAccountID { get; set; }
         public string Periode { get; set; }
         public string DebitAccountID { get; set; }
@@ -161,6 +166,7 @@ namespace IWSProject.Models
         public decimal Price { get; set; }
         public bool IsService { get; set; }
         public string Currency { get; set; }
+        public string Text { get; set; }
     }
     public class AccountBalanceViewModel
     {
@@ -201,7 +207,6 @@ namespace IWSProject.Models
         public string Waehrung { get; set; }
         public string Info { get; set; }
         public string CompanyID { get; set; }
-        public int modelid { get; set; }
         public bool? IsValidated { get; set; }
     }
     public class StatementDetailViewModel
@@ -216,24 +221,40 @@ namespace IWSProject.Models
         public DateTime Valutadatum { get; set; }
         public string Periode { get; set; }
         public string Buchungstext { get; set; }
+        public string Verwendungszweck { get; set; }
+        public string BeguenstigterZahlungspflichtiger { get; set; }
         public string IBAN { get; set; }
     }
-    public class DetailViewModel
+    public class DebitViewModel
     {
         public int TransID { get; set; }
-        public int ModelID { get; set; }
-        public string Item { get; set; }
-        public string Unit { get; set; }
-        public decimal Price { get; set; }
-        public decimal Quantity { get; set; }
-        public string VatCode { get; set; }
-        public DateTime DueDate { get; set; }
-        public string Text { get; set; }
+        public string ODebit { get; set; }
+        public bool Side { get; set; }
+        public DateTime ItemDate { get; set; }
+        public decimal? OVat { get; set; }
+        public decimal? OTotal { get; set; }
         public string Currency { get; set; }
+        public string HeaderText { get; set; }
+     }
+    public class CreditViewModel
+    {
+        public string OCreditVAT { get; set; }
+        public string OCreditTotal { get; set; }
+        public string InputVatAccount { get; set; }
+        public string ExpenseAccount { get; set; }
+        public decimal? OTotal { get; set; }
+        public decimal? OVAT { get; set; }
+    }
+    public class LineInvoiceViewModel
+    {
+        public int TransID { get; set; }
         public string Account { get; set; }
         public bool Side { get; set; }
         public string OAccount { get; set; }
         public decimal Amount { get; set; }
+        public DateTime DueDate { get; set; }
+        public string Text { get; set; }
+        public string Currency { get; set; }
     }
 }
 

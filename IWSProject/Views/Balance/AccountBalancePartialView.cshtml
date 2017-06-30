@@ -19,13 +19,14 @@
     settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
 
     settings.Settings.ShowFilterRow = true;
+    settings.Settings.ShowGroupPanel = true;
     settings.Settings.ShowFilterRowMenu = true;
     settings.SettingsBehavior.AllowFocusedRow = true;
 
     settings.Width = Unit.Percentage(100);
     settings.SettingsPager.PageSize = 24;
-    settings.Settings.VerticalScrollableHeight = 350;
-    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+
+
     settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
     settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
     settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -34,13 +35,20 @@
     {
         column.FieldName = "AccountID";
         column.Caption = IWSLocalResource.account;
+        column.Width = Unit.Percentage(48);
     });
-    settings.Columns.Add("Periode").Caption = IWSLocalResource.periode;
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "Periode";
+        column.Caption = IWSLocalResource.periode;
+        column.Width = Unit.Percentage(8);
+    });
+
     settings.Columns.Add(column =>
     {
         column.FieldName = "Debit";
         column.Caption = IWSLocalResource.debit;
-
+        column.Width = Unit.Percentage(18);
         column.EditorProperties().TextBox(textBox =>
         {
             textBox.DisplayFormatString = "N";
@@ -50,7 +58,7 @@
     {
         column.FieldName = "Credit";
         column.Caption = IWSLocalResource.credit;
-
+        column.Width = Unit.Percentage(18);
         column.EditorProperties().TextBox(textBox =>
         {
             textBox.DisplayFormatString = "N";
@@ -60,6 +68,7 @@
     {
         column.FieldName = "Currency";
         column.Caption = IWSLocalResource.Currency;
+        column.Width = Unit.Percentage(8);
     });
 
 }).Bind(Model).GetHtml()

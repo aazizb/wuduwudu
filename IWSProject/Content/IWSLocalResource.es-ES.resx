@@ -592,7 +592,7 @@
     <value>Line Customer Order es-ES</value>
   </data>
   <data name="Imported" xml:space="preserve">
-    <value>filas se han importado correctamente en la base de datos.</value>
+    <value>filas se han importado correctamente en la base de datos: </value>
   </data>
   <data name="DataImportation" xml:space="preserve">
     <value>Importación de datos</value>
@@ -698,5 +698,20 @@
   </data>
   <data name="totalMovement" xml:space="preserve">
     <value>Total Movimiento</value>
+  </data>
+  <data name="ShippingTerms" xml:space="preserve">
+    <value>Condiciones de envío</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Propietario</value>
+  </data>
+  <data name="EntryDate" xml:space="preserve">
+    <value>Entry Date</value>
+  </data>
+  <data name="ItemDate" xml:space="preserve">
+    <value>Item Date</value>
+  </data>
+  <data name="TransDate" xml:space="preserve">
+    <value>Trans Date</value>
   </data>
 </root>

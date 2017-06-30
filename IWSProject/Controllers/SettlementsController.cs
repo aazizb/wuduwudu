@@ -26,15 +26,24 @@ namespace IWSProject.Controllers
         {
             var model = db.Settlements;
             item.IsValidated = false;
-            item.modelid = 1114;
             item.CompanyId = (string)Session["CompanyID"];
+            int itemOID = (int)item.oid;
             ViewData["item"] = item;
+            bool result;
             if (ModelState.IsValid)
             {
                 try
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    if (itemOID != 0)
+                    {
+                        int itemID = db.Settlements.Max(i => i.id);
+
+                        result = InsertLines(itemID, itemOID, IWSLookUp.DocsType.Settlement.ToString());
+                        if (result)
+                            db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -107,7 +116,6 @@ namespace IWSProject.Controllers
         {
             var model = db.LineSettlements;
 
-            line.modelid = 1115;
             line.transid = transId;
             if (line.Currency == null)
                 line.Currency = (string)Session["Currency"];
@@ -183,5 +191,43 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LineSettlements.Where(p => p.transid == transId).ToList());
         }
+
+        #region Helper
+        public ActionResult HeaderText(int selectedItemIndex)
+        {
+            return Json(IWSLookUp.GetHeaderText(selectedItemIndex, IWSLookUp.DocsType.Settlement.ToString()));
+        }
+        public ActionResult Supplier(int selectedOIDIndex)
+        {
+            return Json(IWSLookUp.GetSupplier(selectedOIDIndex, IWSLookUp.DocsType.Settlement.ToString()));
+        }
+        public ActionResult CostCenter(int selectedOIDIndex)
+        {
+            return Json(IWSLookUp.GetCostCenter(selectedOIDIndex, IWSLookUp.DocsType.Settlement.ToString()));
+        }
+        public bool InsertLines(int itemID, int OID, string ItemType)
+        {
+            bool results = false;
+
+            if (ItemType.Equals(IWSLookUp.DocsType.Settlement.ToString()))
+            {
+                try
+                {
+                    var items = IWSLookUp.GetNewLineSettlement(itemID, OID);
+                    foreach (var item in items)
+                    {
+                        db.LineSettlements.InsertOnSubmit((LineSettlement)item);
+                    }
+                    results = true;
+                }
+                catch (Exception e)
+                {
+                    ViewData["GenericError"] = e.Message;
+                }
+            }
+            return results;
+        }
+
+        #endregion
     }
 }

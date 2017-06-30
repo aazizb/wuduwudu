@@ -28,7 +28,6 @@ namespace IWSProject.Controllers
         {
             var model = db.Customers;
             item.CompanyID = (string)Session["CompanyID"];
-            item.modelid = 3;
             ViewData["customer"] = item;
             if (ModelState.IsValid)
             {

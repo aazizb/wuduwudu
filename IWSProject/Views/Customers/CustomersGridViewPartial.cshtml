@@ -15,7 +15,7 @@
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Percentage(5);
 
         settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
@@ -42,13 +42,15 @@
         settings.KeyFieldName = "id";
 
         settings.Settings.ShowFilterRow = true;
+        settings.Settings.ShowGroupPanel = true;
+        settings.Settings.ShowFilterRowMenu = true;
         settings.SettingsBehavior.ConfirmDelete = true;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+
+
+
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -64,149 +66,189 @@
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+
         settings.SettingsPager.PageSize = 24;
 
-        settings.Columns.Add("id").Caption = IWSLocalResource.id;
-        settings.Columns.Add("name").Caption = IWSLocalResource.name;
-        settings.Columns.Add("street").Caption = IWSLocalResource.street;
-        settings.Columns.Add("city").Caption = IWSLocalResource.city;
-        settings.Columns.Add("state").Caption = IWSLocalResource.state;
-        settings.Columns.Add("zip").Caption = IWSLocalResource.zip;
-        settings.Columns.Add(c =>
+        settings.Columns.Add(column =>
         {
-            c.FieldName = "accountid";
-            c.Caption = IWSLocalResource.accountid;
-            c.EditorProperties().ComboBox(o =>
-            {
-                o.TextField = "Name";
-                o.ValueField = "id";
-                o.ValueType = typeof(string);
-                o.DataSource = IWSLookUp.GetAccounts();
-                o.Columns.Add("id").Caption = IWSLocalResource.id;
-                o.Columns.Add("name").Caption = IWSLocalResource.name;
-                o.TextFormatString = "{0}-{1}";
-            });
+            column.FieldName = "id";
+            column.Caption = IWSLocalResource.id;
+            column.Width = Unit.Percentage(6);
         });
-        settings.Columns.Add("IBAN").Caption = IWSLocalResource.IBAN;
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "name";
+            column.Caption = IWSLocalResource.customer;
+            column.Width = Unit.Percentage(18);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "street";
+            column.Caption = IWSLocalResource.street;
+            column.Width = Unit.Percentage(19);
+        }); settings.Columns.Add(column =>
+        {
+            column.FieldName = "city";
+            column.Caption = IWSLocalResource.city;
+            column.Width = Unit.Percentage(6);
+        }); settings.Columns.Add(column =>
+        {
+            column.FieldName = "state";
+            column.Caption = IWSLocalResource.state;
+            column.Width = Unit.Percentage(6);
+        }); settings.Columns.Add(column =>
+        {
+            column.FieldName = "zip";
+            column.Caption = IWSLocalResource.zip;
+            column.Width = Unit.Percentage(10);
+        });
+        
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "IBAN";
+            column.Caption = IWSLocalResource.IBAN;
+            column.Width = Unit.Percentage(22);
+        });
+
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
         {
-            var editItem = ViewData["customer"] != null ? ViewData["customer"] : templateContent.DataItem;
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
                 formLayoutSettings.Name = "SupplierViewEdit";
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 3;
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "id";
                     i.Caption = IWSLocalResource.id;
+                    i.Width = Unit.Percentage(50);
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(75);
                     });
                 });
-
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "name";
                     i.Caption = IWSLocalResource.name;
+                    i.Width = Unit.Percentage(50);
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(75);
                     });
                 });
-
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "modelid";
-                    i.Visible = false;
-                    i.Caption = IWSLocalResource.modelid;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
-                    });
-                });
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "street";
                     i.Caption = IWSLocalResource.street;
+                    i.Width = Unit.Percentage(50);
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(75);
                     });
                 });
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "city";
                     i.Caption = IWSLocalResource.city;
+                    i.Width = Unit.Percentage(50);
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(75);
                     });
                 });
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "state";
                     i.Caption = IWSLocalResource.state;
+                    i.Width = Unit.Percentage(50);
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(75);
                     });
                 });
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "zip";
                     i.Caption = IWSLocalResource.zip;
+                    i.Width = Unit.Percentage(50);
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(75);
                     });
                 });
-
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "accountid";
-                    i.Caption = IWSLocalResource.accountid;
+                    i.Caption = IWSLocalResource.account;
+                    i.Width = Unit.Percentage(50);
                     i.NestedExtension().ComboBox(s =>
                     {
                         s.Properties.TextField = "name";
                         s.Properties.ValueField = "id";
                         s.Properties.ValueType = typeof(string);
                         s.Properties.DataSource = IWSLookUp.GetAccounts();
-                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
-                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.name;
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "id";
+                            column.Caption = IWSLocalResource.id;
+                            column.Width = Unit.Percentage(15);
+
+                        });
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "name";
+                            column.Caption = IWSLocalResource.account;
+                            column.Width = Unit.Percentage(85);
+
+                        });
+
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(75);
                     });
                 });
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "IBAN";
                     i.Caption = IWSLocalResource.IBAN;
+                    i.Width = Unit.Percentage(50);
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(75);
                     });
                 });
 
@@ -230,7 +272,7 @@
                     b.ToolTip = IWSLocalResource.btnUpdate;
                     b.Style[HtmlTextWriterStyle.MarginRight] = "5px";
                     b.Images.Image.IconID = IconID.ActionsApply16x16;
-                    b.Width = Unit.Pixel(70);
+                    b.Width = Unit.Pixel(80);
                     b.ClientSideEvents.Click = "function(s, e){ CustomersGridView.UpdateEdit(); }";
                 }).Render();
 
@@ -242,7 +284,7 @@
                     b.ToolTip = IWSLocalResource.btnCancel;
                     b.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
                     b.Images.Image.IconID = IconID.ActionsCancel16x16;
-                    b.Width = Unit.Pixel(70);
+                    b.Width = Unit.Pixel(80);
                     b.ClientSideEvents.Click = "function(s, e){ CustomersGridView.CancelEdit(); }";
                 }).Render();
                 });

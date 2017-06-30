@@ -27,9 +27,7 @@ namespace IWSProject.Controllers
             {
                 var model = db.BillOfDeliveries;
                 item.IsValidated = false;
-                item.modelid = 1104;
                 item.CompanyId = (string)Session["CompanyID"];
-                item.oid = item.oid ?? 0;
                 int itemOID = (int)item.oid;
                 ViewData["item"] = item;
                 bool result = false;
@@ -119,7 +117,6 @@ namespace IWSProject.Controllers
             var model = db.LineBillOfDeliveries;
 
             line.transid = transId;
-            line.modelid = 1105;
             ViewData["line"] = line;
             if (ModelState.IsValid)
             {
@@ -216,7 +213,7 @@ namespace IWSProject.Controllers
         }
         public ActionResult Text(string selectedItemIndex)
         {
-            return Json(IWSLookUp.GetLineText(selectedItemIndex));
+            return Json(IWSLookUp.GetLineText(selectedItemIndex) ?? "N/A");
         }
 
         public ActionResult HeaderText(int selectedItemIndex)

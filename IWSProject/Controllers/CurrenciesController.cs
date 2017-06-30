@@ -28,7 +28,6 @@ namespace IWSProject.Controllers
         public ActionResult CurrenciesGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Currency item)
         {
             var model = db.Currencies;
-            item.ModelId = 500;
             item.CompanyID = (string)Session["CompanyID"];
             ViewData["Currencies"] = item;
             if (ModelState.IsValid)

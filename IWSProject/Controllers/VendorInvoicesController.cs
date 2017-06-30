@@ -28,10 +28,8 @@ namespace IWSProject.Controllers
             {
                 var model = db.VendorInvoices;
                 item.IsValidated = false;
-                item.modelid = 112;
                 item.CompanyId = (string)Session["CompanyID"];
-                item.oid = item.oid ?? 0;
-                int itemOID = (int)item.oid;
+                int itemOID = item.oid;
                 ViewData["item"] = item;
                 bool result = false;
                 try
@@ -40,7 +38,7 @@ namespace IWSProject.Controllers
                     db.SubmitChanges();
                     if (itemOID != 0)
                     {
-                        int itemID = db.InventoryInvoices.Max(i => i.id);
+                        int itemID = db.VendorInvoices.Max(i => i.id);
 
                         result = InsertLines(itemID, itemOID, IWSLookUp.DocsType.VendorInvoice.ToString());
                         if (result)
@@ -118,7 +116,6 @@ namespace IWSProject.Controllers
         {
             var model = db.LineVendorInvoices;
 
-            line.modelid = 113;
             line.transid = transId;
             if (line.Currency == null)
                 line.Currency = (string)Session["Currency"];

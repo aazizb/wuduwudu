@@ -586,7 +586,7 @@
     <value>Line Customer Order de-DE</value>
   </data>
   <data name="Imported" xml:space="preserve">
-    <value>rows were successfully imported into the database. de-DE</value>
+    <value>rows were successfully imported into the database. de-DE : </value>
   </data>
   <data name="DataImportation" xml:space="preserve">
     <value>Data Importation de-DE</value>
@@ -692,5 +692,20 @@
   </data>
   <data name="totalMovement" xml:space="preserve">
     <value>Gesamtbewegung</value>
+  </data>
+  <data name="ShippingTerms" xml:space="preserve">
+    <value>Versandbedingungen</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Eigentümer</value>
+  </data>
+  <data name="EntryDate" xml:space="preserve">
+    <value>Entry Date de-DE</value>
+  </data>
+  <data name="ItemDate" xml:space="preserve">
+    <value>Item Date de-DE</value>
+  </data>
+  <data name="TransDate" xml:space="preserve">
+    <value>Trans Date de-DE</value>
   </data>
 </root>

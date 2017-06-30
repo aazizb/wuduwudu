@@ -26,7 +26,6 @@ namespace IWSProject.Controllers
         public ActionResult BankAccountsGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] BankAccount item)
         {
             var model = db.BankAccounts;
-            item.modelid = 12;
             if (item.Currency == null)
                 item.Currency = (string)Session["Currency"];
             item.CompanyID = (string)Session["CompanyID"];

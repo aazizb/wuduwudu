@@ -27,7 +27,6 @@ namespace IWSProject.Controllers
         public ActionResult VatsGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Vat item)
         {
             var model = db.Vats;
-            item.modelid = 5;
             item.CompanyID = (string)Session["CompanyID"];
             ViewData["vats"] = item;
             if (ModelState.IsValid)

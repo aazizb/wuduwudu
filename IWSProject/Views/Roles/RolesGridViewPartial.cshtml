@@ -14,7 +14,7 @@
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Percentage(5);
 
         settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
@@ -51,82 +51,87 @@
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
-
-        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
-        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
-        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
-        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
-        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
 
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.Position = PagerPosition.Bottom;
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+
         settings.SettingsPager.PageSize = 24;
 
-        settings.Columns.Add("Name").Caption = IWSLocalResource.name;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Name";
+            column.Caption = IWSLocalResource.name;
+            column.Width = Unit.Percentage(30);
+        });
+
 
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
         {
-            var editItem = ViewData["role"] != null ? ViewData["role"] : templateContent.DataItem;
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
                 formLayoutSettings.Name = "RolesViewEdit";
                 formLayoutSettings.Width = Unit.Percentage(100);
-                formLayoutSettings.ColCount = 1;
-
+                formLayoutSettings.ColCount = 3;
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "Name";
                     i.Caption = IWSLocalResource.name;
+                    i.Width = Unit.Percentage(23.4);
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
+                        s.Width = Unit.Percentage(75);
                     });
                 });
 
                 formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
                 }).SetNestedContent(() =>
                 {
-                    ViewContext.Writer.Write("<div style='float:right'>");
 
-                    Html.DevExpress().Button(
-                btnSettings =>
-                {
-                    btnSettings.Name = "btnUpdate";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnUpdate;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsUp216x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ RolesGridView.UpdateEdit(); }";
-                }).Render();
+                    Html.DevExpress().Button( btnSettings =>
+                    {
+                        btnSettings.Name = "btnUpdate";
+                        btnSettings.Text = "";
+                        btnSettings.ToolTip = IWSLocalResource.btnUpdate;
+                        btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
+                        btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
+                        btnSettings.Width = Unit.Pixel(80);
+                        btnSettings.ClientSideEvents.Click = "function(s, e){ RolesGridView.UpdateEdit(); }";
+                    }).Render();
 
-                    Html.DevExpress().Button(
-                btnSettings =>
-                {
-                    btnSettings.Name = "btnCancel";
-                    btnSettings.Text = "";
-                    btnSettings.ToolTip = IWSLocalResource.btnCancel;
-                    btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
-                    btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
-                    btnSettings.ClientSideEvents.Click = "function(s, e){ RolesGridView.CancelEdit(); }";
-                }).Render();
-                    ViewContext.Writer.Write("</div>");
+                    Html.DevExpress().Button( btnSettings =>
+                    {
+                        btnSettings.Name = "btnCancel";
+                        btnSettings.Text = "";
+                        btnSettings.ToolTip = IWSLocalResource.btnCancel;
+                        btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
+                        btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
+                        btnSettings.Width = Unit.Pixel(80);
+                        btnSettings.ClientSideEvents.Click = "function(s, e){ RolesGridView.CancelEdit(); }";
+                    }).Render();
+
                 });
             })
             .Bind(ViewData["role"] ?? templateContent.DataItem)

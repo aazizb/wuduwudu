@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using System.Collections;
 using System.Web.Mvc;
 using DevExpress.Web.Mvc;
 using IWSProject.Models;
@@ -26,16 +28,25 @@ namespace IWSProject.Controllers
         {
             var model = db.CustomerInvoices;
             item.IsValidated = false;
-            item.modelid = 1110;
             item.CompanyId = (string)Session["CompanyID"];
-            item.oid = item.oid ?? 0;
+            int itemOID = (int)item.oid;
             ViewData["item"] = item;
+            bool result;
             if (ModelState.IsValid)
             {
                 try
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+
+                    if (itemOID != 0)
+                    {
+                        int itemID = db.CustomerInvoices.Max(i => i.id);
+
+                        result = InsertLines(itemID, itemOID, IWSLookUp.DocsType.CustomerInvoice.ToString());
+                        if (result)
+                            db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -107,7 +118,6 @@ namespace IWSProject.Controllers
         public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LineCustomerInvoice line, int transId)
         {
             var model = db.LineCustomerInvoices;
-            line.modelid = 1111;
             line.transid = transId;
             if (line.Currency == null)
                 line.Currency = (string)Session["Currency"];
@@ -183,5 +193,40 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LineCustomerInvoices.Where(p => p.transid == transId).ToList());
         }
+
+        #region Helper
+         public ActionResult HeaderText(int selectedItemIndex)
+        {
+            return Json(IWSLookUp.GetHeaderText(selectedItemIndex, IWSLookUp.DocsType.CustomerInvoice.ToString()));
+        }
+ 
+        public ActionResult Supplier(int selectedOIDIndex)
+        {
+            return Json(IWSLookUp.GetSupplier(selectedOIDIndex, IWSLookUp.DocsType.CustomerInvoice.ToString()));
+        }
+        public bool InsertLines(int itemID, int OID, string ItemType)
+        {
+            bool results = false;
+            
+            if (ItemType.Equals(IWSLookUp.DocsType.CustomerInvoice.ToString()))
+            {
+                try
+                {
+                    var items = IWSLookUp.GetNewLineCustomerInvoice(itemID, OID);
+                    foreach (var item in items)
+                    {
+                        db.LineCustomerInvoices.InsertOnSubmit((LineCustomerInvoice)item);
+                    }
+                    results = true;
+                }
+                catch (Exception e)
+                {
+                    ViewData["GenericError"] = e.Message;
+                }
+            }
+            return results;
+        }
+
+        #endregion
     }
 }

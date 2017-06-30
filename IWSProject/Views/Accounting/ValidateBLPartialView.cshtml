@@ -25,8 +25,8 @@
 
         settings.Width = Unit.Percentage(100);
 
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+
+
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -44,7 +44,7 @@
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+
         settings.SettingsPager.PageSize = 24;
 
         settings.Columns.Add(column =>
@@ -79,8 +79,8 @@
                 combo.ValueField = "id";
                 combo.ValueType = typeof(string);
                 combo.DataSource = IWSLookUp.GetCustSuppliers();
-                combo.Columns.Add("id").Caption = IWSLocalResource.id;
-                combo.Columns.Add("name").Caption = IWSLocalResource.CustSupplier;
+                combo.Columns.Add("id", IWSLocalResource.id, Unit.Percentage(25));
+                combo.Columns.Add("name", IWSLocalResource.CustSupplier, Unit.Percentage(75));
                 combo.TextFormatString = "{0}-{1}";
             });
         });

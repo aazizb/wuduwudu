@@ -586,7 +586,7 @@
     <value>Line Customer Order</value>
   </data>
   <data name="Imported" xml:space="preserve">
-    <value>rows were successfully imported into the database.</value>
+    <value>rows were successfully imported into the database: </value>
   </data>
   <data name="DataImportation" xml:space="preserve">
     <value>Data Importation</value>
@@ -692,5 +692,20 @@
   </data>
   <data name="totalMovement" xml:space="preserve">
     <value>Total Movement</value>
+  </data>
+  <data name="ShippingTerms" xml:space="preserve">
+    <value>Shipping Terms</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Owner</value>
+  </data>
+  <data name="EntryDate" xml:space="preserve">
+    <value>Entry Date</value>
+  </data>
+  <data name="ItemDate" xml:space="preserve">
+    <value>Item Date</value>
+  </data>
+  <data name="TransDate" xml:space="preserve">
+    <value>Trans Date</value>
   </data>
 </root>

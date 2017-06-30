@@ -18,7 +18,7 @@ namespace IWSProject.Controllers
         // GET: Companies
         public ActionResult Index()
         {
-            return View(db.Companies);
+            return View(db.Companies.Where(c => c.id == (string)Session["CompanyID"]));
         }
         [ValidateInput(false)]
         public ActionResult SetLogo()
@@ -54,15 +54,13 @@ namespace IWSProject.Controllers
         [ValidateInput(false)]
         public ActionResult CompaniesGridViewPartial()
         {
-            return PartialView("CompaniesGridViewPartial", db.Companies);
+            return PartialView("CompaniesGridViewPartial", db.Companies.Where(c => c.id == (string)Session["CompanyID"]));
         }
 
         [HttpPost, ValidateInput(false)]
         public ActionResult CompaniesGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))]Company item)
         {
             var model = db.Companies;
-            item.modelid = 10;
-            //item.CompanyID = (string)Session["CompanyID"];
             ViewData["company"] = item;
             if (ModelState.IsValid)
             {
@@ -80,7 +78,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("CompaniesGridViewPartial", model);
+            return PartialView("CompaniesGridViewPartial", db.Companies.Where(c => c.id == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CompaniesGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))]Company item)
@@ -107,7 +105,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("CompaniesGridViewPartial", model);
+            return PartialView("CompaniesGridViewPartial", db.Companies.Where(c => c.id == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CompaniesGridViewPartialDelete(string id)

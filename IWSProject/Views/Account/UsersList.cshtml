@@ -19,8 +19,8 @@
 
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.PageSize = 24;
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+
+
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -30,18 +30,37 @@
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+
         settings.SettingsPager.PageSize = 24;
 
         settings.ClientSideEvents.RowClick =
                                    string.Format("function(s, e) {{ OnRowClicked(s, e, '{0}'); }}",
                                    Url.Action("UserRoles"));
 
-        settings.Columns.Add("FirstName").Caption = IWSLocalResource.FirstName;
-        settings.Columns.Add("LastName").Caption = IWSLocalResource.LastName;
-        settings.Columns.Add("UserName").Caption = IWSLocalResource.User;
-        settings.Columns.Add("Email").Caption = IWSLocalResource.Email;
-        settings.Columns.Add("Company").Caption = IWSLocalResource.company;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "FirstName";
+            column.Caption = IWSLocalResource.FirstName;
+            column.Width = Unit.Percentage(20);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "LastName";
+            column.Caption = IWSLocalResource.LastName;
+            column.Width = Unit.Percentage(20);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "UserName";
+            column.Caption = IWSLocalResource.User;
+            column.Width = Unit.Percentage(25);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Email";
+            column.Caption = IWSLocalResource.Email;
+            column.Width = Unit.Percentage(30);
+        });
 
         settings.DataBinding = (sender, e) =>
         {

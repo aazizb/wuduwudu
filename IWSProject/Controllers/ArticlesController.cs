@@ -29,7 +29,6 @@ namespace IWSProject.Controllers
         public ActionResult ArticlesGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Article item)
         {
             var model = db.Articles;
-            item.modelid = 7;
             item.CompanyID = (string)Session["CompanyID"];
             if(item.Currency==null)
                 item.Currency = (string)Session["Currency"];

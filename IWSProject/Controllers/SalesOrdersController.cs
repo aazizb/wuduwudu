@@ -26,8 +26,8 @@ namespace IWSProject.Controllers
         {
             var model = db.SalesOrders;
             item.IsValidated = false;
-            item.modelid = 1101;
             item.CompanyId = (string)Session["CompanyID"];
+            item.HeaderText = item.HeaderText ?? "NA";
             ViewData["item"] = item;
             if (ModelState.IsValid)
             {
@@ -108,7 +108,6 @@ namespace IWSProject.Controllers
         {
             var model = db.LineSalesOrders;
 
-            line.modelid = 1102;
             line.transid = transId;
             if (line.Currency == null)
                 line.Currency = (string)Session["Currency"];

@@ -27,9 +27,7 @@ namespace IWSProject.Controllers
             {
                 var model = db.InventoryInvoices;
                 item.IsValidated = false;
-                item.modelid = 110;
                 item.CompanyId = (string)Session["CompanyID"];
-                item.oid = item.oid ?? 0;
                 int itemOID = (int)item.oid;
                 ViewData["item"] = item;
                 bool result = false;
@@ -117,7 +115,6 @@ namespace IWSProject.Controllers
         public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LineInventoryInvoice line, int transId)
         {
             var model = db.LineInventoryInvoices;
-            line.modelid = 111;
             line.transid = transId;
             if (line.Currency == null)
                 line.Currency = (string)Session["Currency"];

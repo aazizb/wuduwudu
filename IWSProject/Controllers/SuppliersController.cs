@@ -27,7 +27,6 @@ namespace IWSProject.Controllers
         public ActionResult SuppliersGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Supplier item)
         {
             var model = db.Suppliers;
-            item.modelid = 1;
             item.CompanyID = (string)Session["CompanyID"];
             ViewData["supplier"] = item;
             if (ModelState.IsValid)

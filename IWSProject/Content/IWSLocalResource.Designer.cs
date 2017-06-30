@@ -601,6 +601,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Entry Date.
+        /// </summary>
+        public static string EntryDate {
+            get {
+                return ResourceManager.GetString("EntryDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Expense Account.
         /// </summary>
         public static string expenseaccountid {
@@ -718,7 +727,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to rows were successfully imported into the database..
+        ///   Looks up a localized string similar to rows were successfully imported into the database: .
         /// </summary>
         public static string Imported {
             get {
@@ -831,6 +840,15 @@ namespace IWSProject.Content {
         public static string ItemCount {
             get {
                 return ResourceManager.GetString("ItemCount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Item Date.
+        /// </summary>
+        public static string ItemDate {
+            get {
+                return ResourceManager.GetString("ItemDate", resourceCulture);
             }
         }
         
@@ -1110,6 +1128,15 @@ namespace IWSProject.Content {
         public static string outputvataccountid {
             get {
                 return ResourceManager.GetString("outputvataccountid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Owner.
+        /// </summary>
+        public static string Owner {
+            get {
+                return ResourceManager.GetString("Owner", resourceCulture);
             }
         }
         
@@ -1465,6 +1492,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Shipping Terms.
+        /// </summary>
+        public static string ShippingTerms {
+            get {
+                return ResourceManager.GetString("ShippingTerms", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ship To:.
         /// </summary>
         public static string ShipTo {
@@ -1650,6 +1686,15 @@ namespace IWSProject.Content {
         public static string TotVAT {
             get {
                 return ResourceManager.GetString("TotVAT", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trans Date.
+        /// </summary>
+        public static string TransDate {
+            get {
+                return ResourceManager.GetString("TransDate", resourceCulture);
             }
         }
         

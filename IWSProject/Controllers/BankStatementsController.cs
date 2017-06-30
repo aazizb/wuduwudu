@@ -4,7 +4,6 @@
     using IWSProject.Content;
     using IWSProject.Models;
     using System;
-    using System.Collections;
     using System.Collections.Generic;
     using System.Globalization;
     using System.IO;
@@ -30,8 +29,10 @@
             if (!string.IsNullOrEmpty(selectedItems))
             {
                 int ItemID = 0;
-                string Area = null;
+
+                int oid = 0;
                 bool results = false;
+
                 Decimal amount;
 
                 IList<string> items = new List<string>(
@@ -55,21 +56,25 @@
 
                     if (amount > 0)
                     {
-                        Area = IWSLookUp.Area.Sales.ToString();
+                        oid = MakeCustomerInvoice(ItemID);
+                        if (oid !=0)
+                            results = MakeSettlement(ItemID, oid);
                     }
                     if (amount < 0)
                     {
-                        Area = IWSLookUp.Area.Purchasing.ToString();
+                        oid = MakeVendorInvoice(ItemID);
+                        if (oid != 0)
+                            results = MakePayment(ItemID, oid);
                     }
-
-                    results = MakePayment(ItemID, Area);
 
                     if (!results)
                     {
                         ViewData["GenericError"] = IWSLocalResource.GenericError;
                         return RedirectToAction("Index");
                     }
-                    results = ValidateItem(ItemID);
+
+                    results = ValidateBankStatement(ItemID);
+
                     if (!results)
                     {
                         ViewData["GenericError"] = IWSLocalResource.GenericError;
@@ -92,7 +97,6 @@
         public ActionResult BankStatementsGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] BankStatement item)
         {
             var model = db.BankStatements;
-            item.modelid = 1600;
             if (item.Waehrung == null)
                 item.Waehrung = (string)Session["Currency"];
 
@@ -187,16 +191,17 @@
             const string bankStatement = "Auftragskonto;Buchungstag;Valutadatum;" +
                 "Buchungstext;Verwendungszweck;Beguenstigter/Zahlungspflichtiger;" +
                 "Kontonummer;BLZ;Betrag;Waehrung;Info";
-            const string accounts = "AccountId;AccountName";
+            const string accounts = "AccountId;AccountName;Balance";
             //foreach (var item in files)
             //{
             string fullPath = files[0].ToString();
 
             string msg = string.Empty;
+            string option = string.Empty;
 
             string fileName = fullPath.Substring(fullPath.IndexOf(@"\") + 1);
 
-            if (fileName == null)
+            if (fileName.Equals(null))
             {
                 return View("ImportCSV");
             }
@@ -212,12 +217,16 @@
                 int count = 0;
                 string Headers = Lines.FirstOrDefault().ToString();
 
-                Lines = Lines.Skip(1).ToArray();                    //skip headers
+                Headers=Headers.Replace("\"","");
+
+                Lines = Lines.Skip(1).ToArray();
 
                 if (Headers.Equals(bankStatement))
                 {
+                    option = IWSLocalResource.BankStatement;
 
                     List<BankStatement> BankStatement = new List<BankStatement>();
+
                     foreach (var line in Lines)
                     {          
                         Fields = line.Split(new char[] { ';' });
@@ -258,17 +267,16 @@
                                     && o.Buchungstag.Equals(n.Buchungstag)
                                     && o.Buchungstext.Equals(n.Buchungstext)
                                     && o.Info.Equals(n.Info)
-                                    && o.Kontonummer.Equals(n.Kontonummer)
+                                    //&& o.Kontonummer.Equals(n.Kontonummer)
                                     && o.Valutadatum.Equals(n.Valutadatum)
                                     && o.Verwendungszweck.Equals(n.Verwendungszweck)
                                     && o.Waehrung.Equals(n.Waehrung)
                                     && o.CompanyID.Equals(n.CompanyID)).FirstOrDefault();
-                        if (u == null)          // add new record
+                        if (u == null)
                         {
-                            n.modelid = 1600;
                             n.IsValidated = false;
                             db.BankStatements.InsertOnSubmit(n);
-                            count += 1;         //and counts inserted record
+                            count += 1;
                         }
                     }
 
@@ -276,7 +284,8 @@
 
                 if (Headers.Equals(accounts))
                 {
-                    
+                    option = IWSLocalResource.account;
+
                     List<Account> Account = new List<Account>();
                     foreach (var line in Lines)
                     {
@@ -286,15 +295,12 @@
                         {
                             id = Fields[0],
                             name = Fields[1],
-                            modelid = 9,
                             description = string.Empty,
-                            groupid = "0000",
                             dateofopen = DateTime.Now,
                             dateofclose = DateTime.Now, 
-                            balance=0,
-                            Currency=string.Empty,
+                            balance = Convert.ToDecimal(Fields[2]),
                             CompanyID = (string)Session["CompanyID"],
-                            ParentId=string.Empty,
+                            ParentId = string.Empty,
                             IsUsed = true
                         });
                         
@@ -314,9 +320,27 @@
                 }
 
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+
+                if (Headers.Equals(bankStatement))
+                {
+                    var bankStatements =
+                        from statement in db.BankStatements
+                        where
+                          statement.Buchungstext == "ABSCHLUSS" &&
+                          statement.Kontonummer.Length == 0
+                        select statement;
+                        foreach (var item in bankStatements)
+                        {
+                        item.Kontonummer = ("DE47" + item.BLZ + "00" + item.Auftragskonto);
+                        }
+                        db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+
+                        AddNewAccount();
+                }
+
                 if (count > 0)
                 {
-                    msg= $"{count} {IWSLocalResource.Imported}";
+                    msg= $"{count} {IWSLocalResource.Imported} {option} ";
                 }
                 else
                 {
@@ -329,15 +353,16 @@
             }
             //}
             var Message = new { Description = msg };
-            AddNewAccount();
+
             return Json(Message);
         }
 
         #region Helper
+
         /// <summary>
-        /// Add new Customer and/or Supplier from newly imported CSV bank statement data
+        /// Add new Customer and/or Supplier from newly imported CSV bank statements data
         /// </summary>
-        /// <returns>true on success and false otherwize</returns>
+        /// <returns>true on success or false otherwize</returns>
         private bool AddNewAccount()
         {
             string companyID = (string)Session["CompanyID"];
@@ -352,22 +377,22 @@
 
             try
             {
+
                 var bankStatement =
                     (from b in db.BankStatements
-                     where
-                        b.BeguenstigterZahlungspflichtiger.Length > 0 &&
-                        b.Kontonummer.Length > 0 &&
-                        b.IsValidated.Equals(false)
+                     orderby
+                       (int?)Math.Sign((int)b.Betrag)
                      select new
                      {
                          Name = b.BeguenstigterZahlungspflichtiger,
-                         IBAN=b.Kontonummer,
-                         IsCustomer = Math.Sign((int)b.Betrag) <0 ? false : true
+                         IBAN = b.Kontonummer,
+                         BIC = b.BLZ,
+                         IsCustomer = Math.Sign((int)b.Betrag) < 0 ? false : true
                      }).Distinct();
 
                     foreach (var r in bankStatement)
                     {
-                    if (r.IsCustomer.Equals(true)  )
+                    if (r.IsCustomer.Equals(true))
                     {
                         var u = db.Customers.FirstOrDefault(o => o.IBAN.Equals(r.IBAN) 
                                                         && o.CompanyID.Equals(companyID));
@@ -377,13 +402,13 @@
                             u = new Customer
                             {
                                 id = Convert.ToString(customerMax),
-                                name = r.Name,
-                                modelid = 3,
+                                name = r.Name??"QWQWQWQWQ",
+                                BIC=r.BIC,
                                 street = "",
                                 city = "",
                                 state = "",
                                 zip = "",
-                                accountid = "7000",
+                                accountid = "400100",// clients divers
                                 CompanyID = companyID,
                                 IBAN=r.IBAN
                             };
@@ -403,13 +428,13 @@
                             u = new Supplier
                             {
                                 id = Convert.ToString(supplierMax),
-                                name = r.Name,
-                                modelid = 1,
-                                street="",
-                                city="",
-                                state="",
+                                name = r.Name ?? "QWQWQWQWQ",
+                                BIC = r.BIC,
+                                street = "",
+                                city= "",
+                                state= "",
                                 zip="",
-                                accountid = "8000",
+                                accountid = "440100", // fournisseurs divers
                                 CompanyID = companyID,
                                 IBAN=r.IBAN
                             };
@@ -429,101 +454,217 @@
                 return false;
             }
         }
-        private bool MakePayment(int bankStatementID, string area)
-        {
-            StatementDetailViewModel SD = IWSLookUp.GetStatementDetail(bankStatementID, area);
-            int itemID = 0;
-            bool results=false;
-            if (SD == null)
-                return results;
-            if (area.Equals(IWSLookUp.Area.Purchasing.ToString()))
-            {
-                Payment payment = new Payment
-                {
-                    oid = 0,
-                    modelid = 114,
-                    store = "200",
-                    account = SD.Id,
-                    HeaderText = SD.Info,
-                    ItemDate = (DateTime)SD.Buchungstag,
-                    CompanyId = (string)Session["CompanyID"],
-                    IsValidated = false
-                };
-                itemID = new AccountingController().MakePaymentHeader(payment);
-                results = (itemID > 0);
-                if (results)
-                {
-                    List<LinePayment> linePayment = new List<LinePayment>
-                    { new LinePayment{
-                        transid = itemID,
-                        modelid = 113,
-                        account = SD.AccountID,
-                        side = true,
-                        oaccount = SD.BankAccountID,
-                        amount = SD.Betrag,
-                        Currency = SD.Waehrung,
-                        duedate = SD.Valutadatum,
-                        text = SD.Buchungstext}
-                    };
-                    int countLineID = new AccountingController().MakePaymentLine(linePayment);
-                    results = (countLineID > 0);
-                }
-            }
 
-            if (area.Equals(IWSLookUp.Area.Sales.ToString()))
+        private int MakeCustomerInvoice(int bankStatementID)
+        {
+            StatementDetailViewModel SD = IWSLookUp.GetStatementDetail(bankStatementID,
+                                            IWSLookUp.DocsType.CustomerInvoice.ToString());
+
+            int itemID = 0;
+
+            if (SD.Equals(null))
+                return itemID;
+
+            CustomerInvoice customerInvoice = new CustomerInvoice
             {
-                Settlement settlement = new Settlement
+                oid = 0,
+                CostCenter = "200", // to be confirmed
+                account = SD.Id,
+                HeaderText = SD.Verwendungszweck,
+                TransDate = SD.Valutadatum,
+                ItemDate = SD.Buchungstag,
+                EntryDate = DateTime.Today,
+                CompanyId = (string)Session["CompanyID"],
+                IsValidated = false
+            };
+            itemID = new AccountingController().MakeCustomerInvoiceHeader(customerInvoice);
+
+            if (itemID == 0)
+                return itemID;
+
+            List<LineCustomerInvoice> lineCustomerInvoice = new List<LineCustomerInvoice>
+            {
+                new LineCustomerInvoice
                 {
-                    oid = 0,
-                    modelid = 114,
-                    store = "100",
+                    transid = itemID,
+                    account = SD.AccountID,
+                    side = true,
+                    oaccount = SD.BankAccountID,
+                    amount = SD.Betrag,
+                    Currency = SD.Waehrung,
+                    duedate = SD.Valutadatum,
+                    text = SD.Buchungstext
+                }
+            };
+            int countLineID = new AccountingController().MakeCustomerInvoiceLine(lineCustomerInvoice);
+
+            if (countLineID == 0)
+                return countLineID;
+
+            return itemID;
+        }
+
+        private int MakeVendorInvoice(int bankStatementID)
+        {
+            StatementDetailViewModel SD = IWSLookUp.GetStatementDetail(bankStatementID,
+                                            IWSLookUp.DocsType.VendorInvoice.ToString());
+
+            int itemID = 0;
+
+            if (SD.Equals(null))
+                return itemID;
+
+            VendorInvoice vendorInvoice = new VendorInvoice
+            {
+                oid = 0,
+                CostCenter = "200", // to be confirmed
+                account = SD.Id,
+                HeaderText = SD.Verwendungszweck,
+                TransDate = SD.Valutadatum,
+                ItemDate = SD.Buchungstag,
+                EntryDate = DateTime.Today,
+                CompanyId = (string)Session["CompanyID"],
+                IsValidated = false
+            };
+            itemID = new AccountingController().MakeVendorInvoiceHeader(vendorInvoice);            
+
+            if (itemID == 0)
+                return itemID;
+
+            List<LineVendorInvoice> lineVendorInvoice = new List<LineVendorInvoice>
+            {
+                new LineVendorInvoice
+                {
+                    transid = itemID,
+                    account = SD.AccountID,
+                    side = true,
+                    oaccount = SD.BankAccountID,
+                    amount = SD.Betrag,
+                    Currency = SD.Waehrung,
+                    duedate = SD.Valutadatum,
+                    text = SD.Buchungstext
+                }
+            };
+            int countLineID = new AccountingController().MakeVendorInvoiceLine(lineVendorInvoice);
+
+            if(countLineID == 0)
+                return countLineID;
+
+            return itemID;
+        }
+
+        private bool MakePayment(int bankStatementID, int oid)
+        {
+            StatementDetailViewModel SD = IWSLookUp.GetStatementDetail(bankStatementID,
+                                            IWSLookUp.DocsType.Payment.ToString());
+
+            int itemID = 0;
+
+            if (SD.Equals(null) )
+                return false;
+
+            Payment payment = new Payment
+            {
+                oid = oid,
+                CostCenter = "200", // to be confirmed
+                account = SD.Id,
+                HeaderText = SD.Verwendungszweck,
+                TransDate = SD.Valutadatum,
+                ItemDate = SD.Buchungstag,
+                EntryDate = DateTime.Today,
+                CompanyId = (string)Session["CompanyID"],
+                IsValidated = false
+            };
+            itemID = new AccountingController().MakePaymentHeader(payment);
+
+            if (!(itemID > 0))
+                return false;
+
+            List<LinePayment> linePayment = new List<LinePayment>
+            {
+                new LinePayment
+                {
+                    transid = itemID,
+                    account = SD.AccountID,
+                    side = true,
+                    oaccount = SD.BankAccountID,
+                    amount = SD.Betrag,
+                    Currency = SD.Waehrung,
+                    duedate = SD.Valutadatum,
+                    text = SD.Buchungstext
+                }
+            };
+            int countLineID = new AccountingController().MakePaymentLine(linePayment);
+
+            return (countLineID > 0);
+        }
+
+        private bool MakeSettlement(int bankStatementID, int oid)
+        {
+            StatementDetailViewModel SD = IWSLookUp.GetStatementDetail(bankStatementID,
+                                                IWSLookUp.DocsType.Settlement.ToString());
+            int itemID = 0;
+
+            if (SD.Equals(null))
+                return false;
+
+            Settlement settlement = new Settlement
+                {
+                    oid = oid,
+                    CostCenter = "100", // to be confirmed
                     account = SD.Id,
-                    HeaderText = SD.Info,
-                    ItemDate = (DateTime)SD.Buchungstag,
+                    HeaderText = SD.Verwendungszweck,
+                    TransDate = SD.Valutadatum,
+                    ItemDate = SD.Buchungstag,
+                    EntryDate = DateTime.Today,
                     CompanyId = (string)Session["CompanyID"],
                     IsValidated = false
                 };
-                itemID = new AccountingController().MakeSettlementHeader(settlement);
-                results = (itemID > 0);
-                if (results)
+            itemID = new AccountingController().MakeSettlementHeader(settlement);
+
+            if (!(itemID > 0))
+                return false;
+
+            List<LineSettlement> lineSettlement = new List<LineSettlement>
                 {
-                    List<LineSettlement> lineSettlement = new List<LineSettlement>
-                    { new LineSettlement{
+                    new LineSettlement
+                    {
                         transid = itemID,
-                        modelid = 113,
                         account = SD.BankAccountID,
                         side = true,
                         oaccount = SD.AccountID,
                         amount = SD.Betrag,
                         Currency = SD.Waehrung,
                         duedate = SD.Valutadatum,
-                        text = SD.Buchungstext}
-                    };
-                    int countLineID = new AccountingController().MakeSettlementLine(lineSettlement);
-                    results = (countLineID > 0);
-                }
-            }
+                        text = SD.Buchungstext
+                    }
+                };
+            int countLineID = new AccountingController().MakeSettlementLine(lineSettlement);
 
-            return results;
+            return (countLineID > 0);
         }
 
-        private bool ValidateItem(int bankStatementID)
+        private bool ValidateBankStatement(int ItemID)
         {
             try
             { 
-                var docs = db.BankStatements.Single(item => item.id == bankStatementID);
-                if (docs != null)
-                {
-                    docs.IsValidated = true;
-                    return true;
-                }
+                var docs = db.BankStatements.Single(item => item.id == ItemID);
+
+                if (docs.Equals(null))
+                    return false;
+
+                docs.IsValidated = true;
+
+                return true;
             }
             catch (Exception e)
             {
                 ViewData["GenericError"] = e.Message;
+
+                return false;
             }
-            return false;
         }
+
         public class Helper
         {
             public const string RootFolder = "~/Content/Uploads";

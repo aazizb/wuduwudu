@@ -446,7 +446,6 @@
       <LastGenOutput>IWSDataCX.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="ClassDiagram1.cd" />
     <None Include="Properties\PublishProfiles\Default Settings.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -801,18 +800,6 @@
     <Content Include="Views\Journal\JournalPartialView.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>JournalPartialView.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\CustomerOrders\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\CustomerOrders\MasterGridViewPartial.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>MasterGridViewPartial.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\CustomerOrders\DetailGridViewPartial.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>DetailGridViewPartial.generated.cs</LastGenOutput>
     </Content>
     <Content Include="Views\CustomerInvoices\Index.cshtml">
       <Generator>RazorGenerator</Generator>
@@ -1321,21 +1308,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MasterGridViewPartial.cshtml</DependentUpon>
     </Compile>
-    <Compile Include="Views\CustomerOrders\DetailGridViewPartial.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DetailGridViewPartial.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CustomerOrders\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\CustomerOrders\MasterGridViewPartial.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MasterGridViewPartial.cshtml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Customers\CustomersGridViewPartial.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1717,7 +1689,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="App_Data\Uploads\" />
     <Folder Include="Content\Uploads\" />
     <Folder Include="Models\PostgreSQL\" />
     <Folder Include="Upload\Files\" />

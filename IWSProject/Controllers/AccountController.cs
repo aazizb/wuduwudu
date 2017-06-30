@@ -454,8 +454,10 @@ namespace IWSProject.Controllers
         [Authorize(Roles = "Admins")]
         public ActionResult Index()
         {
+
             var Db = new ApplicationDbContext();
-            var users = Db.Users;
+            string companyid= (string)Session["CompanyID"];
+            var users = Db.Users.Where(c => c.Company == companyid);
             var model = new List<EditUserViewModel>();
             foreach (var user in users)
             {
@@ -469,7 +471,8 @@ namespace IWSProject.Controllers
         public ActionResult UsersList()
         {
             var Db = new ApplicationDbContext();
-            var users = Db.Users;
+            string companyid = (string)Session["CompanyID"];
+            var users = Db.Users.Where(c => c.Company == companyid);
             var model = new List<EditUserViewModel>();
             foreach (var user in users)
             {

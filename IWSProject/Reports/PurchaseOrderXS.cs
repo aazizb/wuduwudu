@@ -673,7 +673,7 @@ public class PurchaseOrderXS : DevExpress.XtraReports.UI.XtraReport
             // xrTableCell4
             // 
             this.xrTableCell4.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "Master.MasterDetails.price")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "Master.MasterDetails.price", "{0:n2}")});
             this.xrTableCell4.Dpi = 100F;
             this.xrTableCell4.Name = "xrTableCell4";
             this.xrTableCell4.StylePriority.UseTextAlignment = false;
@@ -684,7 +684,7 @@ public class PurchaseOrderXS : DevExpress.XtraReports.UI.XtraReport
             // xrTableCell5
             // 
             this.xrTableCell5.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
-            new DevExpress.XtraReports.UI.XRBinding("Text", null, "Master.MasterDetails.lineNet")});
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "Master.MasterDetails.lineNet", "{0:n2}")});
             this.xrTableCell5.Dpi = 100F;
             this.xrTableCell5.Name = "xrTableCell5";
             this.xrTableCell5.StylePriority.UseTextAlignment = false;

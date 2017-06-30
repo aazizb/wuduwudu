@@ -27,7 +27,6 @@ namespace IWSProject.Controllers
         public ActionResult StoresGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))]Store item)
         {
             var model = db.Stores;
-            item.modelid = 2;
             item.CompanyID = (string)Session["CompanyID"];
             ViewData["stores"] = item;
             if (ModelState.IsValid)

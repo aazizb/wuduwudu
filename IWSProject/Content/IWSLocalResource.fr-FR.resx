@@ -247,7 +247,7 @@
     <value>Nom</value>
   </data>
   <data name="InventoryInvoice" xml:space="preserve">
-    <value>Inventory Invoice</value>
+    <value>Facture Fournisseur Logistic</value>
   </data>
   <data name="LineInventoryInvoice" xml:space="preserve">
     <value>Line Inventory Invoice</value>
@@ -271,7 +271,7 @@
     <value>Ligne Paiement</value>
   </data>
   <data name="vendorinvoice" xml:space="preserve">
-    <value>Facture Fournisseur</value>
+    <value>Facture Fournisseur Compta</value>
   </data>
   <data name="linevendorinvoice" xml:space="preserve">
     <value>Ligne Facture Fournisseur</value>
@@ -495,7 +495,7 @@
   <data name="selling" xml:space="preserve">
     <value>Vente</value>
   </data>
-  <data name="Settlemet" xml:space="preserve">
+  <data name="Settlement" xml:space="preserve">
     <value>Encaissement</value>
   </data>
   <data name="SalesInvoice" xml:space="preserve">
@@ -592,7 +592,7 @@
     <value>Lignes Commande Client</value>
   </data>
   <data name="Imported" xml:space="preserve">
-    <value>lignes ont été importées avec succès dans la base de données.</value>
+    <value>lignes ont été importées avec succès dans la base de données: </value>
   </data>
   <data name="DataImportation" xml:space="preserve">
     <value>Importation de données</value>
@@ -619,7 +619,7 @@
     <value>Bénéficiaire</value>
   </data>
   <data name="BookingText" xml:space="preserve">
-    <value>Texte Commande</value>
+    <value>Libellé</value>
   </data>
   <data name="IBAN" xml:space="preserve">
     <value>IBAN</value>
@@ -698,5 +698,20 @@
   </data>
   <data name="totalMovement" xml:space="preserve">
     <value>Total Mouvement</value>
+  </data>
+  <data name="ShippingTerms" xml:space="preserve">
+    <value>Conditions d'expédition</value>
+  </data>
+  <data name="Owner" xml:space="preserve">
+    <value>Proppriétaire</value>
+  </data>
+  <data name="EntryDate" xml:space="preserve">
+    <value>Date Validation</value>
+  </data>
+  <data name="ItemDate" xml:space="preserve">
+    <value>Date Pièce</value>
+  </data>
+  <data name="TransDate" xml:space="preserve">
+    <value>Trans Date</value>
   </data>
 </root>

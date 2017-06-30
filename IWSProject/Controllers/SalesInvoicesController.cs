@@ -28,12 +28,10 @@ namespace IWSProject.Controllers
             {
                 var model = db.SalesInvoices;
                 item.IsValidated = false;
-                item.modelid = 1112;
                 item.CompanyId = (string)Session["CompanyID"];
-                item.oid = item.oid ?? 0;
                 int itemOID = (int)item.oid;
                 ViewData["item"] = item;
-                bool result = false;
+                bool result;
                 try
                 {
                     model.InsertOnSubmit(item);
@@ -117,7 +115,6 @@ namespace IWSProject.Controllers
         public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LineSalesInvoice line, int transId)
         {
             var model = db.LineSalesInvoices;
-            line.modelid = 1113;
             line.transid = transId;
             if (line.Currency == null)
                 line.Currency = (string)Session["Currency"];

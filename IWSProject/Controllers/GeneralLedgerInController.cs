@@ -26,16 +26,25 @@ namespace IWSProject.Controllers
         {
             var model = db.GeneralLedgers;
             item.IsValidated = false;
-            item.modelid = 2000;
             item.CompanyId = (string)Session["CompanyID"];
+            int itemOID = item.oid;
             item.Area = IWSLookUp.Area.Sales.ToString();
             ViewData["item"] = item;
+            bool result;
             if (ModelState.IsValid)
             {
                 try
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    if (itemOID != 0)
+                    {
+                        int itemID = db.GeneralLedgers.Max(i => i.id);
+
+                        result = InsertLines(itemID, itemOID, IWSLookUp.DocsType.GeneralLedgerIn.ToString());
+                        if (result)
+                            db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                    }
                 }
                 catch (Exception e)
                 {
@@ -46,7 +55,7 @@ namespace IWSProject.Controllers
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MasterGridViewPartial", model.Where(a => a.Area == IWSLookUp.Area.Sales.ToString()).ToList());
+            return PartialView("MasterGridViewPartial", IWSLookUp.GetGeneralLedger(IWSLookUp.Area.Sales.ToString()));
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] GeneralLedger item)
@@ -108,7 +117,6 @@ namespace IWSProject.Controllers
         {
             var model = db.LineGeneralLedgers;
 
-            line.modelid = 2001;
             line.transid = transId;
             if (line.Currency == null)
                 line.Currency = (string)Session["Currency"];
@@ -184,6 +192,40 @@ namespace IWSProject.Controllers
             }
             return PartialView("DetailGridViewPartial", db.LineGeneralLedgers.Where(p => p.transid == transId).ToList());
         }
+
+        #region Helper
+        public ActionResult HeaderText(int selectedItemIndex)
+        {
+            return Json(IWSLookUp.GetHeaderText(selectedItemIndex, IWSLookUp.DocsType.GeneralLedgerIn.ToString()));
+        }
+        public ActionResult CostCenter(int selectedOIDIndex)
+        {
+            return Json(IWSLookUp.GetCostCenter(selectedOIDIndex, IWSLookUp.DocsType.GeneralLedgerIn.ToString()));
+        }
+        public bool InsertLines(int itemID, int OID, string ItemType)
+        {
+            bool results = false;
+
+            if (ItemType.Equals(IWSLookUp.DocsType.GeneralLedgerIn.ToString()))
+            {
+                try
+                {
+                    var items = IWSLookUp.GetNewGeneralLedgerIn(itemID, OID);
+                    foreach (var item in items)
+                    {
+                        db.LineGeneralLedgers.InsertOnSubmit((LineGeneralLedger)item);
+                    }
+                    results = true;
+                }
+                catch (Exception e)
+                {
+                    ViewData["GenericError"] = e.Message;
+                }
+            }
+            return results;
+        }
+
+        #endregion
 
     }
 }

@@ -347,7 +347,7 @@ public class PeriodicBalance : DevExpress.XtraReports.UI.XtraReport
             dynamicListLookUpSettings2.ValueMember = "Periode";
             this.paramPeriodFrom.LookUpSettings = dynamicListLookUpSettings2;
             this.paramPeriodFrom.Name = "paramPeriodFrom";
-            paramPeriodFrom.ValueInfo = IWSLookUp.GetPeriodMin();
+            //paramPeriodFrom.ValueInfo = IWSLookUp.GetPeriodMin();
             // 
             // paramPeriodTo
             // 
@@ -360,7 +360,7 @@ public class PeriodicBalance : DevExpress.XtraReports.UI.XtraReport
             dynamicListLookUpSettings3.ValueMember = "Periode";
             this.paramPeriodTo.LookUpSettings = dynamicListLookUpSettings3;
             this.paramPeriodTo.Name = "paramPeriodTo";
-            paramPeriodTo.ValueInfo = IWSLookUp.GetPeriodMax();
+            //paramPeriodTo.ValueInfo = IWSLookUp.GetPeriodMax();
             // xrControlStyle1
             // 
             this.xrControlStyle1.BackColor = System.Drawing.Color.WhiteSmoke;

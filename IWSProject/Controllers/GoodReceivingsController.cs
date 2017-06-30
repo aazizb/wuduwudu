@@ -27,9 +27,7 @@ namespace IWSProject.Controllers
             {
                 var model = db.GoodReceivings;
                 item.IsValidated = false;
-                item.modelid = 104;
                 item.CompanyId = (string)Session["CompanyID"];
-                item.oid = item.oid ?? 0;
                 int itemOID = (int)item.oid;
                 ViewData["item"] = item;
                 bool result = false;
@@ -117,7 +115,6 @@ namespace IWSProject.Controllers
         {
             var model = db.LineGoodReceivings;
 
-            line.modelid = 105;
             line.transid = transId;
             if (line.Currency == null)
                 line.Currency = (string)Session["Currency"];
