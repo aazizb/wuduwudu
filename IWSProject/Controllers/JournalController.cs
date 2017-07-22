@@ -13,13 +13,7 @@ namespace IWSProject.Controllers
         // GET: Balance
         public ActionResult Index()
         {
-            var journal = IWSLookUp.GetJournal((string)Session["CompanyID"]);
-            var model = new List<JournalViewModel>();
-            foreach (JournalViewModel item in journal)
-            {
-                model.Add(item);
-            }
-            return View(model);
+            return View(IWSLookUp.GetJournal((string)Session["CompanyID"]));
         }
         [ValidateInput(false)]
         public ActionResult JournalPartialView()

@@ -129,21 +129,6 @@
                 });
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
-
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "description";
-                    i.Caption = IWSLocalResource.description;
-                    i.Width = Unit.Percentage(50);
-                    i.NestedExtension().Memo(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(75);
-                    });
-                });
-                formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "PVat";
@@ -152,7 +137,7 @@
                     i.NestedExtension().SpinEdit(s =>
                     {
                         s.Properties.MinValue = 0;
-                        s.Properties.MaxValue = 0.5M;
+                        s.Properties.MaxValue = 0.55M;
                         s.Properties.NumberType = SpinEditNumberType.Float;
                         s.Properties.Increment = 0.01M;
                         s.Properties.LargeIncrement = 0.1M;
@@ -262,13 +247,23 @@
                         s.Width = Unit.Percentage(75);
                     });
                 });
-
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "description";
+                    i.Caption = IWSLocalResource.description;
+                    i.Width = Unit.Percentage(50);
+                    i.NestedExtension().Memo(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(75);
+                        s.Height = Unit.Pixel(80);
+                    });
+                });
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
-
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;

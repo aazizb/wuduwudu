@@ -178,7 +178,7 @@
     <value>T.V.A</value>
   </data>
   <data name="groupid" xml:space="preserve">
-    <value>Group ID</value>
+    <value>Groupe #</value>
   </data>
   <data name="packunit" xml:space="preserve">
     <value>Pack Unit</value>
@@ -217,7 +217,7 @@
     <value>Ligne Bon de Commande</value>
   </data>
   <data name="accountid" xml:space="preserve">
-    <value>Compte#</value>
+    <value>Compte #</value>
   </data>
   <data name="city" xml:space="preserve">
     <value>Ville</value>
@@ -295,7 +295,7 @@
     <value>Revenue Account fr-FR</value>
   </data>
   <data name="stockaccountid" xml:space="preserve">
-    <value>Compte Stock</value>
+    <value>Compte Stock/Charges</value>
   </data>
   <data name="bankaccountid" xml:space="preserve">
     <value>Compte Banquaire</value>
@@ -547,10 +547,10 @@
     <value>Ligne Comptes Généraux</value>
   </data>
   <data name="PeriodFrom" xml:space="preserve">
-    <value>Période de:</value>
+    <value>Période de</value>
   </data>
   <data name="PeriodTo" xml:space="preserve">
-    <value>Période à:</value>
+    <value>Période à</value>
   </data>
   <data name="Consultation" xml:space="preserve">
     <value>Consultation</value>
@@ -713,5 +713,29 @@
   </data>
   <data name="TransDate" xml:space="preserve">
     <value>Trans Date</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="returns" xml:space="preserve">
+    <value>Résultat</value>
+  </data>
+  <data name="scredit" xml:space="preserve">
+    <value>Solde Credit</value>
+  </data>
+  <data name="sdebit" xml:space="preserve">
+    <value>Solde Debit</value>
+  </data>
+  <data name="tcredit" xml:space="preserve">
+    <value>Total Credit</value>
+  </data>
+  <data name="tdebit" xml:space="preserve">
+    <value>Total Debit</value>
+  </data>
+  <data name="classx" xml:space="preserve">
+    <value>Classe</value>
+  </data>
+  <data name="subClass" xml:space="preserve">
+    <value>Sous-Classe</value>
   </data>
 </root>

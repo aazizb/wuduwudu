@@ -117,7 +117,6 @@
                 combo.TextFormatString = "{0}-{1}";
             });
         });
-
         settings.Columns.Add(column =>
         {
             column.FieldName = "account";
@@ -355,6 +354,7 @@
                 {
                     i.FieldName = "HeaderText";
                     i.Caption = IWSLocalResource.text;
+                    i.ColSpan = 2;
                     i.NestedExtension().Memo(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -363,7 +363,6 @@
                     });
                 });
 
-                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {

@@ -65,11 +65,6 @@ namespace IWSProject.Controllers
 
                         Session["CompanyID"] = companyID;
 
-                        if (Session["Currency"] != null)
-                            Session["Currency"] = null;
-
-                        Session["Currency"] = IWSLookUp.GetCurrency(model.UserName);
-
                         if (Session["Menus"] != null)
                             Session["Menus"] = null;
                         

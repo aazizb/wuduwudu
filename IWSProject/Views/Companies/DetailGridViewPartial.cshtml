@@ -14,10 +14,8 @@
         settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "Companies", Action = "DetailGridViewPartialUpdate", owner = Session["owner"] };
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Companies", Action = "DetailGridViewPartialDelete", owner = Session["owner"] };
 
-        settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
-        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-        settings.SettingsResizing.Visualization = ResizingMode.Postponed;
-
+        settings.SettingsEditing.Mode = GridViewEditingMode.EditForm;
+        
         settings.SettingsBehavior.ConfirmDelete = true;
 
         settings.CommandColumn.Visible = true;

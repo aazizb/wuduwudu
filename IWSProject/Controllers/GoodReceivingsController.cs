@@ -116,8 +116,6 @@ namespace IWSProject.Controllers
             var model = db.LineGoodReceivings;
 
             line.transid = transId;
-            if (line.Currency == null)
-                line.Currency = (string)Session["Currency"];
             ViewData["lineGood"] = line;
 
             if (ModelState.IsValid)
@@ -209,9 +207,9 @@ namespace IWSProject.Controllers
         {
             return Json(IWSLookUp.GetSalesPrice(selectedItemIndex));
         }
-        public ActionResult Text(string selectedItemIndex)
+        public ActionResult Currency(string selectedItemIndex)
         {
-            return Json(IWSLookUp.GetLineText(selectedItemIndex));
+            return Json(IWSLookUp.GetCurrency(selectedItemIndex));
         }
         public ActionResult HeaderText(int selectedItemIndex)
         {

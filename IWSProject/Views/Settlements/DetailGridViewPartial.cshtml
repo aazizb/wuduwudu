@@ -49,14 +49,12 @@
         settings.InitNewRow = (s, e) =>
         {
             e.NewValues["duedate"] = DateTime.Today;
-            e.NewValues["Currency"] = (string)Session["Currency"];
         };
 
 
         settings.KeyFieldName = "id";
 
         settings.Width = Unit.Percentage(100);
-        settings.SettingsPager.PageSize = 24;
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -73,12 +71,6 @@
 
         settings.Styles.RowHotTrack.Cursor = "pointer";
         settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
-
-        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
-        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
-        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
-        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = true;
-        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
 
         settings.Columns.Add(column =>
         {
@@ -318,6 +310,7 @@
                 {
                     i.FieldName = "text";
                     i.Caption = IWSLocalResource.text;
+                    i.ColSpan = 3;
                     i.NestedExtension().Memo(s =>
                     {
                         s.ShowModelErrors = true;
@@ -325,7 +318,7 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
-
+                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;

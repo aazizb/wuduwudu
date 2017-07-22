@@ -120,8 +120,6 @@ namespace IWSProject.Controllers
             var model = db.LineGeneralLedgers;
 
             line.transid = transId;
-            if (line.Currency == null)
-                line.Currency = (string)Session["Currency"];
             ViewData["lineGeneralLedger"] = line;
             if (ModelState.IsValid)
             {

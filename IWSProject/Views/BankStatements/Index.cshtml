@@ -41,7 +41,7 @@
 {
     settings.Name = "btnSubmit";
     settings.Text = IWSLocalResource.Validate;
-    settings.Width = Unit.Pixel(150);
+    settings.Width = Unit.Pixel(100);
     settings.UseSubmitBehavior = true;
     settings.ClientSideEvents.Click = "OnSubmitClick";
 }).GetHtml()
@@ -49,9 +49,13 @@
     @Html.DevExpress().Button(settings =>   
 {
     settings.Name = "btShowCustomizationWindow";
-    settings.UseSubmitBehavior = false;
     settings.Text = IWSLocalResource.WindowCustomization;
+    settings.Width = Unit.Pixel(100);
+    settings.UseSubmitBehavior = false;
     settings.ClientSideEvents.Click = "onButtonClick";
 }).GetHtml()
+
+
 }
+
 @Html.Action("BankStatementsGridViewPartial")

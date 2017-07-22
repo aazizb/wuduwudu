@@ -229,6 +229,7 @@ namespace IWSProject.Models
     {
         public int TransID { get; set; }
         public string ODebit { get; set; }
+        public string OCredit { get; set; }
         public bool Side { get; set; }
         public DateTime ItemDate { get; set; }
         public decimal? OVat { get; set; }
@@ -255,6 +256,41 @@ namespace IWSProject.Models
         public DateTime DueDate { get; set; }
         public string Text { get; set; }
         public string Currency { get; set; }
+    }
+    public class OwnerViewModel
+    {
+        public string ID { get; set; }
+        public string Name { get; set; }
+        public string OwnerType { get; set; }
+    }
+    public class ResultsViewModel
+    {
+        public string ClassId { get; set; }
+        public string ClassName { get; set; }
+        public string SubClassId { get; set; }
+        public string SubClassName { get; set; }
+        public string AccountId { get; set; }
+        public string AccountName { get; set; }
+        public decimal TDebit { get; set; }
+        public decimal TCredit { get; set; }
+        public decimal SDebit { get; set; }
+        public decimal SCredit { get; set; }
+        public decimal Balance { get; set; }
+        public string Currency { get; set; }
+    }
+    public class ResultsDialogViewModel
+    {
+        public string Start { get; set; }
+        public string End { get; set; }
+        public string ClassId { get; set; }
+        public string CompanyId { get; set; }
+    }
+    public class ChildViewModel
+    {
+        public string ChildId { get; set; }
+        public string ChildName { get; set; }
+        public string ParentId { get; set; }
+        public string ParentName { get; set; }
     }
 }
 

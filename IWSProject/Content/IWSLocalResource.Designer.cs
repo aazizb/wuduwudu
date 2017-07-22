@@ -358,6 +358,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Class.
+        /// </summary>
+        public static string classx {
+            get {
+                return ResourceManager.GetString("classx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Company.
         /// </summary>
         public static string company {
@@ -1231,7 +1240,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Period From:.
+        ///   Looks up a localized string similar to Period From.
         /// </summary>
         public static string PeriodFrom {
             get {
@@ -1249,7 +1258,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Period To:.
+        ///   Looks up a localized string similar to Period To.
         /// </summary>
         public static string PeriodTo {
             get {
@@ -1366,6 +1375,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Returns.
+        /// </summary>
+        public static string returns {
+            get {
+                return ResourceManager.GetString("returns", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Revenue Account.
         /// </summary>
         public static string revenueaccountid {
@@ -1434,6 +1452,24 @@ namespace IWSProject.Content {
         public static string salesprice {
             get {
                 return ResourceManager.GetString("salesprice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Credit Balance.
+        /// </summary>
+        public static string scredit {
+            get {
+                return ResourceManager.GetString("scredit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Debit Balance.
+        /// </summary>
+        public static string sdebit {
+            get {
+                return ResourceManager.GetString("sdebit", resourceCulture);
             }
         }
         
@@ -1555,7 +1591,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Stock Account.
+        ///   Looks up a localized string similar to Stock/Expense Account.
         /// </summary>
         public static string stockaccountid {
             get {
@@ -1596,6 +1632,15 @@ namespace IWSProject.Content {
         public static string SubAccountOf {
             get {
                 return ResourceManager.GetString("SubAccountOf", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sub Class.
+        /// </summary>
+        public static string subClass {
+            get {
+                return ResourceManager.GetString("subClass", resourceCulture);
             }
         }
         
@@ -1641,6 +1686,24 @@ namespace IWSProject.Content {
         public static string taxcode {
             get {
                 return ResourceManager.GetString("taxcode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Credit.
+        /// </summary>
+        public static string tcredit {
+            get {
+                return ResourceManager.GetString("tcredit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total Debit.
+        /// </summary>
+        public static string tdebit {
+            get {
+                return ResourceManager.GetString("tdebit", resourceCulture);
             }
         }
         
@@ -1704,6 +1767,15 @@ namespace IWSProject.Content {
         public static string transid {
             get {
                 return ResourceManager.GetString("transid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type.
+        /// </summary>
+        public static string Type {
+            get {
+                return ResourceManager.GetString("Type", resourceCulture);
             }
         }
         

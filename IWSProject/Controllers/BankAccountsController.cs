@@ -26,8 +26,6 @@ namespace IWSProject.Controllers
         public ActionResult BankAccountsGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] BankAccount item)
         {
             var model = db.BankAccounts;
-            if (item.Currency == null)
-                item.Currency = (string)Session["Currency"];
             item.CompanyID = (string)Session["CompanyID"];
             ViewData["bankAccount"] = item;
             if (ModelState.IsValid)
@@ -57,7 +55,7 @@ namespace IWSProject.Controllers
             {
                 try
                 {
-                    var modelItem = model.FirstOrDefault(it => it.id == item.id);
+                    var modelItem = model.FirstOrDefault(it => it.IBAN == item.IBAN);
                     if (modelItem != null)
                     {
                         this.UpdateModel(modelItem);
@@ -76,14 +74,14 @@ namespace IWSProject.Controllers
             return PartialView("BankAccountsGridViewPartial", db.BankAccounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult BankAccountsGridViewPartialDelete(string id)
+        public ActionResult BankAccountsGridViewPartialDelete(string iban)
         {
             var model = db.BankAccounts;
-            if (id != null)
+            if (iban != null)
             {
                 try
                 {
-                    var item = model.FirstOrDefault(it => it.id == id);
+                    var item = model.FirstOrDefault(it => it.IBAN == iban);
                     if (item != null)
                         model.DeleteOnSubmit(item);
 

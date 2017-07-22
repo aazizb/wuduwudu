@@ -286,7 +286,7 @@
     <value>Revenue Account de-DE</value>
   </data>
   <data name="stockaccountid" xml:space="preserve">
-    <value>Stock Account de-DE</value>
+    <value>Stock/Expense Account de-DE</value>
   </data>
   <data name="bankaccountid" xml:space="preserve">
     <value>Bank Account de-DE</value>
@@ -541,10 +541,10 @@
     <value>Line General Ledger de-DE</value>
   </data>
   <data name="PeriodFrom" xml:space="preserve">
-    <value>Period From de-DE:</value>
+    <value>Period From de-DE</value>
   </data>
   <data name="PeriodTo" xml:space="preserve">
-    <value>Period To de-DE:</value>
+    <value>Period To de-DE</value>
   </data>
   <data name="Consultation" xml:space="preserve">
     <value>Consultation de-DE</value>
@@ -707,5 +707,26 @@
   </data>
   <data name="TransDate" xml:space="preserve">
     <value>Trans Date de-DE</value>
+  </data>
+  <data name="returns" xml:space="preserve">
+    <value>Returns de-DE</value>
+  </data>
+  <data name="scredit" xml:space="preserve">
+    <value>Credit Balance de-DE</value>
+  </data>
+  <data name="sdebit" xml:space="preserve">
+    <value>Debit Balance de-DE</value>
+  </data>
+  <data name="tcredit" xml:space="preserve">
+    <value>Total Credit de-DE</value>
+  </data>
+  <data name="tdebit" xml:space="preserve">
+    <value>Total Debit de-DE</value>
+  </data>
+  <data name="classx" xml:space="preserve">
+    <value>Class de-DE</value>
+  </data>
+  <data name="subClass" xml:space="preserve">
+    <value>Sub Class de-DE</value>
   </data>
 </root>

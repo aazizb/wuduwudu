@@ -14,13 +14,13 @@ namespace IWSProject.Controllers
         // GET: suppliers
         public ActionResult Index()
         {
-            return View(db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return View(IWSLookUp.GetSupplier());
         }
 
         [ValidateInput(false)]
         public ActionResult SuppliersGridViewPartial()
         {
-            return PartialView("SuppliersGridViewPartial", db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("SuppliersGridViewPartial", IWSLookUp.GetSupplier());
         }
 
         [HttpPost, ValidateInput(false)]
@@ -43,7 +43,7 @@ namespace IWSProject.Controllers
             }
             else
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("SuppliersGridViewPartial", db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("SuppliersGridViewPartial", IWSLookUp.GetSupplier());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult SuppliersGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))]Supplier item)
@@ -68,7 +68,7 @@ namespace IWSProject.Controllers
             }
             else
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("SuppliersGridViewPartial", db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("SuppliersGridViewPartial", IWSLookUp.GetSupplier());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult SuppliersGridViewPartialDelete(string id)
@@ -88,7 +88,95 @@ namespace IWSProject.Controllers
                     ViewData["GenericError"] = e.Message;
                 }
             }
-            return PartialView("SuppliersGridViewPartial", db.Suppliers.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("SuppliersGridViewPartial", IWSLookUp.GetSupplier());
+        }
+
+
+        [ValidateInput(false)]
+        public ActionResult DetailGridViewPartial(string owner)
+        {
+            return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
+        }
+        [HttpPost, ValidateInput(false)]
+        public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] BankAccount line, string owner)
+        {
+            var model = db.BankAccounts;
+
+            line.Owner = owner;
+            line.CompanyID = (string)Session["CompanyID"];
+            ViewData["bankAccount"] = line;
+
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    model.InsertOnSubmit(line);
+
+                    db.SubmitChanges();
+                }
+                catch (Exception e)
+                {
+                    ViewData["GenericError"] = e.Message;
+                }
+            }
+            else
+            {
+                ViewData["GenericError"] = IWSLocalResource.GenericError;
+            }
+            return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
+        }
+        [HttpPost, ValidateInput(false)]
+        public ActionResult DetailGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] BankAccount line, string owner)
+        {
+            var model = db.BankAccounts;
+
+            line.Owner = owner;
+
+            ViewData["bankAccount"] = line;
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    var modelItem = model.FirstOrDefault(i => i.IBAN == line.IBAN);
+
+                    if (modelItem != null)
+                    {
+                        this.UpdateModel(modelItem);
+
+                        db.SubmitChanges();
+                    }
+                }
+                catch (Exception e)
+                {
+                    ViewData["GenericError"] = e.Message;
+                }
+            }
+            else
+            {
+                ViewData["GenericError"] = IWSLocalResource.GenericError;
+            }
+            return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
+        }
+        [HttpPost, ValidateInput(false)]
+        public ActionResult DetailGridViewPartialDelete(string iban, string owner)
+        {
+
+            var model = db.BankAccounts;
+
+            try
+            {
+                var item = model.FirstOrDefault(i => i.IBAN == iban);
+
+                if (item != null)
+                    model.DeleteOnSubmit(item);
+
+                db.SubmitChanges();
+            }
+            catch (Exception e)
+            {
+                ViewData["GenericError"] = e.Message;
+            }
+            return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
         }
     }
 }

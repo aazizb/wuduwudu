@@ -1,4 +1,5 @@
-﻿using IWSProject.Content;
+﻿using DevExpress.Web.Mvc;
+using IWSProject.Content;
 using IWSProject.Models;
 using System;
 using System.Collections.Generic;
@@ -80,8 +81,13 @@ namespace IWSProject.Controllers
             List<DocumentsViewModel> model = IWSLookUp.GetAccountingDocument(false);
             return PartialView(model);
         }
-    
-    #region Helper
+
+        public ActionResult CallbackPanelPartialView()
+        {
+            return PartialView("_CallbackPanelPartialView");
+        }
+
+        #region Helper
 
         /// <summary>
         /// validates documents
@@ -94,7 +100,7 @@ namespace IWSProject.Controllers
             //bool results;
             if (ItemType.Equals(IWSLookUp.DocsType.GoodReceiving.ToString()))
             {
-               return ValidateGoodReceiving(ItemID);
+                return ValidateGoodReceiving(ItemID);
             }
             if (ItemType.Equals(IWSLookUp.DocsType.BillOfDelivery.ToString()))
             {
@@ -112,13 +118,13 @@ namespace IWSProject.Controllers
             {
                 //results = MakePayment(ItemID);
                 //if(results)
-                    return ValidateVendorInvoice(ItemID);
+                return ValidateVendorInvoice(ItemID);
             }
             if (ItemType.Equals(IWSLookUp.DocsType.CustomerInvoice.ToString()))
             {
                 //results = MakeSettlement(ItemID);
                 //if (results)
-                    return ValidateCustmerInvoice(ItemID);
+                return ValidateCustmerInvoice(ItemID);
             }
             if (ItemType.Equals(IWSLookUp.DocsType.Payment.ToString()))
             {
@@ -136,6 +142,7 @@ namespace IWSProject.Controllers
         }
         private bool UpdateStock(int DocumentID, string DocumentType)
         {
+            
             if (DocumentType.Equals(IWSLookUp.DocsType.GoodReceiving.ToString()))
             {
                 List<ValidateStockViewModel> validateStock =
@@ -163,7 +170,7 @@ namespace IWSProject.Controllers
                          IsService = g.Key.IsService,
                          Text = g.Key.Text
                      }).ToList();
-                if (validateStock.Any(i => i.IsService == false))
+                if (validateStock.Any(i => i.IsService.Equals(false)))
                 {
                     return StockIn(validateStock);
                 }
@@ -188,14 +195,14 @@ namespace IWSProject.Controllers
                      {
                          StoreID = g.Key.StoreID,
                          ItemID = g.Key.ItemID,
-                         ItemName=g.Key.ItemName,
+                         ItemName = g.Key.ItemName,
                          Quantity = g.Sum(q => q.line.quantity),
                          Price = g.Key.Price,
                          Currency = g.Key.Currency,
                          IsService = g.Key.IsService,
                          Text = g.Key.Text
                      }).ToList();
-                if (validateStock.Any(i=>i.IsService==false))
+                if (validateStock.Any(i => i.IsService == false))
                 {
                     return StockOut(validateStock);
                 }
@@ -312,6 +319,7 @@ namespace IWSProject.Controllers
             }
             return false;
         }
+
         private bool UpdateAccountBalance(string accountID, decimal amount, bool isDebit)
         {
             try
@@ -333,14 +341,15 @@ namespace IWSProject.Controllers
             }
             return false;
         }
-        private bool UpdateAccountBalance(string Periode, string AccountID, decimal amount, 
+
+        private bool UpdateAccountBalance(string Periode, string AccountID, decimal amount,
                                                     string currency, bool IsDebit)
         {
             string companyID = (string)Session["CompanyID"];
             var docs = db.PeriodicAccountBalances
-                       .FirstOrDefault(p => p.Periode == Periode 
-                        && p.AccountId == AccountID 
-                        && p.CompanyID==companyID);
+                       .FirstOrDefault(p => p.Periode == Periode
+                        && p.AccountId == AccountID
+                        && p.CompanyID == companyID);
             if (docs == null)
             {
                 string name = db.Accounts
@@ -355,16 +364,16 @@ namespace IWSProject.Controllers
                     CompanyID = companyID,
                     Debit = 0,
                     Credit = 0,
-                    Currency=currency
+                    Currency = currency
                 };
                 if (IsDebit)
-                    {
-                        docs.Debit = amount;
-                    }
+                {
+                    docs.Debit = amount;
+                }
                 else
-                    {
-                        docs.Credit = amount;
-                    }
+                {
+                    docs.Credit = amount;
+                }
                 try
                 {
                     db.PeriodicAccountBalances.InsertOnSubmit(docs);
@@ -397,12 +406,14 @@ namespace IWSProject.Controllers
                 }
             }
         }
+
         private string GetItemType(string ItemType)
         {
             return db.Localizations.Where(i => i.LocalName == ItemType)
                                                 .Select(i => i.ItemName)
                                                 .FirstOrDefault();
         }
+
         private bool StockIn(List<ValidateStockViewModel> items)
         {
             try
@@ -410,32 +421,32 @@ namespace IWSProject.Controllers
                 foreach (var item in items)
                 {
                     var article = db.Articles
-                        .FirstOrDefault(i => i.id == item.ItemID 
-                        && i.CompanyID== (string)Session["CompanyID"]);
+                        .FirstOrDefault(i => i.id == item.ItemID
+                        && i.CompanyID == (string)Session["CompanyID"]);
                     if (item.IsService)
                     {
-                        //for IsService=true items
+                        //for service items
                         article.price = item.Price;
                         article.avgprice = item.Price;
                     }
                     else
                     {
-                        //for IsService=false items
+                        //for stockable items
                         float currentStock = 0;
                         bool isItemInStock = db.Stocks.
                             Any(i => i.itemid == item.ItemID
-                            && i.CompanyID== (string)Session["CompanyID"]);
+                            && i.CompanyID == (string)Session["CompanyID"]);
                         if (isItemInStock)
                         {
                             currentStock = db.Stocks
-                                .Where(i => i.itemid == item.ItemID 
-                                && i.CompanyID== (string)Session["CompanyID"])
+                                .Where(i => i.itemid == item.ItemID
+                                && i.CompanyID == (string)Session["CompanyID"])
                                 .Sum(q => q.quantity);
                         }
                         var stock = db.Stocks
-                            .FirstOrDefault(s => s.storeid == item.StoreID 
-                            && s.itemid == item.ItemID 
-                            && s.CompanyID== (string)Session["CompanyID"]);
+                            .FirstOrDefault(s => s.storeid == item.StoreID
+                            && s.itemid == item.ItemID
+                            && s.CompanyID == (string)Session["CompanyID"]);
                         if (stock == null)
                         {
                             stock = new Stock()
@@ -467,32 +478,33 @@ namespace IWSProject.Controllers
             }
             return false;
         }
+
         private bool StockOut(List<ValidateStockViewModel> items)
         {
             try
             {
-                foreach (var item in items.Where(i=>i.IsService==false))
+                foreach (var item in items.Where(i => i.IsService == false))
                 {
-                        var stock = db.Stocks.FirstOrDefault(s => s.storeid == item.StoreID && s.itemid == item.ItemID);
-                        if (stock != null)
+                    var stock = db.Stocks.FirstOrDefault(s => s.storeid == item.StoreID && s.itemid == item.ItemID);
+                    if (stock != null)
+                    {
+                        decimal RequestedQuantity = Convert.ToDecimal(item.Quantity);
+                        decimal AvailableQuantity = Convert.ToDecimal(stock.quantity + stock.minstock);
+                        if (AvailableQuantity >= RequestedQuantity)
                         {
-                            decimal RequestedQuantity = Convert.ToDecimal(item.Quantity);
-                            decimal AvailableQuantity = Convert.ToDecimal(stock.quantity + stock.minstock);
-                            if (AvailableQuantity >= RequestedQuantity)
-                            {
-                                stock.quantity -= (float)item.Quantity;
-                            }
-                            else
-                            {
-                                ViewData["GenericError"] = IWSLocalResource.InsufficientStock + ": " + item.ItemID + "-" + item.ItemName;
-                                return false;
-                            }
+                            stock.quantity -= (float)item.Quantity;
                         }
                         else
                         {
                             ViewData["GenericError"] = IWSLocalResource.InsufficientStock + ": " + item.ItemID + "-" + item.ItemName;
                             return false;
                         }
+                    }
+                    else
+                    {
+                        ViewData["GenericError"] = IWSLocalResource.InsufficientStock + ": " + item.ItemID + "-" + item.ItemName;
+                        return false;
+                    }
                 }
                 return true;
             }
@@ -502,32 +514,67 @@ namespace IWSProject.Controllers
             }
             return false;
         }
-        
+
         private bool ValidateGoodReceiving(int ItemID)
         {
-            List<JournalViewModel> docs = (from l in db.LineGoodReceivings
-                                           where
-                                             l.GoodReceiving.id == ItemID
-                                           select new JournalViewModel()
-                                           {
-                                               ItemID = l.GoodReceiving.id,
-                                               OID = l.GoodReceiving.oid,
-                                               Currency = l.GoodReceiving.oCurrency,
-                                               CustSupplierID = l.GoodReceiving.account,
-                                               StoreID = l.GoodReceiving.store,
-                                               TransDate = l.GoodReceiving.TransDate,
-                                               Itemdate = l.GoodReceiving.ItemDate,
-                                               EntryDate = l.GoodReceiving.EntryDate,
-                                               Periode = l.GoodReceiving.oPeriode,
-                                               Amount = (decimal)l.GoodReceiving.oTotal,
-                                               Account = l.Article.StockAccount,
-                                               OAccount = l.GoodReceiving.Company.purchasingclearingaccountid,
-                                               CompanyIBAN =l.GoodReceiving.Company.IBAN,
-                                               IBAN =l.GoodReceiving.Supplier.IBAN,
-                                               Info=l.GoodReceiving.HeaderText
-                                           }).Distinct().ToList();
+            List<JournalViewModel> docs = (from o in (
+    (from i in db.LineGoodReceivings
+     select new
+     {
+         i.GoodReceiving.id,
+         i.GoodReceiving.oid,
+         i.GoodReceiving.account,
+         i.GoodReceiving.store,
+         i.GoodReceiving.TransDate,
+         i.GoodReceiving.ItemDate,
+         i.GoodReceiving.EntryDate,
+         i.GoodReceiving.oPeriode,
+         i.Article.StockAccount,
+         i.GoodReceiving.Company.purchasingclearingaccountid,
+         sAmount = i.lineNet,
+         i.GoodReceiving.Company.IBAN,
+         IBAN2 = i.GoodReceiving.Supplier.IBAN,
+         i.GoodReceiving.oCurrency,
+         i.GoodReceiving.HeaderText
+     }))
+        group o by new
+        {
+            o.id,
+            o.oid,
+            o.account,
+            o.store,
+            o.TransDate,
+            o.ItemDate,
+            o.EntryDate,
+            o.oPeriode,
+            o.StockAccount,
+            o.purchasingclearingaccountid,
+            o.IBAN,
+            o.IBAN2,
+            o.oCurrency,
+            o.HeaderText
+        } into g
+        where g.Key.id == ItemID
+        select new JournalViewModel()
+        {
+            ItemID = g.Key.id,
+            OID = g.Key.oid,
+            CustSupplierID = g.Key.account,
+            StoreID = g.Key.store,
+            TransDate = g.Key.TransDate,
+            Itemdate = g.Key.ItemDate,
+            EntryDate = g.Key.EntryDate,
+            Periode = g.Key.oPeriode,
+            Account = g.Key.StockAccount,
+            OAccount = g.Key.purchasingclearingaccountid,
+            Amount = Convert.ToDecimal( g.Sum(p => p.sAmount)),
+            CompanyIBAN = g.Key.IBAN,
+            IBAN = g.Key.IBAN2,
+            Currency = g.Key.oCurrency,
+            Info = g.Key.HeaderText
+        }).Distinct().ToList();
 
-            bool results =false;
+            bool results = false;
 
             if (docs.Any())
             {
@@ -537,9 +584,9 @@ namespace IWSProject.Controllers
                     foreach (var doc in docs)
                     {
 
-                        results= UpdateAccountBalance(doc.Periode, doc.Account, doc.Amount, doc.Currency, true);
+                        results = UpdateAccountBalance(doc.Periode, doc.Account, doc.Amount, doc.Currency, true);
 
-                        if(!results)
+                        if (!results)
                             return results;
 
                         results = UpdateAccountBalance(doc.Account, doc.Amount, true);
@@ -589,7 +636,7 @@ namespace IWSProject.Controllers
                                 Info=doc.Info
                             }
                         };
-                        
+
                         results = SendToJournal(journal);
 
                         if (!results)
@@ -631,6 +678,8 @@ namespace IWSProject.Controllers
 
         private bool ValidateBillOfDelivery(int ItemID)
         {
+
+            bool results = false;
             List<JournalViewModel> docs = (from l in db.LineBillOfDeliveries
                                            where
                                              l.BillOfDelivery.id == ItemID
@@ -646,31 +695,82 @@ namespace IWSProject.Controllers
                                                EntryDate = l.BillOfDelivery.EntryDate,
                                                Periode = l.BillOfDelivery.oPeriode,
                                                Amount = (decimal)l.BillOfDelivery.oTotal,
-                                               Account = l.Article.ExpenseAccount,
-                                               OAccount = l.BillOfDelivery.Company.salesclearingaccountid,
+                                               Account = l.BillOfDelivery.Company.salesclearingaccountid,
+                                               OAccount = l.Article.RevenuAccountId,
                                                CompanyIBAN = l.BillOfDelivery.Company.IBAN,
                                                IBAN = l.BillOfDelivery.Customer.IBAN,
                                                Info = l.BillOfDelivery.HeaderText
                                            }).Distinct().ToList();
-
-            bool results = false;
-
             if (docs.Any())
             {
-                try
+                results = ValidateBillOfDelivery(docs);
+            }
+            if (!results)
+                return results;
+            docs = (from l in db.LineBillOfDeliveries
+                    where
+                        !(l.Article.IsService == true)
+                    group new { l.BillOfDelivery, l.Article, l.BillOfDelivery.Company, l.BillOfDelivery.Customer, l } by new
+                    {
+                        l.BillOfDelivery.id,
+                        l.BillOfDelivery.oid,
+                        l.BillOfDelivery.account,
+                        l.BillOfDelivery.store,
+                        l.BillOfDelivery.TransDate,
+                        l.BillOfDelivery.ItemDate,
+                        l.BillOfDelivery.EntryDate,
+                        l.BillOfDelivery.oPeriode,
+                        l.Article.avgprice,
+                        l.Article.ExpenseAccount,
+                        l.Article.StockAccount,
+                        CompanyIBAN=l.BillOfDelivery.Company.IBAN,
+                        IBAN = l.BillOfDelivery.Customer.IBAN,
+                        l.BillOfDelivery.oCurrency,
+                        l.BillOfDelivery.HeaderText
+                    } into g
+                    where g.Key.id == ItemID
+                    select new JournalViewModel()
+                        {
+                            ItemID= g.Key.id,
+                            OID= g.Key.oid,
+                            CustSupplierID= g.Key.account,
+                            StoreID= g.Key.store,
+                            TransDate= g.Key.TransDate,
+                            Itemdate= g.Key.ItemDate,
+                            EntryDate= g.Key.EntryDate,
+                            Periode= g.Key.oPeriode,
+                            Account= g.Key.ExpenseAccount,
+                            OAccount= g.Key.StockAccount,
+                            Amount =  Enumerable.Sum(g,p => Convert.ToDecimal((p.l.quantity*p.l.Article.avgprice))),
+                            CompanyIBAN=g.Key.CompanyIBAN,
+                            IBAN=g.Key.IBAN,
+                            Currency= g.Key.oCurrency,
+                            Info= g.Key.HeaderText
+                        }).ToList();
+            if (docs.Any())
+            {
+                results = ValidateBillOfDelivery(docs);
+            }
+            return results;
+        }
+
+        private bool ValidateBillOfDelivery(List<JournalViewModel> docs)
+        {
+            bool results = false;
+            try
+            {
+
+                foreach (var doc in docs)
                 {
 
-                    foreach (var doc in docs)
-                    {
+                    results = UpdateAccountBalance(doc.Periode, doc.Account, doc.Amount, doc.Currency, true);
 
-                        results = UpdateAccountBalance(doc.Periode, doc.Account, doc.Amount, doc.Currency, true);
+                    if (!results)
+                        return results;
 
-                        if (!results)
-                            return results;
+                    results = UpdateAccountBalance(doc.Account, doc.Amount, true);
 
-                        results = UpdateAccountBalance(doc.Account, doc.Amount, true);
-
-                        List<Journal> journal = new List<Journal> {
+                    List<Journal> journal = new List<Journal> {
                             new Journal {
                                 ItemID =doc.ItemID,
                                 OID =doc.OID,
@@ -713,41 +813,40 @@ namespace IWSProject.Controllers
                             }
                         };
 
-                        results = SendToJournal(journal);
-
-                        if (!results)
-                            return results;
-                    }
-
-                    var item = (from doc in docs
-                                group new { doc } by new
-                                {
-                                    doc.Periode,
-                                    doc.OAccount,
-                                    doc.Currency
-                                } into g
-                                select new
-                                {
-                                    Periode = g.Key.Periode,
-                                    accountID = g.Key.OAccount,
-                                    amount = g.Sum(p => p.doc.Amount),
-                                    currency = g.Key.Currency
-                                }).Single();
-                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false);
-
-                    if (!results)
-                        return results;
-
-                    results = UpdateAccountBalance(item.accountID, item.amount, false);
+                    results = SendToJournal(journal);
 
                     if (!results)
                         return results;
                 }
-                catch (Exception e)
-                {
-                    ViewData["GenericError"] = e.Message;
-                    results = false;
-                }
+
+                var item = (from doc in docs
+                            group new { doc } by new
+                            {
+                                doc.Periode,
+                                doc.OAccount,
+                                doc.Currency
+                            } into g
+                            select new
+                            {
+                                Periode = g.Key.Periode,
+                                accountID = g.Key.OAccount,
+                                amount = g.Sum(p => p.doc.Amount),
+                                currency = g.Key.Currency
+                            }).Single();
+                results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false);
+
+                if (!results)
+                    return results;
+
+                results = UpdateAccountBalance(item.accountID, item.amount, false);
+
+                if (!results)
+                    return results;
+            }
+            catch (Exception e)
+            {
+                ViewData["GenericError"] = e.Message;
+                results = false;
             }
             return results;
         }
@@ -1029,7 +1128,7 @@ namespace IWSProject.Controllers
                                                IBAN = l.CustomerInvoice.Customer.IBAN,
                                                Info = l.CustomerInvoice.HeaderText
                                            }).Distinct().ToList();
-            bool results=false;
+            bool results = false;
 
             if (docs.Any())
             {
@@ -1038,7 +1137,7 @@ namespace IWSProject.Controllers
 
                     foreach (var doc in docs)
                     {
- 
+
                         results = UpdateAccountBalance(doc.Periode, doc.OAccount, doc.Amount, doc.Currency, false);
 
                         if (!results)
@@ -1154,7 +1253,7 @@ namespace IWSProject.Controllers
                                                IBAN = l.Settlement.Customer.IBAN,
                                                Info = l.Settlement.HeaderText
                                            }).Distinct().ToList();
-            bool results=false;
+            bool results = false;
 
             if (docs.Any())
             {
@@ -1280,7 +1379,7 @@ namespace IWSProject.Controllers
                                                Info = l.GeneralLedger.HeaderText
                                            }).Distinct().ToList();
 
-            bool results =false;
+            bool results = false;
 
             if (docs.Any())
             {
@@ -1396,12 +1495,12 @@ namespace IWSProject.Controllers
                      line.SalesInvoice.store,
                      line.SalesInvoice.account,
                      line.SalesInvoice.HeaderText,
-                     Linetext=line.text,
+                     Linetext = line.text,
                      line.SalesInvoice.ItemDate,
                      line.SalesInvoice.CompanyId,
                      line.Article.Vat.revenueaccountid,
                      line.Article.Vat.outputvataccountid,
-                     line.SalesInvoice.Customer.accountid,
+                     //line.SalesInvoice.Customer.accountid,
                      //line.SalesInvoice.Company.salesclearingaccountid,
                      line.SalesInvoice.oPeriode,
                      line.SalesInvoice.oTotal,
@@ -1416,48 +1515,48 @@ namespace IWSProject.Controllers
                      SupplierID = g.Key.account,
                      ItemDate = g.Key.ItemDate,
                      Text = g.Key.HeaderText,
-                     LineText=g.Key.Linetext,
+                     LineText = g.Key.Linetext,
                      CompanyID = g.Key.CompanyId,
                      Vat = g.Key.Vat,
                      VatAccountID = g.Key.outputvataccountid,
-                     CreditAccountID = g.Key.revenueaccountid, 
+                     CreditAccountID = g.Key.revenueaccountid,
                      Periode = g.Key.oPeriode,
-                     DebitAccountID = Convert.ToString(g.Key.accountid),
+                     //DebitAccountID = Convert.ToString(g.Key.accountid),
                      TotHTVA = Convert.ToDecimal(g.Key.oTotal),
-                     TotTVA =  g.Sum(p => p.line.quantity * p.line.price * p.line.Article.Vat.PVat),
-                     Currency=g.Key.oCurrency
+                     TotTVA = g.Sum(p => p.line.quantity * p.line.price * p.line.Article.Vat.PVat),
+                     Currency = g.Key.oCurrency
                  }).ToList();
             if (salesInvoice.Any())
             {
                 int itemID = 0;
                 CustomerInvoice invoiceHeader = (from item in salesInvoice
-                                               select new CustomerInvoice
-                                               {
-                                                   oid = item.ID,
-                                                   CostCenter = item.StoreID,
-                                                   account = item.SupplierID,
-                                                   HeaderText = item.Text,
-                                                   ItemDate = item.ItemDate,
-                                                   CompanyId = item.CompanyID,
-                                                   IsValidated = false
-                                               }).FirstOrDefault();
+                                                 select new CustomerInvoice
+                                                 {
+                                                     oid = item.ID,
+                                                     CostCenter = item.StoreID,
+                                                     account = item.SupplierID,
+                                                     HeaderText = item.Text,
+                                                     ItemDate = item.ItemDate,
+                                                     CompanyId = item.CompanyID,
+                                                     IsValidated = false
+                                                 }).FirstOrDefault();
                 itemID = CustomerInvoiceHeader(invoiceHeader);
                 if (itemID > 0)
                 {
                     List<LineCustomerInvoice> lineCustomer = (from item in salesInvoice
-                                                          select new LineCustomerInvoice
-                                                          {
-                                                              transid = itemID,
-                                                              account = item.DebitAccountID,
-                                                              side = false,
-                                                              oaccount = item.VatAccountID,
-                                                              amount = Math.Round(item.TotTVA, 2),
-                                                              Currency=item.Currency,
-                                                              duedate = item.ItemDate,
-                                                              text = item.LineText
-                                                          }).ToList();
-                    
-                    string accountID = salesInvoice.Select(a => a.CreditAccountID ).First();
+                                                              select new LineCustomerInvoice
+                                                              {
+                                                                  transid = itemID,
+                                                                  account = item.DebitAccountID,
+                                                                  side = false,
+                                                                  oaccount = item.VatAccountID,
+                                                                  amount = Math.Round(item.TotTVA, 2),
+                                                                  Currency = item.Currency,
+                                                                  duedate = item.ItemDate,
+                                                                  text = item.LineText
+                                                              }).ToList();
+
+                    string accountID = salesInvoice.Select(a => a.CreditAccountID).First();
 
                     string oAccountID = salesInvoice.Select(a => a.DebitAccountID).First();
 
@@ -1476,7 +1575,7 @@ namespace IWSProject.Controllers
                         side = false,
                         oaccount = accountID,
                         amount = amount,
-                        Currency=currency,
+                        Currency = currency,
                         duedate = dueDate,
                         text = text
                     };
@@ -1552,7 +1651,7 @@ namespace IWSProject.Controllers
                  select new ValidateInvoiceViewModel
                  {
                      ID = g.Key.id,
-                     OID =(int)g.Key.oid,
+                     OID = (int)g.Key.oid,
                      StoreID = g.Key.store,
                      SupplierID = g.Key.account,
                      ItemDate = g.Key.ItemDate,
@@ -1566,24 +1665,24 @@ namespace IWSProject.Controllers
                      CreditAccountID = g.Key.accountid,
                      TotHTVA = g.Sum(p => p.line.quantity * p.line.price),
                      TotTVA = g.Sum(p => p.line.quantity * p.line.price * p.line.Article.Vat.PVat),
-                     Currency=g.Key.Currency
+                     Currency = g.Key.Currency
                  }).ToList();
 
             if (inventoryInvoice.Any())
             {
                 int itemID = 0;
                 VendorInvoice invoiceHeader = (from item in inventoryInvoice
-                                         select new VendorInvoice
-                                         {
-                                             oid = item.ID,
-                                             CostCenter = item.StoreID,
-                                             account = item.SupplierID,
-                                             HeaderText = item.Text,
-                                             ItemDate = item.ItemDate,
-                                             CompanyId = item.CompanyID,
-                                             oCurrency=item.Currency,
-                                             IsValidated =false
-                                         }).FirstOrDefault();
+                                               select new VendorInvoice
+                                               {
+                                                   oid = item.ID,
+                                                   CostCenter = item.StoreID,
+                                                   account = item.SupplierID,
+                                                   HeaderText = item.Text,
+                                                   ItemDate = item.ItemDate,
+                                                   CompanyId = item.CompanyID,
+                                                   oCurrency = item.Currency,
+                                                   IsValidated = false
+                                               }).FirstOrDefault();
                 itemID = MakeVendorInvoiceHeader(invoiceHeader);
                 if (itemID > 0)
                 {
@@ -1595,11 +1694,11 @@ namespace IWSProject.Controllers
                                                               side = true,
                                                               oaccount = item.CreditAccountID,
                                                               amount = Math.Round(item.TotTVA, 2),
-                                                              Currency=item.Currency,
+                                                              Currency = item.Currency,
                                                               duedate = item.ItemDate,
                                                               text = item.LineText
                                                           }).ToList();
-     
+
                     string accountID = inventoryInvoice.Select(a => a.DebitAccountID).First();
 
                     string oAccountID = inventoryInvoice.Select(a => a.CreditAccountID).First();
@@ -1619,7 +1718,7 @@ namespace IWSProject.Controllers
                         side = true,
                         oaccount = oAccountID,
                         amount = amount,
-                        Currency=currency,
+                        Currency = currency,
                         duedate = dueDate,
                         text = text
                     };
@@ -1657,7 +1756,7 @@ namespace IWSProject.Controllers
             {
                 db.VendorInvoices.InsertOnSubmit(invoice);
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
-                id =db.VendorInvoices.Max(i=>i.id);
+                id = db.VendorInvoices.Max(i => i.id);
             }
             catch (Exception e)
             {
@@ -1674,7 +1773,7 @@ namespace IWSProject.Controllers
                 foreach (var item in line)
                 {
                     db.LineVendorInvoices.InsertOnSubmit(item);
-                    id ++;
+                    id++;
                 }
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
             }
@@ -1696,7 +1795,7 @@ namespace IWSProject.Controllers
                      line.VendorInvoice.CostCenter,
                      SupplierID = line.VendorInvoice.account,
                      line.VendorInvoice.HeaderText,
-                     LineText=line.text,
+                     LineText = line.text,
                      line.Currency,
                      line.VendorInvoice.ItemDate,
                      line.VendorInvoice.CompanyId,
@@ -1714,86 +1813,86 @@ namespace IWSProject.Controllers
                      StoreID = g.Key.CostCenter,
                      SupplierID = g.Key.SupplierID,
                      ItemDate = g.Key.ItemDate,
-                     Periode=g.Key.xYear+g.Key.xMonth,
+                     Periode = g.Key.xYear + g.Key.xMonth,
                      Text = g.Key.HeaderText,
-                     LineText=g.Key.LineText,
-                     Currency=g.Key.Currency,
+                     LineText = g.Key.LineText,
+                     Currency = g.Key.Currency,
                      CompanyID = g.Key.CompanyId,
-                     CreditAccountID =g.Key.bankaccountid,
+                     CreditAccountID = g.Key.bankaccountid,
                      DebitAccountID = g.Key.accountid,
-                     TotTVA = g.Sum(a=>a.line.amount)
+                     TotTVA = g.Sum(a => a.line.amount)
                  }).ToList();
 
             if (vendorInvoice.Any())
             {
                 int itemID = 0;
                 Payment payment = (from item in vendorInvoice
-                                         select new Payment
-                                         {
-                                             oid = item.ID,
-                                             CostCenter = item.StoreID,
-                                             account = item.SupplierID,
-                                             HeaderText = item.Text,
-                                             ItemDate = item.ItemDate,
-                                             CompanyId = item.CompanyID,
-                                             IsValidated = false
-                                         }).First();
+                                   select new Payment
+                                   {
+                                       oid = item.ID,
+                                       CostCenter = item.StoreID,
+                                       account = item.SupplierID,
+                                       HeaderText = item.Text,
+                                       ItemDate = item.ItemDate,
+                                       CompanyId = item.CompanyID,
+                                       IsValidated = false
+                                   }).First();
                 itemID = MakePaymentHeader(payment);
                 if (itemID > 0)
                 {
                     List<LinePayment> lineVendor = (from item in vendorInvoice
-                                                          select new LinePayment
-                                                          {
-                                                              transid = itemID,
-                                                              account = item.DebitAccountID,
-                                                              side = false,
-                                                              oaccount = item.CreditAccountID,
-                                                              amount = Math.Round(item.TotTVA, 2),
-                                                              Currency = item.Currency,
-                                                              duedate = item.ItemDate,
-                                                              text = item.LineText
-                                                          }).ToList();
+                                                    select new LinePayment
+                                                    {
+                                                        transid = itemID,
+                                                        account = item.DebitAccountID,
+                                                        side = false,
+                                                        oaccount = item.CreditAccountID,
+                                                        amount = Math.Round(item.TotTVA, 2),
+                                                        Currency = item.Currency,
+                                                        duedate = item.ItemDate,
+                                                        text = item.LineText
+                                                    }).ToList();
                     int countLineID = MakePaymentLine(lineVendor);
-                    results= (countLineID > 0);
+                    results = (countLineID > 0);
                 }
                 if (!results)
                     return results;
-                    var journals = 
-                    (from line in db.LineVendorInvoices
-                     group new { line, line.VendorInvoice } by new
-                     {
-                         line.VendorInvoice.id,
-                         line.VendorInvoice.oid,
-                         line.VendorInvoice.CostCenter,
-                         SupplierID = line.VendorInvoice.account,
-                         line.VendorInvoice.HeaderText,
-                         line.VendorInvoice.ItemDate,
-                         line.VendorInvoice.CompanyId,
-                         line.account,
-                         line.oaccount,
-                         line.amount,
-                         line.Currency,
-                         line.VendorInvoice.Company.bankaccountid,
-                         xMonth = (Convert.ToString((int?)line.VendorInvoice.ItemDate.Month)).Length == 1 ?
-                                                 '0' + Convert.ToString((int?)line.VendorInvoice.ItemDate.Month) :
-                                                 Convert.ToString((int?)line.VendorInvoice.ItemDate.Month),
-                         xYear = Convert.ToString((int?)line.VendorInvoice.ItemDate.Year)
-                     } into g
-                     where g.Key.id == vendorInvoiceID
-                     select new 
-                     {
-                         ItemID = g.Key.id,
-                         OID=(int)g.Key.oid,
-                         ItemType = IWSLookUp.DocsType.GoodReceiving.ToString(),
-                         CustSupplierID = g.Key.SupplierID,
-                         StoreID = g.Key.CostCenter,
-                         TransDate = g.Key.ItemDate,
-                         Periode = g.Key.xYear + g.Key.xMonth,
-                         Account=g.Key.account,
-                         OAccount=g.Key.oaccount,
-                         Amount=g.Key.amount,
-                         Currency=g.Key.Currency
-                     }).ToList();
+                var journals =
+                (from line in db.LineVendorInvoices
+                 group new { line, line.VendorInvoice } by new
+                 {
+                     line.VendorInvoice.id,
+                     line.VendorInvoice.oid,
+                     line.VendorInvoice.CostCenter,
+                     SupplierID = line.VendorInvoice.account,
+                     line.VendorInvoice.HeaderText,
+                     line.VendorInvoice.ItemDate,
+                     line.VendorInvoice.CompanyId,
+                     line.account,
+                     line.oaccount,
+                     line.amount,
+                     line.Currency,
+                     line.VendorInvoice.Company.bankaccountid,
+                     xMonth = (Convert.ToString((int?)line.VendorInvoice.ItemDate.Month)).Length == 1 ?
+                                             '0' + Convert.ToString((int?)line.VendorInvoice.ItemDate.Month) :
+                                             Convert.ToString((int?)line.VendorInvoice.ItemDate.Month),
+                     xYear = Convert.ToString((int?)line.VendorInvoice.ItemDate.Year)
+                 } into g
+                 where g.Key.id == vendorInvoiceID
+                 select new
+                 {
+                     ItemID = g.Key.id,
+                     OID = (int)g.Key.oid,
+                     ItemType = IWSLookUp.DocsType.GoodReceiving.ToString(),
+                     CustSupplierID = g.Key.SupplierID,
+                     StoreID = g.Key.CostCenter,
+                     TransDate = g.Key.ItemDate,
+                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Account = g.Key.account,
+                     OAccount = g.Key.oaccount,
+                     Amount = g.Key.amount,
+                     Currency = g.Key.Currency
+                 }).ToList();
 
                 foreach (var item in journals)
                 {
@@ -1877,10 +1976,10 @@ namespace IWSProject.Controllers
                      line.CustomerInvoice.CostCenter,
                      SupplierID = line.CustomerInvoice.account,
                      line.CustomerInvoice.HeaderText,
-                     LineText=line.text,
+                     LineText = line.text,
                      line.CustomerInvoice.ItemDate,
                      line.CustomerInvoice.CompanyId,
-                     line.CustomerInvoice.Customer.accountid,
+                     //line.CustomerInvoice.Customer.accountid,
                      line.CustomerInvoice.Company.bankaccountid,
                      line.Currency,
                      xMonth = (Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month)).Length == 1 ?
@@ -1897,12 +1996,12 @@ namespace IWSProject.Controllers
                      ItemDate = g.Key.ItemDate,
                      Periode = g.Key.xYear + g.Key.xMonth,
                      Text = g.Key.HeaderText,
-                     LineText=g.Key.LineText,
+                     LineText = g.Key.LineText,
                      CompanyID = g.Key.CompanyId,
-                     CreditAccountID = Convert.ToString(g.Key.accountid),
+                     //CreditAccountID = Convert.ToString(g.Key.accountid),
                      DebitAccountID = g.Key.bankaccountid,
                      TotTVA = g.Sum(a => a.line.amount),
-                     Currency=g.Key.Currency
+                     Currency = g.Key.Currency
                  }).ToList();
 
 
@@ -1910,31 +2009,31 @@ namespace IWSProject.Controllers
             {
                 int itemID = 0;
                 Settlement settlement = (from item in customerInvoice
-                                   select new Settlement
-                                   {
-                                       oid = item.ID,
-                                       CostCenter = item.StoreID,
-                                       account = item.SupplierID,
-                                       HeaderText = item.Text,
-                                       ItemDate = item.ItemDate,
-                                       CompanyId = item.CompanyID,
-                                       IsValidated = false
-                                   }).First();
+                                         select new Settlement
+                                         {
+                                             oid = item.ID,
+                                             CostCenter = item.StoreID,
+                                             account = item.SupplierID,
+                                             HeaderText = item.Text,
+                                             ItemDate = item.ItemDate,
+                                             CompanyId = item.CompanyID,
+                                             IsValidated = false
+                                         }).First();
                 itemID = MakeSettlementHeader(settlement);
                 if (itemID > 0)
                 {
                     List<LineSettlement> lineSettlement = (from item in customerInvoice
-                                                    select new LineSettlement
-                                                    {
-                                                        transid = itemID,
-                                                        account = item.DebitAccountID,
-                                                        side = false,
-                                                        oaccount = item.CreditAccountID,
-                                                        amount = Math.Round(item.TotTVA, 2),
-                                                        Currency=item.Currency,
-                                                        duedate = item.ItemDate,
-                                                        text = item.LineText
-                                                    }).ToList();
+                                                           select new LineSettlement
+                                                           {
+                                                               transid = itemID,
+                                                               account = item.DebitAccountID,
+                                                               side = false,
+                                                               oaccount = item.CreditAccountID,
+                                                               amount = Math.Round(item.TotTVA, 2),
+                                                               Currency = item.Currency,
+                                                               duedate = item.ItemDate,
+                                                               text = item.LineText
+                                                           }).ToList();
                     int countLineID = MakeSettlementLine(lineSettlement);
                     results = (countLineID > 0);
                 }
@@ -1974,7 +2073,7 @@ namespace IWSProject.Controllers
                           Account = g.Key.account,
                           OAccount = g.Key.oaccount,
                           Amount = g.Key.amount,
-                          Currency=g.Key.Currency
+                          Currency = g.Key.Currency
                       }).ToList();
 
                 foreach (var item in journals)
@@ -2173,7 +2272,7 @@ namespace IWSProject.Controllers
                         results = true;
                     }
                 }
-                if(results)
+                if (results)
                     db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
             }
             catch (Exception e)

@@ -250,7 +250,7 @@
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Width = Unit.Percentage(95);
+                        s.Width = Unit.Percentage(94);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
                     });
@@ -293,7 +293,7 @@
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
                         s.Properties.EditFormatString = "d";
-                        s.Width = Unit.Percentage(95);
+                        s.Width = Unit.Percentage(94);
                         s.Properties.AllowUserInput = false;
                         s.Properties.AllowMouseWheel = false;
                         s.ReadOnly = true;
@@ -336,17 +336,18 @@
                     {
                         s.Properties.UseMaskBehavior = true;
                         s.Properties.EditFormat = EditFormat.Date;
-                        s.Properties.EditFormatString = "d";
-                        s.Width = Unit.Percentage(95);
+                        s.Width = Unit.Percentage(94);
                         s.Properties.AllowUserInput = false;
                         s.Properties.AllowMouseWheel = false;
                         s.ReadOnly = true;
                     });
                 });
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "HeaderText";
                     i.Caption = IWSLocalResource.text;
+                    i.ColSpan = 2;
                     i.NestedExtension().Memo(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -355,7 +356,6 @@
                     });
                 });
 
-                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {

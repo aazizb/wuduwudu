@@ -47,7 +47,7 @@ namespace IWSProject.Controllers
             return PartialView("BanksGridViewPartial", db.Banks.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult BanksGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] BankAccount item)
+        public ActionResult BanksGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Bank item)
         {
             var model = db.Banks;
             ViewData["bank"] = item;

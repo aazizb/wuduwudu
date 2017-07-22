@@ -116,8 +116,6 @@ namespace IWSProject.Controllers
             var model = db.LinePayments;
 
             line.transid = transId;
-            if (line.Currency == null)
-                line.Currency = (string)Session["Currency"];
             ViewData["linePayment"] = line;
             if (ModelState.IsValid)
             {

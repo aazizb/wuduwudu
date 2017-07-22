@@ -30,8 +30,6 @@ namespace IWSProject.Controllers
         {
             var model = db.Articles;
             item.CompanyID = (string)Session["CompanyID"];
-            if(item.Currency==null)
-                item.Currency = (string)Session["Currency"];
             item.IsService = item.IsService != true ? false : true;
             ViewData["article"] = item;
             if (ModelState.IsValid)

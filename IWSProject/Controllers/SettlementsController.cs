@@ -115,11 +115,8 @@ namespace IWSProject.Controllers
         public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LineSettlement line, int transId)
         {
             var model = db.LineSettlements;
-
             line.transid = transId;
-            if (line.Currency == null)
-                line.Currency = (string)Session["Currency"];
-            ViewData["lineCashInflow"] = line;
+            ViewData["lineSettlement"] = line;
             if (ModelState.IsValid)
             {
                 try
@@ -142,7 +139,7 @@ namespace IWSProject.Controllers
         public ActionResult DetailGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] LineSettlement linegood, int transId)
         {
             var model = db.LineSettlements;
-            ViewData["lineCashInflow"] = linegood;
+            ViewData["lineSettlement"] = linegood;
             if (ModelState.IsValid)
             {
                 try
@@ -227,7 +224,6 @@ namespace IWSProject.Controllers
             }
             return results;
         }
-
         #endregion
     }
 }

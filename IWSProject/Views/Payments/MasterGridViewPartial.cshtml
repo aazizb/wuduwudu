@@ -172,7 +172,7 @@
         {
             column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
-            column.Width = Unit.Percentage(24);
+            column.Width = Unit.Percentage(14);
         });
 
         #region Template
@@ -339,6 +339,7 @@
                 {
                     i.FieldName = "HeaderText";
                     i.Caption = IWSLocalResource.text;
+                    i.ColSpan = 2;
                     i.NestedExtension().Memo(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
@@ -346,7 +347,6 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
-                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {

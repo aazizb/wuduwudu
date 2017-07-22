@@ -1,9 +1,6 @@
-﻿using System;
+﻿using IWSProject.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using IWSProject.Models;
 
 
 namespace IWSProject.Controllers
@@ -11,22 +8,41 @@ namespace IWSProject.Controllers
     public class ResultatController : Controller
     {
         // GET: Resultat
-        public ActionResult Index(string account, string start, string end, string company)
+        public ActionResult Index()
         {
-            return View(IWSLookUp.GetResultat("9900","201701","201712","1000"));
+            ViewData["class"] = IWSLookUp.GetClass();
+            return View();
         }
-
-        // GET: Resultat
-        public ActionResult ResultatPartialView(string account, string start, string end, string company)
+        [ValidateInput(false)]
+        public ActionResult ResultatPartial()
         {
-            var resultat = IWSLookUp.GetResultat("9900", "201701", "201712", "1000");
+            string classId = (string)Session["ClassId"];
+            string txtStart = (string)Session["txtStart"];
+            string txtEnd = (string)Session["txtEnd"];
+            string company = (string)Session["CompanyID"];
+            var resultat = IWSLookUp.GetResultat(classId, txtStart, txtEnd, company);
             var model = new List<ResultsViewModel>();
             foreach (ResultsViewModel item in resultat)
             {
                 model.Add(item);
             }
-            return PartialView(model);
+            return PartialView("ResultatPartialView", model);
         }
+        [HttpPost, ValidateInput(false)]
+        public ActionResult CallbackPanelPartial(string classId, string txtStart, string txtEnd)
+        {
+            Session["ClassId"] = classId;
+            Session["txtStart"] = txtStart;
+            Session["txtEnd"] = txtEnd;
+            string company = (string)Session["CompanyID"];
+            var resultat = IWSLookUp.GetResultat(classId, txtStart, txtEnd, company);
+            var model = new List<ResultsViewModel>();
+            foreach (ResultsViewModel item in resultat)
+            {
+                model.Add(item);
+            }
+            return PartialView("_CallbackPartialView", model);
 
+        }
     }
 }

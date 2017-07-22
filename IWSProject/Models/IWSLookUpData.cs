@@ -27,6 +27,19 @@
         {
             var account = IWSEntities.BankAccounts.AsEnumerable().Select(i => new
             {
+                Id = i.IBAN,
+                Name = i.Owner,
+                CompanyID = i.CompanyID,
+            })
+            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+            .OrderBy(o => o.Id);
+            return account;
+        }
+
+        public static IEnumerable GetBIC()
+        {
+            var account = IWSEntities.Banks.AsEnumerable().Select(i => new
+            {
                 Id = i.id,
                 Name = i.name,
                 CompanyID = i.CompanyID,
@@ -35,6 +48,7 @@
             .OrderBy(o => o.Id);
             return account;
         }
+
         public static IEnumerable GetAccounts()
         {
             var account = IWSEntities.Accounts.AsEnumerable().Select(i => new
@@ -46,6 +60,18 @@
             })
             .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"] 
                             && c.IsUsed.Equals(true))
+            .OrderBy(o => o.Id);
+            return account;
+        }
+        public static IEnumerable GetPackUnits()
+        {
+            var account = IWSEntities.QuantityUnits.AsEnumerable().Select(i => new
+            {
+                Id = i.id,
+                Name = i.name,
+                CompanyID = i.CompanyID
+            })
+            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
             .OrderBy(o => o.Id);
             return account;
         }
@@ -174,6 +200,34 @@
             .OrderBy(o => o.Id);
             return customer;
         }
+        public static IEnumerable GetCustomer()
+        {
+            var b = from o in IWSEntities.Customers
+                    where o.CompanyID == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetSupplier()
+        {
+            var b = from o in IWSEntities.Suppliers
+                    where o.CompanyID == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetCompany()
+        {
+            var b = from o in IWSEntities.Companies
+                    where o.id == (string)HttpContext.Current.Session["CompanyID"]
+                    select o;
+            return b;
+        }
+        public static IEnumerable GetBankAccount(string Owner)
+        {
+            var b = from o in IWSEntities.BankAccounts
+                    where o.Owner == Owner
+                    select o;
+            return b;
+        }
         public static IEnumerable GetCompanies()
         {
             var company = IWSEntities.Companies.AsEnumerable().Select(item => new
@@ -185,19 +239,19 @@
             .ToList();
             return company;
         }
-        public static IEnumerable GetCompany()
-        {
-            var company = IWSEntities.Companies.AsEnumerable().Select(item => new
-            {
-                Id = item.id,
-                Name = item.name,
-                CompanyID = item.id
-            })
-            .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
-            .OrderBy(o => o.Name)
-            .ToList();
-            return company;
-        }
+        //public static IEnumerable GetCompany()
+        //{
+        //    var company = IWSEntities.Companies.AsEnumerable().Select(item => new
+        //    {
+        //        Id = item.id,
+        //        Name = item.name,
+        //        CompanyID = item.id
+        //    })
+        //    .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
+        //    .OrderBy(o => o.Name)
+        //    .ToList();
+        //    return company;
+        //}
         public static IEnumerable GetCostCenters()
         {
             var account = IWSEntities.CostCenters.AsEnumerable().Select(item => new
@@ -331,129 +385,131 @@
         }
         public static StatementDetailViewModel GetStatementDetail(int bankStatementID, string itemType)
         {
-
-            if (itemType.Equals(IWSLookUp.DocsType.Settlement.ToString()))
+            try
             {
-                StatementDetailViewModel BS =
+                if (itemType.Equals(IWSLookUp.DocsType.Settlement.ToString()))
+                {
+                    StatementDetailViewModel BS =
+                (from b in IWSEntities.BankStatements
+                 join s in IWSEntities.Customers on new { Kontonummer = b.Kontonummer } equals new { Kontonummer = s.IBAN }
+                 join c in IWSEntities.BankAccounts on new { CompanyIBAN = b.CompanyIBAN } equals new { CompanyIBAN = c.IBAN }
+                 where
+                   b.id == bankStatementID && b.IsValidated==false
+                 select new StatementDetailViewModel()
+                 {
+                    Id = s.id,
+                    AccountID = s.accountid,
+                    BankAccountID = c.Account,
+                    Info = b.Info,
+                    Waehrung = b.Waehrung,
+                    Betrag = Math.Abs((decimal)b.Betrag),
+                     Buchungstag = (DateTime)b.Buchungstag,
+                    Valutadatum = (DateTime)b.Valutadatum,
+                     Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
+                                Convert.ToString((int?)b.Buchungstag.Value.Month),
+                    Buchungstext = b.Buchungstext,
+                    Verwendungszweck = b.Verwendungszweck,
+                    BeguenstigterZahlungspflichtiger = b.BeguenstigterZahlungspflichtiger,
+                    IBAN = s.IBAN
+                 }
+                ).Single();
+                    return BS;
+                }
+
+                if (itemType.Equals(IWSLookUp.DocsType.CustomerInvoice.ToString()))
+                {
+                    StatementDetailViewModel BS =
+                        (from c in IWSEntities.Companies
+                         join b in IWSEntities.BankStatements on new { id = c.id } equals new { id = b.CompanyID }
+                         join s in IWSEntities.Customers
+                             on new { c.id, b.Kontonummer }
+                         equals new { id = s.CompanyID, Kontonummer = s.IBAN }
+                         where
+                         b.IsValidated.Equals(false) &&
+                         b.id.Equals(bankStatementID)
+                         select new StatementDetailViewModel()
+                         {
+                             Id = s.id,
+                             AccountID = s.accountid,
+                             BankAccountID = c.settlementclearingaccountid,
+                             Info = b.Info,
+                             Waehrung = b.Waehrung,
+                             Betrag = (decimal)b.Betrag,
+                             Buchungstag = (DateTime)b.Buchungstag,
+                             Valutadatum = (DateTime)b.Valutadatum,
+                             Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
+                                         Convert.ToString((int?)b.Buchungstag.Value.Month),
+                             Buchungstext = b.Buchungstext,
+                             Verwendungszweck = b.Verwendungszweck,
+                             BeguenstigterZahlungspflichtiger = b.BeguenstigterZahlungspflichtiger,
+                             IBAN = s.IBAN
+                         }).Single();
+                    return BS;
+                }
+
+                if (itemType.Equals(IWSLookUp.DocsType.Payment.ToString()))
+                {
+                    StatementDetailViewModel BS =
+                        (from s in IWSEntities.Suppliers
+                         join b in IWSEntities.BankStatements on new { IBAN = s.IBAN } equals new { IBAN = b.Kontonummer }
+                         join c in IWSEntities.BankAccounts on new { CompanyIBAN = b.CompanyIBAN } equals new { CompanyIBAN = c.IBAN }
+                         where
+                           b.id == bankStatementID &&
+                           b.IsValidated == false
+                         select new StatementDetailViewModel()
+                         {
+                             Id=s.id,
+                             AccountID= s.accountid,
+                             BankAccountID= c.Account,
+                             Info= b.Info,
+                             Waehrung= b.Waehrung,
+                             Betrag= Math.Abs((decimal)b.Betrag),
+                             Buchungstag= (DateTime)b.Buchungstag,
+                             Valutadatum= (DateTime)b.Valutadatum,
+                             Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
+                                Convert.ToString((int?)b.Buchungstag.Value.Month),
+                             Buchungstext= b.Buchungstext,
+                             Verwendungszweck= b.Verwendungszweck,
+                             BeguenstigterZahlungspflichtiger= b.BeguenstigterZahlungspflichtiger,
+                             IBAN= s.IBAN
+                         }).Single();
+                    return BS;
+                }
+
+                if (itemType.Equals(IWSLookUp.DocsType.VendorInvoice.ToString()))
+                {
+                    StatementDetailViewModel BS =
                     (from c in IWSEntities.Companies
-                        join b in IWSEntities.BankStatements on new { id = c.id } equals new { id = b.CompanyID }
-                        join s in IWSEntities.Customers
-                            on new { c.id, b.Kontonummer }
-                        equals new { id = s.CompanyID, Kontonummer = s.IBAN }
-                        where
-                        b.IsValidated.Equals(false) &&
-                        b.id.Equals(bankStatementID)
-                        select new StatementDetailViewModel()
-                        {
-                            Id = s.id,
-                            AccountID = s.accountid,
-                            BankAccountID = c.bankaccountid,
-                            Info = b.Info,
-                            Waehrung = b.Waehrung,
-                            Betrag = (decimal)b.Betrag,
-                            Buchungstag = (DateTime)b.Buchungstag,
-                            Valutadatum = (DateTime)b.Valutadatum,
-                            Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
-                                        Convert.ToString((int?)b.Buchungstag.Value.Month),
-                            Buchungstext = b.Buchungstext,
-                            Verwendungszweck = b.Verwendungszweck,
-                            BeguenstigterZahlungspflichtiger = b.BeguenstigterZahlungspflichtiger,
-                            IBAN = s.IBAN
-                        }).Single(); 
-                return BS;
+                     join b in IWSEntities.BankStatements on new { id = c.id } equals new { id = b.CompanyID }
+                     join s in IWSEntities.Suppliers
+                     on new { c.id, b.Kontonummer }
+                 equals new { id = s.CompanyID, Kontonummer = s.IBAN }
+                     where
+                 b.IsValidated.Equals(false) &&
+                 b.id.Equals(bankStatementID)
+                     select new StatementDetailViewModel()
+                     {
+                         Id = s.id,
+                         AccountID = c.purchasingclearingaccountid,
+                         BankAccountID = s.accountid,
+                         Info = b.Info,
+                         Waehrung = b.Waehrung,
+                         Betrag = Math.Abs((decimal)b.Betrag),
+                         Buchungstag = (DateTime)b.Buchungstag,
+                         Valutadatum = (DateTime)b.Valutadatum,
+                         Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
+                                     Convert.ToString((int?)b.Buchungstag.Value.Month),
+                         Buchungstext = b.Buchungstext,
+                         Verwendungszweck = b.Verwendungszweck,
+                         BeguenstigterZahlungspflichtiger = b.BeguenstigterZahlungspflichtiger,
+                         IBAN = s.IBAN
+                     }).Single();
+                    return BS;
+                }
             }
-
-            if (itemType.Equals(IWSLookUp.DocsType.CustomerInvoice.ToString()))
+            catch (Exception)
             {
-                StatementDetailViewModel BS =
-                    (from c in IWSEntities.Companies
-                        join b in IWSEntities.BankStatements on new { id = c.id } equals new { id = b.CompanyID }
-                        join s in IWSEntities.Customers
-                            on new { c.id, b.Kontonummer }
-                        equals new { id = s.CompanyID, Kontonummer = s.IBAN }
-                        where
-                        b.IsValidated.Equals(false) &&
-                        b.id.Equals(bankStatementID)
-                        select new StatementDetailViewModel()
-                        {
-                            Id = s.id,
-                            AccountID = s.accountid,
-                            BankAccountID = c.settlementclearingaccountid,
-                            Info = b.Info,
-                            Waehrung = b.Waehrung,
-                            Betrag = (decimal)b.Betrag,
-                            Buchungstag = (DateTime)b.Buchungstag,
-                            Valutadatum = (DateTime)b.Valutadatum,
-                            Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
-                                        Convert.ToString((int?)b.Buchungstag.Value.Month),
-                            Buchungstext = b.Buchungstext,
-                            Verwendungszweck = b.Verwendungszweck,
-                            BeguenstigterZahlungspflichtiger = b.BeguenstigterZahlungspflichtiger,
-                            IBAN = s.IBAN
-                        }).Single();
-                return BS;
-            }
-
-            if (itemType.Equals(IWSLookUp.DocsType.Payment.ToString()))
-            {
-                StatementDetailViewModel BS =
-                (from c in IWSEntities.Companies
-                    join b in IWSEntities.BankStatements on new { id = c.id } equals new { id = b.CompanyID }
-                    join s in IWSEntities.Suppliers
-                        on new { c.id, b.Kontonummer }
-                    equals new { id = s.CompanyID, Kontonummer = s.IBAN }
-                    where
-                    b.IsValidated.Equals(false) &&
-                    b.id.Equals(bankStatementID)
-                    select new StatementDetailViewModel()
-                    {
-                        Id = s.id,
-                        AccountID = s.accountid,
-                        BankAccountID = c.bankaccountid,
-                        Info = b.Info,
-                        Waehrung = b.Waehrung,
-                        Betrag = Math.Abs((decimal)b.Betrag),
-                        Buchungstag = (DateTime)b.Buchungstag,
-                        Valutadatum = (DateTime)b.Valutadatum,
-                        Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
-                                        Convert.ToString((int?)b.Buchungstag.Value.Month),
-                        Buchungstext = b.Buchungstext,
-                        Verwendungszweck = b.Verwendungszweck,
-                        BeguenstigterZahlungspflichtiger = b.BeguenstigterZahlungspflichtiger,
-                        IBAN = s.IBAN 
-                    }).Single();
-                return BS;
-            }
-
-            if (itemType.Equals(IWSLookUp.DocsType.VendorInvoice.ToString()))
-            {
-                StatementDetailViewModel BS =
-                (from c in IWSEntities.Companies
-                    join b in IWSEntities.BankStatements on new { id = c.id } equals new { id = b.CompanyID }
-                    join s in IWSEntities.Suppliers
-                        on new { c.id, b.Kontonummer }
-                    equals new { id = s.CompanyID, Kontonummer = s.IBAN }
-                    where
-                    b.IsValidated.Equals(false) &&
-                    b.id.Equals(bankStatementID)
-                    select new StatementDetailViewModel()
-                    {
-                        Id = s.id,
-                        AccountID = c.purchasingclearingaccountid,
-                        BankAccountID = s.accountid,
-                        Info = b.Info,
-                        Waehrung = b.Waehrung,
-                        Betrag = Math.Abs((decimal)b.Betrag),
-                        Buchungstag = (DateTime)b.Buchungstag,
-                        Valutadatum = (DateTime)b.Valutadatum,
-                        Periode = Convert.ToString((int?)b.Buchungstag.Value.Year) +
-                                        Convert.ToString((int?)b.Buchungstag.Value.Month),
-                        Buchungstext = b.Buchungstext,
-                        Verwendungszweck = b.Verwendungszweck,
-                        BeguenstigterZahlungspflichtiger = b.BeguenstigterZahlungspflichtiger,
-                        IBAN = s.IBAN
-                    }).Single();
-                return BS;
+                return null;
             }
             return null;
         }
@@ -495,10 +551,7 @@
                  line.BillOfDelivery.id,
                  ItemType = Item.LocalName,
                  ItemDate = (DateTime?)line.BillOfDelivery.ItemDate,
-                 xMonth = (Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month)).Length == 1 ?
-                                                     '0' + Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month) :
-                                                     Convert.ToString((int?)line.BillOfDelivery.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.BillOfDelivery.ItemDate.Year),
+                 Periode = line.BillOfDelivery.oPeriode,
                  line.BillOfDelivery.account,
                  line.BillOfDelivery.CompanyId,
                  line.Vat,
@@ -511,7 +564,7 @@
                  ItemID = g.Key.id,
                  ItemType = g.Key.ItemType,
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode = g.Key.xYear + g.Key.xMonth,
+                 Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                  Area = false,
                  SupplierID = g.Key.account,
                  CompanyID = g.Key.CompanyId,
@@ -538,10 +591,11 @@
                     line.VendorInvoice.id,
                     ItemType = Item.LocalName,
                     ItemDate = (DateTime?)line.VendorInvoice.ItemDate,
-                    xMonth = (Convert.ToString((int?)line.VendorInvoice.ItemDate.Month)).Length == 1 ?
-                                                     '0' + Convert.ToString((int?)line.VendorInvoice.ItemDate.Month) :
-                                                     Convert.ToString((int?)line.VendorInvoice.ItemDate.Month),
-                    xYear = Convert.ToString((int?)line.VendorInvoice.ItemDate.Year),
+                    Periode = line.VendorInvoice.oPeriode,
+                    //xMonth = (Convert.ToString((int?)line.VendorInvoice.ItemDate.Month)).Length == 1 ?
+                    //                                 '0' + Convert.ToString((int?)line.VendorInvoice.ItemDate.Month) :
+                    //                                 Convert.ToString((int?)line.VendorInvoice.ItemDate.Month),
+                    //xYear = Convert.ToString((int?)line.VendorInvoice.ItemDate.Year),
                     line.VendorInvoice.account,
                     line.Currency,
                     line.VendorInvoice.CompanyId
@@ -553,7 +607,7 @@
                     ItemID = g.Key.id,
                     ItemType = g.Key.ItemType,
                     DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                    Periode = g.Key.xYear + g.Key.xMonth,
+                    Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                     Area = true,
                     SupplierID = g.Key.account,
                     CompanyID = g.Key.CompanyId,
@@ -581,10 +635,11 @@
                  line.PurchaseOrder.id,
                  ItemType = Item.LocalName,
                  ItemDate = (DateTime?)line.PurchaseOrder.ItemDate,
-                 xMonth = (Convert.ToString((int?)line.PurchaseOrder.ItemDate.Month)).Length == 1 ?
-                                                     '0' + Convert.ToString((int?)line.PurchaseOrder.ItemDate.Month) :
-                                                     Convert.ToString((int?)line.PurchaseOrder.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.PurchaseOrder.ItemDate.Year),
+                 Periode=line.PurchaseOrder.oPeriode,
+                 //xMonth = (Convert.ToString((int?)line.PurchaseOrder.ItemDate.Month)).Length == 1 ?
+                 //                                    '0' + Convert.ToString((int?)line.PurchaseOrder.ItemDate.Month) :
+                 //                                    Convert.ToString((int?)line.PurchaseOrder.ItemDate.Month),
+                 //xYear = Convert.ToString((int?)line.PurchaseOrder.ItemDate.Year),
                  line.PurchaseOrder.account,
                  line.PurchaseOrder.CompanyId,
                  line.Vat,
@@ -597,7 +652,7 @@
                  ItemID = g.Key.id,
                  ItemType = g.Key.ItemType,
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode = g.Key.xYear + g.Key.xMonth,
+                 Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                  Area = false,
                  SupplierID = g.Key.account,
                  CompanyID = g.Key.CompanyId,
@@ -625,10 +680,11 @@
                  line.Payment.id,
                  ItemType = Item.LocalName,
                  ItemDate = (DateTime?)line.Payment.ItemDate,
-                 xMonth = (Convert.ToString((int?)line.Payment.ItemDate.Month)).Length == 1 ?
-                                                     '0' + Convert.ToString((int?)line.Payment.ItemDate.Month) :
-                                                     Convert.ToString((int?)line.Payment.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.Payment.ItemDate.Year),
+                 Periode = line.Payment.oPeriode,
+                 //xMonth = (Convert.ToString((int?)line.Payment.ItemDate.Month)).Length == 1 ?
+                 //                                    '0' + Convert.ToString((int?)line.Payment.ItemDate.Month) :
+                 //                                    Convert.ToString((int?)line.Payment.ItemDate.Month),
+                 //xYear = Convert.ToString((int?)line.Payment.ItemDate.Year),
                  line.Payment.account,
                  line.Payment.CompanyId,
                  line.Currency
@@ -640,7 +696,7 @@
                  ItemID = g.Key.id,
                  ItemType = g.Key.ItemType,
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode = g.Key.xYear + g.Key.xMonth,
+                 Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                  Area = false,
                  SupplierID = g.Key.account,
                  CompanyID = g.Key.CompanyId,
@@ -668,10 +724,11 @@
                      line.InventoryInvoice.id,
                      ItemType = Item.LocalName,
                      ItemDate = (DateTime?)line.InventoryInvoice.ItemDate,
-                     xMonth = (Convert.ToString((int?)line.InventoryInvoice.ItemDate.Month)).Length == 1 ?
-                                                         '0' + Convert.ToString((int?)line.InventoryInvoice.ItemDate.Month) :
-                                                         Convert.ToString((int?)line.InventoryInvoice.ItemDate.Month),
-                     xYear = Convert.ToString((int?)line.InventoryInvoice.ItemDate.Year),
+                     Periode = line.InventoryInvoice.oPeriode,
+                     //xMonth = (Convert.ToString((int?)line.InventoryInvoice.ItemDate.Month)).Length == 1 ?
+                     //                                    '0' + Convert.ToString((int?)line.InventoryInvoice.ItemDate.Month) :
+                     //                                    Convert.ToString((int?)line.InventoryInvoice.ItemDate.Month),
+                     //xYear = Convert.ToString((int?)line.InventoryInvoice.ItemDate.Year),
                      line.InventoryInvoice.account,
                      line.InventoryInvoice.CompanyId,
                      line.Vat,
@@ -684,7 +741,7 @@
                      ItemID = g.Key.id,
                      ItemType = g.Key.ItemType,
                      DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                      Area = true,
                      SupplierID = g.Key.account,
                      CompanyID = g.Key.CompanyId,
@@ -712,10 +769,11 @@
                  line.GoodReceiving.id,
                  ItemType = Item.LocalName,
                  ItemDate = (DateTime?)line.GoodReceiving.ItemDate,
-                 xMonth = (Convert.ToString((int?)line.GoodReceiving.ItemDate.Month)).Length == 1 ?
-                                                     '0' + Convert.ToString((int?)line.GoodReceiving.ItemDate.Month) :
-                                                     Convert.ToString((int?)line.GoodReceiving.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.GoodReceiving.ItemDate.Year),
+                 Periode=line.GoodReceiving.oPeriode,
+                 //xMonth = (Convert.ToString((int?)line.GoodReceiving.ItemDate.Month)).Length == 1 ?
+                 //                                    '0' + Convert.ToString((int?)line.GoodReceiving.ItemDate.Month) :
+                 //                                    Convert.ToString((int?)line.GoodReceiving.ItemDate.Month),
+                 //xYear = Convert.ToString((int?)line.GoodReceiving.ItemDate.Year),
                  line.GoodReceiving.account,
                  line.GoodReceiving.CompanyId,
                  line.Vat,
@@ -728,7 +786,7 @@
                  ItemID = g.Key.id,
                  ItemType = g.Key.ItemType,
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode= g.Key.xYear + g.Key.xMonth,
+                 Periode= g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                  Area = true,
                  SupplierID = g.Key.account,
                  CompanyID = g.Key.CompanyId,
@@ -756,11 +814,11 @@
                  line.SalesOrder.id,
                  ItemType = Item.LocalName,
                  ItemDate = (DateTime?)line.SalesOrder.ItemDate,
-                 
-                 xMonth = (Convert.ToString((int?)line.SalesOrder.ItemDate.Month)).Length == 1 ?
-                                                     '0' + Convert.ToString((int?)line.SalesOrder.ItemDate.Month) :
-                                                     Convert.ToString((int?)line.SalesOrder.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.SalesOrder.ItemDate.Year),
+                 Periode=line.SalesOrder.oPeriode,
+                 //xMonth = (Convert.ToString((int?)line.SalesOrder.ItemDate.Month)).Length == 1 ?
+                 //                                    '0' + Convert.ToString((int?)line.SalesOrder.ItemDate.Month) :
+                 //                                    Convert.ToString((int?)line.SalesOrder.ItemDate.Month),
+                 //xYear = Convert.ToString((int?)line.SalesOrder.ItemDate.Year),
                  line.SalesOrder.account,
                  line.SalesOrder.CompanyId,
                  line.Vat,
@@ -773,7 +831,7 @@
                  ItemID = g.Key.id,
                  ItemType = g.Key.ItemType,
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode = g.Key.xYear + g.Key.xMonth,
+                 Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                  Area = false,
                  SupplierID = g.Key.account,
                  CompanyID = g.Key.CompanyId,
@@ -801,10 +859,11 @@
                      line.SalesInvoice.id,
                      ItemType = Item.LocalName,
                      ItemDate = (DateTime?)line.SalesInvoice.ItemDate,
-                     xMonth = (Convert.ToString((int?)line.SalesInvoice.ItemDate.Month)).Length == 1 ?
-                                                         '0' + Convert.ToString((int?)line.SalesInvoice.ItemDate.Month) :
-                                                         Convert.ToString((int?)line.SalesInvoice.ItemDate.Month),
-                     xYear = Convert.ToString((int?)line.SalesInvoice.ItemDate.Year),
+                     Periode=line.SalesInvoice.oPeriode,
+                     //xMonth = (Convert.ToString((int?)line.SalesInvoice.ItemDate.Month)).Length == 1 ?
+                     //                                    '0' + Convert.ToString((int?)line.SalesInvoice.ItemDate.Month) :
+                     //                                    Convert.ToString((int?)line.SalesInvoice.ItemDate.Month),
+                     //xYear = Convert.ToString((int?)line.SalesInvoice.ItemDate.Year),
                      line.SalesInvoice.account,
                      line.SalesInvoice.CompanyId,
                      line.Vat,
@@ -817,7 +876,7 @@
                      ItemID = g.Key.id,
                      ItemType = g.Key.ItemType,
                      DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                     Periode = g.Key.xYear + g.Key.xMonth,
+                     Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                      Area = false,
                      SupplierID = g.Key.account,
                      CompanyID = g.Key.CompanyId,
@@ -844,10 +903,11 @@
                  line.CustomerInvoice.id,
                  ItemType = Item.LocalName,
                  ItemDate = (DateTime?)line.CustomerInvoice.ItemDate,
-                 xMonth = (Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month)).Length == 1 ?
-                                                  '0' + Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month) :
-                                                  Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.CustomerInvoice.ItemDate.Year),
+                 Periode=line.CustomerInvoice.oPeriode,
+                 //xMonth = (Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month)).Length == 1 ?
+                 //                                 '0' + Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month) :
+                 //                                 Convert.ToString((int?)line.CustomerInvoice.ItemDate.Month),
+                 //xYear = Convert.ToString((int?)line.CustomerInvoice.ItemDate.Year),
                  line.CustomerInvoice.account,
                  line.Currency,
                  line.CustomerInvoice.CompanyId
@@ -859,7 +919,7 @@
                  ItemID = g.Key.id,
                  ItemType = g.Key.ItemType,
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode = g.Key.xYear + g.Key.xMonth,
+                 Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                  Area = false,
                  SupplierID = g.Key.account,
                  CompanyID = g.Key.CompanyId,
@@ -886,10 +946,11 @@
                  line.Settlement.id,
                  ItemType = Item.LocalName,
                  ItemDate = (DateTime?)line.Settlement.ItemDate,
-                 xMonth = (Convert.ToString((int?)line.Settlement.ItemDate.Month)).Length == 1 ?
-                                                      '0' + Convert.ToString((int?)line.Settlement.ItemDate.Month) :
-                                                      Convert.ToString((int?)line.Settlement.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.Settlement.ItemDate.Year),
+                 Periode=line.Settlement.oPeriode,
+                 //xMonth = (Convert.ToString((int?)line.Settlement.ItemDate.Month)).Length == 1 ?
+                 //                                     '0' + Convert.ToString((int?)line.Settlement.ItemDate.Month) :
+                 //                                     Convert.ToString((int?)line.Settlement.ItemDate.Month),
+                 //xYear = Convert.ToString((int?)line.Settlement.ItemDate.Year),
                  line.Settlement.account,
                  line.Settlement.CompanyId,
                  line.Currency
@@ -901,7 +962,7 @@
                  ItemID = g.Key.id,
                  ItemType = g.Key.ItemType,
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode = g.Key.xYear + g.Key.xMonth,
+                 Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                  Area = false,
                  SupplierID = g.Key.account,
                  CompanyID = g.Key.CompanyId,
@@ -928,10 +989,11 @@
                  line.GeneralLedger.id,
                  ItemType = Item.LocalName,
                  ItemDate = (DateTime?)line.GeneralLedger.ItemDate,
-                 xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
-                                                      '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
-                                                      Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year),
+                 Periode = line.GeneralLedger.oPeriode,
+                 //xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
+                 //                                     '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
+                 //                                     Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
+                 //xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year),
                  line.GeneralLedger.CompanyId,
                  line.Currency
              } into g
@@ -942,7 +1004,7 @@
                  ItemID = g.Key.id,
                  ItemType = g.Key.ItemType,
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode = g.Key.xYear + g.Key.xMonth,
+                 Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                  Area = false,
                  SupplierID = Area.Sales.ToString(),
                  CompanyID = g.Key.CompanyId,
@@ -969,10 +1031,11 @@
                  line.GeneralLedger.id,
                  ItemType = Item.LocalName,
                  ItemDate = (DateTime?)line.GeneralLedger.ItemDate,
-                 xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
-                                                      '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
-                                                      Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
-                 xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year),
+                 Periode=line.GeneralLedger.oPeriode,
+                 //xMonth = (Convert.ToString((int?)line.GeneralLedger.ItemDate.Month)).Length == 1 ?
+                 //                                     '0' + Convert.ToString((int?)line.GeneralLedger.ItemDate.Month) :
+                 //                                     Convert.ToString((int?)line.GeneralLedger.ItemDate.Month),
+                 //xYear = Convert.ToString((int?)line.GeneralLedger.ItemDate.Year),
                  line.GeneralLedger.CompanyId,
                  line.Currency
              } into g
@@ -983,7 +1046,7 @@
                  ItemID = g.Key.id,
                  ItemType = g.Key.ItemType,
                  DueDate = Convert.ToDateTime(g.Key.ItemDate),
-                 Periode = g.Key.xYear + g.Key.xMonth,
+                 Periode = g.Key.Periode,// g.Key.xYear + g.Key.xMonth,
                  Area = false,
                  SupplierID = Area.Purchasing.ToString(),
                  CompanyID = g.Key.CompanyId,
@@ -1032,6 +1095,50 @@
                                             }).ToList();
             return documents;
         }
+
+        public static List<OwnerViewModel> GetOwner()
+        {
+            string uiCulture = Thread.CurrentThread.CurrentUICulture.Name;
+
+            List<OwnerViewModel> companies = Queryable.OrderBy(
+            (from line in IWSEntities.Companies
+             where line.id== (string)HttpContext.Current.Session["CompanyID"]
+             from Item in IWSEntities.Localizations
+             where Item.ItemName == Owner.Company.ToString() && Item.UICulture == uiCulture
+             select new OwnerViewModel()
+             {
+                 ID = line.id,
+                 Name = line.name,
+                 OwnerType = Item.LocalName
+             }), o => o.OwnerType).ToList();
+
+            List<OwnerViewModel> customers = Queryable.OrderBy(
+            (from line in IWSEntities.Customers
+             where line.id == (string)HttpContext.Current.Session["CompanyID"]
+             from Item in IWSEntities.Localizations
+             where Item.ItemName == Owner.Company.ToString() && Item.UICulture == uiCulture
+             select new OwnerViewModel()
+             {
+                 ID = line.id,
+                 Name = line.name,
+                 OwnerType = Item.LocalName
+             }), o => o.OwnerType).ToList();
+
+            List<OwnerViewModel> suppliers = Queryable.OrderBy(
+            (from line in IWSEntities.Suppliers
+             where line.id == (string)HttpContext.Current.Session["CompanyID"]
+             from Item in IWSEntities.Localizations
+             where Item.ItemName == Owner.Company.ToString() && Item.UICulture == uiCulture
+             select new OwnerViewModel()
+             {
+                 ID = line.id,
+                 Name = line.name,
+                 OwnerType = Item.LocalName
+             }), o => o.OwnerType).ToList();
+            return companies.Union(customers).Union(suppliers).ToList();
+
+        }
+
 
         public static IEnumerable GetNewLineGoodReceiving(int  itemID, int oid)
         {
@@ -1118,6 +1225,7 @@
                    {
                        TransID = itemID,
                        ODebit = l.Customer.accountid,
+                       OCredit= l.Company.salesclearingaccountid,
                        Side = false,
                        HeaderText = l.HeaderText,
                        ItemDate= l.ItemDate,
@@ -1131,7 +1239,7 @@
                             amount=(decimal)d.Single().OVat, duedate=d.Single().ItemDate, text=d.Single().HeaderText,
                             Currency=d.Single().Currency},
                         new LineCustomerInvoice(){
-                            transid =itemID, account=d.Single().ODebit, side=d.Single().Side, oaccount=c.Single().OCreditTotal,
+                            transid =itemID, account=d.Single().ODebit, side=d.Single().Side, oaccount=d.Single().OCredit,
                             amount=(decimal)d.Single().OTotal, duedate=d.Single().ItemDate, text=d.Single().HeaderText,
                             Currency=d.Single().Currency}
                     };
@@ -1265,11 +1373,12 @@
                   LineInventoryInvoices.transid == oid
                 group new { LineInventoryInvoices.Article, LineInventoryInvoices } by new
                 {
-                    LineInventoryInvoices.Article.ExpenseAccount
+                    //LineInventoryInvoices.Article.ExpenseAccount
+                    LineInventoryInvoices.InventoryInvoice.Company.purchasingclearingaccountid
                 } into g
                 select new
                 {
-                    account = g.Key.ExpenseAccount,
+                    account = g.Key.purchasingclearingaccountid,// g.Key.ExpenseAccount,
                     amount = (decimal?)g.Sum(p => p.LineInventoryInvoices.lineNet)
                 }
             ).Union
@@ -1329,7 +1438,6 @@
             return docs;
         }
 
-
         public static IEnumerable GetAccountBalance(string CompanyID)
         {
             List<AccountBalanceViewModel> items = (from p in IWSEntities.PeriodicAccountBalances
@@ -1376,6 +1484,41 @@
             .ToList();
             return journals;
         }
+        public static IEnumerable GetResultat(string classId, string start, string end, string company)
+        {
+            List<ResultsViewModel> r = (from s in IWSEntities.AccountBalance(classId, start, end, company)
+                                        where s.SDebit != s.SCredit
+                                        select new ResultsViewModel()
+                                        {
+                                            ClassId =s.ClassId,
+                                            ClassName =s.ClassName,
+                                            SubClassId =s.SubClassId,
+                                            SubClassName =s.SubClassName,
+                                            AccountId = s.AccountId,
+                                            AccountName = s.AccountName,
+                                            TDebit = (Decimal)s.TDebit,
+                                            TCredit = (Decimal)s.TCredit,
+                                            SDebit = (Decimal)s.SDebit,
+                                            SCredit = (Decimal)s.SCredit,
+                                            Currency=s.Currency,
+                                            Balance=(decimal)s.Balance
+                                        }).ToList();
+            return r;
+        }
+        public static IEnumerable GetClass()
+        {
+
+            List<ChildViewModel> r = (from a in IWSEntities.Accounts
+                                      where
+                                        a.ParentId == null &&
+                                        a.CompanyID == (string)HttpContext.Current.Session["CompanyID"]
+                                      select new ChildViewModel()
+                                      {
+                                          ParentId = a.id,
+                                          ParentName = a.name
+                                      }).ToList();
+            return r;
+        }
         public static IEnumerable GetStock(string CompanyID)
         {
             List<StockViewModel> SV = (from s in IWSEntities.Stocks
@@ -1403,11 +1546,6 @@
             return IWSEntities.AspNetUsers.FirstOrDefault(c => 
                                 c.UserName == UserName).Company;
         }
-        public static string GetCurrency(string UserName)
-        {
-            string companyID = IWSEntities.AspNetUsers.FirstOrDefault(c => c.UserName == UserName).Company;
-            return IWSEntities.Companies.FirstOrDefault(c=>c.id==companyID).Currency;
-        }
         public static string GetQttyUnit(string id)
         {
             return IWSEntities.Articles.FirstOrDefault(c => 
@@ -1417,6 +1555,11 @@
         {
             return IWSEntities.Articles.FirstOrDefault(c =>
                    c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).Vat.PVat;
+        }
+        public static string GetCurrency(string id)
+        {
+            return IWSEntities.Articles.FirstOrDefault(c =>
+                   c.id == id && c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]).Currency;
         }
         public static decimal GetPrice(string id)
         {
@@ -1813,6 +1956,12 @@
         {
             Purchasing,
             Sales
+        }
+        public enum Owner
+        {
+            Company,
+            Customer,
+            Supplier
         }
     }
 }

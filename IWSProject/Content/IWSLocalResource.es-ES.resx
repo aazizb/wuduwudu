@@ -178,7 +178,7 @@
     <value>IVA</value>
   </data>
   <data name="groupid" xml:space="preserve">
-    <value>Group ID</value>
+    <value>Grup #</value>
   </data>
   <data name="packunit" xml:space="preserve">
     <value>Pack Unit</value>
@@ -295,7 +295,7 @@
     <value>Revenue Account es-ES</value>
   </data>
   <data name="stockaccountid" xml:space="preserve">
-    <value>Stock Account es-ES</value>
+    <value>Stock/Expense Account es-ES</value>
   </data>
   <data name="bankaccountid" xml:space="preserve">
     <value>Bank Account es-ES</value>
@@ -713,5 +713,29 @@
   </data>
   <data name="TransDate" xml:space="preserve">
     <value>Trans Date</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="returns" xml:space="preserve">
+    <value>Resultado</value>
+  </data>
+  <data name="scredit" xml:space="preserve">
+    <value>Saldo Acreedor</value>
+  </data>
+  <data name="sdebit" xml:space="preserve">
+    <value>Saldo Deudor</value>
+  </data>
+  <data name="tcredit" xml:space="preserve">
+    <value>Total Haber</value>
+  </data>
+  <data name="tdebit" xml:space="preserve">
+    <value>Total Debe</value>
+  </data>
+  <data name="classx" xml:space="preserve">
+    <value>Clase</value>
+  </data>
+  <data name="subClass" xml:space="preserve">
+    <value>Subclase</value>
   </data>
 </root>

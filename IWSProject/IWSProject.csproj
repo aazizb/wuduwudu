@@ -648,10 +648,6 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>Index.generated.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\Suppliers\SuppliersGridViewPartial.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>SuppliersGridViewPartial.generated.cs</LastGenOutput>
-    </Content>
     <Content Include="Views\CostCenters\Index.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>Index.generated.cs</LastGenOutput>
@@ -691,10 +687,6 @@
     <Content Include="Views\Customers\Index.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Customers\CustomersGridViewPartial.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>CustomersGridViewPartial.generated.cs</LastGenOutput>
     </Content>
     <Content Include="Views\Payments\Index.cshtml">
       <Generator>RazorGenerator</Generator>
@@ -740,10 +732,6 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>Index.generated.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\Companies\CompaniesGridViewPartial.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>CompaniesGridViewPartial.generated.cs</LastGenOutput>
-    </Content>
     <Content Include="Views\MenuUI\Index.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>Index.generated.cs</LastGenOutput>
@@ -776,14 +764,6 @@
     <Content Include="Views\Account\UsersList.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>UsersList.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Accounting\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Accounting\ValidateBLPartialView.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>ValidateBLPartialView.generated.cs</LastGenOutput>
     </Content>
     <Content Include="Views\Balance\Index.cshtml">
       <Generator>RazorGenerator</Generator>
@@ -861,18 +841,6 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>DetailGridViewPartial.generated.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\ComptesGeneraux\Index.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>Index.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\ComptesGeneraux\MasterGridViewPartial.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>MasterGridViewPartial.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\ComptesGeneraux\DetailGridViewPartial.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>DetailGridViewPartial.generated.cs</LastGenOutput>
-    </Content>
     <Content Include="Views\GeneralLedgerIn\Index.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>Index.generated.cs</LastGenOutput>
@@ -901,10 +869,6 @@
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>PeriodicBalance.generated.cs</LastGenOutput>
     </Content>
-    <Content Include="Views\Accounting\AccountBalance.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>AccountBalance.generated.cs</LastGenOutput>
-    </Content>
     <Content Include="Views\Stocks\Index.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>Index.generated.cs</LastGenOutput>
@@ -912,10 +876,6 @@
     <Content Include="Views\Stocks\StocksPartialView.cshtml">
       <Generator>RazorGenerator</Generator>
       <LastGenOutput>StocksPartialView.generated.cs</LastGenOutput>
-    </Content>
-    <Content Include="Views\Accounting\AccountBalanceView.cshtml">
-      <Generator>RazorGenerator</Generator>
-      <LastGenOutput>AccountBalanceView.generated.cs</LastGenOutput>
     </Content>
     <Content Include="Views\Currencies\Index.cshtml">
       <Generator>RazorGenerator</Generator>
@@ -945,6 +905,18 @@
     <Content Include="Views\Home\SalesInvoiceXS.cshtml" />
     <Content Include="Views\Home\PurchaseOrderXS.cshtml" />
     <Content Include="Views\Home\AccountBalance.cshtml" />
+    <Content Include="Views\Accounting\Index.cshtml" />
+    <Content Include="Views\Accounting\ValidateBLPartialView.cshtml" />
+    <Content Include="Views\Customers\CustomersGridViewPartial.cshtml" />
+    <Content Include="Views\Customers\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\Suppliers\SuppliersGridViewPartial.cshtml" />
+    <Content Include="Views\Suppliers\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\Companies\CompaniesGridViewPartial.cshtml" />
+    <Content Include="Views\Companies\DetailGridViewPartial.cshtml" />
+    <Content Include="Views\Resultat\ResultatPartialView.cshtml" />
+    <Content Include="Views\Resultat\Index.cshtml" />
+    <Content Include="Views\Resultat\_CallbackPartialView.cshtml" />
+    <Content Include="Views\Accounting\_CallbackPartialView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -994,6 +966,7 @@
     <Compile Include="Controllers\CurrenciesController.cs" />
     <Compile Include="Controllers\GeneralLedgerInController.cs" />
     <Compile Include="Controllers\GeneralLedgerOutController.cs" />
+    <Compile Include="Controllers\ResultatController.cs" />
     <Compile Include="Controllers\SalesInvoicesController.cs" />
     <Compile Include="Controllers\SettlementsController.cs" />
     <Compile Include="Controllers\CompaniesController.cs" />
@@ -1031,6 +1004,11 @@
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\AccountModels.cs" />
+    <Compile Include="Models\Db\IWSDataCX.designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IWSDataCX.dbml</DependentUpon>
+    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\IWSUserRole.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -1063,26 +1041,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Startup.cs" />
-    <Compile Include="Views\Accounting\AccountBalance.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AccountBalance.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Accounting\AccountBalanceView.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AccountBalanceView.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Accounting\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Accounting\ValidateBLPartialView.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>ValidateBLPartialView.cshtml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Accounts\AccountsGridViewPartial.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -1248,30 +1206,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>MasterGridViewPartial.cshtml</DependentUpon>
     </Compile>
-    <Compile Include="Views\Companies\CompaniesGridViewPartial.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CompaniesGridViewPartial.cshtml</DependentUpon>
-    </Compile>
     <Compile Include="Views\Companies\Index.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ComptesGeneraux\DetailGridViewPartial.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>DetailGridViewPartial.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ComptesGeneraux\Index.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\ComptesGeneraux\MasterGridViewPartial.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>MasterGridViewPartial.cshtml</DependentUpon>
     </Compile>
     <Compile Include="Views\CostCenters\CostCentersGridViewPartial.generated.cs">
       <AutoGen>True</AutoGen>
@@ -1307,11 +1245,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MasterGridViewPartial.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Customers\CustomersGridViewPartial.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>CustomersGridViewPartial.cshtml</DependentUpon>
     </Compile>
     <Compile Include="Views\Customers\Index.generated.cs">
       <AutoGen>True</AutoGen>
@@ -1592,11 +1525,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Index.cshtml</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Suppliers\SuppliersGridViewPartial.generated.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>SuppliersGridViewPartial.cshtml</DependentUpon>
     </Compile>
     <Compile Include="Views\Vats\Index.generated.cs">
       <AutoGen>True</AutoGen>

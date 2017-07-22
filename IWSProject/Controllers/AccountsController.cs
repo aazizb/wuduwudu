@@ -28,8 +28,7 @@ namespace IWSProject.Controllers
         {
             var model = db.Accounts;
             item.CompanyID = (string)Session["CompanyID"];
-            //if (item.Currency == null)
-            //    item.Currency = (string)Session["Currency"];
+
             ViewData["accounts"] = item;
             if (ModelState.IsValid)
             {

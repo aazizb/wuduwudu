@@ -8,9 +8,6 @@
 
         settings.CallbackRouteValues = new { Controller = "Accounting", Action = "ValidateBLPartialView" };
 
-        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-        settings.SettingsResizing.Visualization = ResizingMode.Postponed;
-
         settings.KeyFieldName = "ItemID;ItemType";
 
         settings.Settings.ShowFilterRow = true;
@@ -24,8 +21,6 @@
         settings.CommandColumn.ShowSelectCheckbox = true;
 
         settings.Width = Unit.Percentage(100);
-
-
 
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
@@ -137,3 +132,4 @@
     }
 }
 @grid.Bind(Model).GetHtml()
+

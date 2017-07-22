@@ -5,12 +5,9 @@
     settings.Name = "ResultatPartialView";
     settings.Caption = IWSLocalResource.returns;
 
-    settings.CallbackRouteValues = new { Controller = "Resultat", Action = "ResultatPartialView" };
+    settings.CallbackRouteValues = new { Controller = "Resultat", Action = "ResultatPartial" };
 
     settings.KeyFieldName = "AccountId";
-
-    settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-    settings.SettingsResizing.Visualization = ResizingMode.Postponed;
 
     settings.SettingsBehavior.AllowSelectByRowClick = true;
     settings.SettingsBehavior.EnableRowHotTrack = true;
@@ -50,6 +47,7 @@
         column.GroupIndex = 1;
         column.Caption = IWSLocalResource.subClass;
         column.Width = Unit.Percentage(14);
+        column.Visible = false;
     });
 
     settings.Columns.Add(column =>
@@ -57,6 +55,7 @@
         column.FieldName = "AccountId";
         column.Caption = IWSLocalResource.accountid;
         column.Width = Unit.Percentage(12);
+        column.Visible = false;
     });
 
     settings.Columns.Add(column =>
@@ -84,16 +83,8 @@
 
     settings.Columns.Add(column =>
     {
-        column.FieldName = "SDebit";
-        column.Caption = IWSLocalResource.sdebit;
-        column.Width = Unit.Percentage(12);
-        column.PropertiesEdit.DisplayFormatString = "N";
-    });
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "SCredit";
-        column.Caption = IWSLocalResource.scredit;
+        column.FieldName = "Balance";
+        column.Caption = IWSLocalResource.balance;
         column.Width = Unit.Percentage(12);
         column.PropertiesEdit.DisplayFormatString = "N";
     });
@@ -140,17 +131,11 @@
     tcredit.FieldName = "TCredit";
     settings.GroupSummary.Add(tcredit);
 
-    ASPxSummaryItem sdebit = new ASPxSummaryItem();
-    sdebit.ShowInGroupFooterColumn = "SDebit";
-    sdebit.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-    sdebit.FieldName = "SDebit";
-    settings.GroupSummary.Add(sdebit);
-
-    ASPxSummaryItem scredit = new ASPxSummaryItem();
-    scredit.ShowInGroupFooterColumn = "SCredit";
-    scredit.SummaryType = DevExpress.Data.SummaryItemType.Sum;
-    scredit.FieldName = "SCredit";
-    settings.GroupSummary.Add(scredit);
+    ASPxSummaryItem sbalance = new ASPxSummaryItem();
+    sbalance.ShowInGroupFooterColumn = "Balance";
+    sbalance.SummaryType = DevExpress.Data.SummaryItemType.Sum;
+    sbalance.FieldName = "Balance";
+    settings.GroupSummary.Add(sbalance);
 
     ASPxSummaryItem currency = new ASPxSummaryItem();
     currency.ShowInGroupFooterColumn = "Currency";

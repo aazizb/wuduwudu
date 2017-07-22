@@ -17,6 +17,7 @@
         // GET: BankStatements
         public ActionResult Index()
         {
+
             return View(IWSLookUp.GetBankStatements(
                     (string)Session["CompanyID"], false));
         }
@@ -24,67 +25,165 @@
         [HttpPost, ValidateInput(false)]
         public ActionResult Index(string selectedIDsHF)
         {
+            string msg = string.Empty;
+
             string selectedItems = selectedIDsHF;
 
-            if (!string.IsNullOrEmpty(selectedItems))
+            try
             {
-                int ItemID = 0;
-
-                int oid = 0;
-                bool results = false;
-
-                Decimal amount;
-
-                IList<string> items = new List<string>(
-                    selectedItems.Split(new string[] { ";" },
-                        StringSplitOptions.None));
-
-                foreach (string item in items)
+                if (!string.IsNullOrEmpty(selectedItems))
                 {
+                    int ItemID = 0;
 
-                    var list = item.Split(new string[] { "," }, StringSplitOptions.None);
+                    int oid = 0;
+                    bool results = false;
 
-                    ItemID = Convert.ToInt32(list[0]);
+                    Decimal amount;
 
-                    amount = Convert.ToDecimal(list[1]);
+                    IList<string> items = new List<string>(
+                        selectedItems.Split(new string[] { ";" },
+                            StringSplitOptions.None));
 
-                    if (amount == 0 )
+                    foreach (string item in items)
                     {
-                        ViewData["GenericError"] = IWSLocalResource.GenericError;
-                        return RedirectToAction("Index");
-                    }
 
-                    if (amount > 0)
-                    {
-                        oid = MakeCustomerInvoice(ItemID);
-                        if (oid !=0)
-                            results = MakeSettlement(ItemID, oid);
-                    }
-                    if (amount < 0)
-                    {
-                        oid = MakeVendorInvoice(ItemID);
-                        if (oid != 0)
-                            results = MakePayment(ItemID, oid);
-                    }
+                        var list = item.Split(new string[] { "," }, StringSplitOptions.None);
 
-                    if (!results)
-                    {
-                        ViewData["GenericError"] = IWSLocalResource.GenericError;
-                        return RedirectToAction("Index");
-                    }
+                        ItemID = Convert.ToInt32(list[0]);
 
-                    results = ValidateBankStatement(ItemID);
+                        amount = Convert.ToDecimal(list[1]);
 
-                    if (!results)
-                    {
-                        ViewData["GenericError"] = IWSLocalResource.GenericError;
-                        return RedirectToAction("Index");
+                        if (amount == 0)
+                        {
+                            msg = IWSLocalResource.GenericError;
+                            throw new Exception(msg);
+                        }
+                        if (!IfExist(ItemID))
+                        {
+                            msg = IWSLocalResource.GenericError;
+                            throw new Exception(msg);
+                        }
+
+                        if (amount > 0)
+                        {
+                            oid = MakeCustomerInvoice(ItemID);
+                            if (oid != 0)
+                                results = MakeSettlement(ItemID, oid);
+                        }
+                        if (amount < 0)
+                        {
+                            oid = MakeVendorInvoice(ItemID);
+                            if (oid != 0)
+                                results = MakePayment(ItemID, oid);
+                        }
+
+                        if (!results)
+                        {
+                            msg = IWSLocalResource.GenericError;
+                            throw new Exception(msg);
+                        }
+
+                        results = ValidateBankStatement(ItemID);
+
+                        if (!results)
+                        {
+                            msg = IWSLocalResource.GenericError;
+                            throw new Exception(msg);
+                        }
+                        db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
                     }
-                    db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
                 }
+                //return View(IWSLookUp.GetBankStatements((string)Session["CompanyID"], false));
             }
+            catch (Exception ex)
+            {
+                msg = ex.Message;
+                ViewData["GenericError"] = msg;
+            }
+
             return View(IWSLookUp.GetBankStatements((string)Session["CompanyID"], false));
+
         }
+        //public ActionResult Index(string selectedIDsHF)
+        //{
+        //    string msg = string.Empty;
+
+        //    string selectedItems = selectedIDsHF;
+        //    //try
+        //    //{
+        //    if (!string.IsNullOrEmpty(selectedItems))
+        //    {
+        //        int ItemID = 0;
+
+        //        int oid = 0;
+        //        bool results = false;
+
+        //        Decimal amount;
+
+        //        IList<string> items = new List<string>(
+        //            selectedItems.Split(new string[] { ";" },
+        //                StringSplitOptions.None));
+
+        //        foreach (string item in items)
+        //        {
+
+        //            var list = item.Split(new string[] { "," }, StringSplitOptions.None);
+
+        //            ItemID = Convert.ToInt32(list[0]);
+
+        //            amount = Convert.ToDecimal(list[1]);
+
+        //            if (amount == 0 )
+        //            {
+        //                ViewData["GenericError"] = IWSLocalResource.GenericError;
+        //                return RedirectToAction("Index");
+        //            }
+        //            if (!IfExist(ItemID))
+        //            {
+        //                ViewData["GenericError"] = IWSLocalResource.GenericError;
+        //                return RedirectToAction("Index");
+        //            }
+
+        //            if (amount > 0)
+        //            {
+        //                oid = MakeCustomerInvoice(ItemID);
+        //                if (oid !=0)
+        //                    results = MakeSettlement(ItemID, oid);
+        //            }
+        //            if (amount < 0)
+        //            {
+        //                oid = MakeVendorInvoice(ItemID);
+        //                if (oid != 0)
+        //                    results = MakePayment(ItemID, oid);
+        //            }
+
+        //            if (!results)
+        //            {
+        //                ViewData["GenericError"] = IWSLocalResource.GenericError;
+        //                return RedirectToAction("Index");
+        //            }
+
+        //            results = ValidateBankStatement(ItemID);
+
+        //            if (!results)
+        //            {
+        //                ViewData["GenericError"] = IWSLocalResource.GenericError;
+        //                return RedirectToAction("Index");
+        //            }
+        //            db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+        //        }
+        //        }
+        //    return View(IWSLookUp.GetBankStatements((string)Session["CompanyID"], false));
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    msg = ex.Message;
+        //    //}
+
+        //    //var Message = new { Description = msg };
+
+        //    //return Json(Message);
+        //}
 
         [ValidateInput(false)]
         public ActionResult BankStatementsGridViewPartial()
@@ -97,9 +196,6 @@
         public ActionResult BankStatementsGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] BankStatement item)
         {
             var model = db.BankStatements;
-            if (item.Waehrung == null)
-                item.Waehrung = (string)Session["Currency"];
-
             item.CompanyID = (string)Session["CompanyID"];
 
             ViewData["BankStatement"] = item;
@@ -121,7 +217,7 @@
             }
             return PartialView("BankStatementsGridViewPartial", 
                     IWSLookUp.GetBankStatements((string)Session["CompanyID"], false));
-                    }
+        }
         [HttpPost, ValidateInput(false)]
         public ActionResult BankStatementsGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] BankStatement item)
         {
@@ -323,19 +419,29 @@
 
                 if (Headers.Equals(bankStatement))
                 {
-                    var bankStatements =
-                        from statement in db.BankStatements
+                    var items =
+                        from s in db.BankStatements
                         where
-                          statement.Buchungstext == "ABSCHLUSS" &&
-                          statement.Kontonummer.Length == 0
-                        select statement;
-                        foreach (var item in bankStatements)
+                          s.Buchungstext.ToUpper() == "ABSCHLUSS" &&
+                          s.Kontonummer.Length == 0
+                        select s;
+                        foreach (var item in items)
                         {
                         item.Kontonummer = ("DE47" + item.BLZ + "00" + item.Auftragskonto);
                         }
-                        db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                        
+                    var  ibans =
+                        from b in db.BankStatements
+                        where
+                          b.Auftragskonto == "43006329"
+                        select b;
+                        foreach (var iban in ibans)
+                        {
+                            iban.CompanyIBAN = "DE47480501610043006329";
+                        }
+                    db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
 
-                        AddNewAccount();
+                    //AddNewAccount();
                 }
 
                 if (count > 0)
@@ -363,97 +469,93 @@
         /// Add new Customer and/or Supplier from newly imported CSV bank statements data
         /// </summary>
         /// <returns>true on success or false otherwize</returns>
-        private bool AddNewAccount()
-        {
-            string companyID = (string)Session["CompanyID"];
+        //private bool AddNewAccount()
+        //{
+        //    string companyID = (string)Session["CompanyID"];
 
-            var customerID = db.Customers.Max(i => i.id);   
+        //    int customerMax =  Convert.ToInt32(db.Customers.Max(i => i.id));
 
-            int customerMax =  Convert.ToInt32(customerID);
+        //    int supplierMax = Convert.ToInt32(db.Suppliers.Max(i => i.id));
 
-            var supplierID = db.Suppliers.Max(i => i.id);   
+        //    try
+        //    {
 
-            int supplierMax = Convert.ToInt32(supplierID);
+        //        var items =
+        //            (from b in db.BankStatements
+        //             orderby
+        //               (int?)Math.Sign((int)b.Betrag)
+        //             select new
+        //             {
+        //                 Name = b.BeguenstigterZahlungspflichtiger,
+        //                 IBAN = b.Kontonummer,
+        //                 BIC = b.BLZ,
+        //                 IsCustomer = Math.Sign((int)b.Betrag) < 0 ? false : true
+        //             }).Distinct();
 
-            try
-            {
-
-                var bankStatement =
-                    (from b in db.BankStatements
-                     orderby
-                       (int?)Math.Sign((int)b.Betrag)
-                     select new
-                     {
-                         Name = b.BeguenstigterZahlungspflichtiger,
-                         IBAN = b.Kontonummer,
-                         BIC = b.BLZ,
-                         IsCustomer = Math.Sign((int)b.Betrag) < 0 ? false : true
-                     }).Distinct();
-
-                    foreach (var r in bankStatement)
-                    {
-                    if (r.IsCustomer.Equals(true))
-                    {
-                        var u = db.Customers.FirstOrDefault(o => o.IBAN.Equals(r.IBAN) 
-                                                        && o.CompanyID.Equals(companyID));
-                        if (u == null)
-                        {
-                            customerMax++;
-                            u = new Customer
-                            {
-                                id = Convert.ToString(customerMax),
-                                name = r.Name??"QWQWQWQWQ",
-                                BIC=r.BIC,
-                                street = "",
-                                city = "",
-                                state = "",
-                                zip = "",
-                                accountid = "400100",// clients divers
-                                CompanyID = companyID,
-                                IBAN=r.IBAN
-                            };
-                            var b = db.Customers.FirstOrDefault(o => o.IBAN.Equals(u.IBAN) 
-                                                            && o.CompanyID.Equals(companyID));
-                            if(b==null)
-                                db.Customers.InsertOnSubmit(u);
-                        }
-                    }
-                    if (r.IsCustomer.Equals(false))
-                    {
-                        var u = db.Suppliers.FirstOrDefault(o => o.IBAN.Equals(r.IBAN) 
-                                                        && o.CompanyID.Equals(companyID));
-                        if (u == null)
-                        {
-                            supplierMax++;
-                            u = new Supplier
-                            {
-                                id = Convert.ToString(supplierMax),
-                                name = r.Name ?? "QWQWQWQWQ",
-                                BIC = r.BIC,
-                                street = "",
-                                city= "",
-                                state= "",
-                                zip="",
-                                accountid = "440100", // fournisseurs divers
-                                CompanyID = companyID,
-                                IBAN=r.IBAN
-                            };
-                            var b = db.Suppliers.FirstOrDefault(o => o.IBAN.Equals(r.IBAN) 
-                                                            && o.CompanyID.Equals(companyID));
-                            if(b==null)
-                                db.Suppliers.InsertOnSubmit(u);
-                        }
-                    }
-                    db.SubmitChanges(System.Data.Linq.ConflictMode.ContinueOnConflict);
-                    }
-                return true;
-            }
-            catch (Exception e)
-            {
-                ViewData["GenericError"] = e.Message;
-                return false;
-            }
-        }
+        //            foreach (var item in items)
+        //            {
+        //            if (item.IsCustomer.Equals(true))
+        //            {
+        //                var u = db.Customers.FirstOrDefault(o => o.IBAN.Equals(item.IBAN) 
+        //                                                && o.CompanyID.Equals(companyID));
+        //                if (u == null)
+        //                {
+        //                    customerMax++;
+        //                    u = new Customer
+        //                    {
+        //                        id = Convert.ToString(customerMax),
+        //                        name = item.Name,
+        //                        BIC=item.BIC,
+        //                        street = "",
+        //                        city = "",
+        //                        state = "",
+        //                        zip = "",
+        //                        accountid = "400100",// clients divers
+        //                        CompanyID = companyID,
+        //                        IBAN=item.IBAN
+        //                    };
+        //                    var b = db.Customers.FirstOrDefault(o => o.IBAN.Equals(u.IBAN) 
+        //                                                    && o.CompanyID.Equals(companyID));
+        //                    if(b==null)
+        //                        db.Customers.InsertOnSubmit(u);
+        //                }
+        //            }
+        //            if (item.IsCustomer.Equals(false))
+        //            {
+        //                var u = db.Suppliers.FirstOrDefault(o => o.IBAN.Equals(item.IBAN) 
+        //                                                && o.CompanyID.Equals(companyID));
+        //                if (u == null)
+        //                {
+        //                    supplierMax++;
+        //                    u = new Supplier
+        //                    {
+        //                        id = Convert.ToString(supplierMax),
+        //                        name = item.Name,
+        //                        BIC = item.BIC,
+        //                        street = "",
+        //                        city= "",
+        //                        state= "",
+        //                        zip="",
+        //                        accountid = "440100", // fournisseurs divers
+        //                        CompanyID = companyID,
+        //                        IBAN=item.IBAN
+        //                    };
+        //                    var b = db.Suppliers.FirstOrDefault(o => o.IBAN.Equals(item.IBAN) 
+        //                                                    && o.CompanyID.Equals(companyID));
+        //                    if(b==null)
+        //                        db.Suppliers.InsertOnSubmit(u);
+        //                }
+        //            }
+        //            db.SubmitChanges(System.Data.Linq.ConflictMode.ContinueOnConflict);
+        //            }
+        //        return true;
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        ViewData["GenericError"] = e.Message;
+        //        return false;
+        //    }
+        //}
 
         private int MakeCustomerInvoice(int bankStatementID)
         {
@@ -506,12 +608,13 @@
 
         private int MakeVendorInvoice(int bankStatementID)
         {
+
             StatementDetailViewModel SD = IWSLookUp.GetStatementDetail(bankStatementID,
                                             IWSLookUp.DocsType.VendorInvoice.ToString());
 
             int itemID = 0;
 
-            if (SD.Equals(null))
+            if (SD==null)
                 return itemID;
 
             VendorInvoice vendorInvoice = new VendorInvoice
@@ -560,7 +663,7 @@
 
             int itemID = 0;
 
-            if (SD.Equals(null) )
+            if (SD==null)
                 return false;
 
             Payment payment = new Payment
@@ -663,6 +766,37 @@
 
                 return false;
             }
+        }
+
+        private bool IfExist(int ItemID)
+        {
+
+            try
+            {
+                var docs = db.BankStatements.Single(item => item.id == ItemID);
+
+                if (docs==null)
+                    return false;
+
+                if (docs.Betrag > 0)
+                {
+                    return db.Customers.Any(i => i.IBAN == docs.Kontonummer) &&
+                            db.BankAccounts.Any(i => i.IBAN == docs.CompanyIBAN);
+
+                }
+                if (docs.Betrag < 0)
+                {
+                    return db.Suppliers.Any(i => i.IBAN == docs.Kontonummer) &&
+                            db.BankAccounts.Any(i => i.IBAN == docs.CompanyIBAN);
+
+                }
+            }
+            catch (Exception e)
+            {
+                ViewData["GenericError"] = e.Message;
+
+            }
+            return false;
         }
 
         public class Helper

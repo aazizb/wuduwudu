@@ -16,8 +16,8 @@
 
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.PageSize = 24;
-        
-        
+
+
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -28,23 +28,48 @@
 
         settings.Styles.RowHotTrack.Cursor = "pointer";
         settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
+        settings.SettingsPager.Visible = true;
+        settings.SettingsPager.Position = PagerPosition.Bottom;
+        settings.SettingsPager.FirstPageButton.Visible = true;
+        settings.SettingsPager.LastPageButton.Visible = true;
+        settings.SettingsPager.PageSizeItemSettings.Visible = true;
 
-        settings.Columns.Add("ItemName").Caption = IWSLocalResource.name;
-        settings.Columns.Add("StoreName").Caption = IWSLocalResource.store;
+        settings.SettingsPager.PageSize = 24;
+
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ItemName";
+            column.Caption = IWSLocalResource.name;
+            column.Width = Unit.Percentage(20);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "StoreName";
+            column.Caption = IWSLocalResource.store;
+            column.Width = Unit.Percentage(20);
+        });
         settings.Columns.Add(column =>
         {
             column.FieldName = "Quantity";
             column.Caption = IWSLocalResource.quantity;
+            column.Width = Unit.Percentage(10);
             column.EditorProperties().TextBox(textBox =>
             {
                 textBox.DisplayFormatString = "N";
             });
         });
-        settings.Columns.Add("ItemUnit").Caption = IWSLocalResource.unit;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "ItemUnit";
+            column.Caption = IWSLocalResource.unit;
+            column.Width = Unit.Percentage(8);
+        });
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "AveragePrice";
             column.Caption = IWSLocalResource.AveragePrice;
+            column.Width = Unit.Percentage(10);
             column.EditorProperties().TextBox(textBox =>
             {
                 textBox.DisplayFormatString = "N";
@@ -54,6 +79,7 @@
         {
             column.FieldName = "Currency";
             column.Caption = IWSLocalResource.Currency;
+            column.Width = Unit.Percentage(8);
         });
     }).Bind(Model).GetHtml()
 

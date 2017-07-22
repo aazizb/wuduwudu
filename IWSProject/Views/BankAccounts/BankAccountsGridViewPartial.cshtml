@@ -55,12 +55,6 @@
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
 
-        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
-        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
-        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
-        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
-        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
-
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.Position = PagerPosition.Bottom;
         settings.SettingsPager.FirstPageButton.Visible = true;
@@ -75,11 +69,23 @@
             column.Caption = IWSLocalResource.IBAN;
             column.Width = Unit.Percentage(16);
         });
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "name";
             column.Caption = IWSLocalResource.Owner;
-            column.Width = Unit.Percentage(15);
+            column.Width = Unit.Percentage(20);
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetOwner();
+                combo.Columns.Add("ID", IWSLocalResource.id, Unit.Percentage(15));
+                combo.Columns.Add("Name", IWSLocalResource.Owner, Unit.Percentage(60));
+                combo.Columns.Add("OwnerType", IWSLocalResource.Type, Unit.Percentage(25));
+                combo.TextFormatString = "{0}-{1}-{2}";
+            });
         });
         settings.Columns.Add(column =>
         {
@@ -102,7 +108,6 @@
             {
                 p.DisplayFormatString = "N";
                 p.DisplayFormatInEditMode = true;
-                p.MinValue = 0;
                 p.SpinButtons.ShowLargeIncrementButtons = true;
                 p.Width = Unit.Percentage(100);
             });
@@ -116,7 +121,6 @@
             {
                 p.DisplayFormatString = "N";
                 p.DisplayFormatInEditMode = true;
-                p.MinValue = 0;
                 p.SpinButtons.ShowLargeIncrementButtons = true;
                 p.Width = Unit.Percentage(100);
             });
@@ -140,6 +144,7 @@
         });
 
         #region Template Edit
+
         settings.SetEditFormTemplateContent(templateContent =>
         {
 
@@ -160,17 +165,57 @@
                     });
                 });
 
+                //formLayoutSettings.Items.Add(i =>
+                //{
+                //    i.FieldName = "name";
+                //    i.Caption = IWSLocalResource.Owner;
+                //    i.NestedExtension().TextBox(s =>
+                //    {
+                //        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                //        s.ShowModelErrors = true;
+                //        s.Width = Unit.Percentage(100);
+                //    });
+                //});
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "name";
                     i.Caption = IWSLocalResource.Owner;
-                    i.NestedExtension().TextBox(s =>
+                    i.NestedExtension().ComboBox(s =>
                     {
+                        s.Properties.TextField = "Name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetOwner();
+                        s.Width = Unit.Percentage(100);
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "id";
+                            column.Caption = IWSLocalResource.id;
+                            column.Width = Unit.Percentage(15);
+
+                        });
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "name";
+                            column.Caption = IWSLocalResource.Owner;
+                            column.Width = Unit.Percentage(60);
+
+                        });
+
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "OwnerType";
+                            column.Caption = IWSLocalResource.Type;
+                            column.Width = Unit.Percentage(25);
+
+                        });
+                        s.Properties.TextFormatString = "{0}-{1}-{2}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
                     });
                 });
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "Account";
@@ -247,8 +292,6 @@
                     });
                 });
 
-
-
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "description";
@@ -298,6 +341,7 @@
             .Bind(ViewData["bankAccount"] ?? templateContent.DataItem)
             .Render();
         });
+        
         #endregion
 
 

@@ -1,5 +1,4 @@
-﻿
-namespace IWSProject.Models
+﻿namespace IWSProject.Models
 {
     using System;
     using System.ComponentModel;
@@ -588,33 +587,20 @@ namespace IWSProject.Models
             }
         }
 
+        public System.Data.Linq.Table<tmpBalance> tmpBalances
+        {
+            get
+            {
+                return this.GetTable<tmpBalance>();
+            }
+        }
+
         public System.Data.Linq.Table<Vat> Vats
         {
             get
             {
                 return this.GetTable<Vat>();
             }
-        }
-
-        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.account1To7")]
-        public ISingleResult<account1To7Result> account1To7([global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string start, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string end, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string companyid)
-        {
-            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), start, end, companyid);
-            return ((ISingleResult<account1To7Result>)(result.ReturnValue));
-        }
-
-        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.ClassAccountBalances")]
-        public ISingleResult<ClassAccountBalancesResult> ClassAccountBalances([global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string start, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string end, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string companyid)
-        {
-            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), start, end, companyid);
-            return ((ISingleResult<ClassAccountBalancesResult>)(result.ReturnValue));
-        }
-
-        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.ClassAccountBalance")]
-        public ISingleResult<ClassAccountBalanceResult> ClassAccountBalance([global::System.Data.Linq.Mapping.ParameterAttribute(Name = "class", DbType = "NVarChar(12)")] string @class, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string start, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string end, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string companyid)
-        {
-            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), @class, start, end, companyid);
-            return ((ISingleResult<ClassAccountBalanceResult>)(result.ReturnValue));
         }
 
         [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.GetAccountBalance", IsComposable = true)]
@@ -629,10 +615,57 @@ namespace IWSProject.Models
             return this.CreateMethodCallQuery<GetAccountBalancesResult>(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), @class, start, end, companyid);
         }
 
+        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.GetChild", IsComposable = true)]
+        public IQueryable<GetChildResult> GetChild([global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(50)")] string classId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(50)")] string companyid)
+        {
+            return this.CreateMethodCallQuery<GetChildResult>(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), classId, companyid);
+        }
+
         [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.GetChildren", IsComposable = true)]
         public IQueryable<GetChildrenResult> GetChildren([global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(50)")] string id, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(50)")] string companyid)
         {
             return this.CreateMethodCallQuery<GetChildrenResult>(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, companyid);
+        }
+
+        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.GetParents", IsComposable = true)]
+        public IQueryable<GetParentsResult> GetParents([global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(50)")] string id, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(50)")] string companyid)
+        {
+            return this.CreateMethodCallQuery<GetParentsResult>(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), id, companyid);
+        }
+
+        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.account1To7")]
+        public ISingleResult<account1To7Result> account1To7([global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string start, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string end, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string companyid)
+        {
+            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), start, end, companyid);
+            return ((ISingleResult<account1To7Result>)(result.ReturnValue));
+        }
+
+        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.ClassChild")]
+        public ISingleResult<ClassChildResult> ClassChild([global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(50)")] string classId, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(50)")] string company)
+        {
+            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), classId, company);
+            return ((ISingleResult<ClassChildResult>)(result.ReturnValue));
+        }
+
+        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.AccountBalance")]
+        public ISingleResult<AccountBalanceResult> AccountBalance([global::System.Data.Linq.Mapping.ParameterAttribute(Name = "class", DbType = "NVarChar(50)")] string @class, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string start, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string end, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string companyid)
+        {
+            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), @class, start, end, companyid);
+            return ((ISingleResult<AccountBalanceResult>)(result.ReturnValue));
+        }
+
+        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.ClassAccountBalance")]
+        public ISingleResult<ClassAccountBalanceResult> ClassAccountBalance([global::System.Data.Linq.Mapping.ParameterAttribute(Name = "class", DbType = "NVarChar(12)")] string @class, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string start, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string end, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string companyid)
+        {
+            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), @class, start, end, companyid);
+            return ((ISingleResult<ClassAccountBalanceResult>)(result.ReturnValue));
+        }
+
+        [global::System.Data.Linq.Mapping.FunctionAttribute(Name = "dbo.ClassAccountBalances")]
+        public ISingleResult<ClassAccountBalancesResult> ClassAccountBalances([global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string start, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string end, [global::System.Data.Linq.Mapping.ParameterAttribute(DbType = "NVarChar(6)")] string companyid)
+        {
+            IExecuteResult result = this.ExecuteMethodCall(this, ((MethodInfo)(MethodInfo.GetCurrentMethod())), start, end, companyid);
+            return ((ISingleResult<ClassAccountBalancesResult>)(result.ReturnValue));
         }
     }
 
@@ -1593,6 +1626,8 @@ namespace IWSProject.Models
 
         private string _Currency;
 
+        private string _RevenuAccountId;
+
         private EntitySet<LineBillOfDelivery> _LineBillOfDeliveries;
 
         private EntitySet<LineGoodReceiving> _LineGoodReceivings;
@@ -1641,6 +1676,8 @@ namespace IWSProject.Models
         partial void OnExpenseAccountChanged();
         partial void OnCurrencyChanging(string value);
         partial void OnCurrencyChanged();
+        partial void OnRevenuAccountIdChanging(string value);
+        partial void OnRevenuAccountIdChanged();
         #endregion
 
         public Article()
@@ -1936,6 +1973,26 @@ namespace IWSProject.Models
                     this._Currency = value;
                     this.SendPropertyChanged("Currency");
                     this.OnCurrencyChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_RevenuAccountId", DbType = "NVarChar(50)")]
+        public string RevenuAccountId
+        {
+            get
+            {
+                return this._RevenuAccountId;
+            }
+            set
+            {
+                if ((this._RevenuAccountId != value))
+                {
+                    this.OnRevenuAccountIdChanging(value);
+                    this.SendPropertyChanging();
+                    this._RevenuAccountId = value;
+                    this.SendPropertyChanged("RevenuAccountId");
+                    this.OnRevenuAccountIdChanged();
                 }
             }
         }
@@ -3424,7 +3481,7 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Bank_BankAccount", Storage = "_BankAccounts", ThisKey = "id", OtherKey = "bic")]
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Bank_BankAccount", Storage = "_BankAccounts", ThisKey = "id", OtherKey = "BIC")]
         public EntitySet<BankAccount> BankAccounts
         {
             get
@@ -3476,19 +3533,17 @@ namespace IWSProject.Models
 
         private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
 
-        private string _id;
+        private string _IBAN;
 
-        private string _name;
+        private string _Owner;
 
-        private string _description;
-
-        private string _bic;
+        private string _BIC;
 
         private string _Account;
 
-        private decimal _debit;
+        private decimal _Debit;
 
-        private decimal _credit;
+        private decimal _Credit;
 
         private string _Currency;
 
@@ -3500,20 +3555,18 @@ namespace IWSProject.Models
         partial void OnLoaded();
         partial void OnValidate(System.Data.Linq.ChangeAction action);
         partial void OnCreated();
-        partial void OnidChanging(string value);
-        partial void OnidChanged();
-        partial void OnnameChanging(string value);
-        partial void OnnameChanged();
-        partial void OndescriptionChanging(string value);
-        partial void OndescriptionChanged();
-        partial void OnbicChanging(string value);
-        partial void OnbicChanged();
+        partial void OnIBANChanging(string value);
+        partial void OnIBANChanged();
+        partial void OnOwnerChanging(string value);
+        partial void OnOwnerChanged();
+        partial void OnBICChanging(string value);
+        partial void OnBICChanged();
         partial void OnAccountChanging(string value);
         partial void OnAccountChanged();
-        partial void OndebitChanging(decimal value);
-        partial void OndebitChanged();
-        partial void OncreditChanging(decimal value);
-        partial void OncreditChanged();
+        partial void OnDebitChanging(decimal value);
+        partial void OnDebitChanged();
+        partial void OnCreditChanging(decimal value);
+        partial void OnCreditChanged();
         partial void OnCurrencyChanging(string value);
         partial void OnCurrencyChanged();
         partial void OnCompanyIDChanging(string value);
@@ -3526,86 +3579,66 @@ namespace IWSProject.Models
             OnCreated();
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_id", DbType = "NVarChar(50) NOT NULL", CanBeNull = false, IsPrimaryKey = true)]
-        public string id
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_IBAN", DbType = "NVarChar(50) NOT NULL", CanBeNull = false, IsPrimaryKey = true)]
+        public string IBAN
         {
             get
             {
-                return this._id;
+                return this._IBAN;
             }
             set
             {
-                if ((this._id != value))
+                if ((this._IBAN != value))
                 {
-                    this.OnidChanging(value);
+                    this.OnIBANChanging(value);
                     this.SendPropertyChanging();
-                    this._id = value;
-                    this.SendPropertyChanged("id");
-                    this.OnidChanged();
+                    this._IBAN = value;
+                    this.SendPropertyChanged("IBAN");
+                    this.OnIBANChanged();
                 }
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_name", DbType = "NVarChar(255) NOT NULL", CanBeNull = false)]
-        public string name
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Owner", DbType = "NVarChar(255) NOT NULL", CanBeNull = false)]
+        public string Owner
         {
             get
             {
-                return this._name;
+                return this._Owner;
             }
             set
             {
-                if ((this._name != value))
+                if ((this._Owner != value))
                 {
-                    this.OnnameChanging(value);
+                    this.OnOwnerChanging(value);
                     this.SendPropertyChanging();
-                    this._name = value;
-                    this.SendPropertyChanged("name");
-                    this.OnnameChanged();
+                    this._Owner = value;
+                    this.SendPropertyChanged("Owner");
+                    this.OnOwnerChanged();
                 }
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_description", DbType = "NVarChar(255)")]
-        public string description
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_BIC", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string BIC
         {
             get
             {
-                return this._description;
+                return this._BIC;
             }
             set
             {
-                if ((this._description != value))
-                {
-                    this.OndescriptionChanging(value);
-                    this.SendPropertyChanging();
-                    this._description = value;
-                    this.SendPropertyChanged("description");
-                    this.OndescriptionChanged();
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_bic", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
-        public string bic
-        {
-            get
-            {
-                return this._bic;
-            }
-            set
-            {
-                if ((this._bic != value))
+                if ((this._BIC != value))
                 {
                     if (this._Bank.HasLoadedOrAssignedValue)
                     {
                         throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
                     }
-                    this.OnbicChanging(value);
+                    this.OnBICChanging(value);
                     this.SendPropertyChanging();
-                    this._bic = value;
-                    this.SendPropertyChanged("bic");
-                    this.OnbicChanged();
+                    this._BIC = value;
+                    this.SendPropertyChanged("BIC");
+                    this.OnBICChanged();
                 }
             }
         }
@@ -3630,42 +3663,42 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_debit", DbType = "Money NOT NULL")]
-        public decimal debit
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Debit", DbType = "Money NOT NULL")]
+        public decimal Debit
         {
             get
             {
-                return this._debit;
+                return this._Debit;
             }
             set
             {
-                if ((this._debit != value))
+                if ((this._Debit != value))
                 {
-                    this.OndebitChanging(value);
+                    this.OnDebitChanging(value);
                     this.SendPropertyChanging();
-                    this._debit = value;
-                    this.SendPropertyChanged("debit");
-                    this.OndebitChanged();
+                    this._Debit = value;
+                    this.SendPropertyChanged("Debit");
+                    this.OnDebitChanged();
                 }
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_credit", DbType = "Money NOT NULL")]
-        public decimal credit
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Credit", DbType = "Money NOT NULL")]
+        public decimal Credit
         {
             get
             {
-                return this._credit;
+                return this._Credit;
             }
             set
             {
-                if ((this._credit != value))
+                if ((this._Credit != value))
                 {
-                    this.OncreditChanging(value);
+                    this.OnCreditChanging(value);
                     this.SendPropertyChanging();
-                    this._credit = value;
-                    this.SendPropertyChanged("credit");
-                    this.OncreditChanged();
+                    this._Credit = value;
+                    this.SendPropertyChanged("Credit");
+                    this.OnCreditChanged();
                 }
             }
         }
@@ -3710,7 +3743,7 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Bank_BankAccount", Storage = "_Bank", ThisKey = "bic", OtherKey = "id", IsForeignKey = true)]
+        [global::System.Data.Linq.Mapping.AssociationAttribute(Name = "Bank_BankAccount", Storage = "_Bank", ThisKey = "BIC", OtherKey = "id", IsForeignKey = true)]
         public Bank Bank
         {
             get
@@ -3733,11 +3766,11 @@ namespace IWSProject.Models
                     if ((value != null))
                     {
                         value.BankAccounts.Add(this);
-                        this._bic = value.id;
+                        this._BIC = value.id;
                     }
                     else
                     {
-                        this._bic = default(string);
+                        this._BIC = default(string);
                     }
                     this.SendPropertyChanged("Bank");
                 }
@@ -3797,6 +3830,8 @@ namespace IWSProject.Models
 
         private string _CompanyID;
 
+        private string _CompanyIBAN;
+
         private System.Nullable<bool> _IsValidated;
 
         #region Extensibility Method Definitions
@@ -3829,6 +3864,8 @@ namespace IWSProject.Models
         partial void OnInfoChanged();
         partial void OnCompanyIDChanging(string value);
         partial void OnCompanyIDChanged();
+        partial void OnCompanyIBANChanging(string value);
+        partial void OnCompanyIBANChanged();
         partial void OnIsValidatedChanging(System.Nullable<bool> value);
         partial void OnIsValidatedChanged();
         #endregion
@@ -4094,6 +4131,26 @@ namespace IWSProject.Models
                     this._CompanyID = value;
                     this.SendPropertyChanged("CompanyID");
                     this.OnCompanyIDChanged();
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyIBAN", DbType = "NVarChar(50)")]
+        public string CompanyIBAN
+        {
+            get
+            {
+                return this._CompanyIBAN;
+            }
+            set
+            {
+                if ((this._CompanyIBAN != value))
+                {
+                    this.OnCompanyIBANChanging(value);
+                    this.SendPropertyChanging();
+                    this._CompanyIBAN = value;
+                    this.SendPropertyChanged("CompanyIBAN");
+                    this.OnCompanyIBANChanged();
                 }
             }
         }
@@ -5590,7 +5647,7 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Currency", DbType = "NVarChar(10)")]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Currency", DbType = "NVarChar(50)")]
         public string Currency
         {
             get
@@ -5610,7 +5667,7 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_IBAN", DbType = "NVarChar(150)")]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_IBAN", DbType = "NVarChar(50)")]
         public string IBAN
         {
             get
@@ -18030,7 +18087,7 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_accountid", DbType = "NVarChar(255)")]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_accountid", DbType = "NVarChar(50)")]
         public string accountid
         {
             get
@@ -18248,6 +18305,267 @@ namespace IWSProject.Models
         {
             this.SendPropertyChanging();
             entity.Supplier = null;
+        }
+    }
+
+    [global::System.Data.Linq.Mapping.TableAttribute(Name = "dbo.tmpBalance")]
+    public partial class tmpBalance
+    {
+
+        private int _ID;
+
+        private string _ClassId;
+
+        private string _ClassName;
+
+        private string _SubClassId;
+
+        private string _SubClassName;
+
+        private string _AccountId;
+
+        private string _AccountName;
+
+        private System.Nullable<decimal> _TDebit;
+
+        private System.Nullable<decimal> _TCredit;
+
+        private System.Nullable<decimal> _SDebit;
+
+        private System.Nullable<decimal> _SCredit;
+
+        private string _Currency;
+
+        private System.Nullable<decimal> _Balance;
+
+        private string _CompanyId;
+
+        public tmpBalance()
+        {
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ID", AutoSync = AutoSync.Always, DbType = "Int NOT NULL IDENTITY", IsDbGenerated = true)]
+        public int ID
+        {
+            get
+            {
+                return this._ID;
+            }
+            set
+            {
+                if ((this._ID != value))
+                {
+                    this._ID = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ClassId", DbType = "NVarChar(50)")]
+        public string ClassId
+        {
+            get
+            {
+                return this._ClassId;
+            }
+            set
+            {
+                if ((this._ClassId != value))
+                {
+                    this._ClassId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ClassName", DbType = "NVarChar(150)")]
+        public string ClassName
+        {
+            get
+            {
+                return this._ClassName;
+            }
+            set
+            {
+                if ((this._ClassName != value))
+                {
+                    this._ClassName = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SubClassId", DbType = "NVarChar(50)")]
+        public string SubClassId
+        {
+            get
+            {
+                return this._SubClassId;
+            }
+            set
+            {
+                if ((this._SubClassId != value))
+                {
+                    this._SubClassId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SubClassName", DbType = "NVarChar(150)")]
+        public string SubClassName
+        {
+            get
+            {
+                return this._SubClassName;
+            }
+            set
+            {
+                if ((this._SubClassName != value))
+                {
+                    this._SubClassName = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AccountId", DbType = "NVarChar(50)")]
+        public string AccountId
+        {
+            get
+            {
+                return this._AccountId;
+            }
+            set
+            {
+                if ((this._AccountId != value))
+                {
+                    this._AccountId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AccountName", DbType = "NVarChar(150)")]
+        public string AccountName
+        {
+            get
+            {
+                return this._AccountName;
+            }
+            set
+            {
+                if ((this._AccountName != value))
+                {
+                    this._AccountName = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TDebit", DbType = "Money")]
+        public System.Nullable<decimal> TDebit
+        {
+            get
+            {
+                return this._TDebit;
+            }
+            set
+            {
+                if ((this._TDebit != value))
+                {
+                    this._TDebit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TCredit", DbType = "Money")]
+        public System.Nullable<decimal> TCredit
+        {
+            get
+            {
+                return this._TCredit;
+            }
+            set
+            {
+                if ((this._TCredit != value))
+                {
+                    this._TCredit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SDebit", DbType = "Money")]
+        public System.Nullable<decimal> SDebit
+        {
+            get
+            {
+                return this._SDebit;
+            }
+            set
+            {
+                if ((this._SDebit != value))
+                {
+                    this._SDebit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SCredit", DbType = "Money")]
+        public System.Nullable<decimal> SCredit
+        {
+            get
+            {
+                return this._SCredit;
+            }
+            set
+            {
+                if ((this._SCredit != value))
+                {
+                    this._SCredit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Currency", DbType = "NVarChar(50)")]
+        public string Currency
+        {
+            get
+            {
+                return this._Currency;
+            }
+            set
+            {
+                if ((this._Currency != value))
+                {
+                    this._Currency = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Balance", DbType = "Money")]
+        public System.Nullable<decimal> Balance
+        {
+            get
+            {
+                return this._Balance;
+            }
+            set
+            {
+                if ((this._Balance != value))
+                {
+                    this._Balance = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyId
+        {
+            get
+            {
+                return this._CompanyId;
+            }
+            set
+            {
+                if ((this._CompanyId != value))
+                {
+                    this._CompanyId = value;
+                }
+            }
         }
     }
 
@@ -18509,6 +18827,388 @@ namespace IWSProject.Models
         }
     }
 
+    public partial class GetAccountBalanceResult
+    {
+
+        private string _AccountId;
+
+        private string _Name;
+
+        private decimal _Debit;
+
+        private decimal _Credit;
+
+        private string _Currency;
+
+        public GetAccountBalanceResult()
+        {
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AccountId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string AccountId
+        {
+            get
+            {
+                return this._AccountId;
+            }
+            set
+            {
+                if ((this._AccountId != value))
+                {
+                    this._AccountId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Name", DbType = "NVarChar(255) NOT NULL", CanBeNull = false)]
+        public string Name
+        {
+            get
+            {
+                return this._Name;
+            }
+            set
+            {
+                if ((this._Name != value))
+                {
+                    this._Name = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Debit", DbType = "Decimal(18,2) NOT NULL")]
+        public decimal Debit
+        {
+            get
+            {
+                return this._Debit;
+            }
+            set
+            {
+                if ((this._Debit != value))
+                {
+                    this._Debit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Credit", DbType = "Decimal(18,2) NOT NULL")]
+        public decimal Credit
+        {
+            get
+            {
+                return this._Credit;
+            }
+            set
+            {
+                if ((this._Credit != value))
+                {
+                    this._Credit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Currency", DbType = "NVarChar(10)")]
+        public string Currency
+        {
+            get
+            {
+                return this._Currency;
+            }
+            set
+            {
+                if ((this._Currency != value))
+                {
+                    this._Currency = value;
+                }
+            }
+        }
+    }
+
+    public partial class GetAccountBalancesResult
+    {
+
+        private string _AccountId;
+
+        private string _Name;
+
+        private System.Nullable<decimal> _TDebit;
+
+        private System.Nullable<decimal> _TCredit;
+
+        private System.Nullable<decimal> _SDebit;
+
+        private System.Nullable<decimal> _SCredit;
+
+        private string _Currency;
+
+        public GetAccountBalancesResult()
+        {
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AccountId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string AccountId
+        {
+            get
+            {
+                return this._AccountId;
+            }
+            set
+            {
+                if ((this._AccountId != value))
+                {
+                    this._AccountId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Name", DbType = "NVarChar(255) NOT NULL", CanBeNull = false)]
+        public string Name
+        {
+            get
+            {
+                return this._Name;
+            }
+            set
+            {
+                if ((this._Name != value))
+                {
+                    this._Name = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TDebit", DbType = "Decimal(38,2)")]
+        public System.Nullable<decimal> TDebit
+        {
+            get
+            {
+                return this._TDebit;
+            }
+            set
+            {
+                if ((this._TDebit != value))
+                {
+                    this._TDebit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TCredit", DbType = "Decimal(38,2)")]
+        public System.Nullable<decimal> TCredit
+        {
+            get
+            {
+                return this._TCredit;
+            }
+            set
+            {
+                if ((this._TCredit != value))
+                {
+                    this._TCredit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SDebit", DbType = "Decimal(38,2)")]
+        public System.Nullable<decimal> SDebit
+        {
+            get
+            {
+                return this._SDebit;
+            }
+            set
+            {
+                if ((this._SDebit != value))
+                {
+                    this._SDebit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SCredit", DbType = "Decimal(38,2)")]
+        public System.Nullable<decimal> SCredit
+        {
+            get
+            {
+                return this._SCredit;
+            }
+            set
+            {
+                if ((this._SCredit != value))
+                {
+                    this._SCredit = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Currency", DbType = "NVarChar(10) NOT NULL", CanBeNull = false)]
+        public string Currency
+        {
+            get
+            {
+                return this._Currency;
+            }
+            set
+            {
+                if ((this._Currency != value))
+                {
+                    this._Currency = value;
+                }
+            }
+        }
+    }
+
+    public partial class GetChildResult
+    {
+
+        private string _ChildId;
+
+        private string _ChildName;
+
+        private string _ParentId;
+
+        private string _ParentName;
+
+        public GetChildResult()
+        {
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ChildId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string ChildId
+        {
+            get
+            {
+                return this._ChildId;
+            }
+            set
+            {
+                if ((this._ChildId != value))
+                {
+                    this._ChildId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ChildName", DbType = "NVarChar(255)")]
+        public string ChildName
+        {
+            get
+            {
+                return this._ChildName;
+            }
+            set
+            {
+                if ((this._ChildName != value))
+                {
+                    this._ChildName = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ParentId", DbType = "NVarChar(50)")]
+        public string ParentId
+        {
+            get
+            {
+                return this._ParentId;
+            }
+            set
+            {
+                if ((this._ParentId != value))
+                {
+                    this._ParentId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ParentName", DbType = "NVarChar(255)")]
+        public string ParentName
+        {
+            get
+            {
+                return this._ParentName;
+            }
+            set
+            {
+                if ((this._ParentName != value))
+                {
+                    this._ParentName = value;
+                }
+            }
+        }
+    }
+
+    public partial class GetChildrenResult
+    {
+
+        private string _id;
+
+        public GetChildrenResult()
+        {
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_id", DbType = "NVarChar(50)")]
+        public string id
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((this._id != value))
+                {
+                    this._id = value;
+                }
+            }
+        }
+    }
+
+    public partial class GetParentsResult
+    {
+
+        private string _id;
+
+        private string _name;
+
+        public GetParentsResult()
+        {
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_id", DbType = "NVarChar(50)")]
+        public string id
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((this._id != value))
+                {
+                    this._id = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_name", DbType = "NVarChar(255)")]
+        public string name
+        {
+            get
+            {
+                return this._name;
+            }
+            set
+            {
+                if ((this._name != value))
+                {
+                    this._name = value;
+                }
+            }
+        }
+    }
+
     public partial class account1To7Result
     {
 
@@ -18679,14 +19379,102 @@ namespace IWSProject.Models
         }
     }
 
-    public partial class ClassAccountBalancesResult
+    public partial class ClassChildResult
     {
 
-        private System.Nullable<int> _ID;
+        private string _ChildId;
+
+        private string _ChildName;
+
+        private string _ParentId;
+
+        private string _ParentName;
+
+        public ClassChildResult()
+        {
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ChildId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string ChildId
+        {
+            get
+            {
+                return this._ChildId;
+            }
+            set
+            {
+                if ((this._ChildId != value))
+                {
+                    this._ChildId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ChildName", DbType = "NVarChar(255)")]
+        public string ChildName
+        {
+            get
+            {
+                return this._ChildName;
+            }
+            set
+            {
+                if ((this._ChildName != value))
+                {
+                    this._ChildName = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ParentId", DbType = "NVarChar(50)")]
+        public string ParentId
+        {
+            get
+            {
+                return this._ParentId;
+            }
+            set
+            {
+                if ((this._ParentId != value))
+                {
+                    this._ParentId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ParentName", DbType = "NVarChar(255)")]
+        public string ParentName
+        {
+            get
+            {
+                return this._ParentName;
+            }
+            set
+            {
+                if ((this._ParentName != value))
+                {
+                    this._ParentName = value;
+                }
+            }
+        }
+    }
+
+    public partial class AccountBalanceResult
+    {
+
+        private int _ID;
+
+        private string _ClassId;
+
+        private string _ClassName;
+
+        private string _SubClassId;
+
+        private string _SubClassName;
 
         private string _AccountId;
 
-        private string _Name;
+        private string _AccountName;
 
         private System.Nullable<decimal> _TDebit;
 
@@ -18698,12 +19486,16 @@ namespace IWSProject.Models
 
         private string _Currency;
 
-        public ClassAccountBalancesResult()
+        private System.Nullable<decimal> _Balance;
+
+        private string _CompanyId;
+
+        public AccountBalanceResult()
         {
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ID", DbType = "Int")]
-        public System.Nullable<int> ID
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ID", DbType = "Int NOT NULL")]
+        public int ID
         {
             get
             {
@@ -18714,6 +19506,70 @@ namespace IWSProject.Models
                 if ((this._ID != value))
                 {
                     this._ID = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ClassId", DbType = "NVarChar(50)")]
+        public string ClassId
+        {
+            get
+            {
+                return this._ClassId;
+            }
+            set
+            {
+                if ((this._ClassId != value))
+                {
+                    this._ClassId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ClassName", DbType = "NVarChar(150)")]
+        public string ClassName
+        {
+            get
+            {
+                return this._ClassName;
+            }
+            set
+            {
+                if ((this._ClassName != value))
+                {
+                    this._ClassName = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SubClassId", DbType = "NVarChar(50)")]
+        public string SubClassId
+        {
+            get
+            {
+                return this._SubClassId;
+            }
+            set
+            {
+                if ((this._SubClassId != value))
+                {
+                    this._SubClassId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SubClassName", DbType = "NVarChar(150)")]
+        public string SubClassName
+        {
+            get
+            {
+                return this._SubClassName;
+            }
+            set
+            {
+                if ((this._SubClassName != value))
+                {
+                    this._SubClassName = value;
                 }
             }
         }
@@ -18734,18 +19590,18 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Name", DbType = "NVarChar(50)")]
-        public string Name
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AccountName", DbType = "NVarChar(150)")]
+        public string AccountName
         {
             get
             {
-                return this._Name;
+                return this._AccountName;
             }
             set
             {
-                if ((this._Name != value))
+                if ((this._AccountName != value))
                 {
-                    this._Name = value;
+                    this._AccountName = value;
                 }
             }
         }
@@ -18826,6 +19682,38 @@ namespace IWSProject.Models
                 if ((this._Currency != value))
                 {
                     this._Currency = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Balance", DbType = "Money")]
+        public System.Nullable<decimal> Balance
+        {
+            get
+            {
+                return this._Balance;
+            }
+            set
+            {
+                if ((this._Balance != value))
+                {
+                    this._Balance = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyId
+        {
+            get
+            {
+                return this._CompanyId;
+            }
+            set
+            {
+                if ((this._CompanyId != value))
+                {
+                    this._CompanyId = value;
                 }
             }
         }
@@ -18983,112 +19871,22 @@ namespace IWSProject.Models
         }
     }
 
-    public partial class GetAccountBalanceResult
+    public partial class ClassAccountBalancesResult
     {
+
+        private int _ID;
+
+        private string _ClassId;
+
+        private string _ClassName;
+
+        private string _SubClassId;
+
+        private string _SubClassName;
 
         private string _AccountId;
 
-        private string _Name;
-
-        private decimal _Debit;
-
-        private decimal _Credit;
-
-        private string _Currency;
-
-        public GetAccountBalanceResult()
-        {
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AccountId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
-        public string AccountId
-        {
-            get
-            {
-                return this._AccountId;
-            }
-            set
-            {
-                if ((this._AccountId != value))
-                {
-                    this._AccountId = value;
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Name", DbType = "NVarChar(255) NOT NULL", CanBeNull = false)]
-        public string Name
-        {
-            get
-            {
-                return this._Name;
-            }
-            set
-            {
-                if ((this._Name != value))
-                {
-                    this._Name = value;
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Debit", DbType = "Decimal(18,2) NOT NULL")]
-        public decimal Debit
-        {
-            get
-            {
-                return this._Debit;
-            }
-            set
-            {
-                if ((this._Debit != value))
-                {
-                    this._Debit = value;
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Credit", DbType = "Decimal(18,2) NOT NULL")]
-        public decimal Credit
-        {
-            get
-            {
-                return this._Credit;
-            }
-            set
-            {
-                if ((this._Credit != value))
-                {
-                    this._Credit = value;
-                }
-            }
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Currency", DbType = "NVarChar(10)")]
-        public string Currency
-        {
-            get
-            {
-                return this._Currency;
-            }
-            set
-            {
-                if ((this._Currency != value))
-                {
-                    this._Currency = value;
-                }
-            }
-        }
-    }
-
-    public partial class GetAccountBalancesResult
-    {
-
-        private string _ID;
-
-        private string _AccountId;
-
-        private string _Name;
+        private string _AccountName;
 
         private System.Nullable<decimal> _TDebit;
 
@@ -19100,12 +19898,16 @@ namespace IWSProject.Models
 
         private string _Currency;
 
-        public GetAccountBalancesResult()
+        private System.Nullable<decimal> _Balance;
+
+        private string _CompanyId;
+
+        public ClassAccountBalancesResult()
         {
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ID", DbType = "NVarChar(1)")]
-        public string ID
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ID", DbType = "Int NOT NULL")]
+        public int ID
         {
             get
             {
@@ -19120,7 +19922,71 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AccountId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ClassId", DbType = "NVarChar(50)")]
+        public string ClassId
+        {
+            get
+            {
+                return this._ClassId;
+            }
+            set
+            {
+                if ((this._ClassId != value))
+                {
+                    this._ClassId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_ClassName", DbType = "NVarChar(150)")]
+        public string ClassName
+        {
+            get
+            {
+                return this._ClassName;
+            }
+            set
+            {
+                if ((this._ClassName != value))
+                {
+                    this._ClassName = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SubClassId", DbType = "NVarChar(50)")]
+        public string SubClassId
+        {
+            get
+            {
+                return this._SubClassId;
+            }
+            set
+            {
+                if ((this._SubClassId != value))
+                {
+                    this._SubClassId = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SubClassName", DbType = "NVarChar(150)")]
+        public string SubClassName
+        {
+            get
+            {
+                return this._SubClassName;
+            }
+            set
+            {
+                if ((this._SubClassName != value))
+                {
+                    this._SubClassName = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AccountId", DbType = "NVarChar(50)")]
         public string AccountId
         {
             get
@@ -19136,23 +20002,23 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Name", DbType = "NVarChar(255) NOT NULL", CanBeNull = false)]
-        public string Name
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_AccountName", DbType = "NVarChar(150)")]
+        public string AccountName
         {
             get
             {
-                return this._Name;
+                return this._AccountName;
             }
             set
             {
-                if ((this._Name != value))
+                if ((this._AccountName != value))
                 {
-                    this._Name = value;
+                    this._AccountName = value;
                 }
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TDebit", DbType = "Decimal(38,2)")]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TDebit", DbType = "Money")]
         public System.Nullable<decimal> TDebit
         {
             get
@@ -19168,7 +20034,7 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TCredit", DbType = "Decimal(38,2)")]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_TCredit", DbType = "Money")]
         public System.Nullable<decimal> TCredit
         {
             get
@@ -19184,7 +20050,7 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SDebit", DbType = "Decimal(38,2)")]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SDebit", DbType = "Money")]
         public System.Nullable<decimal> SDebit
         {
             get
@@ -19200,7 +20066,7 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SCredit", DbType = "Decimal(38,2)")]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_SCredit", DbType = "Money")]
         public System.Nullable<decimal> SCredit
         {
             get
@@ -19216,7 +20082,7 @@ namespace IWSProject.Models
             }
         }
 
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Currency", DbType = "NVarChar(10) NOT NULL", CanBeNull = false)]
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Currency", DbType = "NVarChar(50)")]
         public string Currency
         {
             get
@@ -19231,29 +20097,35 @@ namespace IWSProject.Models
                 }
             }
         }
-    }
 
-    public partial class GetChildrenResult
-    {
-
-        private string _id;
-
-        public GetChildrenResult()
-        {
-        }
-
-        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_id", DbType = "NVarChar(50)")]
-        public string id
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_Balance", DbType = "Money")]
+        public System.Nullable<decimal> Balance
         {
             get
             {
-                return this._id;
+                return this._Balance;
             }
             set
             {
-                if ((this._id != value))
+                if ((this._Balance != value))
                 {
-                    this._id = value;
+                    this._Balance = value;
+                }
+            }
+        }
+
+        [global::System.Data.Linq.Mapping.ColumnAttribute(Storage = "_CompanyId", DbType = "NVarChar(50) NOT NULL", CanBeNull = false)]
+        public string CompanyId
+        {
+            get
+            {
+                return this._CompanyId;
+            }
+            set
+            {
+                if ((this._CompanyId != value))
+                {
+                    this._CompanyId = value;
                 }
             }
         }

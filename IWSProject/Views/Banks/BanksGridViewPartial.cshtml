@@ -41,7 +41,6 @@
 
         settings.KeyFieldName = "id";
 
-
         settings.Settings.ShowFilterRow = true;
         settings.Settings.ShowGroupPanel = true;
         settings.Settings.ShowFilterRowMenu = true;
@@ -53,12 +52,6 @@
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
-
-        settings.SettingsAdaptivity.AdaptivityMode = GridViewAdaptivityMode.Off;
-        settings.SettingsAdaptivity.AdaptiveColumnPosition = GridViewAdaptiveColumnPosition.Right;
-        settings.SettingsAdaptivity.AdaptiveDetailColumnCount = 1;
-        settings.SettingsAdaptivity.AllowOnlyOneAdaptiveDetailExpanded = false;
-        settings.SettingsAdaptivity.HideDataCellsAtWindowInnerWidth = 0;
 
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.Position = PagerPosition.Bottom;
@@ -101,11 +94,13 @@
                     i.FieldName = "id";
                     i.Caption = IWSLocalResource.bic;
                     i.Width = Unit.Percentage(50);
+
                     i.NestedExtension().TextBox(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(75);
+                        s.Properties.ClientSideEvents.KeyUp = "function(s, e) { var txt = s.GetText(); s.SetText(txt.toUpperCase()); }";
                     });
                 });
                 formLayoutSettings.Items.AddEmptyItem();
@@ -135,13 +130,12 @@
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(75);
+                        s.Height = Unit.Pixel(80);
                     });
                 });
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
+
 
                 formLayoutSettings.Items.Add(i =>
                 {

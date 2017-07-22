@@ -15,7 +15,7 @@
         settings.SettingsEditing.Mode = GridViewEditingMode.PopupEditForm;
 
         settings.SettingsBehavior.EnableCustomizationWindow = true;
-        settings.ClientSideEvents.CustomizationWindowCloseUp= "CustomizationWindowCloseUp";
+        settings.ClientSideEvents.CustomizationWindowCloseUp = "CustomizationWindowCloseUp";
 
         settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
         settings.SettingsResizing.Visualization = ResizingMode.Postponed;
@@ -54,7 +54,6 @@
         {
             e.NewValues["Buchungstag"] = DateTime.Today;
             e.NewValues["Valutadatum"] = DateTime.Today;
-            e.NewValues["Currency"] = (string)Session["Currency"];
         };
 
         settings.KeyFieldName = "id";
@@ -227,31 +226,22 @@
                 {
                     i.FieldName = "Buchungstag";
                     i.Caption = IWSLocalResource.OrderDate;
-                    i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
-
-                    i.NestedExtension().DateEdit(s =>
+                    i.NestedExtension().TextBox(s =>
                     {
-                        s.Properties.UseMaskBehavior = true;
-                        s.Properties.EditFormat = EditFormat.Date;
-                        s.Properties.EditFormatString = "d";
-                        s.Width = Unit.Percentage(94);
-                        s.Properties.AllowUserInput = true;
-                        s.Properties.AllowMouseWheel = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "Valutadatum";
                     i.Caption = IWSLocalResource.ValueDate;
-                    i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
-                    i.NestedExtension().DateEdit(s =>
+                    i.NestedExtension().TextBox(s =>
                     {
-                        s.Properties.UseMaskBehavior = true;
-                        s.Properties.EditFormat = EditFormat.Date;
-                        s.Properties.EditFormatString = "d";
-                        s.Width = Unit.Percentage(94);
-                        s.Properties.AllowUserInput = true;
-                        s.Properties.AllowMouseWheel = true;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -274,6 +264,7 @@
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
+                        s.Height = Unit.Pixel(100);
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -292,25 +283,8 @@
                 {
                     i.FieldName = "Kontonummer";
                     i.Caption = IWSLocalResource.IBAN;
-                    i.NestedExtension().ComboBox(s =>
+                    i.NestedExtension().TextBox(s =>
                     {
-                        s.Properties.TextField = "Name";
-                        s.Properties.ValueField = "id";
-                        s.Properties.ValueType = typeof(string);
-                        s.Properties.DataSource = IWSLookUp.GetIBAN();
-                        s.Properties.Columns.Add(column =>
-                        {
-                            column.FieldName = "id";
-                            column.Caption = IWSLocalResource.id;
-                            column.Width = Unit.Percentage(40);
-                        });
-                        s.Properties.Columns.Add(column =>
-                        {
-                            column.FieldName = "Name";
-                            column.Caption = IWSLocalResource.name;
-                            column.Width = Unit.Percentage(60);
-                        });
-                        s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -344,25 +318,8 @@
                 {
                     i.FieldName = "Waehrung";
                     i.Caption = IWSLocalResource.Currency;
-                    i.NestedExtension().ComboBox(s =>
+                    i.NestedExtension().TextBox(s =>
                     {
-                        s.Properties.TextField = "name";
-                        s.Properties.ValueField = "id";
-                        s.Properties.ValueType = typeof(string);
-                        s.Properties.DataSource = IWSLookUp.GetCurrency();
-                        s.Properties.Columns.Add(column =>
-                        {
-                            column.FieldName = "id";
-                            column.Caption = IWSLocalResource.id;
-                            column.Width = Unit.Percentage(15);
-                        });
-                        s.Properties.Columns.Add(column =>
-                        {
-                            column.FieldName = "name";
-                            column.Caption = IWSLocalResource.Currency;
-                            column.Width = Unit.Percentage(85);
-                        });
-                        s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
@@ -379,7 +336,6 @@
                         s.Width = Unit.Percentage(100);
                     });
                 });
-
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
@@ -419,7 +375,18 @@
         {
             ((MVCxGridView)sender).ForceDataRowType(typeof(BankStatement));
         };
+
+
+
+
     });
+    if (ViewData["GenericError"] != null)
+    {
+        < script type = "text/javascript" >
+        alert("@ViewData["GenericError"]");
+        </ script >
+    }
+
     if (ViewData["GenericError"] != null)
     {
         grid.SetEditErrorText((string)ViewData["GenericError"]);
