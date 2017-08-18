@@ -79,7 +79,7 @@ namespace ASP
         settings.CommandColumn.ShowSelectCheckbox = true;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
 
         settings.Styles.RowHotTrack.Cursor = "pointer";
         settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
@@ -109,8 +109,7 @@ namespace ASP
         settings.InitNewRow = (s, e) =>
         {
             e.NewValues["Buchungstag"] = DateTime.Today;
-            e.NewValues["Valutadatum"] = DateTime.Today.AddDays(14);
-            e.NewValues["Currency"] = (string)Session["Currency"];
+            e.NewValues["Valutadatum"] = DateTime.Today;
         };
 
         settings.KeyFieldName = "id";
@@ -124,9 +123,9 @@ namespace ASP
         settings.SettingsBehavior.ConfirmDelete = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -142,7 +141,7 @@ namespace ASP
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+        
         settings.SettingsPager.PageSize = 24;
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
         settings.Columns.Add("Auftragskonto").Caption = IWSLocalResource.OrderAccount;
@@ -368,7 +367,7 @@ namespace ASP
                             b.ToolTip = IWSLocalResource.btnUpdate;
                             b.Style[HtmlTextWriterStyle.MarginRight] = "5px";
                             b.Images.Image.IconID = IconID.ActionsApply16x16;
-                            b.Width = Unit.Pixel(70);
+                            b.Width = Unit.Pixel(80);
                             b.ClientSideEvents.Click = "function(s, e){ BankStatementsGridView.UpdateEdit(); }";
                         }).Render();
 
@@ -380,7 +379,7 @@ namespace ASP
                             b.ToolTip = IWSLocalResource.btnCancel;
                             b.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
                             b.Images.Image.IconID = IconID.ActionsCancel16x16;
-                            b.Width = Unit.Pixel(70);
+                            b.Width = Unit.Pixel(80);
                             b.ClientSideEvents.Click = "function(s, e){ BankStatementsGridView.CancelEdit(); }";
                         }).Render();
                 });

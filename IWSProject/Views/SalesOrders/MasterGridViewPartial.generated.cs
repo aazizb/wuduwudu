@@ -75,7 +75,7 @@ namespace ASP
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
 
         settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
@@ -100,7 +100,6 @@ namespace ASP
         settings.SettingsCommandButton.DeleteButton.Text = " ";
         settings.CommandColumn.ShowDeleteButton = true;
 
-        //conditionally disable command buttons depending on IsValidated column value
         settings.CommandButtonInitialize = (s, e) =>
         {
 
@@ -113,8 +112,7 @@ namespace ASP
 
         settings.InitNewRow = (s, e) =>
         {
-            e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
-            e.NewValues["oid"] = 0;
+            e.NewValues["ItemDate"] = DateTime.Today;
         };
 
         settings.KeyFieldName = "id";
@@ -124,9 +122,9 @@ namespace ASP
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -148,8 +146,7 @@ namespace ASP
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
-        settings.SettingsPager.PageSize = 24;
+        settings.SettingsPager.PageSize = 26;
 
         settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
         settings.SettingsDetail.ShowDetailRow = true;
@@ -160,18 +157,7 @@ namespace ASP
             column.Caption = IWSLocalResource.id;
             column.Width = Unit.Pixel(60);
         });
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "oid";
-            column.Caption = IWSLocalResource.oid;
-            column.Width = Unit.Pixel(60);
-        });
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "modelid";
-            column.Caption = IWSLocalResource.modelid;
-            column.Visible = false;
-        });
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "store";
@@ -232,6 +218,13 @@ namespace ASP
         });
         settings.Columns.Add(column =>
         {
+            column.FieldName = "oVat";
+            column.Caption = IWSLocalResource.vat;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "N";
+        });
+        settings.Columns.Add(column =>
+        {
             column.FieldName = "oCurrency";
             column.Caption = IWSLocalResource.Currency;
             column.UnboundType = DevExpress.Data.UnboundColumnType.String;
@@ -253,16 +246,6 @@ namespace ASP
 
                 formLayoutSettings.Width = Unit.Percentage(100);
                 formLayoutSettings.ColCount = 2;
-
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "oid";
-                    i.Caption = IWSLocalResource.oid;
-                    i.NestedExtension().TextBox(textBox =>
-                    {
-
-                    });
-                });
 
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -330,7 +313,6 @@ namespace ASP
                     });
                 });
                 formLayoutSettings.Items.AddEmptyItem();
-                formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;
@@ -386,7 +368,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 323 "..\..\Views\SalesOrders\MasterGridViewPartial.cshtml"
+            #line 305 "..\..\Views\SalesOrders\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

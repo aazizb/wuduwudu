@@ -454,7 +454,7 @@
     <value>Valider</value>
   </data>
   <data name="IsValidated" xml:space="preserve">
-    <value>Validé</value>
+    <value>Est Validé?</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
     <value>Solde des Comptes</value>
@@ -649,7 +649,7 @@
     <value>N° Banque</value>
   </data>
   <data name="WindowCustomization" xml:space="preserve">
-    <value>Personnalisation</value>
+    <value>Afficher</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Masquer</value>
@@ -658,7 +658,7 @@
     <value>Montrer</value>
   </data>
   <data name="IsUsed" xml:space="preserve">
-    <value>Est Utilisé</value>
+    <value>Est Utilisé?</value>
   </data>
   <data name="SubAccountOf" xml:space="preserve">
     <value>Sous-Compte de</value>
@@ -717,8 +717,8 @@
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
-  <data name="returns" xml:space="preserve">
-    <value>Résultat</value>
+  <data name="BalanceSheet" xml:space="preserve">
+    <value>Bilan</value>
   </data>
   <data name="scredit" xml:space="preserve">
     <value>Solde Credit</value>
@@ -737,5 +737,20 @@
   </data>
   <data name="subClass" xml:space="preserve">
     <value>Sous-Classe</value>
+  </data>
+  <data name="IncomesStatement" xml:space="preserve">
+    <value>Compe Résultat</value>
+  </data>
+  <data name="IsBalanceSheetAccount" xml:space="preserve">
+    <value>Vue au Bilan</value>
+  </data>
+  <data name="Charge" xml:space="preserve">
+    <value>Charge</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Détail</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Fermer</value>
   </data>
 </root>

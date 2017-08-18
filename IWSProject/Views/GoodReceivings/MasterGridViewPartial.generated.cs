@@ -82,7 +82,7 @@ namespace ASP
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
 
         settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
@@ -119,7 +119,7 @@ namespace ASP
 
         settings.InitNewRow = (s, e) =>
         {
-            e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
+            e.NewValues["ItemDate"] = DateTime.Today;
             e.NewValues["oid"] = 0;
 
 
@@ -132,9 +132,9 @@ namespace ASP
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -150,7 +150,7 @@ namespace ASP
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+        
         settings.SettingsPager.PageSize = 24;
 
         settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
@@ -180,12 +180,7 @@ namespace ASP
                 combo.TextFormatString = "{0}";
             });
         });
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "modelid";
-            column.Caption = IWSLocalResource.modelid;
-            column.Visible = false;
-        });
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "store";
@@ -239,6 +234,13 @@ namespace ASP
         {
             column.FieldName = "oTotal";
             column.Caption = IWSLocalResource.Total;
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "N";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "oVat";
+            column.Caption = IWSLocalResource.vat;
             column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
             column.PropertiesEdit.DisplayFormatString = "N";
         });
@@ -417,7 +419,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 354 "..\..\Views\GoodReceivings\MasterGridViewPartial.cshtml"
+            #line 356 "..\..\Views\GoodReceivings\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

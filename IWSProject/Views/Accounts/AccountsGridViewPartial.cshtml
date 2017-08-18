@@ -46,7 +46,8 @@
             e.NewValues["dateofopen"] = DateTime.Now;
             e.NewValues["dateofclose"] = DateTime.Now;
             e.NewValues["balance"] = 0;
-            e.NewValues["Isused"] = true;
+            e.NewValues["IsUsed"] = true;
+            e.NewValues["IsBalanceSheetAccount"] = false;
         };
 
 
@@ -112,8 +113,8 @@
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "IsUsed";
-            column.Caption = IWSLocalResource.IsUsed;
+            column.FieldName = "IsBalanceSheetAccount";
+            column.Caption = IWSLocalResource.IsBalanceSheetAccount;
             column.Width = Unit.Percentage(5);
             column.EditorProperties().CheckBox(checkBox =>
             {
@@ -283,6 +284,17 @@
                 {
                     i.FieldName = "IsUsed";
                     i.Caption = IWSLocalResource.IsUsed;
+                    i.NestedExtension().CheckBox(e =>
+                    {
+
+                    });
+                });
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "IsBalanceSheetAccount";
+                    i.Caption = IWSLocalResource.IsBalanceSheetAccount;
                     i.NestedExtension().CheckBox(e =>
                     {
 

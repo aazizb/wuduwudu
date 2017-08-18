@@ -25,6 +25,8 @@
         //settings.SettingsBehavior.AllowSelectByRowClick = true;
         //settings.ClientSideEvents.RowDblClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
 
+        settings.CommandColumn.ShowSelectCheckbox = true;
+
         settings.CommandColumn.ShowNewButtonInHeader = true;
         settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
         settings.SettingsCommandButton.NewButton.Image.ToolTip = IWSLocalResource.btnAddNew;
@@ -42,21 +44,28 @@
 
         settings.CommandButtonInitialize = (s, e) =>
         {
-
-            var value = (s as MVCxGridView).GetRowValues(e.VisibleIndex, "IsValidated");
+            if (e.VisibleIndex == -1) return;
+            MVCxGridView g = (MVCxGridView)s;
+            bool isSelected = Convert.ToBoolean(g.GetRowValues(e.VisibleIndex, "IsValidated"));
             if (e.ButtonType == ColumnCommandButtonType.Edit || e.ButtonType == ColumnCommandButtonType.Delete)
             {
-                e.Enabled = false.Equals(value);
+                e.Enabled = false.Equals(isSelected);
+            }
+            if (e.ButtonType == ColumnCommandButtonType.SelectCheckbox)
+            {
+                e.Enabled = false.Equals(isSelected);
+                if (isSelected)
+                {
+                    g.Selection.SetSelection(e.VisibleIndex, false);
+                }
             }
         };
-
         settings.InitNewRow = (s, e) =>
         {
             e.NewValues["TransDate"] = DateTime.Today;
             e.NewValues["ItemDate"] = DateTime.Today;
             e.NewValues["EntryDate"] = DateTime.Today;
         };
-
 
         settings.KeyFieldName = "id";
 
@@ -70,6 +79,10 @@
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
+
+        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.ClientSideEvents.RowClick = "OnRowClick";
 
         settings.SettingsBehavior.AllowSelectByRowClick = true;
         settings.SettingsBehavior.EnableRowHotTrack = true;
@@ -147,11 +160,31 @@
                 d.AllowMouseWheel = true;
             });
         });
-
+        var ucolumn = settings.Columns.Add("Periode");
+        ucolumn.Caption = IWSLocalResource.periode;
+        ucolumn.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        settings.CustomUnboundColumnData = (sender, e) =>
+        {
+            if (e.Column.FieldName == "Periode")
+            {
+                DateTime transDate = (DateTime)e.GetListSourceFieldValue("TransDate");
+                string periode= Convert.ToString((int)transDate.Year);
+                periode+= ((int)transDate.Month < 10) ? "0" + Convert.ToString((int)transDate.Month) : Convert.ToString((int)transDate.Month);
+                e.Value = periode;
+            }
+        };
         settings.Columns.Add(column =>
         {
             column.FieldName = "oTotal";
             column.Caption = IWSLocalResource.Total;
+            column.Width = Unit.Percentage(10);
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "N";
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "oNet";
+            column.Caption = IWSLocalResource.net;
             column.Width = Unit.Percentage(10);
             column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
             column.PropertiesEdit.DisplayFormatString = "N";
@@ -173,6 +206,15 @@
         });
         settings.Columns.Add(column =>
         {
+            column.FieldName = "IsValidated";
+            column.Caption = IWSLocalResource.IsValidated;
+            column.Width = Unit.Percentage(5);
+            column.EditorProperties().CheckBox(checkBox =>
+            {
+            });
+        });
+        settings.Columns.Add(column =>
+        {
             column.FieldName = "ShippingTerms";
             column.Caption = IWSLocalResource.ShippingTerms;
             column.Width = Unit.Percentage(10);
@@ -183,6 +225,14 @@
             column.Caption = IWSLocalResource.text;
             column.Width = Unit.Percentage(17);
         });
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oTotal").DisplayFormat = "N";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oNet").DisplayFormat = "N";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oVat").DisplayFormat = "N";
+        settings.Settings.ShowFooter = true;
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oTotal").DisplayFormat = "N";
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oNet").DisplayFormat = "N";
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oVat").DisplayFormat = "N";
+        settings.Settings.ShowGroupPanel = true;
 
         #region Template
 
@@ -283,7 +333,7 @@
                         s.ReadOnly = true;
                     });
                 });
- 
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "ShippingTerms";

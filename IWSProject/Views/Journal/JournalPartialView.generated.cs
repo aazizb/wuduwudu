@@ -88,7 +88,7 @@ Write(Html.DevExpress().GridView(settings =>
 
     settings.Width = Unit.Percentage(100);
     //settings.Settings.VerticalScrollableHeight = Unit.Percentage(100);
-    settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+    
     settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
     settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
     settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -98,7 +98,7 @@ Write(Html.DevExpress().GridView(settings =>
     settings.SettingsPager.FirstPageButton.Visible = true;
     settings.SettingsPager.LastPageButton.Visible = true;
     settings.SettingsPager.PageSizeItemSettings.Visible = true;
-    settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+    
     settings.SettingsPager.PageSize = 24;
 
     settings.Columns.Add(column =>

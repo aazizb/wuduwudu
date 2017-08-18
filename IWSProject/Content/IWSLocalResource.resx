@@ -451,7 +451,7 @@
     <value>Validate</value>
   </data>
   <data name="IsValidated" xml:space="preserve">
-    <value>IsValidated</value>
+    <value>Is Validated?</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
     <value>Account Balance</value>
@@ -535,7 +535,7 @@
     <value>Line Settlement</value>
   </data>
   <data name="IsService" xml:space="preserve">
-    <value>Is Service</value>
+    <value>Is Service?</value>
   </data>
   <data name="GeneralLedger" xml:space="preserve">
     <value>General Ledger</value>
@@ -643,7 +643,7 @@
     <value>Bank ID</value>
   </data>
   <data name="WindowCustomization" xml:space="preserve">
-    <value>Customization</value>
+    <value>Show</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Hide</value>
@@ -652,7 +652,7 @@
     <value>Show</value>
   </data>
   <data name="IsUsed" xml:space="preserve">
-    <value>Is Used</value>
+    <value>Is Used?</value>
   </data>
   <data name="SubAccountOf" xml:space="preserve">
     <value>Sub Account Of</value>
@@ -711,8 +711,8 @@
   <data name="Type" xml:space="preserve">
     <value>Type</value>
   </data>
-  <data name="returns" xml:space="preserve">
-    <value>Returns</value>
+  <data name="BalanceSheet" xml:space="preserve">
+    <value>Balance Sheet</value>
   </data>
   <data name="scredit" xml:space="preserve">
     <value>Credit Balance</value>
@@ -731,5 +731,20 @@
   </data>
   <data name="subClass" xml:space="preserve">
     <value>Sub Class</value>
+  </data>
+  <data name="IncomesStatement" xml:space="preserve">
+    <value>Incomes Statement</value>
+  </data>
+  <data name="IsBalanceSheetAccount" xml:space="preserve">
+    <value>Balance Sheet</value>
+  </data>
+  <data name="Charge" xml:space="preserve">
+    <value>Charge</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Detail</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Close</value>
   </data>
 </root>

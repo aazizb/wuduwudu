@@ -76,7 +76,7 @@ WriteLiteral("\r\n");
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
 
         settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
@@ -114,7 +114,7 @@ WriteLiteral("\r\n");
 
         settings.InitNewRow = (s, e) =>
         {
-            e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
+            e.NewValues["ItemDate"] = DateTime.Today;
             e.NewValues["oid"] = 0;
         };
 
@@ -125,9 +125,9 @@ WriteLiteral("\r\n");
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -149,7 +149,6 @@ WriteLiteral("\r\n");
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
         settings.SettingsPager.PageSize = 24;
 
         settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
@@ -169,13 +168,7 @@ WriteLiteral("\r\n");
         });
         settings.Columns.Add(column =>
         {
-            column.FieldName = "modelid";
-            column.Caption = IWSLocalResource.modelid;
-            column.Visible = false;
-        });
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "store";
+            column.FieldName = "CostCenter";
             column.Caption = IWSLocalResource.costcenters;
             column.EditorProperties().ComboBox(combo =>
             {
@@ -184,7 +177,7 @@ WriteLiteral("\r\n");
                 combo.ValueType = typeof(string);
                 combo.DataSource = IWSLookUp.GetCostCenters();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
-                combo.Columns.Add("name").Caption = IWSLocalResource.name;
+                combo.Columns.Add("name").Caption = IWSLocalResource.costcenters;
                 combo.TextFormatString = "{0}-{1}";
             });
         });
@@ -266,21 +259,20 @@ WriteLiteral("\r\n");
                         s.Properties.DataSource = IWSLookUp.GetSettlementOID();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("Customer").Caption = IWSLocalResource.customer;
-                        s.Properties.Columns.Add("store").Caption = IWSLocalResource.store;
+                        s.Properties.Columns.Add("CostCenter").Caption = IWSLocalResource.costcenters;
                         s.Properties.Columns.Add("DueDate").Caption = IWSLocalResource.duedate;
                         s.Properties.TextFormatString = "{0}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
-                        //s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
+                        s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
 
                     });
                 });
 
-
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "store";
+                    i.FieldName = "CostCenter";
                     i.Caption = IWSLocalResource.costcenters;
                     i.NestedExtension().ComboBox(s =>
                     {
@@ -398,7 +390,7 @@ WriteLiteral("\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 334 "..\..\Views\Settlements\MasterGridViewPartial.cshtml"
+            #line 326 "..\..\Views\Settlements\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

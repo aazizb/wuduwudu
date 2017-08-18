@@ -12,7 +12,6 @@ namespace IWSProject.Controllers
     public class ArticlesController : Controller
     {
         IWSDataContext db = new IWSDataContext();
-        
         // GET: articles
         public ActionResult Index()
         {

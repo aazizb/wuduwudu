@@ -138,6 +138,19 @@
                 d.AllowMouseWheel = true;
             });
         });
+        var ucolumn = settings.Columns.Add("Periode");
+        ucolumn.Caption = IWSLocalResource.periode;
+        ucolumn.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        settings.CustomUnboundColumnData = (sender, e) =>
+        {
+            if (e.Column.FieldName == "Periode")
+            {
+                DateTime transDate = (DateTime)e.GetListSourceFieldValue("TransDate");
+                string periode = Convert.ToString((int)transDate.Year);
+                periode += ((int)transDate.Month < 10) ? "0" + Convert.ToString((int)transDate.Month) : Convert.ToString((int)transDate.Month);
+                e.Value = periode;
+            }
+        };
         settings.Columns.Add(column =>
         {
             column.FieldName = "oTotal";

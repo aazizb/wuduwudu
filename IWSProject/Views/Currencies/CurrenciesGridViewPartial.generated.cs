@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     #line 1 "..\..\Views\Currencies\CurrenciesGridViewPartial.cshtml"
     using IWSProject.Content;
@@ -71,7 +75,7 @@ namespace ASP
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
         //settings.SettingsContextMenu.Enabled = true;
         settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
@@ -108,9 +112,9 @@ namespace ASP
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -126,7 +130,7 @@ namespace ASP
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+        
         settings.SettingsPager.PageSize = 24;
 
         settings.Columns.Add("Id").Caption = IWSLocalResource.id;
@@ -167,18 +171,6 @@ namespace ASP
 
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "Modelid";
-                    i.Visible = false;
-                    i.Caption = IWSLocalResource.modelid;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
-                    });
-                });
-                formLayoutSettings.Items.Add(i =>
-                {
                     i.FieldName = "Description";
                     i.Caption = IWSLocalResource.description;
                     i.NestedExtension().Memo(s =>
@@ -205,7 +197,7 @@ namespace ASP
                     b.ToolTip = IWSLocalResource.btnUpdate;
                     b.Style[HtmlTextWriterStyle.MarginRight] = "5px";
                     b.Images.Image.IconID = IconID.ActionsApply16x16;
-                    b.Width = Unit.Pixel(70);
+                    b.Width = Unit.Pixel(80);
                     b.ClientSideEvents.Click = "function(s, e){ CurrenciesGridView.UpdateEdit(); }";
                 }).Render();
 
@@ -217,7 +209,7 @@ namespace ASP
                     b.ToolTip = IWSLocalResource.btnCancel;
                     b.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
                     b.Images.Image.IconID = IconID.ActionsCancel16x16;
-                    b.Width = Unit.Pixel(70);
+                    b.Width = Unit.Pixel(80);
                     b.ClientSideEvents.Click = "function(s, e){ CurrenciesGridView.CancelEdit(); }";
                 }).Render();
                 });
@@ -243,7 +235,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 184 "..\..\Views\Currencies\CurrenciesGridViewPartial.cshtml"
+            #line 172 "..\..\Views\Currencies\CurrenciesGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

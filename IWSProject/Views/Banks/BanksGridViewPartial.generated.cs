@@ -75,7 +75,7 @@ namespace ASP
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Percentage(5);
 
         settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
@@ -107,9 +107,9 @@ namespace ASP
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -125,18 +125,32 @@ namespace ASP
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+        
         settings.SettingsPager.PageSize = 24;
 
-        settings.Columns.Add("id").Caption = IWSLocalResource.id;
-        settings.Columns.Add("name").Caption = IWSLocalResource.name;
-        settings.Columns.Add("description").Caption = IWSLocalResource.description;
-
+        settings.Columns.Add(column => 
+        {
+            column.FieldName = "id";
+            column.Caption = IWSLocalResource.id;
+            column.Width = Unit.Percentage(6);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "name";
+            column.Caption = IWSLocalResource.name;
+            column.Width = Unit.Percentage(23);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "description";
+            column.Caption = IWSLocalResource.description;
+            column.Width = Unit.Percentage(36);
+        });
+        
         #region Template Edit
         settings.SetEditFormTemplateContent(templateContent =>
         {
-            var editItem = ViewData["bank"] != null ? ViewData["bank"] : templateContent.DataItem;
-
+   
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
                 formLayoutSettings.Name = "BanksViewEdit";
@@ -168,18 +182,6 @@ namespace ASP
 
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "modelid";
-                    i.Visible = false;
-                    i.Caption = IWSLocalResource.modelid;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
-                    });
-                });
-                formLayoutSettings.Items.Add(i =>
-                {
                     i.FieldName = "description";
                     i.Caption = IWSLocalResource.description;
                     i.NestedExtension().Memo(s =>
@@ -204,7 +206,7 @@ namespace ASP
                     b.ToolTip = IWSLocalResource.btnUpdate;
                     b.Style[HtmlTextWriterStyle.MarginRight] = "5px";
                     b.Images.Image.IconID = IconID.ActionsApply16x16;
-                    b.Width = Unit.Pixel(70);
+                    b.Width = Unit.Pixel(80);
                     b.ClientSideEvents.Click = "function(s, e){ BanksGridView.UpdateEdit(); }";
                 }).Render();
 
@@ -216,7 +218,7 @@ namespace ASP
                     b.ToolTip = IWSLocalResource.btnCancel;
                     b.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
                     b.Images.Image.IconID = IconID.ActionsCancel16x16;
-                    b.Width = Unit.Pixel(70);
+                    b.Width = Unit.Pixel(80);
                     b.ClientSideEvents.Click = "function(s, e){ BanksGridView.CancelEdit(); }";
                 }).Render();
                 });
@@ -242,7 +244,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 179 "..\..\Views\Banks\BanksGridViewPartial.cshtml"
+            #line 167 "..\..\Views\Banks\BanksGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

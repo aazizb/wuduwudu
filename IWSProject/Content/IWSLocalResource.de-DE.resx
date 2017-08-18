@@ -448,7 +448,7 @@
     <value>Validate</value>
   </data>
   <data name="IsValidated" xml:space="preserve">
-    <value>IsValidated de-DE</value>
+    <value>IsValidated de-DE?</value>
   </data>
   <data name="AccountBalance" xml:space="preserve">
     <value>Account Balance de-DE</value>
@@ -532,7 +532,7 @@
     <value>Line Settlement de-DE</value>
   </data>
   <data name="IsService" xml:space="preserve">
-    <value>Is Service de-DE</value>
+    <value>Is Service de-DE?</value>
   </data>
   <data name="GeneralLedger" xml:space="preserve">
     <value>General Ledger de-DE</value>
@@ -643,7 +643,7 @@
     <value>Bank ID de-DE</value>
   </data>
   <data name="WindowCustomization" xml:space="preserve">
-    <value>Customization de-DE</value>
+    <value>Show de-DE</value>
   </data>
   <data name="Hide" xml:space="preserve">
     <value>Hide de-DE</value>
@@ -652,7 +652,7 @@
     <value>Show de-DE</value>
   </data>
   <data name="IsUsed" xml:space="preserve">
-    <value>Is Used de-De</value>
+    <value>Is Used de-De?</value>
   </data>
   <data name="SubAccountOf" xml:space="preserve">
     <value>Sub Account Of</value>
@@ -708,8 +708,8 @@
   <data name="TransDate" xml:space="preserve">
     <value>Trans Date de-DE</value>
   </data>
-  <data name="returns" xml:space="preserve">
-    <value>Returns de-DE</value>
+  <data name="BalanceSheet" xml:space="preserve">
+    <value>Balance sheet de-DE</value>
   </data>
   <data name="scredit" xml:space="preserve">
     <value>Credit Balance de-DE</value>
@@ -728,5 +728,20 @@
   </data>
   <data name="subClass" xml:space="preserve">
     <value>Sub Class de-DE</value>
+  </data>
+  <data name="IncomesStatement" xml:space="preserve">
+    <value>Incomes Statement de-DE</value>
+  </data>
+  <data name="IsBalanceSheetAccount" xml:space="preserve">
+    <value>Balance Sheet de-DE?</value>
+  </data>
+  <data name="Charge" xml:space="preserve">
+    <value>Charge de-DE</value>
+  </data>
+  <data name="Detail" xml:space="preserve">
+    <value>Detail de-DE</value>
+  </data>
+  <data name="close" xml:space="preserve">
+    <value>Close de-De</value>
   </data>
 </root>

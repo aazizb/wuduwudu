@@ -81,7 +81,7 @@ WriteLiteral("\r\n");
         settings.SettingsBehavior.ConfirmDelete = true;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
 
         settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
         settings.SettingsCommandButton.NewButton.Image.ToolTip = IWSLocalResource.btnAddNew;
@@ -109,16 +109,15 @@ WriteLiteral("\r\n");
         };
         settings.InitNewRow = (s, e) =>
         {
-            e.NewValues["duedate"] = DateTime.Today.AddDays(14);
-            e.NewValues["Currency"] = (string)Session["Currency"];
+            e.NewValues["duedate"] = DateTime.Today;
         };
 
         settings.KeyFieldName = "id";
 
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.PageSize = 24;
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -207,18 +206,8 @@ WriteLiteral("\r\n");
 
         settings.Columns.Add(column =>
         {
-            column.FieldName = "VatCode";
+            column.FieldName = "Vat";
             column.Caption = IWSLocalResource.vatcode;
-            column.EditorProperties().ComboBox(combo =>
-            {
-                combo.TextField = "Name";
-                combo.ValueField = "id";
-                combo.ValueType = typeof(string);
-                combo.DataSource = IWSLookUp.GetVAT();
-                combo.Columns.Add("id").Caption = IWSLocalResource.id;
-                combo.Columns.Add("name").Caption = IWSLocalResource.vat;
-                combo.TextFormatString = "{0}-{1}";
-            });
         });
 
         settings.Columns.Add(column =>
@@ -352,21 +341,8 @@ WriteLiteral("\r\n");
 
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "VatCode";
+                    i.FieldName = "Vat";
                     i.Caption = IWSLocalResource.vat;
-                    i.NestedExtension().ComboBox(s =>
-                    {
-                        s.Properties.TextField = "name";
-                        s.Properties.ValueField = "id";
-                        s.Properties.ValueType = typeof(string);
-                        s.Properties.DataSource = IWSLookUp.GetVAT();
-                        s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
-                        s.Properties.Columns.Add("name").Caption = IWSLocalResource.vat;
-                        s.Properties.TextFormatString = "{0}-{1}";
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
-                    });
                 });
 
                 formLayoutSettings.Items.Add(i =>
@@ -453,7 +429,7 @@ WriteLiteral("\r\n");
 WriteLiteral("\r\n");
 
             
-            #line 389 "..\..\Views\SalesOrders\DetailGridViewPartial.cshtml"
+            #line 366 "..\..\Views\SalesOrders\DetailGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

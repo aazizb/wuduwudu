@@ -174,11 +174,14 @@ namespace IWSProject.Models
 
         [Key]
         public string AccountID { get; set; }
+        public string AccountName { get; set; }
         public string Periode { get; set; }
         public decimal Debit { get; set; }
         public decimal Credit { get; set; }
-        public string CompanyID { get; set; }
+        public decimal Balance { get; set; }
         public string Currency { get; set; }
+        public bool IsBalance { get; set; }
+        public string CompanyID { get; set; }
     }
     public class StockViewModel
     {
@@ -213,6 +216,7 @@ namespace IWSProject.Models
     {
         public string Id { get; set; }
         public string AccountID { get; set; }
+        public string OAccountID { get; set; }
         public string BankAccountID { get; set; }
         public string Info { get; set; }
         public string Waehrung { get; set; }
@@ -224,6 +228,27 @@ namespace IWSProject.Models
         public string Verwendungszweck { get; set; }
         public string BeguenstigterZahlungspflichtiger { get; set; }
         public string IBAN { get; set; }
+    }
+    public class InvoiceViewModel
+    {
+        public string Account { get; set; }
+        public string OAccount { get; set; }
+        public decimal? PVat { get; set; }
+        public string CostCenter { get; set; }
+        public string HeaderText { get; set; }
+        public DateTime TransDate { get; set; }
+        public DateTime ItemDate { get; set; }
+        public DateTime EntryDate { get; set; }
+        public string CompanyId { get; set; }
+        public decimal? OTotal { get; set; }
+        public decimal? Amount { get; set; }
+        public decimal? VatAmount { get; set; }
+        public string OCurrency { get; set; }
+        public string OPeriode { get; set; }
+        public DateTime DueDate { get; set; }
+        public string Text { get; set; }
+        public string AccountId { get; set; }
+        public string VatAccountId { get; set; }
     }
     public class DebitViewModel
     {

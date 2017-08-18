@@ -69,8 +69,8 @@ Write(Html.DevExpress().GridView(
 
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.PageSize = 24;
-        settings.Settings.VerticalScrollableHeight = 350;
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);

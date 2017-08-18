@@ -24,6 +24,22 @@ namespace IWSProject.Controllers
             return PartialView("MasterGridViewPartial", IWSLookUp.GetCustomerInvoice());
         }
         [HttpPost, ValidateInput(false)]
+        public ActionResult CallbackPanelPartialView(string selectedIDs)
+        {
+            string selectedItems = selectedIDs;
+            if (!string.IsNullOrEmpty(selectedItems) && selectedItems != null)
+            {
+                string companyID = (string)Session["CompanyID"];
+
+                AccountingController c = new AccountingController();
+
+                string items = c.SetDocType(selectedItems,
+                                        IWSLookUp.DocsType.CustomerInvoice.ToString());
+                c.ProcessData(items, companyID, false);
+            }
+            return PartialView("CallbackPanelPartialView", IWSLookUp.GetCustomerInvoice());
+        }
+        [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] CustomerInvoice item)
         {
             var model = db.CustomerInvoices;

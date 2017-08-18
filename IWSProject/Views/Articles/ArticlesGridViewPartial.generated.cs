@@ -77,7 +77,7 @@ namespace ASP
         settings.SettingsResizing.Visualization = ResizingMode.Postponed;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
 
         settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
@@ -100,10 +100,7 @@ namespace ASP
         settings.SettingsCommandButton.DeleteButton.Image.ToolTip = IWSLocalResource.btnDelete;
         settings.SettingsCommandButton.DeleteButton.Text = " ";
         settings.CommandColumn.ShowDeleteButton = true;
-        settings.InitNewRow = (s, e) =>
-        {
-            e.NewValues["Currency"] = (string)Session["Currency"];
-        };
+
         settings.KeyFieldName = "id";
 
         settings.SettingsBehavior.AllowSelectByRowClick = true;
@@ -120,8 +117,8 @@ namespace ASP
 
         settings.Width = Unit.Percentage(100);
         settings.Height = Unit.Percentage(100);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -137,7 +134,7 @@ namespace ASP
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
+        
         settings.SettingsPager.PageSize = 24;
 
         settings.Columns.Add("id").Caption = IWSLocalResource.id;
@@ -271,18 +268,7 @@ namespace ASP
                     });
                 });
 
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "modelid";
-                    i.Caption = IWSLocalResource.modelid;
-                    i.Visible = false;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
-                    });
-                });
+                
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "price";
@@ -437,7 +423,7 @@ namespace ASP
                     b.ToolTip = IWSLocalResource.btnUpdate;
                     b.Style[HtmlTextWriterStyle.MarginRight] = "5px";
                     b.Images.Image.IconID = IconID.ActionsApply16x16;
-                    b.Width = Unit.Pixel(70);
+                    b.Width = Unit.Pixel(80);
                     b.ClientSideEvents.Click = "function(s, e){ ArticlesGridView.UpdateEdit(); }";
                 }).Render();
 
@@ -449,7 +435,7 @@ namespace ASP
                     b.ToolTip = IWSLocalResource.btnCancel;
                     b.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
                     b.Images.Image.IconID = IconID.ActionsCancel16x16;
-                    b.Width = Unit.Pixel(70);
+                    b.Width = Unit.Pixel(80);
                     b.ClientSideEvents.Click = "function(s, e){ ArticlesGridView.CancelEdit(); }";
                 }).Render();
                 });
@@ -474,7 +460,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 411 "..\..\Views\Articles\ArticlesGridViewPartial.cshtml"
+            #line 400 "..\..\Views\Articles\ArticlesGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

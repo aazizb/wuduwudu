@@ -22,6 +22,22 @@ namespace IWSProject.Controllers
             return PartialView("MasterGridViewPartial", IWSLookUp.GetSettlement());
         }
         [HttpPost, ValidateInput(false)]
+        public ActionResult CallbackPanelPartialView(string selectedIDs)
+        {
+            string selectedItems = selectedIDs;
+            if (!string.IsNullOrEmpty(selectedItems) && selectedItems != null)
+            {
+                string companyID = (string)Session["CompanyID"];
+
+                AccountingController c = new AccountingController();
+
+                string items = c.SetDocType(selectedItems,
+                                        IWSLookUp.DocsType.Settlement.ToString());
+                c.ProcessData(items, companyID, false);
+            }
+            return PartialView("CallbackPanelPartialView", IWSLookUp.GetSettlement());
+        }
+        [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] Settlement item)
         {
             var model = db.Settlements;

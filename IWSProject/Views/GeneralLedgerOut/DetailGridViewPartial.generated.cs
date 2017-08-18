@@ -81,7 +81,7 @@ WriteLiteral("\r\n");
         settings.SettingsBehavior.ConfirmDelete = true;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
 
         settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
         settings.SettingsCommandButton.NewButton.Image.ToolTip = IWSLocalResource.btnAddNew;
@@ -109,16 +109,15 @@ WriteLiteral("\r\n");
         };
         settings.InitNewRow = (s, e) =>
         {
-            e.NewValues["duedate"] = DateTime.Today.AddDays(14);
-            e.NewValues["Currency"] = (string)Session["Currency"];
+            e.NewValues["duedate"] = DateTime.Today;
         };
 
         settings.KeyFieldName = "id";
 
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.PageSize = 24;
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);

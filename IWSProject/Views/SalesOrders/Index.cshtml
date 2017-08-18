@@ -1,4 +1,5 @@
-﻿<script type="text/javascript">
+﻿@using IWSProject.Content
+<script type="text/javascript">
     function OnSelectedIndexChanged(s, e) {
         $.ajax({
             url: '@Url.Action("PackUnit", "SalesOrders")',
@@ -45,6 +46,43 @@
             }
         });
     }
+    var selectedIDs = null;
+    function OnBeginCallback(s, e) {
+        e.customArgs["selectedIDs"] = selectedIDs;
+    }
+    function OnSelectionChanged(s, e) {
+        s.GetSelectedFieldValues("id", GetSelectedFieldValuesCallback);
+    }
+    function GetSelectedFieldValuesCallback(values) {
+        selectedIDs = values.join(';');
+    }
+    function OnSubmitClick(s, e) {
+        callbackPanelPartialView.PerformCallback();
+    }
+
+    function OnRowClick(s, e) {
+        if (!s.IsValidated[e.visibleIndex])
+            return;
+        e.cancel = true;
+        s.SetFocusedRowIndex(e.visibleIndex);
+    }
 </script>
 
-@Html.Action("MasterGridViewPartial")
+
+@using (Html.BeginForm("Index", "SalesOrders"))
+{
+
+    @Html.DevExpress().Button(
+    settings =>
+    {
+        settings.Name = "btnSubmit";
+        settings.ControlStyle.CssClass = "button";
+        settings.Text = IWSLocalResource.Validate;
+        settings.Width = Unit.Pixel(150);
+        settings.UseSubmitBehavior = false;
+        settings.ClientSideEvents.Click = "OnSubmitClick";
+    }
+    ).GetHtml()
+
+    @Html.Partial("CallbackPanelPartialView")
+}

@@ -75,13 +75,13 @@ namespace ASP
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
 
         settings.SettingsBehavior.EnableRowHotTrack = true;
         settings.Styles.RowHotTrack.Cursor = "pointer";
         settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
 
-        //when an end-user double-clicks a grid row, the edit form appears, allowing an end-user to edit the row.  
+        //when an end-user double-clicks a grid row, the edit form appears, allowing an end-user to edit the row.
         //settings.SettingsBehavior.AllowSelectByRowClick = true;
         //settings.ClientSideEvents.RowDblClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
 
@@ -100,7 +100,6 @@ namespace ASP
         settings.SettingsCommandButton.DeleteButton.Text = " ";
         settings.CommandColumn.ShowDeleteButton = true;
 
-        //conditionally disable command buttons depending on IsValidated column value
         settings.CommandButtonInitialize = (s, e) =>
         {
 
@@ -113,7 +112,7 @@ namespace ASP
 
         settings.InitNewRow = (s, e) =>
         {
-            e.NewValues["ItemDate"] = DateTime.Today.AddDays(14);
+            e.NewValues["ItemDate"] = DateTime.Today;
             e.NewValues["oid"] = 0;
         };
 
@@ -124,9 +123,9 @@ namespace ASP
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
-        settings.Height = Unit.Percentage(300);
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -148,7 +147,6 @@ namespace ASP
         settings.SettingsPager.FirstPageButton.Visible = true;
         settings.SettingsPager.LastPageButton.Visible = true;
         settings.SettingsPager.PageSizeItemSettings.Visible = true;
-        settings.SettingsPager.PageSizeItemSettings.Items = new string[] { "24", "30", "36", "50" };
         settings.SettingsPager.PageSize = 24;
 
         settings.SettingsDetail.AllowOnlyOneMasterRowExpanded = true;
@@ -166,24 +164,19 @@ namespace ASP
             column.Caption = IWSLocalResource.oid;
             column.Width = Unit.Pixel(60);
         });
+
         settings.Columns.Add(column =>
         {
-            column.FieldName = "modelid";
-            column.Caption = IWSLocalResource.modelid;
-            column.Visible = false;
-        });
-        settings.Columns.Add(column =>
-        {
-            column.FieldName = "store";
-            column.Caption = IWSLocalResource.store;
+            column.FieldName = "CostCenter";
+            column.Caption = IWSLocalResource.costcenters;
             column.EditorProperties().ComboBox(combo =>
             {
                 combo.TextField = "Name";
                 combo.ValueField = "id";
                 combo.ValueType = typeof(string);
-                combo.DataSource = IWSLookUp.GetStore();
+                combo.DataSource = IWSLookUp.GetCostCenters();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
-                combo.Columns.Add("name").Caption = IWSLocalResource.store;
+                combo.Columns.Add("name").Caption = IWSLocalResource.costcenters;
                 combo.TextFormatString = "{0}-{1}";
             });
         });
@@ -272,7 +265,7 @@ namespace ASP
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
-                        //s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
+                        s.Properties.ClientSideEvents.SelectedIndexChanged = "OnOIDSelectedIndexChanged";
 
                     });
                 });
@@ -280,18 +273,18 @@ namespace ASP
 
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "store";
-                    i.Caption = IWSLocalResource.store;
+                    i.FieldName = "CostCenter";
+                    i.Caption = IWSLocalResource.costcenters;
                     i.NestedExtension().ComboBox(s =>
                     {
                         s.Properties.TextField = "Name";
                         s.Properties.ValueField = "id";
                         s.Properties.ValueType = typeof(string);
-                        s.Properties.DataSource = IWSLookUp.GetStore();
+                        s.Properties.DataSource = IWSLookUp.GetCostCenters();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
-                        s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.TextFormatString = "{0}-{1}";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                     });
@@ -308,8 +301,8 @@ namespace ASP
                         s.Properties.DataSource = IWSLookUp.GetCustomers();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("Name").Caption = IWSLocalResource.name;
-                        s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.TextFormatString = "{0}-{1}";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                     });
@@ -398,7 +391,7 @@ namespace ASP
 WriteLiteral("\r\n");
 
             
-            #line 335 "..\..\Views\CustomerInvoices\MasterGridViewPartial.cshtml"
+            #line 328 "..\..\Views\CustomerInvoices\MasterGridViewPartial.cshtml"
 Write(grid.Bind(Model).GetHtml());
 
             

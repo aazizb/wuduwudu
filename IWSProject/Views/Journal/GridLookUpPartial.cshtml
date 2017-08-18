@@ -1,0 +1,52 @@
+﻿@using IWSProject.Content
+
+@Html.DevExpress().GridLookup(settings =>
+{
+    settings.Name = "gridLookup";
+    settings.KeyFieldName = "Id";
+
+    settings.GridViewProperties.CallbackRouteValues = new { Controller = "Journal", Action = "GridLookUpPartial" };
+    settings.Properties.SelectionMode = GridLookupSelectionMode.Multiple;
+
+    //settings.GridViewClientSideEvents.RowClick = "OnGridRowClick";
+    settings.GridViewClientSideEvents.SelectionChanged = "OnSelectionChanged";
+    settings.GridViewClientSideEvents.BeginCallback = "OnBeginCallback";
+
+    settings.CommandColumn.Visible = true;
+    settings.CommandColumn.ShowSelectCheckbox = true;
+    settings.Columns.Add("Id").Caption = IWSLocalResource.accountid;
+    settings.Columns.Add("Name").Caption = IWSLocalResource.name;
+    settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Multiple;
+    settings.Properties.TextFormatString = "{0}";
+    settings.Properties.MultiTextSeparator = ";";
+    settings.Properties.Width = 250;
+
+    settings.GridViewProperties.SettingsPager.Visible = true;
+    settings.GridViewProperties.Settings.ShowGroupPanel = true;
+    settings.GridViewProperties.Settings.ShowFilterRow = true;
+    settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
+
+    settings.GridViewProperties.SetStatusBarTemplateContent(c =>
+    {
+        ViewContext.Writer.Write("<div style=\"padding: 2px 8px 2px 0; float: right\">");
+        Html.DevExpress().Button(
+            btnSettings =>
+            {
+                btnSettings.Name = "btnClose";
+                btnSettings.UseSubmitBehavior = false;
+                btnSettings.Text = IWSLocalResource.close;
+
+                btnSettings.ClientSideEvents.Click = "CloseGridLookup";
+            }
+        )
+        .Render();
+        ViewContext.Writer.Write("</div>");
+    });
+
+    settings.DataBound = (sender, e) =>
+    {
+        var gridLookup = (MVCxGridLookup)sender;
+        gridLookup.GridView.Width = 250;
+    };
+
+}).BindList(ViewData["accounts"]).GetHtml()

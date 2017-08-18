@@ -21,6 +21,22 @@ namespace IWSProject.Controllers
             return PartialView("MasterGridViewPartial", IWSLookUp.GetPurchaseOrder());
         }
         [HttpPost, ValidateInput(false)]
+
+        public ActionResult CallbackPanelPartialView(string selectedIDs)
+        {
+            if (!string.IsNullOrEmpty(selectedIDs) && selectedIDs != null)
+            {
+                string companyId = (string)Session["CompanyID"];
+                AccountingController c = new AccountingController();
+            
+                string items=c.SetDocType(selectedIDs,
+                                        IWSLookUp.DocsType.PurchaseOrder.ToString());
+                c.ProcessData(items, companyId, false);
+            }
+            return PartialView("CallbackPanelPartialView", IWSLookUp.GetPurchaseOrder());
+        }
+
+        [HttpPost, ValidateInput(false)]
         public ActionResult MasterGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] PurchaseOrder item)
         {
             var model = db.PurchaseOrders;

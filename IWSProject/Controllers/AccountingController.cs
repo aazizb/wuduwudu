@@ -1,9 +1,9 @@
-﻿using DevExpress.Web.Mvc;
-using IWSProject.Content;
+﻿using IWSProject.Content;
 using IWSProject.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Transactions;
 using System.Web.Mvc;
 
 namespace IWSProject.Controllers
@@ -20,71 +20,24 @@ namespace IWSProject.Controllers
             return View(model);
         }
 
-        [HttpPost, ValidateInput(false)]
-        public ActionResult Index(string selectedIDsHF)
-        {
-            string selectedItems = selectedIDsHF;
-            //check if items were selected previously
-            if (!string.IsNullOrEmpty(selectedItems))
-            {
-                IList<string> items = new List<string>(selectedItems.Split(new string[] { ";" }, StringSplitOptions.None));
-                foreach (string item in items)
-                {
-                    bool results = false;
-                    int ItemID;
-                    string ItemType;
-                    var list = item.Split(new string[] { "," }, StringSplitOptions.None);
-
-                    ItemID = Convert.ToInt32(list[0]);
-
-                    ItemType = GetItemType(list[1]);
-
-                    results = UpdateEntryDate(ItemID, ItemType);
-                    if (!results)
-                    {
-                        ViewData["GenericError"] = IWSLocalResource.GenericError;
-                        return RedirectToAction("Index");
-                    }
-                    results = UpdateStock(ItemID, ItemType);
-                    if (!results)
-                    {
-                        ViewData["GenericError"] = IWSLocalResource.GenericError;
-                        return RedirectToAction("Index");
-                    }
-                    results = Account(ItemID, ItemType);
-                    if (!results)
-                    {
-                        ViewData["GenericError"] = IWSLocalResource.GenericError;
-                        return RedirectToAction("Index");
-                    }
-                    results = Validate(ItemID, ItemType);
-                    if (results)
-                    {
-                        db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
-                    }
-                }
-            }
-            var docs = IWSLookUp.GetAccountingDocument(false);
-
-            var model = new List<DocumentsViewModel>();
-
-            foreach (DocumentsViewModel doc in docs)
-            {
-                model.Add(doc);
-            }
-            return View(model);
-        }
-
         [ValidateInput(false)]
         public ActionResult ValidateBLPartialView()
         {
             List<DocumentsViewModel> model = IWSLookUp.GetAccountingDocument(false);
             return PartialView(model);
         }
-
-        public ActionResult CallbackPanelPartialView()
+        [HttpPost, ValidateInput(false)]
+        public ActionResult CallbackPanelPartialView(string selectedIDs)
         {
-            return PartialView("_CallbackPanelPartialView");
+            string selectedItems = selectedIDs;
+            //check if items were selected previously
+            if (!String.IsNullOrEmpty(selectedItems) && selectedItems!=null)
+            {
+                string companyId = (string)Session["CompanyID"];
+                ProcessData(selectedItems, companyId, true);
+            }
+            List<DocumentsViewModel> model = IWSLookUp.GetAccountingDocument(false);
+            return PartialView("CallbackPanelPartialView", model);
         }
 
         #region Helper
@@ -95,16 +48,16 @@ namespace IWSProject.Controllers
         /// <param name="document ID ItemID"></param>
         /// <param name="document type ItemType"></param>
         /// <returns>bool</returns>
-        private bool Account(int ItemID, string ItemType)
+        private bool Account(int ItemID, string ItemType, string companyId)
         {
             //bool results;
             if (ItemType.Equals(IWSLookUp.DocsType.GoodReceiving.ToString()))
             {
-                return ValidateGoodReceiving(ItemID);
+                return ValidateGoodReceiving(ItemID,companyId);
             }
             if (ItemType.Equals(IWSLookUp.DocsType.BillOfDelivery.ToString()))
             {
-                return ValidateBillOfDelivery(ItemID);
+                return ValidateBillOfDelivery(ItemID, companyId);
             }
             //if (ItemType.Equals(IWSLookUp.DocsType.InventoryInvoice.ToString()))
             //{
@@ -118,31 +71,31 @@ namespace IWSProject.Controllers
             {
                 //results = MakePayment(ItemID);
                 //if(results)
-                return ValidateVendorInvoice(ItemID);
+                return ValidateVendorInvoice(ItemID, companyId);
             }
             if (ItemType.Equals(IWSLookUp.DocsType.CustomerInvoice.ToString()))
             {
                 //results = MakeSettlement(ItemID);
                 //if (results)
-                return ValidateCustmerInvoice(ItemID);
+                return ValidateCustmerInvoice(ItemID, companyId);
             }
             if (ItemType.Equals(IWSLookUp.DocsType.Payment.ToString()))
             {
-                return ValidatePayment(ItemID);
+                return ValidatePayment(ItemID, companyId);
             }
             if (ItemType.Equals(IWSLookUp.DocsType.Settlement.ToString()))
             {
-                return ValidateSettlement(ItemID);
+                return ValidateSettlement(ItemID, companyId);
             }
             if (ItemType.Equals(IWSLookUp.DocsType.GeneralLedger.ToString()))
             {
-                return ValidateGeneralLedger(ItemID);
+                return ValidateGeneralLedger(ItemID, companyId);
             }
             return true;
         }
-        private bool UpdateStock(int DocumentID, string DocumentType)
+        private bool UpdateStock(int DocumentID, string DocumentType, string CompanyId)
         {
-            
+
             if (DocumentType.Equals(IWSLookUp.DocsType.GoodReceiving.ToString()))
             {
                 List<ValidateStockViewModel> validateStock =
@@ -172,7 +125,7 @@ namespace IWSProject.Controllers
                      }).ToList();
                 if (validateStock.Any(i => i.IsService.Equals(false)))
                 {
-                    return StockIn(validateStock);
+                    return StockIn(validateStock, CompanyId);
                 }
             }
             if (DocumentType.Equals(IWSLookUp.DocsType.BillOfDelivery.ToString()))
@@ -204,7 +157,7 @@ namespace IWSProject.Controllers
                      }).ToList();
                 if (validateStock.Any(i => i.IsService == false))
                 {
-                    return StockOut(validateStock);
+                    return StockOut(validateStock, CompanyId);
                 }
             }
             return true;
@@ -320,7 +273,7 @@ namespace IWSProject.Controllers
             return false;
         }
 
-        private bool UpdateAccountBalance(string accountID, decimal amount, bool isDebit)
+        private bool UpdateAccountBalance(string accountID, decimal amount, bool isDebit, string companyId)
         {
             try
             {
@@ -328,7 +281,7 @@ namespace IWSProject.Controllers
                 {
                     amount = -amount;
                 }
-                var docs = db.Accounts.FirstOrDefault(a => a.id == accountID);
+                var docs = db.Accounts.FirstOrDefault(a => a.id == accountID && a.CompanyID==companyId);
                 if (docs != null)
                 {
                     docs.balance += amount;
@@ -343,9 +296,9 @@ namespace IWSProject.Controllers
         }
 
         private bool UpdateAccountBalance(string Periode, string AccountID, decimal amount,
-                                                    string currency, bool IsDebit)
+                                                    string currency, bool IsDebit, string companyID)
         {
-            string companyID = (string)Session["CompanyID"];
+            
             var docs = db.PeriodicAccountBalances
                        .FirstOrDefault(p => p.Periode == Periode
                         && p.AccountId == AccountID
@@ -414,7 +367,7 @@ namespace IWSProject.Controllers
                                                 .FirstOrDefault();
         }
 
-        private bool StockIn(List<ValidateStockViewModel> items)
+        private bool StockIn(List<ValidateStockViewModel> items, string CompanyId)
         {
             try
             {
@@ -422,7 +375,7 @@ namespace IWSProject.Controllers
                 {
                     var article = db.Articles
                         .FirstOrDefault(i => i.id == item.ItemID
-                        && i.CompanyID == (string)Session["CompanyID"]);
+                        && i.CompanyID == CompanyId);
                     if (item.IsService)
                     {
                         //for service items
@@ -435,18 +388,18 @@ namespace IWSProject.Controllers
                         float currentStock = 0;
                         bool isItemInStock = db.Stocks.
                             Any(i => i.itemid == item.ItemID
-                            && i.CompanyID == (string)Session["CompanyID"]);
+                            && i.CompanyID == CompanyId);
                         if (isItemInStock)
                         {
                             currentStock = db.Stocks
                                 .Where(i => i.itemid == item.ItemID
-                                && i.CompanyID == (string)Session["CompanyID"])
+                                && i.CompanyID == CompanyId)
                                 .Sum(q => q.quantity);
                         }
                         var stock = db.Stocks
                             .FirstOrDefault(s => s.storeid == item.StoreID
                             && s.itemid == item.ItemID
-                            && s.CompanyID == (string)Session["CompanyID"]);
+                            && s.CompanyID == CompanyId);
                         if (stock == null)
                         {
                             stock = new Stock()
@@ -454,7 +407,7 @@ namespace IWSProject.Controllers
                                 itemid = item.ItemID,
                                 name = item.ItemName,
                                 storeid = item.StoreID,
-                                CompanyID = (string)Session["CompanyID"],
+                                CompanyID = CompanyId,
                                 Currency = item.Currency,
                                 quantity = (float)item.Quantity,
                                 description = item.Text
@@ -479,13 +432,13 @@ namespace IWSProject.Controllers
             return false;
         }
 
-        private bool StockOut(List<ValidateStockViewModel> items)
+        private bool StockOut(List<ValidateStockViewModel> items, string CompanyId)
         {
             try
             {
                 foreach (var item in items.Where(i => i.IsService == false))
                 {
-                    var stock = db.Stocks.FirstOrDefault(s => s.storeid == item.StoreID && s.itemid == item.ItemID);
+                    var stock = db.Stocks.FirstOrDefault(s => s.storeid == item.StoreID && s.itemid == item.ItemID && s.CompanyID==CompanyId);
                     if (stock != null)
                     {
                         decimal RequestedQuantity = Convert.ToDecimal(item.Quantity);
@@ -515,7 +468,7 @@ namespace IWSProject.Controllers
             return false;
         }
 
-        private bool ValidateGoodReceiving(int ItemID)
+        private bool ValidateGoodReceiving(int ItemID, string companyId)
         {
             List<JournalViewModel> docs = (from o in (
     (from i in db.LineGoodReceivings
@@ -537,42 +490,42 @@ namespace IWSProject.Controllers
          i.GoodReceiving.oCurrency,
          i.GoodReceiving.HeaderText
      }))
-        group o by new
-        {
-            o.id,
-            o.oid,
-            o.account,
-            o.store,
-            o.TransDate,
-            o.ItemDate,
-            o.EntryDate,
-            o.oPeriode,
-            o.StockAccount,
-            o.purchasingclearingaccountid,
-            o.IBAN,
-            o.IBAN2,
-            o.oCurrency,
-            o.HeaderText
-        } into g
-        where g.Key.id == ItemID
-        select new JournalViewModel()
-        {
-            ItemID = g.Key.id,
-            OID = g.Key.oid,
-            CustSupplierID = g.Key.account,
-            StoreID = g.Key.store,
-            TransDate = g.Key.TransDate,
-            Itemdate = g.Key.ItemDate,
-            EntryDate = g.Key.EntryDate,
-            Periode = g.Key.oPeriode,
-            Account = g.Key.StockAccount,
-            OAccount = g.Key.purchasingclearingaccountid,
-            Amount = Convert.ToDecimal( g.Sum(p => p.sAmount)),
-            CompanyIBAN = g.Key.IBAN,
-            IBAN = g.Key.IBAN2,
-            Currency = g.Key.oCurrency,
-            Info = g.Key.HeaderText
-        }).Distinct().ToList();
+                                           group o by new
+                                           {
+                                               o.id,
+                                               o.oid,
+                                               o.account,
+                                               o.store,
+                                               o.TransDate,
+                                               o.ItemDate,
+                                               o.EntryDate,
+                                               o.oPeriode,
+                                               o.StockAccount,
+                                               o.purchasingclearingaccountid,
+                                               o.IBAN,
+                                               o.IBAN2,
+                                               o.oCurrency,
+                                               o.HeaderText
+                                           } into g
+                                           where g.Key.id == ItemID
+                                           select new JournalViewModel()
+                                           {
+                                               ItemID = g.Key.id,
+                                               OID = g.Key.oid,
+                                               CustSupplierID = g.Key.account,
+                                               StoreID = g.Key.store,
+                                               TransDate = g.Key.TransDate,
+                                               Itemdate = g.Key.ItemDate,
+                                               EntryDate = g.Key.EntryDate,
+                                               Periode = g.Key.oPeriode,
+                                               Account = g.Key.StockAccount,
+                                               OAccount = g.Key.purchasingclearingaccountid,
+                                               Amount = Convert.ToDecimal(g.Sum(p => p.sAmount)),
+                                               CompanyIBAN = g.Key.IBAN,
+                                               IBAN = g.Key.IBAN2,
+                                               Currency = g.Key.oCurrency,
+                                               Info = g.Key.HeaderText
+                                           }).Distinct().ToList();
 
             bool results = false;
 
@@ -584,12 +537,12 @@ namespace IWSProject.Controllers
                     foreach (var doc in docs)
                     {
 
-                        results = UpdateAccountBalance(doc.Periode, doc.Account, doc.Amount, doc.Currency, true);
+                        results = UpdateAccountBalance(doc.Periode, doc.Account, doc.Amount, doc.Currency, true, companyId);
 
                         if (!results)
                             return results;
 
-                        results = UpdateAccountBalance(doc.Account, doc.Amount, true);
+                        results = UpdateAccountBalance(doc.Account, doc.Amount, true, companyId);
 
                         if (!results)
                             return results;
@@ -609,7 +562,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.OAccount,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Debit.ToString(),
-                                CompanyID =(string)Session["CompanyID"],
+                                CompanyID =companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency =doc.Currency,
@@ -629,7 +582,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.Account,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Credit.ToString(),
-                                CompanyID=(string)Session["CompanyID"],
+                                CompanyID=companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency=doc.Currency,
@@ -657,12 +610,12 @@ namespace IWSProject.Controllers
                                     amount = g.Sum(p => p.doc.Amount),
                                     currency = g.Key.Currency
                                 }).Single();
-                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false);
+                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false, companyId);
 
                     if (!results)
                         return results;
 
-                    results = UpdateAccountBalance(item.accountID, item.amount, false);
+                    results = UpdateAccountBalance(item.accountID, item.amount, false, companyId);
 
                     if (!results)
                         return results;
@@ -676,7 +629,7 @@ namespace IWSProject.Controllers
             return results;
         }
 
-        private bool ValidateBillOfDelivery(int ItemID)
+        private bool ValidateBillOfDelivery(int ItemID, string companyId)
         {
 
             bool results = false;
@@ -703,7 +656,7 @@ namespace IWSProject.Controllers
                                            }).Distinct().ToList();
             if (docs.Any())
             {
-                results = ValidateBillOfDelivery(docs);
+                results = ValidateBillOfDelivery(docs, companyId);
             }
             if (!results)
                 return results;
@@ -723,38 +676,38 @@ namespace IWSProject.Controllers
                         l.Article.avgprice,
                         l.Article.ExpenseAccount,
                         l.Article.StockAccount,
-                        CompanyIBAN=l.BillOfDelivery.Company.IBAN,
+                        CompanyIBAN = l.BillOfDelivery.Company.IBAN,
                         IBAN = l.BillOfDelivery.Customer.IBAN,
                         l.BillOfDelivery.oCurrency,
                         l.BillOfDelivery.HeaderText
                     } into g
                     where g.Key.id == ItemID
                     select new JournalViewModel()
-                        {
-                            ItemID= g.Key.id,
-                            OID= g.Key.oid,
-                            CustSupplierID= g.Key.account,
-                            StoreID= g.Key.store,
-                            TransDate= g.Key.TransDate,
-                            Itemdate= g.Key.ItemDate,
-                            EntryDate= g.Key.EntryDate,
-                            Periode= g.Key.oPeriode,
-                            Account= g.Key.ExpenseAccount,
-                            OAccount= g.Key.StockAccount,
-                            Amount =  Enumerable.Sum(g,p => Convert.ToDecimal((p.l.quantity*p.l.Article.avgprice))),
-                            CompanyIBAN=g.Key.CompanyIBAN,
-                            IBAN=g.Key.IBAN,
-                            Currency= g.Key.oCurrency,
-                            Info= g.Key.HeaderText
-                        }).ToList();
+                    {
+                        ItemID = g.Key.id,
+                        OID = g.Key.oid,
+                        CustSupplierID = g.Key.account,
+                        StoreID = g.Key.store,
+                        TransDate = g.Key.TransDate,
+                        Itemdate = g.Key.ItemDate,
+                        EntryDate = g.Key.EntryDate,
+                        Periode = g.Key.oPeriode,
+                        Account = g.Key.ExpenseAccount,
+                        OAccount = g.Key.StockAccount,
+                        Amount = Enumerable.Sum(g, p => Convert.ToDecimal((p.l.quantity * p.l.Article.avgprice))),
+                        CompanyIBAN = g.Key.CompanyIBAN,
+                        IBAN = g.Key.IBAN,
+                        Currency = g.Key.oCurrency,
+                        Info = g.Key.HeaderText
+                    }).ToList();
             if (docs.Any())
             {
-                results = ValidateBillOfDelivery(docs);
+                results = ValidateBillOfDelivery(docs, companyId);
             }
             return results;
         }
 
-        private bool ValidateBillOfDelivery(List<JournalViewModel> docs)
+        private bool ValidateBillOfDelivery(List<JournalViewModel> docs, string companyId)
         {
             bool results = false;
             try
@@ -763,12 +716,12 @@ namespace IWSProject.Controllers
                 foreach (var doc in docs)
                 {
 
-                    results = UpdateAccountBalance(doc.Periode, doc.Account, doc.Amount, doc.Currency, true);
+                    results = UpdateAccountBalance(doc.Periode, doc.Account, doc.Amount, doc.Currency, true, companyId);
 
                     if (!results)
                         return results;
 
-                    results = UpdateAccountBalance(doc.Account, doc.Amount, true);
+                    results = UpdateAccountBalance(doc.Account, doc.Amount, true, companyId);
 
                     List<Journal> journal = new List<Journal> {
                             new Journal {
@@ -785,7 +738,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.OAccount,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Debit.ToString(),
-                                CompanyID =(string)Session["CompanyID"],
+                                CompanyID =companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency =doc.Currency,
@@ -805,7 +758,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.Account,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Credit.ToString(),
-                                CompanyID=(string)Session["CompanyID"],
+                                CompanyID=companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency=doc.Currency,
@@ -833,12 +786,13 @@ namespace IWSProject.Controllers
                                 amount = g.Sum(p => p.doc.Amount),
                                 currency = g.Key.Currency
                             }).Single();
-                results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false);
+
+                results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false, companyId);
 
                 if (!results)
                     return results;
 
-                results = UpdateAccountBalance(item.accountID, item.amount, false);
+                results = UpdateAccountBalance(item.accountID, item.amount, false, companyId);
 
                 if (!results)
                     return results;
@@ -851,7 +805,7 @@ namespace IWSProject.Controllers
             return results;
         }
 
-        private bool ValidateVendorInvoice(int ItemID)
+        private bool ValidateVendorInvoice(int ItemID, string companyId)
         {
 
             List<JournalViewModel> docs = (from l in db.LineVendorInvoices
@@ -871,8 +825,8 @@ namespace IWSProject.Controllers
                                                Amount = l.amount,
                                                Account = l.account,
                                                OAccount = l.oaccount,
-                                               CompanyIBAN = l.VendorInvoice.Company.IBAN,
-                                               IBAN = l.VendorInvoice.Supplier.IBAN,
+                                               CompanyIBAN = l.VendorInvoice.Company.IBAN ?? "NA",
+                                               IBAN = l.VendorInvoice.Supplier.IBAN ?? "NA",
                                                Info = l.VendorInvoice.HeaderText
                                            }).Distinct().ToList();
 
@@ -886,12 +840,12 @@ namespace IWSProject.Controllers
                     foreach (var doc in docs)
                     {
                         results = UpdateAccountBalance(doc.Periode,
-                                        doc.Account, doc.Amount, doc.Currency, true);
+                                        doc.Account, doc.Amount, doc.Currency, true, companyId);
 
                         if (!results)
                             return results;
 
-                        results = UpdateAccountBalance(doc.Account, doc.Amount, true);
+                        results = UpdateAccountBalance(doc.Account, doc.Amount, true, companyId);
 
                         if (!results)
                             return results;
@@ -911,7 +865,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.OAccount,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Debit.ToString(),
-                                CompanyID =(string)Session["CompanyID"],
+                                CompanyID =companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency =doc.Currency,
@@ -931,7 +885,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.Account,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Credit.ToString(),
-                                CompanyID=(string)Session["CompanyID"],
+                                CompanyID=companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency=doc.Currency,
@@ -959,12 +913,12 @@ namespace IWSProject.Controllers
                                     amount = g.Sum(p => p.doc.Amount),
                                     currency = g.Key.Currency
                                 }).Single();
-                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false);
+                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false, companyId);
 
                     if (!results)
                         return results;
 
-                    results = UpdateAccountBalance(item.accountID, item.amount, false);
+                    results = UpdateAccountBalance(item.accountID, item.amount, false, companyId);
 
                     if (!results)
                         return results;
@@ -978,7 +932,7 @@ namespace IWSProject.Controllers
             return results;
         }
 
-        private bool ValidatePayment(int ItemID)
+        private bool ValidatePayment(int ItemID, string companyId)
         {
             List<JournalViewModel> docs = (from l in db.LinePayments
                                            where
@@ -997,8 +951,8 @@ namespace IWSProject.Controllers
                                                Amount = l.amount,
                                                Account = l.account,
                                                OAccount = l.oaccount,
-                                               CompanyIBAN = l.Payment.Company.IBAN,
-                                               IBAN = l.Payment.Supplier.IBAN,
+                                               CompanyIBAN = l.Payment.Company.IBAN ?? "NA",
+                                               IBAN = l.Payment.Supplier.IBAN ??"NA",
                                                Info = l.Payment.HeaderText
                                            }).Distinct().ToList();
 
@@ -1012,13 +966,13 @@ namespace IWSProject.Controllers
                     foreach (var doc in docs)
                     {
                         results = UpdateAccountBalance(doc.Periode,
-                                        doc.Account, doc.Amount, doc.Currency, true);
-
+                                        doc.Account, doc.Amount, doc.Currency, true, companyId);
+                        
                         if (!results)
                             return results;
 
-                        results = UpdateAccountBalance(doc.Account, doc.Amount, true);
-
+                        results = UpdateAccountBalance(doc.Account, doc.Amount, true, companyId);
+                        
                         if (!results)
                             return results;
 
@@ -1037,7 +991,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.OAccount,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Debit.ToString(),
-                                CompanyID =(string)Session["CompanyID"],
+                                CompanyID =companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency =doc.Currency,
@@ -1057,7 +1011,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.Account,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Credit.ToString(),
-                                CompanyID=(string)Session["CompanyID"],
+                                CompanyID=companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency=doc.Currency,
@@ -1066,7 +1020,6 @@ namespace IWSProject.Controllers
                         };
 
                         results = SendToJournal(journal);
-
                         if (!results)
                             return results;
                     }
@@ -1085,12 +1038,12 @@ namespace IWSProject.Controllers
                                     amount = g.Sum(p => p.doc.Amount),
                                     currency = g.Key.Currency
                                 }).Single();
-                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false);
+                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false, companyId);
 
                     if (!results)
                         return results;
 
-                    results = UpdateAccountBalance(item.accountID, item.amount, false);
+                    results = UpdateAccountBalance(item.accountID, item.amount, false, companyId);
 
                     if (!results)
                         return results;
@@ -1105,7 +1058,7 @@ namespace IWSProject.Controllers
             return results;
         }
 
-        private bool ValidateCustmerInvoice(int ItemID)
+        private bool ValidateCustmerInvoice(int ItemID, string companyId)
         {
             List<JournalViewModel> docs = (from l in db.LineCustomerInvoices
                                            where
@@ -1124,8 +1077,8 @@ namespace IWSProject.Controllers
                                                Amount = l.amount,
                                                Account = l.account,
                                                OAccount = l.oaccount,
-                                               CompanyIBAN = l.CustomerInvoice.Company.IBAN,
-                                               IBAN = l.CustomerInvoice.Customer.IBAN,
+                                               CompanyIBAN = l.CustomerInvoice.Company.IBAN ?? "NA",
+                                               IBAN = l.CustomerInvoice.Customer.IBAN ?? "NA",
                                                Info = l.CustomerInvoice.HeaderText
                                            }).Distinct().ToList();
             bool results = false;
@@ -1138,12 +1091,12 @@ namespace IWSProject.Controllers
                     foreach (var doc in docs)
                     {
 
-                        results = UpdateAccountBalance(doc.Periode, doc.OAccount, doc.Amount, doc.Currency, false);
+                        results = UpdateAccountBalance(doc.Periode, doc.OAccount, doc.Amount, doc.Currency, false, companyId);
 
                         if (!results)
                             return results;
 
-                        results = UpdateAccountBalance(doc.OAccount, doc.Amount, false);
+                        results = UpdateAccountBalance(doc.OAccount, doc.Amount, false, companyId);
 
                         if (!results)
                             return results;
@@ -1163,7 +1116,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.OAccount,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Debit.ToString(),
-                                CompanyID =(string)Session["CompanyID"],
+                                CompanyID =companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency =doc.Currency,
@@ -1183,7 +1136,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.Account,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Credit.ToString(),
-                                CompanyID=(string)Session["CompanyID"],
+                                CompanyID=companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency=doc.Currency,
@@ -1211,12 +1164,12 @@ namespace IWSProject.Controllers
                                     amount = g.Sum(p => p.doc.Amount),
                                     currency = g.Key.Currency
                                 }).Single();
-                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, true);
+                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, true, companyId);
 
                     if (!results)
                         return results;
 
-                    results = UpdateAccountBalance(item.accountID, item.amount, true);
+                    results = UpdateAccountBalance(item.accountID, item.amount, true, companyId);
 
                     if (!results)
                         return results;
@@ -1230,7 +1183,7 @@ namespace IWSProject.Controllers
             return results;
         }
 
-        private bool ValidateSettlement(int ItemID)
+        private bool ValidateSettlement(int ItemID, string companyId)
         {
             List<JournalViewModel> docs = (from l in db.LineSettlements
                                            where
@@ -1249,8 +1202,8 @@ namespace IWSProject.Controllers
                                                Amount = l.amount,
                                                Account = l.account,
                                                OAccount = l.oaccount,
-                                               CompanyIBAN = l.Settlement.Company.IBAN,
-                                               IBAN = l.Settlement.Customer.IBAN,
+                                               CompanyIBAN = l.Settlement.Company.IBAN ?? "NA",
+                                               IBAN = l.Settlement.Customer.IBAN ?? "NA",
                                                Info = l.Settlement.HeaderText
                                            }).Distinct().ToList();
             bool results = false;
@@ -1263,12 +1216,12 @@ namespace IWSProject.Controllers
                     foreach (var doc in docs)
                     {
                         results = UpdateAccountBalance(doc.Periode,
-                                        doc.Account, doc.Amount, doc.Currency, true);
+                                        doc.Account, doc.Amount, doc.Currency, true, companyId);
 
                         if (!results)
                             return results;
 
-                        results = UpdateAccountBalance(doc.Account, doc.Amount, true);
+                        results = UpdateAccountBalance(doc.Account, doc.Amount, true, companyId);
 
                         if (!results)
                             return results;
@@ -1288,7 +1241,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.OAccount,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Debit.ToString(),
-                                CompanyID =(string)Session["CompanyID"],
+                                CompanyID =companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency =doc.Currency,
@@ -1308,7 +1261,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.Account,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Credit.ToString(),
-                                CompanyID=(string)Session["CompanyID"],
+                                CompanyID=companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency=doc.Currency,
@@ -1336,12 +1289,12 @@ namespace IWSProject.Controllers
                                     amount = g.Sum(p => p.doc.Amount),
                                     currency = g.Key.Currency
                                 }).Single();
-                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false);
+                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false, companyId);
 
                     if (!results)
                         return results;
 
-                    results = UpdateAccountBalance(item.accountID, item.amount, false);
+                    results = UpdateAccountBalance(item.accountID, item.amount, false, companyId);
 
                     if (!results)
                         return results;
@@ -1355,7 +1308,7 @@ namespace IWSProject.Controllers
             return results;
         }
 
-        private bool ValidateGeneralLedger(int ItemID)
+        private bool ValidateGeneralLedger(int ItemID, string companyId)
         {
             List<JournalViewModel> docs = (from l in db.LineGeneralLedgers
                                            where
@@ -1374,8 +1327,8 @@ namespace IWSProject.Controllers
                                                Amount = l.amount,
                                                Account = l.account,
                                                OAccount = l.oaccount,
-                                               CompanyIBAN = l.GeneralLedger.Company.IBAN,
-                                               IBAN = l.GeneralLedger.Company.IBAN,
+                                               CompanyIBAN = l.GeneralLedger.Company.IBAN ?? "NA",
+                                               IBAN = l.GeneralLedger.Company.IBAN ?? "NA",
                                                Info = l.GeneralLedger.HeaderText
                                            }).Distinct().ToList();
 
@@ -1389,12 +1342,12 @@ namespace IWSProject.Controllers
                     foreach (var doc in docs)
                     {
                         results = UpdateAccountBalance(doc.Periode,
-                                        doc.Account, doc.Amount, doc.Currency, true);
+                                        doc.Account, doc.Amount, doc.Currency, true, companyId);
 
                         if (!results)
                             return results;
 
-                        results = UpdateAccountBalance(doc.Account, doc.Amount, true);
+                        results = UpdateAccountBalance(doc.Account, doc.Amount, true,companyId);
 
                         if (!results)
                             return results;
@@ -1414,7 +1367,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.OAccount,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Debit.ToString(),
-                                CompanyID =(string)Session["CompanyID"],
+                                CompanyID =companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency =doc.Currency,
@@ -1434,7 +1387,7 @@ namespace IWSProject.Controllers
                                 OAccount =doc.Account,
                                 Amount =doc.Amount,
                                 Side = IWSLookUp. Side.Credit.ToString(),
-                                CompanyID=(string)Session["CompanyID"],
+                                CompanyID=companyId,
                                 CompanyIBAN =doc.CompanyIBAN,
                                 IBAN =doc.IBAN,
                                 Currency=doc.Currency,
@@ -1463,12 +1416,12 @@ namespace IWSProject.Controllers
                                     currency = g.Key.Currency
                                 }).Single();
 
-                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false);
+                    results = UpdateAccountBalance(item.Periode, item.accountID, item.amount, item.currency, false, companyId);
 
                     if (!results)
                         return results;
 
-                    results = UpdateAccountBalance(item.accountID, item.amount, false);
+                    results = UpdateAccountBalance(item.accountID, item.amount, false, companyId);
 
                     if (!results)
                         return results;
@@ -1732,7 +1685,6 @@ namespace IWSProject.Controllers
             }
             return results;
         }
-
         public int MakeCustomerInvoiceHeader(CustomerInvoice customeInvoice)
         {
             int id = 0;
@@ -2281,6 +2233,76 @@ namespace IWSProject.Controllers
             }
             return results;
         }
+
+        public void ProcessData(string selectedItems, string companyId, bool convertType)
+        {
+            using (TransactionScope tx = new TransactionScope(TransactionScopeOption.RequiresNew))
+            {
+                string msg;
+                try
+                {
+                    IList<string> items = new List<string>(selectedItems.Split(new string[] { ";" }, StringSplitOptions.None));
+                    foreach (string item in items)
+                    {
+                        bool results = false;
+                        int ItemID;
+                        string ItemType;
+                        var list = item.Split(new string[] { "," }, StringSplitOptions.None);
+
+                        ItemID = Convert.ToInt32(list[0]);
+
+                        ItemType = list[1];
+
+                        if(convertType)
+                        {
+                            ItemType = GetItemType(ItemType);
+                        }
+                        results = UpdateEntryDate(ItemID, ItemType);
+                        if (!results)
+                        {
+                            msg = IWSLocalResource.GenericError;
+                            throw new ApplicationException(msg);
+                        }
+                        results = UpdateStock(ItemID, ItemType, companyId);
+                        if (!results)
+                        {
+                            msg = IWSLocalResource.GenericError;
+                            throw new ApplicationException(msg);
+                        }
+                        results = Account(ItemID, ItemType, companyId);
+                        if (!results)
+                        {
+                            msg = IWSLocalResource.GenericError;
+                            throw new ApplicationException(msg);
+                        }
+                        results = Validate(ItemID, ItemType);
+                        if (!results)
+                        {
+                            msg = IWSLocalResource.GenericError;
+                            throw new ApplicationException(msg);
+                        }
+                        db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                    }
+                tx.Complete();
+            }
+                catch (Exception)
+                {
+                tx.Dispose();
+            }
+        }
+
+    }
+
+        public string SetDocType(string selectedItems, string docType)
+        {
+  
+            string[] items = selectedItems.Split(new string[] { ";" }, 
+                                        StringSplitOptions.RemoveEmptyEntries);
+            items = items.Select(x => x + "," + docType).ToArray();
+
+            return String.Join(";", items);
+        }
+
         #endregion
     }
 }

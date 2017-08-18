@@ -8,13 +8,6 @@
 
         settings.CallbackRouteValues = new { Controller = "goodreceivings", Action = "MasterGridViewPartial" };
 
-        //settings.ClientSideEvents.Init = "function(s, e) { s.PerformCallback(); }";
-
-
-        //settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
-        //settings.ClientSideEvents.EndCallback = "OnEndCallback";
-
-
         settings.SettingsEditing.AddNewRowRouteValues = new { Controller = "goodreceivings", Action = "MasterGridViewPartialAddNew" };
         settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "goodreceivings", Action = "MasterGridViewPartialUpdate" };
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "goodreceivings", Action = "MasterGridViewPartialDelete" };
@@ -24,13 +17,21 @@
         settings.CommandColumn.Visible = true;
         settings.CommandColumn.Width = Unit.Percentage(5);
 
+        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.ClientSideEvents.RowClick = "OnRowClick";
+
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
         settings.SettingsBehavior.EnableRowHotTrack = true;
+
         settings.Styles.RowHotTrack.Cursor = "pointer";
         settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
 
         //when an end-user double-clicks a grid row, the edit form appears, allowing an end-user to edit the row.  
         //settings.SettingsBehavior.AllowSelectByRowClick = true;
         //settings.ClientSideEvents.RowDblClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
+
+        settings.CommandColumn.ShowSelectCheckbox = true;
 
         settings.CommandColumn.ShowNewButtonInHeader = true;
         settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
@@ -49,11 +50,20 @@
 
         settings.CommandButtonInitialize = (s, e) =>
         {
-
-            var value = (s as MVCxGridView).GetRowValues(e.VisibleIndex, "IsValidated");
+            if (e.VisibleIndex == -1) return;
+            MVCxGridView g = (MVCxGridView)s;
+            bool isSelected = Convert.ToBoolean(g.GetRowValues(e.VisibleIndex, "IsValidated"));
             if (e.ButtonType == ColumnCommandButtonType.Edit || e.ButtonType == ColumnCommandButtonType.Delete)
             {
-                e.Enabled = false.Equals(value);
+                e.Enabled = false.Equals(isSelected);
+            }
+            if (e.ButtonType == ColumnCommandButtonType.SelectCheckbox)
+            {
+                e.Enabled = false.Equals(isSelected);
+                if (isSelected)
+                {
+                    g.Selection.SetSelection(e.VisibleIndex, false);
+                }
             }
         };
 
@@ -63,8 +73,6 @@
             e.NewValues["ItemDate"] = DateTime.Today;
             e.NewValues["EntryDate"] = DateTime.Today;
             e.NewValues["oid"] = 0;
-
-
         };
 
         settings.KeyFieldName = "id";
@@ -155,6 +163,19 @@
                 d.AllowMouseWheel = true;
             });
         });
+        var ucolumn = settings.Columns.Add("Periode");
+        ucolumn.Caption = IWSLocalResource.periode;
+        ucolumn.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        settings.CustomUnboundColumnData = (sender, e) =>
+        {
+            if (e.Column.FieldName == "Periode")
+            {
+                DateTime transDate = (DateTime)e.GetListSourceFieldValue("TransDate");
+                string periode = Convert.ToString((int)transDate.Year);
+                periode += ((int)transDate.Month < 10) ? "0" + Convert.ToString((int)transDate.Month) : Convert.ToString((int)transDate.Month);
+                e.Value = periode;
+            }
+        };
         settings.Columns.Add(column =>
         {
             column.FieldName = "oTotal";
@@ -162,6 +183,14 @@
             column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
             column.PropertiesEdit.DisplayFormatString = "N";
             column.Width = Unit.Percentage(10);
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "oNet";
+            column.Caption = IWSLocalResource.net;
+            column.Width = Unit.Percentage(10);
+            column.UnboundType = DevExpress.Data.UnboundColumnType.Decimal;
+            column.PropertiesEdit.DisplayFormatString = "N";
         });
         settings.Columns.Add(column =>
         {
@@ -180,11 +209,28 @@
         });
         settings.Columns.Add(column =>
         {
+            column.FieldName = "IsValidated";
+            column.Caption = IWSLocalResource.IsValidated;
+            column.Width = Unit.Percentage(5);
+            column.EditorProperties().CheckBox(checkBox =>
+            {
+            });
+        });
+        settings.Columns.Add(column =>
+        {
             column.FieldName = "HeaderText";
             column.Caption = IWSLocalResource.text;
             column.Width = Unit.Percentage(20);
         });
 
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oTotal").DisplayFormat = "N";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oNet").DisplayFormat = "N";
+        settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oVat").DisplayFormat = "N";
+        settings.Settings.ShowFooter = true;
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oTotal").DisplayFormat = "N";
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oNet").DisplayFormat = "N";
+        settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oVat").DisplayFormat = "N";
+        settings.Settings.ShowGroupPanel = true;
         #region Template
 
         settings.SetEditFormTemplateContent(c =>

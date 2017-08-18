@@ -17,32 +17,26 @@ namespace IWSProject.Controllers
         public ActionResult ResultatPartial()
         {
             string classId = (string)Session["ClassId"];
-            string txtStart = (string)Session["txtStart"];
-            string txtEnd = (string)Session["txtEnd"];
+            string start = (string)Session["txtStart"];
+            string end = (string)Session["txtEnd"];
+            bool isBalance = (bool)Session["isBalance"];
             string company = (string)Session["CompanyID"];
-            var resultat = IWSLookUp.GetResultat(classId, txtStart, txtEnd, company);
-            var model = new List<ResultsViewModel>();
-            foreach (ResultsViewModel item in resultat)
-            {
-                model.Add(item);
-            }
+            List<ResultsViewModel> model = (List<ResultsViewModel>)IWSLookUp.GetResultat(classId, start, end, company, isBalance);
             return PartialView("ResultatPartialView", model);
         }
         [HttpPost, ValidateInput(false)]
-        public ActionResult CallbackPanelPartial(string classId, string txtStart, string txtEnd)
+        public ActionResult CallbackPanelPartial(string ClassId, string Start, string End)
         {
-            Session["ClassId"] = classId;
-            Session["txtStart"] = txtStart;
-            Session["txtEnd"] = txtEnd;
+            if (string.IsNullOrWhiteSpace(Start) || string.IsNullOrWhiteSpace(End))
+                return PartialView("_CallbackPartialView"); 
+            Session["ClassId"] = ClassId;
+            Session["txtStart"] = Start;
+            Session["txtEnd"] = End;
+            bool isBalance = IWSLookUp.IsBalance(ClassId);
+            Session["isBalance"] = isBalance;
             string company = (string)Session["CompanyID"];
-            var resultat = IWSLookUp.GetResultat(classId, txtStart, txtEnd, company);
-            var model = new List<ResultsViewModel>();
-            foreach (ResultsViewModel item in resultat)
-            {
-                model.Add(item);
-            }
+            List<ResultsViewModel> model = (List<ResultsViewModel>)IWSLookUp.GetResultat(ClassId, Start, End, company, isBalance);
             return PartialView("_CallbackPartialView", model);
-
         }
     }
 }

@@ -84,7 +84,7 @@ WriteLiteral(@"',
             type: ""POST"",
             data: { selectedItemIndex: s.GetValue() },
             success: function (data) {
-                VatCode.SetText(data);
+                Vat.SetText(data);
             },
             error: function (xhr, textStatus, errorThrown) {
                 alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);

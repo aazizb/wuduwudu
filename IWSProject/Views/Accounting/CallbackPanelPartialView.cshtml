@@ -1,7 +1,7 @@
 ﻿@Html.DevExpress().CallbackPanel(settings =>
 {
-    settings.Name = "callbackPartialView";
-    settings.CallbackRouteValues = new { Controller = "Accounting", Action = "CallbackPanelPartial" };
+    settings.Name = "callbackPanelPartialView";
+    settings.CallbackRouteValues = new { Controller = "Accounting", Action = "CallbackPanelPartialView" };
 
     settings.SetContent(() =>
     {
@@ -10,4 +10,5 @@
     });
     settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
 }).GetHtml()
+
 

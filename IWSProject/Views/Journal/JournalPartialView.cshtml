@@ -32,6 +32,9 @@
     settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
     settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
 
+    //settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+    //settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
+
     settings.SettingsPager.Visible = true;
     settings.SettingsPager.Position = PagerPosition.Bottom;
     settings.SettingsPager.FirstPageButton.Visible = true;
@@ -40,6 +43,12 @@
 
     settings.SettingsPager.PageSize = 24;
 
+    settings.Columns.Add(column =>
+    {
+        column.FieldName = "pk";
+        column.Caption = "#";
+        column.Width = Unit.Percentage(5);
+    });
     settings.Columns.Add(column =>
     {
         column.FieldName = "ItemID";
@@ -147,5 +156,9 @@
         column.Caption = IWSLocalResource.Currency;
         column.Width = Unit.Percentage(6);
     });
+    settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Amount").DisplayFormat = "N";
+    settings.Settings.ShowFooter = true;
+    settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "Amount").DisplayFormat = "N";
+    settings.Settings.ShowGroupPanel = true;
 
 }).Bind(Model).GetHtml()

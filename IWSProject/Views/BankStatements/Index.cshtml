@@ -1,8 +1,8 @@
 ﻿@using IWSProject.Content
 <script type="text/javascript">
-    var selectedIDs;
+    var selectedIDs=null;
 
-    function onButtonClick() {
+    function OnButtonClick() {
         if (BankStatementsGridView.IsCustomizationWindowVisible())
             BankStatementsGridView.HideCustomizationWindow();
         else
@@ -14,12 +14,13 @@
     }
     function UpdateButtonText() {
         var text = BankStatementsGridView.IsCustomizationWindowVisible() ? "Hide" : "Show";
-        text += " Customization";
+        //text += " Customization";
         btShowCustomizationWindow.SetText(text);
     }
 
     function OnBeginCallback(s, e) {
         e.customArgs["selectedIDs"] = selectedIDs;
+        selectedIDs = null;
     }
     function OnSelectionChanged(s, e) {
         s.GetSelectedFieldValues("id;Betrag", GetSelectedFieldValuesCallback);
@@ -28,34 +29,44 @@
         selectedIDs = values.join(';');
     }
     function OnSubmitClick(s, e) {
-        $("#selectedIDsHF").val(selectedIDs);
+        $("#selectedIDs").val(selectedIDs);
+        callbackPanelPartialView.PerformCallback();
     }
 
+    //function OnInitGrid() {
+    //    if ($("#selectedIDs").val()) {
+    //        var keysArray = $("#selectedIDs").val().split(",");
+    //        BankStatementsGridView.SelectRowsByKey(keysArray);
+    //    }
+    //}
 </script>
 
 @using (Html.BeginForm("Index", "BankStatements"))
 {
-    @Html.Hidden("selectedIDsHF");
+    @Html.Hidden("selectedIDs");
 
     @Html.DevExpress().Button(settings =>
-{
-    settings.Name = "btnSubmit";
-    settings.Text = IWSLocalResource.Validate;
-    settings.Width = Unit.Pixel(100);
-    settings.UseSubmitBehavior = true;
-    settings.ClientSideEvents.Click = "OnSubmitClick";
-}).GetHtml()
+    {
+        settings.Name = "btnSubmit";
 
-    @Html.DevExpress().Button(settings =>   
+        settings.Text = IWSLocalResource.Validate;
+        settings.Width = Unit.Pixel(100);
+        settings.UseSubmitBehavior = false;
+        settings.ClientSideEvents.Click = "OnSubmitClick";
+    }).GetHtml()
+
+
+    @Html.DevExpress().Button(settings =>
 {
     settings.Name = "btShowCustomizationWindow";
     settings.Text = IWSLocalResource.WindowCustomization;
     settings.Width = Unit.Pixel(100);
     settings.UseSubmitBehavior = false;
-    settings.ClientSideEvents.Click = "onButtonClick";
+    settings.ClientSideEvents.Click = "OnButtonClick";
 }).GetHtml()
 
 
+@Html.Partial("CallbackPanelPartialView")
+
 }
 
-@Html.Action("BankStatementsGridViewPartial")

@@ -139,62 +139,6 @@
                         s.Width = Unit.Percentage(80);
                     });
                 });
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "name";
-                    i.Caption = IWSLocalResource.name;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(80);
-                    });
-                });
-
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "street";
-                    i.Caption = IWSLocalResource.street;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(80);
-                    });
-                });
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "city";
-                    i.Caption = IWSLocalResource.city;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(80);
-                    });
-                });
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "state";
-                    i.Caption = IWSLocalResource.state;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(80);
-                    });
-                });
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "zip";
-                    i.Caption = IWSLocalResource.zip;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(80);
-                    });
-                });
 
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -227,6 +171,109 @@
                     });
                 });
 
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "street";
+                    i.Caption = IWSLocalResource.street;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "salesclearingaccountid";
+                    i.Caption = IWSLocalResource.salesclearingaccountid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "id";
+                            column.Caption = IWSLocalResource.id;
+                            column.Width = Unit.Percentage(15);
+
+                        });
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "name";
+                            column.Caption = IWSLocalResource.account;
+                            column.Width = Unit.Percentage(85);
+
+                        });
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "state";
+                    i.Caption = IWSLocalResource.state;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "settlementclearingaccountid";
+                    i.Caption = IWSLocalResource.settlementclearingaccountid;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "id";
+                            column.Caption = IWSLocalResource.id;
+                            column.Width = Unit.Percentage(15);
+
+                        });
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "name";
+                            column.Caption = IWSLocalResource.account;
+                            column.Width = Unit.Percentage(85);
+
+                        });
+                        s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+
+
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "name";
+                    i.Caption = IWSLocalResource.name;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+
+
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "purchasingclearingaccountid";
@@ -257,31 +304,13 @@
                         s.Width = Unit.Percentage(80);
                     });
                 });
+
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "salesclearingaccountid";
-                    i.Caption = IWSLocalResource.salesclearingaccountid;
-                    i.NestedExtension().ComboBox(s =>
+                    i.FieldName = "city";
+                    i.Caption = IWSLocalResource.city;
+                    i.NestedExtension().TextBox(s =>
                     {
-                        s.Properties.TextField = "name";
-                        s.Properties.ValueField = "id";
-                        s.Properties.ValueType = typeof(string);
-                        s.Properties.DataSource = IWSLookUp.GetAccounts();
-                        s.Properties.Columns.Add(column =>
-                        {
-                            column.FieldName = "id";
-                            column.Caption = IWSLocalResource.id;
-                            column.Width = Unit.Percentage(15);
-
-                        });
-                        s.Properties.Columns.Add(column =>
-                        {
-                            column.FieldName = "name";
-                            column.Caption = IWSLocalResource.account;
-                            column.Width = Unit.Percentage(85);
-
-                        });
-                        s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(80);
@@ -317,10 +346,23 @@
                         s.Width = Unit.Percentage(80);
                     });
                 });
+
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "settlementclearingaccountid";
-                    i.Caption = IWSLocalResource.settlementclearingaccountid;
+                    i.FieldName = "zip";
+                    i.Caption = IWSLocalResource.zip;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "BalanceSheet";
+                    i.Caption = IWSLocalResource.BalanceSheet;
                     i.NestedExtension().ComboBox(s =>
                     {
                         s.Properties.TextField = "name";
@@ -347,12 +389,44 @@
                         s.Width = Unit.Percentage(80);
                     });
                 });
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "IBAN";
                     i.Caption = IWSLocalResource.IBAN;
                     i.NestedExtension().TextBox(s =>
                     {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "IncomesStatement";
+                    i.Caption = IWSLocalResource.IncomesStatement;
+                    i.NestedExtension().ComboBox(s =>
+                    {
+                        s.Properties.TextField = "name";
+                        s.Properties.ValueField = "id";
+                        s.Properties.ValueType = typeof(string);
+                        s.Properties.DataSource = IWSLookUp.GetAccounts();
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "id";
+                            column.Caption = IWSLocalResource.id;
+                            column.Width = Unit.Percentage(15);
+
+                        });
+                        s.Properties.Columns.Add(column =>
+                        {
+                            column.FieldName = "name";
+                            column.Caption = IWSLocalResource.account;
+                            column.Width = Unit.Percentage(85);
+
+                        });
+                        s.Properties.TextFormatString = "{0}-{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(80);
@@ -369,21 +443,11 @@
                         s.Width = Unit.Percentage(80);
                     });
                 });
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "taxcode";
-                    i.Caption = IWSLocalResource.taxcode;
-                    i.NestedExtension().TextBox(s =>
-                    {
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(80);
-                    });
-                });
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "vatcode";
-                    i.Caption = IWSLocalResource.vatcode;
+                    i.Caption = IWSLocalResource.produit;
                     i.NestedExtension().ComboBox(s =>
                     {
                         s.Properties.TextField = "name";
@@ -410,6 +474,18 @@
                         s.Width = Unit.Percentage(80);
                     });
                 });
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "taxcode";
+                    i.Caption = IWSLocalResource.taxcode;
+                    i.NestedExtension().TextBox(s =>
+                    {
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(80);
+                    });
+                });
+
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();

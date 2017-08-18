@@ -10,26 +10,30 @@ namespace IWSProject.Controllers
         // GET: Balance
         public ActionResult Index()
         {
-            var items = IWSLookUp.GetAccountBalance((string)Session["CompanyID"]);
-            var model = new List<AccountBalanceViewModel>();
-            foreach (AccountBalanceViewModel item in items)
-            {
-                model.Add(item);
-            }
-            //List<AccountBalanceViewModel> model = IWSLookUp.GetAccountBalance((string)Session["CompanyID"]);
-            return View(model);
+            return View();
         }
         [ValidateInput(false)]
         public ActionResult AccountBalancePartialView()
         {
-            var items = IWSLookUp.GetAccountBalance((string)Session["CompanyID"]);
-            var model = new List<AccountBalanceViewModel>();
-            foreach (AccountBalanceViewModel item in items)
-            {
-                model.Add(item);
-            }
-            return PartialView(model);
+            string start = (string)Session["Start"];
+            string end = (string)Session["End"];
+            bool detail = (bool)Session["Detail"];
+            string company = (string)Session["CompanyID"];
+            List<AccountBalanceViewModel> model = (List<AccountBalanceViewModel>)IWSLookUp.GetAccountBalance(start, end, detail, company);
+            return PartialView("AccountBalancePartialView",model);
+        }
+        [HttpPost, ValidateInput(false)]
+        public ActionResult CallbackPanelPartial(string start, string end, bool detail)
+        {
+            if (string.IsNullOrWhiteSpace(start) || string.IsNullOrWhiteSpace(end))
+                return PartialView("_CallbackPartialView");
 
+            Session["Start"] = start;
+            Session["End"] = end;
+            Session["Detail"] = detail;
+            string company = (string)Session["CompanyID"];
+            List<AccountBalanceViewModel> model = (List<AccountBalanceViewModel>)IWSLookUp.GetAccountBalance(start, end, detail, company);
+            return PartialView("_CallbackPartialView", model);
         }
     }
 }

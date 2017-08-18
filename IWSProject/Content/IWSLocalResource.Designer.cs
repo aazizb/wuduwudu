@@ -196,6 +196,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Balance Sheet.
+        /// </summary>
+        public static string BalanceSheet {
+            get {
+                return ResourceManager.GetString("BalanceSheet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bank Account.
         /// </summary>
         public static string bankaccount {
@@ -331,6 +340,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Charge.
+        /// </summary>
+        public static string Charge {
+            get {
+                return ResourceManager.GetString("Charge", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Choose company&apos;s Logo.
         /// </summary>
         public static string ChooseLogo {
@@ -363,6 +381,15 @@ namespace IWSProject.Content {
         public static string classx {
             get {
                 return ResourceManager.GetString("classx", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Close.
+        /// </summary>
+        public static string close {
+            get {
+                return ResourceManager.GetString("close", resourceCulture);
             }
         }
         
@@ -565,6 +592,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Detail.
+        /// </summary>
+        public static string Detail {
+            get {
+                return ResourceManager.GetString("Detail", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Disable.
         /// </summary>
         public static string Disable {
@@ -754,6 +790,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incomes Statement.
+        /// </summary>
+        public static string IncomesStatement {
+            get {
+                return ResourceManager.GetString("IncomesStatement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Info.
         /// </summary>
         public static string Info {
@@ -808,7 +853,16 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is Service.
+        ///   Looks up a localized string similar to Balance Sheet.
+        /// </summary>
+        public static string IsBalanceSheetAccount {
+            get {
+                return ResourceManager.GetString("IsBalanceSheetAccount", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Is Service?.
         /// </summary>
         public static string IsService {
             get {
@@ -817,7 +871,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Is Used.
+        ///   Looks up a localized string similar to Is Used?.
         /// </summary>
         public static string IsUsed {
             get {
@@ -826,7 +880,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to IsValidated.
+        ///   Looks up a localized string similar to Is Validated?.
         /// </summary>
         public static string IsValidated {
             get {
@@ -1375,15 +1429,6 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Returns.
-        /// </summary>
-        public static string returns {
-            get {
-                return ResourceManager.GetString("returns", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Revenue Account.
         /// </summary>
         public static string revenueaccountid {
@@ -1888,7 +1933,7 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Customization.
+        ///   Looks up a localized string similar to Show.
         /// </summary>
         public static string WindowCustomization {
             get {

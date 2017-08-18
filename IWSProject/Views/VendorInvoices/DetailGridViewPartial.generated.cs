@@ -79,7 +79,7 @@ namespace ASP
         settings.SettingsBehavior.ConfirmDelete = true;
 
         settings.CommandColumn.Visible = true;
-        settings.CommandColumn.Width = Unit.Pixel(70);
+        settings.CommandColumn.Width = Unit.Pixel(80);
 
         settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
         settings.SettingsCommandButton.NewButton.Image.ToolTip = IWSLocalResource.btnAddNew;
@@ -107,8 +107,7 @@ namespace ASP
         };
         settings.InitNewRow = (s, e) =>
         {
-            e.NewValues["duedate"] = DateTime.Today.AddDays(14);
-            e.NewValues["Currency"] = (string)Session["Currency"];
+            e.NewValues["duedate"] = DateTime.Today;
         };
 
 
@@ -116,8 +115,8 @@ namespace ASP
 
         settings.Width = Unit.Percentage(100);
         settings.SettingsPager.PageSize = 24;
-        settings.Settings.VerticalScrollBarMode = ScrollBarMode.Hidden;
-        settings.Settings.VerticalScrollableHeight = 350;
+        
+        
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(0);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
@@ -249,7 +248,7 @@ namespace ASP
 
         settings.SetEditFormTemplateContent(templateContent =>
         {
-            var editItem = ViewData["line"] != null ? ViewData["line"] : templateContent.DataItem;
+            //var editItem = ViewData["line"] != null ? ViewData["line"] : templateContent.DataItem;
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {

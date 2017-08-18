@@ -17,9 +17,6 @@
         settings.SettingsBehavior.EnableCustomizationWindow = true;
         settings.ClientSideEvents.CustomizationWindowCloseUp = "CustomizationWindowCloseUp";
 
-        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-        settings.SettingsResizing.Visualization = ResizingMode.Postponed;
-
         settings.CommandColumn.ShowSelectCheckbox = true;
 
         settings.CommandColumn.Visible = true;
@@ -35,26 +32,28 @@
         settings.SettingsBehavior.AllowSelectByRowClick = true;
         settings.ClientSideEvents.RowDblClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
 
-        settings.CommandColumn.ShowNewButtonInHeader = true;
         settings.SettingsCommandButton.NewButton.Image.IconID = IconID.ActionsAdditem16x16;
         settings.SettingsCommandButton.NewButton.Image.ToolTip = IWSLocalResource.btnAddNew;
         settings.SettingsCommandButton.NewButton.Text = " ";
+        settings.CommandColumn.ShowNewButtonInHeader = false;
 
         settings.SettingsCommandButton.EditButton.Image.IconID = IconID.ActionsEditname16x16;
         settings.SettingsCommandButton.EditButton.Image.ToolTip = IWSLocalResource.btnEdit;
         settings.SettingsCommandButton.EditButton.Text = " ";
-        settings.CommandColumn.ShowEditButton = true;
+        settings.CommandColumn.ShowEditButton = false;
 
         settings.SettingsCommandButton.DeleteButton.Image.IconID = IconID.ActionsDeletelist16x16;
         settings.SettingsCommandButton.DeleteButton.Image.ToolTip = IWSLocalResource.btnDelete;
         settings.SettingsCommandButton.DeleteButton.Text = " ";
-        settings.CommandColumn.ShowDeleteButton = true;
+        settings.CommandColumn.ShowDeleteButton = false;
 
         settings.InitNewRow = (s, e) =>
         {
             e.NewValues["Buchungstag"] = DateTime.Today;
             e.NewValues["Valutadatum"] = DateTime.Today;
         };
+
+        //settings.ClientSideEvents.Init = "OnInitGrid";
 
         settings.KeyFieldName = "id";
 
@@ -133,7 +132,19 @@
                 d.AllowMouseWheel = true;
             });
         });
-
+        var ucolumn = settings.Columns.Add("Periode");
+        ucolumn.Caption = IWSLocalResource.periode;
+        ucolumn.UnboundType = DevExpress.Data.UnboundColumnType.String;
+        settings.CustomUnboundColumnData = (sender, e) =>
+        {
+            if (e.Column.FieldName == "Periode")
+            {
+                DateTime transDate = (DateTime)e.GetListSourceFieldValue("Valutadatum");
+                string periode = Convert.ToString((int)transDate.Year);
+                periode += ((int)transDate.Month < 10) ? "0" + Convert.ToString((int)transDate.Month) : Convert.ToString((int)transDate.Month);
+                e.Value = periode;
+            }
+        };
         settings.Columns.Add(column =>
         {
             column.FieldName = "Buchungstext";

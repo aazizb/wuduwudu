@@ -32,6 +32,10 @@ namespace ASP
     using DevExpress.Web.ASPxThemes;
     using DevExpress.Web.Mvc;
     using DevExpress.Web.Mvc.UI;
+    using DevExpress.XtraReports;
+    using DevExpress.XtraReports.UI;
+    using DevExpress.XtraReports.Web;
+    using DevExpress.XtraReports.Web.DocumentViewer;
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("RazorGenerator", "2.0.0.0")]
     [System.Web.WebPages.PageVirtualPathAttribute("~/Views/Settlements/Index.cshtml")]
@@ -42,8 +46,78 @@ namespace ASP
         }
         public override void Execute()
         {
+WriteLiteral("<script");
+
+WriteLiteral(" type=\"text/javascript\"");
+
+WriteLiteral(">\r\n    function OnOIDSelectedIndexChanged(s, e) {\r\n\r\n        $.ajax({\r\n          " +
+"  url: \'");
+
             
-            #line 1 "..\..\Views\Settlements\Index.cshtml"
+            #line 5 "..\..\Views\Settlements\Index.cshtml"
+             Write(Url.Action("Supplier", "Settlements"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedOIDIndex: s.GetValue() },
+            success: function (data) {
+                account.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+        $.ajax({
+            url: '");
+
+            
+            #line 16 "..\..\Views\Settlements\Index.cshtml"
+             Write(Url.Action("CostCenter", "Settlements"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedOIDIndex: s.GetValue() },
+            success: function (data) {
+                CostCenter.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+        $.ajax({
+            url: '");
+
+            
+            #line 27 "..\..\Views\Settlements\Index.cshtml"
+             Write(Url.Action("HeaderText", "Settlements"));
+
+            
+            #line default
+            #line hidden
+WriteLiteral(@"',
+            type: ""POST"",
+            data: { selectedItemIndex: s.GetValue() },
+            success: function (data) {
+                HeaderText.SetText(data);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                alert('Request Status: ' + xhr.status + '; Status Text: ' + textStatus + '; Error: ' + errorThrown);
+            }
+        });
+     }
+
+</script>
+
+");
+
+            
+            #line 41 "..\..\Views\Settlements\Index.cshtml"
 Write(Html.Partial("MasterGridViewPartial"));
 
             

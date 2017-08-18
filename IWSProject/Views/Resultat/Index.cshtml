@@ -3,20 +3,20 @@
 @model List<ResultsViewModel>
 
 <script type="text/javascript">
-    var sClassId = null;
-    var sStart = null;
-    var sEnd = null;
+    var vClassId = null;
+    var vStart = null;
+    var vEnd = null;
     function OnButtonClick(s, e) {
-        sClassId = ClassId.GetValue();
-        sStart = txtStart.GetText();
-        sEnd = txtEnd.GetValue();
+        vClassId = ClassId.GetValue();
+        vStart = Start.GetText();
+        vEnd = End.GetText();
         callbackPartialView.PerformCallback();
     }
 
     function OnBeginCallback(s, e) {
-        e.customArgs["ClassId"] = sClassId;
-        e.customArgs["txtStart"] = sStart;
-        e.customArgs["txtEnd"] = sEnd;
+        e.customArgs["ClassId"] = vClassId;
+        e.customArgs["Start"] = vStart;
+        e.customArgs["End"] = vEnd;
     }
 </script>
 
@@ -26,7 +26,7 @@
     settings =>
     {
         settings.Properties.Native = true;
-        settings.Name = "txtStart";
+        settings.Name = "Start";
         settings.Width = Unit.Pixel(101);
         settings.Properties.NullText = IWSLocalResource.PeriodFrom;
     }
@@ -35,7 +35,7 @@
     @Html.DevExpress().TextBox(
     settings =>
     {
-        settings.Name = "txtEnd";
+        settings.Name = "End";
         settings.Properties.Native = true;
         settings.Width = Unit.Pixel(101);
         settings.Properties.NullText = IWSLocalResource.PeriodTo;
