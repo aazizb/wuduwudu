@@ -9,19 +9,21 @@ namespace IWSProject.Controllers
 {
     public class CurrenciesController : Controller
     {
-        // GET: Currency
-        private IWSDataContext db = new IWSDataContext();
-
+        IWSDataContext db;
+        public CurrenciesController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: Currencies
         public ActionResult Index()
         {
-            return View(db.Currencies.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return View(IWSLookUp.GetCurrencies());
         }
 
         [ValidateInput(false)]
         public ActionResult CurrenciesGridViewPartial()
         {
-            return PartialView("CurrenciesGridViewPartial", db.Currencies.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("CurrenciesGridViewPartial", IWSLookUp.GetCurrencies());
         }
 
         [HttpPost, ValidateInput(false)]
@@ -37,17 +39,19 @@ namespace IWSProject.Controllers
                     model.InsertOnSubmit(item);
 
                     db.SubmitChanges();
+                    return PartialView("CurrenciesGridViewPartial", IWSLookUp.GetCurrencies());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("CurrenciesGridViewPartial", db.Currencies.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("CurrenciesGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CurrenciesGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Currency item)
@@ -65,18 +69,20 @@ namespace IWSProject.Controllers
                         this.UpdateModel(modelItem);
 
                         db.SubmitChanges();
+                        return PartialView("CurrenciesGridViewPartial", IWSLookUp.GetCurrencies());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("CurrenciesGridViewPartial", db.Currencies.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("CurrenciesGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CurrenciesGridViewPartialDelete(string id)
@@ -95,9 +101,10 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
-            return PartialView("CurrenciesGridViewPartial", db.Currencies.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("CurrenciesGridViewPartial", IWSLookUp.GetCurrencies());
         }
     }
 }

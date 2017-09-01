@@ -10,7 +10,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class SalesInvoicesController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public SalesInvoicesController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: BuyerInvoices
         public ActionResult Index()
         {

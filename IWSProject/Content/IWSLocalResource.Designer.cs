@@ -19,7 +19,7 @@ namespace IWSProject.Content {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class IWSLocalResource {
@@ -538,6 +538,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check data format and try again.
+        /// </summary>
+        public static string DataFormat {
+            get {
+                return ResourceManager.GetString("DataFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Data Importation.
         /// </summary>
         public static string DataImportation {
@@ -660,6 +669,15 @@ namespace IWSProject.Content {
         public static string expenseaccountid {
             get {
                 return ResourceManager.GetString("expenseaccountid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export.
+        /// </summary>
+        public static string Export {
+            get {
+                return ResourceManager.GetString("Export", resourceCulture);
             }
         }
         
@@ -916,6 +934,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Item Type.
+        /// </summary>
+        public static string ItemType {
+            get {
+                return ResourceManager.GetString("ItemType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Journal.
         /// </summary>
         public static string journal {
@@ -1101,6 +1128,15 @@ namespace IWSProject.Content {
         public static string modelid {
             get {
                 return ResourceManager.GetString("modelid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Month.
+        /// </summary>
+        public static string Month {
+            get {
+                return ResourceManager.GetString("Month", resourceCulture);
             }
         }
         
@@ -1330,20 +1366,20 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Preview and Print.
-        /// </summary>
-        public static string PreviewPrint {
-            get {
-                return ResourceManager.GetString("PreviewPrint", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Price.
         /// </summary>
         public static string price {
             get {
                 return ResourceManager.GetString("price", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Preview and Print.
+        /// </summary>
+        public static string printing {
+            get {
+                return ResourceManager.GetString("printing", resourceCulture);
             }
         }
         
@@ -1420,11 +1456,29 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Quarter.
+        /// </summary>
+        public static string Quarter {
+            get {
+                return ResourceManager.GetString("Quarter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Remember me.
         /// </summary>
         public static string RememberMe {
             get {
                 return ResourceManager.GetString("RememberMe", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Report.
+        /// </summary>
+        public static string Report {
+            get {
+                return ResourceManager.GetString("Report", resourceCulture);
             }
         }
         
@@ -1461,6 +1515,15 @@ namespace IWSProject.Content {
         public static string rolesmanagement {
             get {
                 return ResourceManager.GetString("rolesmanagement", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sales.
+        /// </summary>
+        public static string sales {
+            get {
+                return ResourceManager.GetString("sales", resourceCulture);
             }
         }
         
@@ -1524,15 +1587,6 @@ namespace IWSProject.Content {
         public static string SelectFile {
             get {
                 return ResourceManager.GetString("SelectFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Sales.
-        /// </summary>
-        public static string selling {
-            get {
-                return ResourceManager.GetString("selling", resourceCulture);
             }
         }
         
@@ -1938,6 +1992,15 @@ namespace IWSProject.Content {
         public static string WindowCustomization {
             get {
                 return ResourceManager.GetString("WindowCustomization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Year.
+        /// </summary>
+        public static string Year {
+            get {
+                return ResourceManager.GetString("Year", resourceCulture);
             }
         }
         

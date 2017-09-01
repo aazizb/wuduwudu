@@ -10,7 +10,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class SettlementsController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public SettlementsController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: CashInflow
         public ActionResult Index()
         {

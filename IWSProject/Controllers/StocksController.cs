@@ -7,7 +7,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class StocksController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public StocksController()
+        {
+            db = new IWSDataContext();
+        }
 
         // GET: Stocks
         public ActionResult Index()

@@ -10,17 +10,21 @@ namespace IWSProject.Controllers
     public class CostCentersController : Controller
     {
 
-        IWSDataContext db = new IWSDataContext();
-        
+        IWSDataContext db;
+        public CostCentersController()
+        {
+            db = new IWSDataContext();
+        }
+
         // GET: costcenters
         public ActionResult Index()
         {
-            return View(db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return View(IWSLookUp.GetCostCenter());
         }
         [ValidateInput(false)]
         public ActionResult CostCentersGridViewPartial()
         {
-            return PartialView("CostCentersGridViewPartial", db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("CostCentersGridViewPartial", IWSLookUp.GetCostCenter());
         }
 
         [HttpPost, ValidateInput(false)]
@@ -35,15 +39,20 @@ namespace IWSProject.Controllers
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    return PartialView("CostCentersGridViewPartial", IWSLookUp.GetCostCenter());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
+            {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("CostCentersGridViewPartial", db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+
+            }
+            return PartialView("CostCentersGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CostCentersGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))]CostCenter item)
@@ -59,16 +68,21 @@ namespace IWSProject.Controllers
                     {
                         this.UpdateModel(modelItem);
                         db.SubmitChanges();
+                        return PartialView("CostCentersGridViewPartial", IWSLookUp.GetCostCenter());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
+            {
+
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("CostCentersGridViewPartial", db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            }
+            return PartialView("CostCentersGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CostCentersGridViewPartialDelete(System.String id)
@@ -86,9 +100,10 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
-            return PartialView("CostCentersGridViewPartial", db.CostCenters.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("CostCentersGridViewPartial", IWSLookUp.GetCostCenter());
         }
     }
 }

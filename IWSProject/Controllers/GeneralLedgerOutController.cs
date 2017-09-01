@@ -12,7 +12,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class GeneralLedgerOutController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public GeneralLedgerOutController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: GeneralLedgers
         public ActionResult Index()
         {

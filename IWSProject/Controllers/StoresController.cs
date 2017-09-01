@@ -9,18 +9,22 @@ namespace IWSProject.Controllers
     [Authorize]
     public class StoresController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public StoresController()
+        {
+            db = new IWSDataContext();
+        }
 
         // GET: stores
         public ActionResult Index()
         {
-            return View(db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return View(IWSLookUp.GetStores());
         }
 
         [ValidateInput(false)]
         public ActionResult StoresGridViewPartial()
         {
-            return PartialView("StoresGridViewPartial", db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("StoresGridViewPartial", IWSLookUp.GetStores());
         }
 
         [HttpPost, ValidateInput(false)]
@@ -35,17 +39,19 @@ namespace IWSProject.Controllers
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    return PartialView("StoresGridViewPartial", IWSLookUp.GetStores());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("StoresGridViewPartial", db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("StoresGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult StoresGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Store item)
@@ -61,18 +67,20 @@ namespace IWSProject.Controllers
                     {
                         this.UpdateModel(modelItem);
                         db.SubmitChanges();
+                        return PartialView("StoresGridViewPartial", IWSLookUp.GetStores());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("StoresGridViewPartial", db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("StoresGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult StoresGridViewPartialDelete(string id)
@@ -90,9 +98,10 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
-            return PartialView("StoresGridViewPartial", db.Stores.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("StoresGridViewPartial", IWSLookUp.GetStores());
         }
     }
 }

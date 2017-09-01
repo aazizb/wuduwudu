@@ -58,10 +58,15 @@ namespace IWSProject.Controllers
                 {
                     case SignInStatus.Success:
 
+                        string user = model.UserName;
+                        Session["UserName"] = user;
+
                         if (Session["CompanyID"] != null)
                             Session["CompanyID"] = null;
 
                         string companyID= IWSLookUp.GetCompany(model.UserName);
+
+
 
                         Session["CompanyID"] = companyID;
 

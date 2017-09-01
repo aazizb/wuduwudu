@@ -238,6 +238,42 @@
                     select o;
             return b;
         }
+        public static IEnumerable GetCostCenter()
+        {
+            return IWSEntities.CostCenters.Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]);
+        }
+        public static IEnumerable GetCurrencies()
+        {
+            return IWSEntities.Currencies.Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]);
+        }
+        public static IEnumerable GetBanks()
+        {
+            return IWSEntities.Banks.Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]);
+        }
+        public static IEnumerable GetAccount()
+        {
+            return IWSEntities.Accounts.Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]);
+        }
+        public static IEnumerable GetMenus()
+        {
+            return IWSEntities.Menus.Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]);
+        }
+        public static IEnumerable GetQuantityUnits()
+        {
+            return IWSEntities.QuantityUnits.Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]);
+        }
+        public static IEnumerable GetStores()
+        {
+            return IWSEntities.Stores.Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]);
+        }
+        public static IEnumerable GetArticles()
+        {
+            return IWSEntities.Articles.Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]);
+        }
+        public static IEnumerable GetVats()
+        {
+            return IWSEntities.Vats.Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"]);
+        }
         public static IEnumerable GetBankAccount(string Owner)
         {
             var b = from o in IWSEntities.BankAccounts
@@ -258,7 +294,7 @@
         }
         public static IEnumerable GetCostCenters()
         {
-            var account = IWSEntities.CostCenters.AsEnumerable().Select(item => new
+            var center = IWSEntities.CostCenters.AsEnumerable().Select(item => new
             {
                 Id = item.id,
                 Name = item.name,
@@ -266,7 +302,7 @@
             })
             .Where(c => c.CompanyID == (string)HttpContext.Current.Session["CompanyID"])
             .OrderBy(o => o.Name);
-            return account;
+            return center;
         }
         public static IEnumerable GetMenuId()
         {
@@ -1494,13 +1530,14 @@
                                                    }).ToList();
             return items;
         }
+
         public static IEnumerable GetJournal(string start, string end, string accountId, string CompanyID)
         {
-            string uiCulture = Thread.CurrentThread.CurrentUICulture.Name;// get current thread UICulture
+            string uiCulture = Thread.CurrentThread.CurrentUICulture.Name;
             List<JournalViewModel> journals = new List<JournalViewModel>();
             if (String.IsNullOrEmpty(accountId) || String.IsNullOrWhiteSpace(accountId))
             {
-             journals = (from j in IWSEntities.GetJournal(start, end, uiCulture, CompanyID)
+             journals = (from j in IWSEntities.GetJournals(start, end, uiCulture, CompanyID)
                  select new JournalViewModel()
                  {
                      pk = j.ID,
@@ -1508,10 +1545,13 @@
                      OID = j.OID,
                      ItemType = j.LocalName,
                      CustSupplierID = j.CustSupplierID,
+                     Owner = j.Owner,
                      TransDate = j.TransDate,
                      Periode = j.Periode,
                      Account = j.Account,
+                     AccountName=j.AccountName,
                      OAccount = j.OAccount,
+                     OAccountName = j.OAccountName,
                      Amount = j.Amount,
                      Side = j.Side,
                      Currency = j.Currency,
@@ -1520,7 +1560,7 @@
             }
             else
             {
-            journals = (from j in IWSEntities.GetJournal(start, end, uiCulture, CompanyID)
+            journals = (from j in IWSEntities.GetJournals(start, end, uiCulture, CompanyID)
                  select new JournalViewModel()
                  {
                      pk = j.ID,
@@ -1528,19 +1568,41 @@
                      OID = j.OID,
                      ItemType = j.LocalName,
                      CustSupplierID = j.CustSupplierID,
+                     Owner = j.Owner,
                      TransDate = j.TransDate,
                      Periode = j.Periode,
                      Account = j.Account,
+                     AccountName = j.AccountName,
                      OAccount = j.OAccount,
+                     OAccountName = j.OAccountName,
                      Amount = j.Amount,
                      Side = j.Side,
                      Currency = j.Currency,
                      CompanyID = j.CompanyID
-                 }).Where(c => accountId.IndexOf(c.Account)>=0).ToList();
+                 }).Where(c => accountId.IndexOf(c.Account)>=0  || accountId.IndexOf(c.Account) >= 0).ToList();
             }
             return journals; 
         }
-        public static IEnumerable GetResultat(string classId, string start, string end, string company, bool isBalance)
+        public static IEnumerable GetReport(string start, string end, string CompanyID)
+        {
+            string uiCulture = Thread.CurrentThread.CurrentUICulture.Name;
+            List<ReportViewModel> report = new List<ReportViewModel>();
+
+            report = (from j in IWSEntities.GetJournal(start, end, uiCulture, CompanyID)
+                      select new ReportViewModel()
+                      {
+                          Account = j.Account,
+                          Owner = j.CustSupplierID,
+                          ItemType = j.LocalName,
+                          TransDate = j.TransDate,
+                          Amount = j.Amount,
+                          Currency = j.Currency,
+                      }).ToList();
+            return report;
+        }
+
+ 
+    public static IEnumerable GetResultat(string classId, string start, string end, string company, bool isBalance)
         {
             List<ResultsViewModel> r = (from s in IWSEntities.AccountBalance(classId, start, end, company, isBalance)
                                         where s.SDebit != s.SCredit
@@ -1997,6 +2059,20 @@
                 DueDate = p.ItemDate.ToShortDateString()
             };
             return query;
+        }
+
+
+        public static void LogException(Exception ex)
+        {
+            HttpContext context = HttpContext.Current;
+            string msg = ex.Message.ToString();
+            string type = ex.GetType().Name.ToString();
+            string source = ex.Source;
+            string url = context.Request.Url.ToString();
+            string target = ex.TargetSite.Name.ToString();
+            string company = (string)HttpContext.Current.Session["CompanyID"];
+            string userName = (string)HttpContext.Current.Session["UserName"];
+            IWSEntities.LogException(msg, type, source, url, target, company, userName);
         }
 
         public enum DocsType

@@ -9,9 +9,14 @@ using System.Web.Mvc;
 namespace IWSProject.Controllers
 {
     [Authorize]
+    [HandleError()]
     public class AccountingController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public AccountingController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: Accounting
         [HttpGet]
         public ActionResult Index()
@@ -30,11 +35,19 @@ namespace IWSProject.Controllers
         public ActionResult CallbackPanelPartialView(string selectedIDs)
         {
             string selectedItems = selectedIDs;
-            //check if items were selected previously
-            if (!String.IsNullOrEmpty(selectedItems) && selectedItems!=null)
+            try
             {
-                string companyId = (string)Session["CompanyID"];
-                ProcessData(selectedItems, companyId, true);
+                //check if items were selected previously
+                if (!String.IsNullOrEmpty(selectedItems) && selectedItems!=null)
+                {
+                    string companyId = (string)Session["CompanyID"];
+                    ProcessData(selectedItems, companyId, true);
+                }
+            }
+            catch (Exception ex)
+            {
+                IWSLookUp.LogException(ex);
+                //throw;
             }
             List<DocumentsViewModel> model = IWSLookUp.GetAccountingDocument(false);
             return PartialView("CallbackPanelPartialView", model);
@@ -266,9 +279,10 @@ namespace IWSProject.Controllers
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(ex);
+                //throw;
             }
             return false;
         }
@@ -288,9 +302,10 @@ namespace IWSProject.Controllers
                     return true;
                 }
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(ex);
+                //throw;
             }
             return false;
         }
@@ -298,7 +313,7 @@ namespace IWSProject.Controllers
         private bool UpdateAccountBalance(string Periode, string AccountID, decimal amount,
                                                     string currency, bool IsDebit, string companyID)
         {
-            
+           
             var docs = db.PeriodicAccountBalances
                        .FirstOrDefault(p => p.Periode == Periode
                         && p.AccountId == AccountID
@@ -332,9 +347,10 @@ namespace IWSProject.Controllers
                     db.PeriodicAccountBalances.InsertOnSubmit(docs);
                     return true;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(ex);
+                    //throw;
                     return false;
                 }
             }
@@ -352,9 +368,10 @@ namespace IWSProject.Controllers
                     }
                     return true;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(ex);
+                    //throw;
                     return false;
                 }
             }
@@ -425,11 +442,12 @@ namespace IWSProject.Controllers
                 }
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return false;
             }
-            return false;
         }
 
         private bool StockOut(List<ValidateStockViewModel> items, string CompanyId)
@@ -449,83 +467,85 @@ namespace IWSProject.Controllers
                         }
                         else
                         {
-                            ViewData["GenericError"] = IWSLocalResource.InsufficientStock + ": " + item.ItemID + "-" + item.ItemName;
+                            string msg = IWSLocalResource.InsufficientStock + ": " + item.ItemID + "-" + item.ItemName;
+                            ViewData["GenericError"] = msg;
                             return false;
                         }
                     }
                     else
                     {
-                        ViewData["GenericError"] = IWSLocalResource.InsufficientStock + ": " + item.ItemID + "-" + item.ItemName;
+                        string msg = IWSLocalResource.InsufficientStock + ": " + item.ItemID + "-" + item.ItemName;
+                        ViewData["GenericError"] = msg;
                         return false;
                     }
                 }
                 return true;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(ex);
+                return false;
             }
-            return false;
         }
 
         private bool ValidateGoodReceiving(int ItemID, string companyId)
         {
             List<JournalViewModel> docs = (from o in (
-    (from i in db.LineGoodReceivings
-     select new
-     {
-         i.GoodReceiving.id,
-         i.GoodReceiving.oid,
-         i.GoodReceiving.account,
-         i.GoodReceiving.store,
-         i.GoodReceiving.TransDate,
-         i.GoodReceiving.ItemDate,
-         i.GoodReceiving.EntryDate,
-         i.GoodReceiving.oPeriode,
-         i.Article.StockAccount,
-         i.GoodReceiving.Company.purchasingclearingaccountid,
-         sAmount = i.lineNet,
-         i.GoodReceiving.Company.IBAN,
-         IBAN2 = i.GoodReceiving.Supplier.IBAN,
-         i.GoodReceiving.oCurrency,
-         i.GoodReceiving.HeaderText
-     }))
-                                           group o by new
-                                           {
-                                               o.id,
-                                               o.oid,
-                                               o.account,
-                                               o.store,
-                                               o.TransDate,
-                                               o.ItemDate,
-                                               o.EntryDate,
-                                               o.oPeriode,
-                                               o.StockAccount,
-                                               o.purchasingclearingaccountid,
-                                               o.IBAN,
-                                               o.IBAN2,
-                                               o.oCurrency,
-                                               o.HeaderText
-                                           } into g
-                                           where g.Key.id == ItemID
-                                           select new JournalViewModel()
-                                           {
-                                               ItemID = g.Key.id,
-                                               OID = g.Key.oid,
-                                               CustSupplierID = g.Key.account,
-                                               StoreID = g.Key.store,
-                                               TransDate = g.Key.TransDate,
-                                               Itemdate = g.Key.ItemDate,
-                                               EntryDate = g.Key.EntryDate,
-                                               Periode = g.Key.oPeriode,
-                                               Account = g.Key.StockAccount,
-                                               OAccount = g.Key.purchasingclearingaccountid,
-                                               Amount = Convert.ToDecimal(g.Sum(p => p.sAmount)),
-                                               CompanyIBAN = g.Key.IBAN,
-                                               IBAN = g.Key.IBAN2,
-                                               Currency = g.Key.oCurrency,
-                                               Info = g.Key.HeaderText
-                                           }).Distinct().ToList();
+                (from i in db.LineGoodReceivings
+                 select new
+                 {
+                     i.GoodReceiving.id,
+                     i.GoodReceiving.oid,
+                     i.GoodReceiving.account,
+                     i.GoodReceiving.store,
+                     i.GoodReceiving.TransDate,
+                     i.GoodReceiving.ItemDate,
+                     i.GoodReceiving.EntryDate,
+                     i.GoodReceiving.oPeriode,
+                     i.Article.StockAccount,
+                     i.GoodReceiving.Company.purchasingclearingaccountid,
+                     sAmount = i.lineNet,
+                     i.GoodReceiving.Company.IBAN,
+                     IBAN2 = i.GoodReceiving.Supplier.IBAN,
+                     i.GoodReceiving.oCurrency,
+                     i.GoodReceiving.HeaderText
+                 }))
+                    group o by new
+                    {
+                        o.id,
+                        o.oid,
+                        o.account,
+                        o.store,
+                        o.TransDate,
+                        o.ItemDate,
+                        o.EntryDate,
+                        o.oPeriode,
+                        o.StockAccount,
+                        o.purchasingclearingaccountid,
+                        o.IBAN,
+                        o.IBAN2,
+                        o.oCurrency,
+                        o.HeaderText
+                    } into g
+                    where g.Key.id == ItemID
+                    select new JournalViewModel()
+                    {
+                    ItemID = g.Key.id,
+                    OID = g.Key.oid,
+                    CustSupplierID = g.Key.account,
+                    StoreID = g.Key.store,
+                    TransDate = g.Key.TransDate,
+                    Itemdate = g.Key.ItemDate,
+                    EntryDate = g.Key.EntryDate,
+                    Periode = g.Key.oPeriode,
+                    Account = g.Key.StockAccount,
+                    OAccount = g.Key.purchasingclearingaccountid,
+                    Amount = Convert.ToDecimal(g.Sum(p => p.sAmount)),
+                    CompanyIBAN = g.Key.IBAN,
+                    IBAN = g.Key.IBAN2,
+                    Currency = g.Key.oCurrency,
+                    Info = g.Key.HeaderText
+                }).Distinct().ToList();
 
             bool results = false;
 
@@ -620,10 +640,11 @@ namespace IWSProject.Controllers
                     if (!results)
                         return results;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ViewData["GenericError"] = e.Message;
-                    results = false;
+                    IWSLookUp.LogException(ex);
+                    //throw;
+                    return false;
                 }
             }
             return results;
@@ -797,10 +818,11 @@ namespace IWSProject.Controllers
                 if (!results)
                     return results;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
-                results = false;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return false;
             }
             return results;
         }
@@ -923,10 +945,11 @@ namespace IWSProject.Controllers
                     if (!results)
                         return results;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ViewData["GenericError"] = e.Message;
-                    results = false;
+                    IWSLookUp.LogException(ex);
+                    //throw;
+                    return false;
                 }
             }
             return results;
@@ -1049,10 +1072,11 @@ namespace IWSProject.Controllers
                         return results;
 
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ViewData["GenericError"] = e.Message;
-                    results = false;
+                    IWSLookUp.LogException(ex);
+                    //throw;
+                    return false;
                 }
             }
             return results;
@@ -1174,10 +1198,11 @@ namespace IWSProject.Controllers
                     if (!results)
                         return results;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ViewData["GenericError"] = e.Message;
-                    results = false;
+                    IWSLookUp.LogException(ex);
+                    //throw;
+                    return false;
                 }
             }
             return results;
@@ -1299,10 +1324,11 @@ namespace IWSProject.Controllers
                     if (!results)
                         return results;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ViewData["GenericError"] = e.Message;
-                    results = false;
+                    IWSLookUp.LogException(ex);
+                    //throw;
+                    return false;
                 }
             }
             return results;
@@ -1426,10 +1452,11 @@ namespace IWSProject.Controllers
                     if (!results)
                         return results;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ViewData["GenericError"] = e.Message;
-                    results = false;
+                    IWSLookUp.LogException(ex);
+                    //throw;
+                    return false;
                 }
             }
             return results;
@@ -1550,13 +1577,14 @@ namespace IWSProject.Controllers
                 db.CustomerInvoices.InsertOnSubmit(customerInvoice);
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
                 id = db.CustomerInvoices.Max(i => i.id);
+                return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
-                return 0;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return id;
             }
-            return id;
         }
 
         public int MakeCustomerInvoiceLine(List<LineCustomerInvoice> line)
@@ -1566,17 +1594,21 @@ namespace IWSProject.Controllers
             {
                 foreach (var item in line)
                 {
-                    db.LineCustomerInvoices.InsertOnSubmit(item);
-                    id++;
+                    if (item.amount > 0)
+                    {
+                        db.LineCustomerInvoices.InsertOnSubmit(item);
+                        id++;
+                    }
                 }
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
-                id = 0;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return 0;
             }
-            return id;
         }
         private bool MakeVendorInvoice(int InventoryInvoiceItemID)
         {
@@ -1693,13 +1725,14 @@ namespace IWSProject.Controllers
                 db.CustomerInvoices.InsertOnSubmit(customeInvoice);
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
                 id = db.CustomerInvoices.Max(i => i.id);
+                return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
-                return 0;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return id;
             }
-            return id;
         }
         public int MakeVendorInvoiceHeader(VendorInvoice invoice)
         {
@@ -1709,13 +1742,14 @@ namespace IWSProject.Controllers
                 db.VendorInvoices.InsertOnSubmit(invoice);
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
                 id = db.VendorInvoices.Max(i => i.id);
+                return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
-                return 0;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return id;
             }
-            return id;
         }
         public int MakeVendorInvoiceLine(List<LineVendorInvoice> line)
         {
@@ -1724,17 +1758,21 @@ namespace IWSProject.Controllers
             {
                 foreach (var item in line)
                 {
-                    db.LineVendorInvoices.InsertOnSubmit(item);
-                    id++;
+                    if (item.amount > 0)
+                    {
+                        db.LineVendorInvoices.InsertOnSubmit(item);
+                        id++;
+                    }
                 }
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
-                id = 0;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return 0;
             }
-            return id;
         }
         private bool MakePayment(int vendorInvoiceID)
         {
@@ -1891,12 +1929,14 @@ namespace IWSProject.Controllers
                 db.Payments.InsertOnSubmit(payment);
                 db.SubmitChanges(System.Data.Linq.ConflictMode.ContinueOnConflict);
                 id = db.Payments.Max(i => i.id);
+                return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return id;
             }
-            return id;
         }
         public int MakePaymentLine(List<LinePayment> linePayment)
         {
@@ -1909,13 +1949,14 @@ namespace IWSProject.Controllers
                     id++;
                 }
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
-                id = 0;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return 0;
             }
-            return id;
         }
         private bool MakeSettlement(int customerInvoiceID)
         {
@@ -2072,12 +2113,14 @@ namespace IWSProject.Controllers
                 db.Settlements.InsertOnSubmit(settlement);
                 db.SubmitChanges(System.Data.Linq.ConflictMode.ContinueOnConflict);
                 id = db.Settlements.Max(i => i.id);
+                return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return id;
             }
-            return id;
         }
         public int MakeSettlementLine(List<LineSettlement> lineSettlement)
         {
@@ -2090,13 +2133,14 @@ namespace IWSProject.Controllers
                     id++;
                 }
                 db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
+                return id;
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
-                id = 0;
+                IWSLookUp.LogException(ex);
+                //throw;
+                return 0;
             }
-            return id;
         }
         public bool SendToJournal(List<Journal> journal)
         {
@@ -2111,9 +2155,11 @@ namespace IWSProject.Controllers
                     }
                     results = true;
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
-                    ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(ex);
+                    //throw;
+                    results = false;
                 }
             }
             return results;
@@ -2124,7 +2170,6 @@ namespace IWSProject.Controllers
             bool results = false;
             try
             {
-
                 if (ItemType.Equals(IWSLookUp.DocsType.PurchaseOrder.ToString()))
                 {
                     var docs = db.PurchaseOrders.Single(item => item.id == ItemID);
@@ -2227,9 +2272,11 @@ namespace IWSProject.Controllers
                 if (results)
                     db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(ex);
+                //throw;
+                results = false;
             }
             return results;
         }
@@ -2283,21 +2330,24 @@ namespace IWSProject.Controllers
                         }
                         db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
                     }
-                tx.Complete();
-            }
-                catch (Exception)
+                    tx.Complete();
+                }
+                catch (Exception ex)
                 {
-                tx.Dispose();
+                    IWSLookUp.LogException(ex);
+                    tx.Dispose();
+                    //throw;
+                }
             }
-        }
 
-    }
+        }
 
         public string SetDocType(string selectedItems, string docType)
         {
   
             string[] items = selectedItems.Split(new string[] { ";" }, 
                                         StringSplitOptions.RemoveEmptyEntries);
+
             items = items.Select(x => x + "," + docType).ToArray();
 
             return String.Join(";", items);

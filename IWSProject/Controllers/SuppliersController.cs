@@ -9,7 +9,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class SuppliersController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public SuppliersController()
+        {
+            db = new IWSDataContext();
+        }
 
         // GET: suppliers
         public ActionResult Index()
@@ -35,15 +39,19 @@ namespace IWSProject.Controllers
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    return PartialView("SuppliersGridViewPartial", IWSLookUp.GetSupplier());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
+            {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("SuppliersGridViewPartial", IWSLookUp.GetSupplier());
+            }
+            return PartialView("SuppliersGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult SuppliersGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))]Supplier item)
@@ -59,16 +67,20 @@ namespace IWSProject.Controllers
                     {
                         this.UpdateModel(modelItem);
                         db.SubmitChanges();
+                        return PartialView("SuppliersGridViewPartial", IWSLookUp.GetSupplier());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
+            {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("SuppliersGridViewPartial", IWSLookUp.GetSupplier());
+            }
+            return PartialView("SuppliersGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult SuppliersGridViewPartialDelete(string id)
@@ -113,17 +125,19 @@ namespace IWSProject.Controllers
                     model.InsertOnSubmit(line);
 
                     db.SubmitChanges();
+                    return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
+            return PartialView("DetailGridViewPartial", line);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult DetailGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] BankAccount line, string owner)
@@ -144,18 +158,20 @@ namespace IWSProject.Controllers
                         this.UpdateModel(modelItem);
 
                         db.SubmitChanges();
+                        return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
+            return PartialView("DetailGridViewPartial", line);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult DetailGridViewPartialDelete(string iban, string owner)
@@ -175,6 +191,7 @@ namespace IWSProject.Controllers
             catch (Exception e)
             {
                 ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(e);
             }
             return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
         }

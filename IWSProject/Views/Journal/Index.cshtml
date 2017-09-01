@@ -10,7 +10,8 @@
     function OnButtonClick(s, e) {
         vStart = Start.GetText();
         vEnd = End.GetText();
-        id=gridLookup.GetText()
+        id = gridLookupIDs.GetText()
+
         callbackPartialView.PerformCallback();
     }
 
@@ -26,16 +27,15 @@
     function GetSelectedFieldValuesCallback(values) {
         selectedIDs= values.join(';');
     }
-    function CloseGridLookup() {
-        gridLookup.ConfirmCurrentSelection();
-        gridLookup.HideDropDown();
+    function HideGridLookup() {
+        gridLookupIDs.ConfirmCurrentSelection();
+        gridLookupIDs.HideDropDown();
     }
 
 </script>
 
 @using (Html.BeginForm("Index", "Journal"))
 {
-    @Html.Hidden("selectedIDs");
     @Html.DevExpress().TextBox(
     settings =>
     {
@@ -56,68 +56,7 @@
     }
     ).GetHtml()
 
-    @Html.DevExpress().GridLookup(settings =>
-{
-    settings.Name = "gridLookup";
-    settings.KeyFieldName = "Id";
-
-    settings.GridViewProperties.CallbackRouteValues = new { Controller = "Journal", Action = "GridLookUpPartial" };
-    settings.Properties.SelectionMode = GridLookupSelectionMode.Multiple;
-
-    settings.CommandColumn.Visible = true;
-    settings.CommandColumn.ShowSelectCheckbox = true;
-    settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Multiple;
-    settings.CommandColumn.SelectAllCheckboxMode = GridViewSelectAllCheckBoxMode.AllPages;
-
-    settings.GridViewClientSideEvents.SelectionChanged = "OnSelectionChanged";
-    settings.GridViewClientSideEvents.BeginCallback = "OnBeginCallback";
-
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "Id";
-        column.Caption = IWSLocalResource.accountid;
-        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-    });
-    settings.Columns.Add(column =>
-    {
-        column.FieldName = "Name";
-        column.Caption = IWSLocalResource.name;
-        column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
-    });
-
-    settings.Properties.TextFormatString = "{0}";
-    settings.Properties.MultiTextSeparator = ";";
-    settings.Properties.Width = Unit.Pixel(260);
-
-    settings.GridViewProperties.SettingsPager.Visible = true;
-    settings.GridViewProperties.Settings.ShowGroupPanel = true;
-    settings.GridViewProperties.Settings.ShowFilterRow = true;
-    settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
-    settings.Width = Unit.Pixel(210);
-    settings.GridViewProperties.SetStatusBarTemplateContent(c =>
-    {
-        ViewContext.Writer.Write("<div style=\"padding: 2px 8px 2px 0; float: right\">");
-        Html.DevExpress().Button(
-            btnSettings =>
-            {
-                btnSettings.Name = "btnClose";
-                btnSettings.UseSubmitBehavior = false;
-                btnSettings.Text = IWSLocalResource.close;
-
-                btnSettings.ClientSideEvents.Click = "CloseGridLookup";
-            }
-        )
-        .Render();
-        ViewContext.Writer.Write("</div>");
-    });
-
-    settings.DataBound = (sender, e) =>
-    {
-        var gridLookup = (MVCxGridLookup)sender;
-        gridLookup.GridView.Width = Unit.Pixel(210);
-    };
-
-}).BindList(ViewData["accounts"]).GetHtml()
+    @Html.Action("GridLookupPartial")
 
     @Html.DevExpress().Button(
     settings =>

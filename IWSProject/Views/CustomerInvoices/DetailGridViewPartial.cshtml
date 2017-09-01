@@ -141,7 +141,7 @@
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
                 combo.Columns.Add("name").Caption = IWSLocalResource.Currency;
                 combo.Width = Unit.Percentage(100);
-                combo.TextFormatString = "{0}";
+                combo.TextFormatString = "{1}";
             });
         });
         settings.Columns.Add(column =>
@@ -281,7 +281,7 @@
                             a.Caption = IWSLocalResource.Currency;
                             a.Width = Unit.Percentage(85);
                         });
-                        s.Properties.TextFormatString = "{0}";
+                        s.Properties.TextFormatString = "{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);

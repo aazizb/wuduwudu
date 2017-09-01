@@ -1,52 +1,55 @@
-﻿@using IWSProject.Content
+@using IWSProject.Content
+@{
+    var gridLookup = Html.DevExpress().GridLookup(settings => {
+        settings.Name = "gridLookupIDs";
+        settings.KeyFieldName = "Id";
 
-@Html.DevExpress().GridLookup(settings =>
-{
-    settings.Name = "gridLookup";
-    settings.KeyFieldName = "Id";
+        settings.GridViewProperties.CallbackRouteValues = new { Controller = "Journal", Action = "GridLookupPartial" };
+        settings.Properties.SelectionMode = GridLookupSelectionMode.Multiple;
+        settings.Properties.TextFormatString = "{0}";
 
-    settings.GridViewProperties.CallbackRouteValues = new { Controller = "Journal", Action = "GridLookUpPartial" };
-    settings.Properties.SelectionMode = GridLookupSelectionMode.Multiple;
+        settings.Width = Unit.Pixel(210);
+        settings.CommandColumn.Visible = true;
+        settings.CommandColumn.ShowSelectCheckbox = true;
 
-    //settings.GridViewClientSideEvents.RowClick = "OnGridRowClick";
-    settings.GridViewClientSideEvents.SelectionChanged = "OnSelectionChanged";
-    settings.GridViewClientSideEvents.BeginCallback = "OnBeginCallback";
+        settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
 
-    settings.CommandColumn.Visible = true;
-    settings.CommandColumn.ShowSelectCheckbox = true;
-    settings.Columns.Add("Id").Caption = IWSLocalResource.accountid;
-    settings.Columns.Add("Name").Caption = IWSLocalResource.name;
-    settings.Properties.SelectionMode = DevExpress.Web.GridLookupSelectionMode.Multiple;
-    settings.Properties.TextFormatString = "{0}";
-    settings.Properties.MultiTextSeparator = ";";
-    settings.Properties.Width = 250;
+        settings.GridViewProperties.SettingsPager.Visible = true;
+        settings.GridViewProperties.Settings.ShowGroupPanel = true;
+        settings.GridViewProperties.Settings.ShowFilterRow = true;
+        settings.GridViewProperties.SetStatusBarTemplateContent(c =>
+        {
+            ViewContext.Writer.Write("<div style=\"padding: 2px 8px 2px 0; float: right\">");
+            Html.DevExpress().Button(
+                btnSettings =>
+                {
+                    btnSettings.Name = "btnClose";
+                    btnSettings.UseSubmitBehavior = false;
+                    btnSettings.Text = IWSLocalResource.close;
 
-    settings.GridViewProperties.SettingsPager.Visible = true;
-    settings.GridViewProperties.Settings.ShowGroupPanel = true;
-    settings.GridViewProperties.Settings.ShowFilterRow = true;
-    settings.GridViewProperties.Settings.ShowStatusBar = GridViewStatusBarMode.Visible;
+                    btnSettings.ClientSideEvents.Click = "HideGridLookup";
+                }
+            )
+            .Render();
+            ViewContext.Writer.Write("</div>");
+        });
 
-    settings.GridViewProperties.SetStatusBarTemplateContent(c =>
-    {
-        ViewContext.Writer.Write("<div style=\"padding: 2px 8px 2px 0; float: right\">");
-        Html.DevExpress().Button(
-            btnSettings =>
-            {
-                btnSettings.Name = "btnClose";
-                btnSettings.UseSubmitBehavior = false;
-                btnSettings.Text = IWSLocalResource.close;
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Id";
+            column.Caption = IWSLocalResource.accountid;
+            column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        });
+        settings.Columns.Add(column =>
+        {
+            column.FieldName = "Name";
+            column.Caption = IWSLocalResource.name;
+            column.Settings.AutoFilterCondition = AutoFilterCondition.Contains;
+        });
 
-                btnSettings.ClientSideEvents.Click = "CloseGridLookup";
-            }
-        )
-        .Render();
-        ViewContext.Writer.Write("</div>");
     });
-
-    settings.DataBound = (sender, e) =>
-    {
-        var gridLookup = (MVCxGridLookup)sender;
-        gridLookup.GridView.Width = 250;
-    };
-
-}).BindList(ViewData["accounts"]).GetHtml()
+    if (ViewData["EditError"] != null){
+        gridLookup.SetEditErrorText((string)ViewData["EditError"]);
+    }
+}
+@gridLookup.BindList(Model).GetHtml()

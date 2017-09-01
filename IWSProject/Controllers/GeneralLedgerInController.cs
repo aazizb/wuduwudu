@@ -10,7 +10,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class GeneralLedgerInController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public GeneralLedgerInController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: GeneralLedgers
         public ActionResult Index()
         {

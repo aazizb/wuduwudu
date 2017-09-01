@@ -49,6 +49,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
@@ -77,6 +78,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
@@ -100,6 +102,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             return PartialView("RolesGridViewPartial", roleManager.Roles.ToList());

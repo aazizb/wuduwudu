@@ -365,9 +365,13 @@
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(75);
                     });
+                    i.Visible = false;
                 });
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
+
+                formLayoutSettings.Items.AddEmptyItem();
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "BIC";
@@ -379,10 +383,14 @@
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(75);
                     });
+                    i.Visible = false;
                 });
 
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
+
+                formLayoutSettings.Items.AddEmptyItem();
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.ShowCaption = DefaultBoolean.False;

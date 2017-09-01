@@ -9,18 +9,21 @@ namespace IWSProject.Controllers
     [Authorize]
     public class AccountsController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public AccountsController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: Accounts
         public ActionResult Index()
         {
-            return View(db.Accounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return View(IWSLookUp.GetAccount());
         }
 
         [ValidateInput(false)]
         public ActionResult AccountsGridViewPartial()
         {
-            return PartialView("AccountsGridViewPartial",
-                db.Accounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("AccountsGridViewPartial", IWSLookUp.GetAccount());
         }
 
         [HttpPost, ValidateInput(false)]
@@ -36,16 +39,20 @@ namespace IWSProject.Controllers
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    return PartialView("AccountsGridViewPartial", IWSLookUp.GetAccount());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
+            {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("AccountsGridViewPartial",
-                                db.Accounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            }
+            return PartialView("AccountsGridViewPartial", item);
+                                
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult AccountsGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))]Account item)
@@ -61,17 +68,20 @@ namespace IWSProject.Controllers
                     {
                         this.UpdateModel(modelItem);
                         db.SubmitChanges();
+                        return PartialView("AccountsGridViewPartial", IWSLookUp.GetAccount());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
+            {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
-            return PartialView("AccountsGridViewPartial",
-                db.Accounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            }
+            return PartialView("AccountsGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult AccountsGridViewPartialDelete(string id)
@@ -89,10 +99,10 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
-            return PartialView("AccountsGridViewPartial",
-                    db.Accounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
-        }
+            return PartialView("AccountsGridViewPartial",   IWSLookUp.GetAccount());
+            }
     }
 }

@@ -13,7 +13,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class CompaniesController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public CompaniesController()
+        {
+            db = new IWSDataContext();
+        }
 
         // GET: Companies
         public ActionResult Index()
@@ -68,17 +72,19 @@ namespace IWSProject.Controllers
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    return PartialView("CompaniesGridViewPartial", IWSLookUp.GetCompany());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("CompaniesGridViewPartial", IWSLookUp.GetCompany());
+            return PartialView("CompaniesGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CompaniesGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))]Company item)
@@ -94,18 +100,20 @@ namespace IWSProject.Controllers
                     {
                         this.UpdateModel(modelItem);
                         db.SubmitChanges();
+                        return PartialView("CompaniesGridViewPartial", IWSLookUp.GetCompany());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("CompaniesGridViewPartial", IWSLookUp.GetCompany());
+            return PartialView("CompaniesGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult CompaniesGridViewPartialDelete(string id)
@@ -123,6 +131,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             return PartialView("CompaniesGridViewPartial", IWSLookUp.GetCompany());
@@ -155,6 +164,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
@@ -187,6 +197,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
@@ -213,6 +224,7 @@ namespace IWSProject.Controllers
             catch (Exception e)
             {
                 ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(e);
             }
             return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
         }

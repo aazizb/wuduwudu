@@ -9,18 +9,22 @@ namespace IWSProject.Controllers
     [Authorize]
     public class MenuUIController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public MenuUIController()
+        {
+            db = new IWSDataContext();
+        }
 
         // GET: MenuUI
         public ActionResult Index()
         {
-            return View(db.Menus.Where(c=>c.CompanyID== (string)Session["CompanyID"]));
+            return View(IWSLookUp.GetMenus());
         }
 
         [ValidateInput(false)]
         public ActionResult MenuUIGridViewPartial()
         {
-            return PartialView("MenuUIGridViewPartial", db.Menus.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("MenuUIGridViewPartial", IWSLookUp.GetMenus());
         }
 
         [HttpPost, ValidateInput(false)]
@@ -36,17 +40,19 @@ namespace IWSProject.Controllers
                     model.InsertOnSubmit(item);
 
                     db.SubmitChanges();
+                    return PartialView("MenuUIGridViewPartial", IWSLookUp.GetMenus());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MenuUIGridViewPartial", db.Menus.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("MenuUIGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MenuUIGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Menu item)
@@ -63,18 +69,20 @@ namespace IWSProject.Controllers
                         this.UpdateModel(modelItem);
 
                         db.SubmitChanges();
+                        return PartialView("MenuUIGridViewPartial", IWSLookUp.GetMenus());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("MenuUIGridViewPartial", db.Menus.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("MenuUIGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult MenuUIGridViewPartialDelete(int id)
@@ -91,8 +99,9 @@ namespace IWSProject.Controllers
             catch (Exception e)
             {
                 ViewData["GenericError"] = e.Message;
+                IWSLookUp.LogException(e);
             }
-            return PartialView("MenuUIGridViewPartial", db.Menus.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("MenuUIGridViewPartial", IWSLookUp.GetMenus());
         }
     }
 }

@@ -9,7 +9,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class PurchaseOrdersController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public PurchaseOrdersController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: purchaseorders
         public ActionResult Index()
         {

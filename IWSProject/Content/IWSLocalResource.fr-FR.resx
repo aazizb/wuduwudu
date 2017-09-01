@@ -492,7 +492,7 @@
   <data name="CustSupplier" xml:space="preserve">
     <value>Client/Fournisseur</value>
   </data>
-  <data name="selling" xml:space="preserve">
+  <data name="sales" xml:space="preserve">
     <value>Vente</value>
   </data>
   <data name="Settlement" xml:space="preserve">
@@ -555,7 +555,7 @@
   <data name="Consultation" xml:space="preserve">
     <value>Consultation</value>
   </data>
-  <data name="PreviewPrint" xml:space="preserve">
+  <data name="printing" xml:space="preserve">
     <value>Aperçu et Impression</value>
   </data>
   <data name="AccountFrom" xml:space="preserve">
@@ -752,5 +752,26 @@
   </data>
   <data name="close" xml:space="preserve">
     <value>Fermer</value>
+  </data>
+  <data name="Export" xml:space="preserve">
+    <value>Exporter</value>
+  </data>
+  <data name="ItemType" xml:space="preserve">
+    <value>Type Pièce</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Mois</value>
+  </data>
+  <data name="Quarter" xml:space="preserve">
+    <value>Semestre</value>
+  </data>
+  <data name="Year" xml:space="preserve">
+    <value>Année</value>
+  </data>
+  <data name="Report" xml:space="preserve">
+    <value>Etat</value>
+  </data>
+  <data name="DataFormat" xml:space="preserve">
+    <value>Vérifiez le format des données et réessayez</value>
   </data>
 </root>

@@ -9,7 +9,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class CustomersController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public CustomersController()
+        {
+            db = new IWSDataContext();
+        }
 
         // GET: Customers
         public ActionResult Index()
@@ -39,6 +43,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
@@ -64,6 +69,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
@@ -86,6 +92,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             return PartialView("CustomersGridViewPartial", IWSLookUp.GetCustomer());
@@ -116,6 +123,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
@@ -148,6 +156,7 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
@@ -174,7 +183,8 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
-                }
+                IWSLookUp.LogException(e);
+            }
             return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
         }
     }

@@ -9,17 +9,21 @@ namespace IWSProject.Controllers
     [Authorize]
     public class BanksController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public BanksController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: Banks
         public ActionResult Index()
         {
-            return View(db.Banks.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return View(IWSLookUp.GetBanks());
         }
 
         [ValidateInput(false)]
         public ActionResult BanksGridViewPartial()
         {
-            return PartialView("BanksGridViewPartial", db.Banks.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("BanksGridViewPartial", IWSLookUp.GetBanks());
         }
 
         [HttpPost, ValidateInput(false)]
@@ -34,17 +38,19 @@ namespace IWSProject.Controllers
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    return PartialView("BanksGridViewPartial", IWSLookUp.GetBanks());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("BanksGridViewPartial", db.Banks.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("BanksGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult BanksGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Bank item)
@@ -60,18 +66,20 @@ namespace IWSProject.Controllers
                     {
                         this.UpdateModel(modelItem);
                         db.SubmitChanges();
+                        return PartialView("BanksGridViewPartial", IWSLookUp.GetBanks());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("BanksGridViewPartial", db.Banks.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("BanksGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult BanksGridViewPartialDelete(string id)
@@ -90,9 +98,10 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
-            return PartialView("BanksGridViewPartial", db.Banks.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("BanksGridViewPartial", IWSLookUp.GetBanks());
         }
     }
 }

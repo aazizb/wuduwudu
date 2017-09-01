@@ -69,6 +69,12 @@
 
         settings.SettingsPager.PageSize = 24;
 
+        settings.InitNewRow = (s, e) =>
+        {
+            e.NewValues["avgprice"] = 0;
+            e.NewValues["IsService"] = true;
+        };
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "id";
@@ -144,7 +150,7 @@
                 combo.DataSource = IWSLookUp.GetCurrency();
                 combo.Columns.Add("id", IWSLocalResource.id, Unit.Percentage(50));
                 combo.Columns.Add("name", IWSLocalResource.Currency, Unit.Percentage(50));
-                combo.TextFormatString = "{0}";
+                combo.TextFormatString = "{1}";
             });
         });
         settings.Columns.Add(column =>
@@ -152,12 +158,32 @@
             column.FieldName = "qttyunit";
             column.Caption = IWSLocalResource.qttyunit;
             column.Width = Unit.Percentage(4);
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetPackUnits();
+                combo.Columns.Add("id", IWSLocalResource.id, Unit.Percentage(50));
+                combo.Columns.Add("name", IWSLocalResource.vat, Unit.Percentage(50));
+                combo.TextFormatString = "{1}";
+            });
         });
         settings.Columns.Add(column =>
         {
             column.FieldName = "packunit";
             column.Caption = IWSLocalResource.packunit;
             column.Width = Unit.Percentage(4);
+            column.EditorProperties().ComboBox(combo =>
+            {
+                combo.TextField = "Name";
+                combo.ValueField = "id";
+                combo.ValueType = typeof(string);
+                combo.DataSource = IWSLookUp.GetPackUnits();
+                combo.Columns.Add("id", IWSLocalResource.id, Unit.Percentage(50));
+                combo.Columns.Add("name", IWSLocalResource.vat, Unit.Percentage(50));
+                combo.TextFormatString = "{1}";
+            });
         });
         settings.Columns.Add(column =>
         {
@@ -221,7 +247,6 @@
 
                     });
                 });
-
 
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -466,7 +491,7 @@
                             column.Width = Unit.Percentage(80);
 
                         });
-                        s.Properties.TextFormatString = "{0}";
+                        s.Properties.TextFormatString = "{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);

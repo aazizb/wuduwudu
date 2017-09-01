@@ -9,18 +9,22 @@ namespace IWSProject.Controllers
     [Authorize]
     public class VatsController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public VatsController()
+        {
+            db = new IWSDataContext();
+        }
 
         // GET: Vats
         public ActionResult Index()
         {
-            return View(db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return View(IWSLookUp.GetVats());
         }
 
         [ValidateInput(false)]
         public ActionResult VatsGridViewPartial()
         {
-            return PartialView("VatsGridViewPartial", db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("VatsGridViewPartial", IWSLookUp.GetVats());
         }
 
         [HttpPost, ValidateInput(false)]
@@ -36,17 +40,19 @@ namespace IWSProject.Controllers
                     model.InsertOnSubmit(item);
 
                     db.SubmitChanges();
+                    return PartialView("VatsGridViewPartial", IWSLookUp.GetVats());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("VatsGridViewPartial", db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("VatsGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult VatsGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] Vat item)
@@ -64,18 +70,20 @@ namespace IWSProject.Controllers
                         this.UpdateModel(modelItem);
 
                         db.SubmitChanges();
+                        return PartialView("VatsGridViewPartial", IWSLookUp.GetVats());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("VatsGridViewPartial", db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("VatsGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult VatsGridViewPartialDelete(string id)
@@ -94,9 +102,11 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
+
                 }
             }
-            return PartialView("VatsGridViewPartial", db.Vats.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("VatsGridViewPartial", IWSLookUp.GetVats());
         }
     }
 }

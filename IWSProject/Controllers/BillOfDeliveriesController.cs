@@ -9,7 +9,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class BillOfDeliveriesController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public BillOfDeliveriesController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: BillOfDeliveries
         public ActionResult Index()
         {

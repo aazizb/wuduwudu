@@ -9,18 +9,22 @@ namespace IWSProject.Controllers
     [Authorize]
     public class QuantityUnitsController : Controller
     {
-        private IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public QuantityUnitsController()
+        {
+            db = new IWSDataContext();
+        }
 
         // GET: QuantityUnits
         public ActionResult Index()
         {
-            return View(db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return View(IWSLookUp.GetQuantityUnits());
         }
 
         [ValidateInput(false)]
         public ActionResult QuantityUnitsGridViewPartial()
         {
-            return PartialView("QuantityUnitsGridViewPartial", db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("QuantityUnitsGridViewPartial", IWSLookUp.GetQuantityUnits());
         }
 
         [HttpPost, ValidateInput(false)]
@@ -36,17 +40,19 @@ namespace IWSProject.Controllers
                     model.InsertOnSubmit(item);
 
                     db.SubmitChanges();
+                    return PartialView("QuantityUnitsGridViewPartial", IWSLookUp.GetQuantityUnits());
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("QuantityUnitsGridViewPartial", db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("QuantityUnitsGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult QuantityUnitsGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] QuantityUnit item)
@@ -64,18 +70,20 @@ namespace IWSProject.Controllers
                         this.UpdateModel(modelItem);
 
                         db.SubmitChanges();
+                        return PartialView("QuantityUnitsGridViewPartial", IWSLookUp.GetQuantityUnits());
                     }
                 }
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
             else
             {
                 ViewData["GenericError"] = IWSLocalResource.GenericError;
             }
-            return PartialView("QuantityUnitsGridViewPartial", db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("QuantityUnitsGridViewPartial", item);
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult QuantityUnitsGridViewPartialDelete(string id)
@@ -94,9 +102,10 @@ namespace IWSProject.Controllers
                 catch (Exception e)
                 {
                     ViewData["GenericError"] = e.Message;
+                    IWSLookUp.LogException(e);
                 }
             }
-            return PartialView("QuantityUnitsGridViewPartial", db.QuantityUnits.Where(c => c.CompanyID == (string)Session["CompanyID"]));
+            return PartialView("QuantityUnitsGridViewPartial", IWSLookUp.GetQuantityUnits());
         }
     }
 }

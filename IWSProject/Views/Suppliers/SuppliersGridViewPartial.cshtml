@@ -217,7 +217,7 @@
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "Phone";
-                    i.Caption = IWSLocalResource.zip;
+                    i.Caption = IWSLocalResource.PhoneNumber;
                     i.Width = Unit.Percentage(50);
                     i.NestedExtension().TextBox(s =>
                     {
@@ -353,6 +353,9 @@
                 });
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
+
+                formLayoutSettings.Items.AddEmptyItem();
+
                 formLayoutSettings.Items.Add(i =>
                 {
                     i.FieldName = "Bank";
@@ -364,6 +367,7 @@
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(75);
                     });
+                    i.Visible = false;
                 });
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.AddEmptyItem();
@@ -378,8 +382,11 @@
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(75);
                     });
+                    i.Visible = false;
                 });
                 formLayoutSettings.Items.AddEmptyItem();
+                formLayoutSettings.Items.AddEmptyItem();
+
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {

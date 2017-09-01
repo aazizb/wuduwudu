@@ -7,9 +7,14 @@ using IWSProject.Content;
 namespace IWSProject.Controllers
 {
     [Authorize]
+    [HandleError()]
     public class BankAccountsController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public BankAccountsController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: bankaccounts
         public ActionResult Index()
         {

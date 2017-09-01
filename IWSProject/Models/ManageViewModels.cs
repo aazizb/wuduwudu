@@ -68,13 +68,16 @@ namespace IWSProject.Models
         //public int ModelID { get; set; }
         public string ItemType { get; set; }
         public string CustSupplierID { get; set; }
+        public string Owner { get; set; }
         public string StoreID { get; set; }
         public DateTime TransDate { get; set; }
         public DateTime Itemdate { get; set; }
         public DateTime EntryDate { get; set; }
         public string Periode { get; set; }
         public string Account { get; set; }
+        public string AccountName { get; set; }
         public string OAccount { get; set; }
+        public string OAccountName { get; set; }
         public decimal Amount { get; set; }
         public string Side { get; set; }
         public string CompanyID { get; set; }
@@ -193,6 +196,16 @@ namespace IWSProject.Models
         public decimal AveragePrice { get; set; }
         public string Currency { get; set; }
         public string CompanyID { get; set; }
+    }
+    public class ReportViewModel
+    {
+        [Key]
+        public string Account { get; set; }
+        public string Owner { get; set; }
+        public string ItemType { get; set; }
+        public DateTime TransDate { get; set; }
+        public decimal Amount { get; set; }
+        public string Currency { get; set; }
     }
     public class BankStatementViewModel
     {

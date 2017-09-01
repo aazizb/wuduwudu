@@ -9,7 +9,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class GoodReceivingsController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public GoodReceivingsController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: goodreceivings
         public ActionResult Index()
         {

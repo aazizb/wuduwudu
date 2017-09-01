@@ -9,7 +9,11 @@ namespace IWSProject.Controllers
     [Authorize]
     public class PaymentsController : Controller
     {
-        IWSDataContext db = new IWSDataContext();
+        IWSDataContext db;
+        public PaymentsController()
+        {
+            db = new IWSDataContext();
+        }
         // GET: Payments
         public ActionResult Index()
         {
