@@ -49,7 +49,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("StoresGridViewPartial", item);
         }
@@ -78,7 +78,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("StoresGridViewPartial", item);
         }

@@ -50,7 +50,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("VatsGridViewPartial", item);
         }
@@ -81,7 +81,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("VatsGridViewPartial", item);
         }

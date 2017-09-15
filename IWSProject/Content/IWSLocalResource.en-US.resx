@@ -768,4 +768,7 @@
   <data name="DataFormat" xml:space="preserve">
     <value>Check data format and try again</value>
   </data>
+  <data name="BillPeriod" xml:space="preserve">
+    <value>Bill Period</value>
+  </data>
 </root>

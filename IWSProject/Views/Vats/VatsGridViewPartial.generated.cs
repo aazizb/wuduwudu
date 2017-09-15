@@ -73,9 +73,7 @@ namespace ASP
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "Vats", Action = "VatsGridViewPartialDelete" };
 
         settings.SettingsEditing.Mode = GridViewEditingMode.EditForm;
-        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-        settings.SettingsResizing.Visualization = ResizingMode.Postponed;
-
+        
         settings.CommandColumn.Visible = true;
         settings.CommandColumn.Width = Unit.Pixel(80);
 

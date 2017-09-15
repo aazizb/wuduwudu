@@ -47,7 +47,7 @@ namespace IWSProject.Controllers
                 }
             }
             else
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             return PartialView("CustomersGridViewPartial", IWSLookUp.GetCustomer());
         }
         [HttpPost, ValidateInput(false)]
@@ -73,7 +73,7 @@ namespace IWSProject.Controllers
                 }
             }
             else
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             return PartialView("CustomersGridViewPartial", IWSLookUp.GetCustomer());
         }
         [HttpPost, ValidateInput(false)]
@@ -128,7 +128,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
         }
@@ -161,7 +161,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("DetailGridViewPartial", IWSLookUp.GetBankAccount(owner));
         }

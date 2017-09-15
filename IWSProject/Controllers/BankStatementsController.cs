@@ -13,7 +13,7 @@
     using System.Text.RegularExpressions;
     using System.Web.Mvc;
     [Authorize]
-    [HandleError]
+    //[HandleError]
     public class BankStatementsController : Controller
     {
         IWSDataContext db;
@@ -110,8 +110,8 @@
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                throw ex;
             }
             List<BankStatementViewModel> model=IWSLookUp.GetBankStatements((string)Session["CompanyID"], false);
             return PartialView("CallbackPanelPartialView", model); 
@@ -135,12 +135,11 @@
                 catch (Exception ex)
                 {
                     IWSLookUp.LogException(ex);
-                    throw ex;
                 }
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("BankStatementsGridViewPartial", 
                     IWSLookUp.GetBankStatements(companyId, false));
@@ -164,13 +163,13 @@
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    throw ex;
                 }
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("BankStatementsGridViewPartial", 
                     IWSLookUp.GetBankStatements((string)Session["CompanyID"], false));
@@ -191,8 +190,8 @@
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    throw ex;
                 }
             }
             return PartialView("BankStatementsGridViewPartial", 
@@ -216,8 +215,16 @@
             const string bankStatement = "Auftragskonto;Buchungstag;Valutadatum;" +
                 "Buchungstext;Verwendungszweck;Beguenstigter/Zahlungspflichtiger;" +
                 "Kontonummer;BLZ;Betrag;Waehrung;Info";
+
+            const string articles = "id;name;description;price";
+
             const string accounts = "AccountId;AccountName;Balance";
 
+            const string providerXLS = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=";
+            const string extensionXLS= ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+            const string providerXLSX = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=";
+            const string extensionXLSX= ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+            
             string companyId = (string)Session["CompanyID"];
 
             //foreach (var item in files)
@@ -257,7 +264,7 @@
 
                         Lines = Lines.Skip(1).ToArray();
 
-                        if(!(Headers.Equals(bankStatement)) && !(Headers.Equals(accounts)))
+                        if(!(Headers.Equals(bankStatement)) && !(Headers.Equals(accounts)) && !(Headers.Equals(articles)))
                         {
                             string x = $"{IWSLocalResource.GenericError}{Environment.NewLine}{IWSLocalResource.DataFormat}";
 
@@ -363,6 +370,39 @@
                             }
 
                         }
+
+
+                        if (Headers.Equals(articles))
+                        {
+                            option = IWSLocalResource.articles;
+
+                            List<Article> Article = new List<Article>();
+                            foreach (var line in Lines)
+                            {
+                                Fields = line.Split(new char[] { ';' });
+
+                                Article.Add(new Article
+                                {
+                                    id = Fields[0],
+                                    name = Fields[1],
+                                    description = string.Empty,
+                                    CompanyID = companyId,
+                                });
+
+                            }
+
+                            foreach (var n in Article)
+                            {
+                                var u = db.Articles.Where(o => o.id.Equals(n.id)
+                                           && o.CompanyID.Equals(n.CompanyID)).FirstOrDefault();
+                                if (u == null)
+                                {
+                                    db.Articles.InsertOnSubmit(n);
+                                    count += 1;
+                                }
+                            }
+                        }
+
                         break;
                     case ".xls":
                     case ".xlsx":
@@ -374,13 +414,12 @@
 
                         if (extension == ".xls")
                         {
-                            connectionString = "Provider=Microsoft.Jet.OLEDB.4.0;Data Source=" +
-                            path + ";Extended Properties=\"Excel 8.0;HDR=Yes;IMEX=2\"";
+                            connectionString = providerXLS + path + extensionXLS;
                         }
                         else if (extension == ".xlsx")
                         {
-                            connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=" +
-                            path + ";Extended Properties=\"Excel 12.0;HDR=Yes;IMEX=2\"";
+                            connectionString = providerXLSX + path + extensionXLSX;
+
                         }
 
                         OleDbConnection oleDBConnection = new OleDbConnection(connectionString);
@@ -408,11 +447,14 @@
                         {
                             dataAdapter.Fill(dataSet);
                         }
-                        string[] original = { "id", "name", "balance", "description" };
-
+                        
                         string[] columnNames = dataSet.Tables[0].Columns.Cast<DataColumn>().Select(x => x.ColumnName).ToArray();
 
-                        if (!original.SequenceEqual(columnNames))
+                        string[] account = { "id", "name", "balance", "description" };
+
+                        string[] owner = { "id", "name", "street", "city", "state", "zip", "phone", "email", "accountid", "IBAN", "CIF" };
+
+                        if (!account.SequenceEqual(columnNames) && !owner.SequenceEqual(columnNames))
                         {
                             string x = $"{IWSLocalResource.GenericError}{Environment.NewLine}{IWSLocalResource.DataFormat}";
 
@@ -420,8 +462,7 @@
 
                             return Json(s);
                         }
-                        List<Account> Accounts = new List<Account>();
-                        if(!(dataSet.Tables[0].Rows.Count > 0))//dataSet != null && dataSet.Tables.Count > 0
+                        if(!(dataSet.Tables[0].Rows.Count > 0))
                         {
                             string x = $"{IWSLocalResource.GenericError}{Environment.NewLine}{IWSLocalResource.DataFormat} ";
 
@@ -429,35 +470,100 @@
 
                             return Json(s);
                         }
-
-                        for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+                        if (account.SequenceEqual(columnNames))
                         {
-                            Account Account = new Account
+
+                            List<Account> Accounts = new List<Account>();
+                            for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
                             {
-                                id = dataSet.Tables[0].Rows[i][0].ToString(),
-                                name = dataSet.Tables[0].Rows[i][1].ToString(),
-                                description = dataSet.Tables[0].Rows[i][3].ToString(),
-                                dateofopen = DateTime.Now,
-                                dateofclose = DateTime.Now,
-                                balance = Convert.ToDecimal(dataSet.Tables[0].Rows[i][2].ToString()),
-                                CompanyID = companyId.ToString(),
-                                ParentId = string.Empty,
-                                IsUsed = true
-                            };
-                            Accounts.Add(Account);
+                                Account Account = new Account
+                                {
+                                    id = dataSet.Tables[0].Rows[i][0].ToString(),
+                                    name = dataSet.Tables[0].Rows[i][1].ToString(),
+                                    description = dataSet.Tables[0].Rows[i][3].ToString(),
+                                    dateofopen = DateTime.Now,
+                                    dateofclose = DateTime.Now,
+                                    balance = Convert.ToDecimal(dataSet.Tables[0].Rows[i][2].ToString()),
+                                    CompanyID = companyId.ToString(),
+                                    ParentId = string.Empty,
+                                    IsUsed = true
+                                };
+                                Accounts.Add(Account);
+                            }
+
+                            count = 0;
+
+                            foreach (var n in Accounts)
+                            {
+                                var u = db.Accounts.Where(o => o.id.Equals(n.id)
+                                           && o.CompanyID.Equals(n.CompanyID)).FirstOrDefault();
+                                if (u == null)
+                                {
+                                    db.Accounts.InsertOnSubmit(n);
+                                    count += 1;
+                                }
+                            }
+
                         }
 
-                        count = 0;
-
-                        foreach (var n in Accounts)
+                        if (owner.SequenceEqual(columnNames))
                         {
-                            var u = db.Accounts.Where(o => o.id.Equals(n.id)
-                                       && o.CompanyID.Equals(n.CompanyID)).FirstOrDefault();
-                            if (u == null)
+
+                            List<Customer> Customers = new List<Customer>();
+                            for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
                             {
-                                db.Accounts.InsertOnSubmit(n);
-                                count += 1;
+                                Customer Customer = new Customer
+                                {
+                                    id = dataSet.Tables[0].Rows[i][0].ToString(),
+                                    name = dataSet.Tables[0].Rows[i][1].ToString(),
+
+                                    CompanyID = companyId.ToString(),
+
+                                };
+                                Customers.Add(Customer);
                             }
+
+                            count = 0;
+
+                            foreach (var n in Customers)
+                            {
+                                var u = db.Customers.Where(o => o.id.Equals(n.id)
+                                           && o.CompanyID.Equals(n.CompanyID)).FirstOrDefault();
+                                if (u == null)
+                                {
+                                    db.Customers.InsertOnSubmit(n);
+                                    count += 1;
+                                }
+                            }
+
+                            //==============================
+                            List<Supplier> Suppliers = new List<Supplier>();
+                            for (int i = 0; i < dataSet.Tables[0].Rows.Count; i++)
+                            {
+                                Supplier Supplier = new Supplier
+                                {
+                                    id = dataSet.Tables[0].Rows[i][0].ToString(),
+                                    name = dataSet.Tables[0].Rows[i][1].ToString(),
+
+                                    CompanyID = companyId.ToString(),
+
+                                };
+                                Suppliers.Add(Supplier);
+                            }
+
+                            count = 0;
+
+                            foreach (var n in Suppliers)
+                            {
+                                var u = db.Suppliers.Where(o => o.id.Equals(n.id)
+                                           && o.CompanyID.Equals(n.CompanyID)).FirstOrDefault();
+                                if (u == null)
+                                {
+                                    db.Suppliers.InsertOnSubmit(n);
+                                    count += 1;
+                                }
+                            }
+
                         }
                         break;
                 }
@@ -503,7 +609,8 @@
             catch (Exception ex)
             {
                 IWSLookUp.LogException(ex);
-                throw;
+
+                msg = ex.Message;
             }
             //}
             var Message = new { Description = msg };
@@ -750,8 +857,9 @@
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                throw;
+                return false;
             }
         }
 
@@ -768,8 +876,10 @@
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                throw;
+                return false;
+                
             }
         }
 
@@ -798,8 +908,8 @@
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                throw;
             }
             return false;
         }

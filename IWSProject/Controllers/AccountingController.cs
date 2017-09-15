@@ -46,8 +46,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
             }
             List<DocumentsViewModel> model = IWSLookUp.GetAccountingDocument(false);
             return PartialView("CallbackPanelPartialView", model);
@@ -281,8 +281,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
             }
             return false;
         }
@@ -304,8 +304,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
             }
             return false;
         }
@@ -349,8 +349,8 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    //throw;
                     return false;
                 }
             }
@@ -370,8 +370,8 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    //throw;
                     return false;
                 }
             }
@@ -444,8 +444,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return false;
             }
         }
@@ -642,8 +642,8 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    //throw;
                     return false;
                 }
             }
@@ -820,8 +820,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return false;
             }
             return results;
@@ -947,8 +947,8 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    //throw;
                     return false;
                 }
             }
@@ -1074,8 +1074,8 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    //throw;
                     return false;
                 }
             }
@@ -1200,8 +1200,8 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    //throw;
                     return false;
                 }
             }
@@ -1326,8 +1326,8 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    //throw;
                     return false;
                 }
             }
@@ -1454,8 +1454,8 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    //throw;
                     return false;
                 }
             }
@@ -1581,8 +1581,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return id;
             }
         }
@@ -1605,8 +1605,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return 0;
             }
         }
@@ -1729,8 +1729,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return id;
             }
         }
@@ -1746,8 +1746,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return id;
             }
         }
@@ -1769,8 +1769,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return 0;
             }
         }
@@ -1933,8 +1933,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return id;
             }
         }
@@ -1953,8 +1953,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return 0;
             }
         }
@@ -2117,8 +2117,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return id;
             }
         }
@@ -2137,8 +2137,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 return 0;
             }
         }
@@ -2157,8 +2157,8 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
-                    //throw;
                     results = false;
                 }
             }
@@ -2274,8 +2274,8 @@ namespace IWSProject.Controllers
             }
             catch (Exception ex)
             {
+                ViewData["GenericError"] = ex.Message;
                 IWSLookUp.LogException(ex);
-                //throw;
                 results = false;
             }
             return results;
@@ -2308,25 +2308,25 @@ namespace IWSProject.Controllers
                         if (!results)
                         {
                             msg = IWSLocalResource.GenericError;
-                            throw new ApplicationException(msg);
+                            throw new Exception(msg);
                         }
                         results = UpdateStock(ItemID, ItemType, companyId);
                         if (!results)
                         {
                             msg = IWSLocalResource.GenericError;
-                            throw new ApplicationException(msg);
+                            throw new Exception(msg);
                         }
                         results = Account(ItemID, ItemType, companyId);
                         if (!results)
                         {
                             msg = IWSLocalResource.GenericError;
-                            throw new ApplicationException(msg);
+                            throw new Exception(msg);
                         }
                         results = Validate(ItemID, ItemType);
                         if (!results)
                         {
                             msg = IWSLocalResource.GenericError;
-                            throw new ApplicationException(msg);
+                            throw new Exception(msg);
                         }
                         db.SubmitChanges(System.Data.Linq.ConflictMode.FailOnFirstConflict);
                     }
@@ -2334,9 +2334,9 @@ namespace IWSProject.Controllers
                 }
                 catch (Exception ex)
                 {
+                    ViewData["GenericError"] = ex.Message;
                     IWSLookUp.LogException(ex);
                     tx.Dispose();
-                    //throw;
                 }
             }
 

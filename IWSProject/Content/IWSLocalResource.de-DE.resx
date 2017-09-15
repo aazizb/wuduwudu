@@ -765,4 +765,7 @@
   <data name="DataFormat" xml:space="preserve">
     <value>Check data format and try again de-DE</value>
   </data>
+  <data name="BillPeriod" xml:space="preserve">
+    <value>Bill Period de-DE</value>
+  </data>
 </root>

@@ -71,7 +71,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("MasterGridViewPartial", IWSLookUp.GetGoodReceiving());
         }
@@ -99,7 +99,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("MasterGridViewPartial", IWSLookUp.GetGoodReceiving());
         }
@@ -152,7 +152,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("DetailGridViewPartial", model.Where(p=>p.transid==transId).ToList());
         }
@@ -181,7 +181,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("DetailGridViewPartial", db.LineGoodReceivings.Where(p => p.transid == transId).ToList());
         }

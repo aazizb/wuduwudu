@@ -69,9 +69,7 @@ namespace ASP
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "MenuUI", Action = "MenuUIGridViewPartialDelete" };
 
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
-        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-        settings.SettingsResizing.Visualization = ResizingMode.Postponed;
-
+        
         settings.CommandColumn.Visible = true;
         settings.CommandColumn.Width = Unit.Pixel(80);
 

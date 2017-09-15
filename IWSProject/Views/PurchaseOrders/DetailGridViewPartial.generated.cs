@@ -75,8 +75,7 @@ WriteLiteral("\r\n");
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PurchaseOrders", Action = "DetailGridViewPartialDelete", transid = Session["transid"] };
 
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
-        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-        settings.SettingsResizing.Visualization = ResizingMode.Postponed;
+      
 
         settings.SettingsBehavior.ConfirmDelete = true;
 
@@ -187,7 +186,7 @@ WriteLiteral("\r\n");
                 combo.DataSource = IWSLookUp.GetCurrency();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
                 combo.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                combo.TextFormatString = "{0}";
+                combo.TextFormatString = "{1}";
             });
         });
         settings.Columns.Add(column =>
@@ -305,7 +304,7 @@ WriteLiteral("\r\n");
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}";
+                        s.Properties.TextFormatString = "{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);

@@ -12,6 +12,8 @@
         settings.SettingsEditing.UpdateRowRouteValues = new { Controller = "articles", Action = "ArticlesGridViewPartialUpdate" };
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "articles", Action = "ArticlesGridViewPartialDelete" };
 
+        settings.EnableRowsCache = true;
+
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
 
         settings.CommandColumn.Visible = true;

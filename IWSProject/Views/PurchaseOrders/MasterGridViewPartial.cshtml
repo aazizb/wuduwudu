@@ -17,13 +17,19 @@
         settings.CommandColumn.Visible = true;
         settings.CommandColumn.Width = Unit.Percentage(5);
 
+        settings.SettingsBehavior.ConfirmDelete = true;
+        settings.SettingsBehavior.AllowFocusedRow = true;
         settings.SettingsBehavior.EnableRowHotTrack = true;
+        settings.SettingsBehavior.AllowSelectByRowClick = true;
+
         settings.Styles.RowHotTrack.Cursor = "pointer";
         settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
 
-        //when an end-user double-clicks a grid row, the edit form appears, allowing an end-user to edit the row.  
-        //settings.SettingsBehavior.AllowSelectByRowClick = true;
-        //settings.ClientSideEvents.RowDblClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
+        settings.ClientSideEvents.RowClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
+        settings.ClientSideEvents.RowDblClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
+        settings.ClientSideEvents.Init = "OnInitMaster";
+        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
+        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
 
         settings.CommandColumn.ShowSelectCheckbox = true;
 
@@ -60,11 +66,30 @@
                 }
             }
         };
+
         settings.InitNewRow = (s, e) =>
         {
             e.NewValues["TransDate"] = DateTime.Today;
             e.NewValues["ItemDate"] = DateTime.Today;
             e.NewValues["EntryDate"] = DateTime.Today;
+            e.NewValues["IsValidated"] = false;
+        };
+
+        settings.BeforeGetCallbackResult = (sender, e) =>
+        {
+            MVCxGridView g = (MVCxGridView)sender;
+            if (ViewData["NewKeyValue"] != null)
+            {
+                g.DetailRows.ExpandRowByKey((int)ViewData["NewKeyValue"]);
+            }
+        };
+        settings.AfterPerformCallback = (sender, e) =>
+        {
+            MVCxGridView g = (MVCxGridView)sender;
+            if (g.IsEditing)
+            {
+                g.DetailRows.CollapseAllRows();
+            }
         };
 
         settings.KeyFieldName = "id";
@@ -72,23 +97,12 @@
         settings.Settings.ShowFilterRow = true;
         settings.Settings.ShowGroupPanel = true;
         settings.Settings.ShowFilterRowMenu = true;
-        settings.SettingsBehavior.ConfirmDelete = true;
-        settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.Width = Unit.Percentage(100);
         settings.ControlStyle.Paddings.Padding = Unit.Pixel(10);
         settings.ControlStyle.Border.BorderWidth = Unit.Pixel(0);
         settings.ControlStyle.BorderBottom.BorderWidth = Unit.Pixel(1);
 
-        settings.ClientSideEvents.SelectionChanged = "OnSelectionChanged";
-        settings.ClientSideEvents.BeginCallback = "OnBeginCallback";
-        settings.ClientSideEvents.RowClick = "OnRowClick";
-
-        settings.SettingsBehavior.AllowSelectByRowClick = true;
-        settings.SettingsBehavior.EnableRowHotTrack = true;
-
-        settings.Styles.RowHotTrack.Cursor = "pointer";
-        settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
 
         settings.SettingsPager.Visible = true;
         settings.SettingsPager.Position = PagerPosition.Bottom;
@@ -173,6 +187,7 @@
                 e.Value = periode;
             }
         };
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "oTotal";
@@ -225,19 +240,25 @@
             column.Caption = IWSLocalResource.text;
             column.Width = Unit.Percentage(17);
         });
+
         settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oTotal").DisplayFormat = "N";
         settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oNet").DisplayFormat = "N";
         settings.TotalSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oVat").DisplayFormat = "N";
-        settings.Settings.ShowFooter = true;
+
         settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oTotal").DisplayFormat = "N";
         settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oNet").DisplayFormat = "N";
         settings.GroupSummary.Add(DevExpress.Data.SummaryItemType.Sum, "oVat").DisplayFormat = "N";
+
+        settings.Settings.ShowFooter = true;
         settings.Settings.ShowGroupPanel = true;
 
         #region Template
 
         settings.SetEditFormTemplateContent(c =>
         {
+            var isValidated = DataBinder.Eval(c.DataItem, "IsValidated");
+
+            bool showUpdateButton = ((bool)isValidated == true) ? false : true;
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
@@ -272,6 +293,8 @@
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
+                        s.TabIndex = 1;
+                        s.Properties.ClientSideEvents.Init = "function(s, e) { s.Focus(); }";
                     });
                 });
 
@@ -287,6 +310,7 @@
                         s.Width = Unit.Percentage(94);
                         s.Properties.AllowUserInput = true;
                         s.Properties.AllowMouseWheel = true;
+                        s.TabIndex = 5;
                     });
                 });
 
@@ -316,6 +340,7 @@
                         s.Properties.TextFormatString = "{0}-{1}";
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
+                        s.TabIndex = 2;
                     });
                 });
                 formLayoutSettings.Items.Add(i =>
@@ -331,6 +356,7 @@
                         s.Properties.AllowUserInput = false;
                         s.Properties.AllowMouseWheel = false;
                         s.ReadOnly = true;
+                        s.TabIndex = 6;
                     });
                 });
 
@@ -343,7 +369,9 @@
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
+                        s.TabIndex = 3;
                     });
+
                 });
 
                 formLayoutSettings.Items.Add(i =>
@@ -360,6 +388,7 @@
                         s.Properties.AllowUserInput = false;
                         s.Properties.AllowMouseWheel = false;
                         s.ReadOnly = true;
+                        s.TabIndex = 7;
                     });
                 });
 
@@ -367,15 +396,26 @@
                 {
                     i.FieldName = "HeaderText";
                     i.Caption = IWSLocalResource.text;
-                    i.ColSpan = 2;
+
                     i.NestedExtension().Memo(s =>
                     {
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
+                        s.TabIndex = 4;
                     });
                 });
-
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "IsValidated";
+                    i.Caption = IWSLocalResource.IsValidated;
+                    i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+                    i.NestedExtension().CheckBox(s =>
+                    {
+                        s.Width = Unit.Percentage(20);
+                        s.ReadOnly = true;
+                    });
+                });
                 formLayoutSettings.Items.AddEmptyItem();
                 formLayoutSettings.Items.Add(i =>
                 {
@@ -393,7 +433,9 @@
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
                     btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
                     btnSettings.Width = Unit.Pixel(80);
+                    btnSettings.ClientVisible = showUpdateButton;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ PurchaseOrder.UpdateEdit(); }";
+                    btnSettings.TabIndex = 8;
                 }).Render();
 
                     Html.DevExpress().Button(
@@ -406,6 +448,7 @@
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
                     btnSettings.Width = Unit.Pixel(80);
                     btnSettings.ClientSideEvents.Click = "function(s, e){ PurchaseOrder.CancelEdit(); }";
+                    btnSettings.TabIndex = 9;
                 }).Render();
 
                 });
@@ -419,7 +462,7 @@
         {
             Session["transid"] = DataBinder.Eval(c.DataItem, "ID");
             Session["IsValidated"] = DataBinder.Eval(c.DataItem, "IsValidated");
-            Html.RenderAction("DetailGridViewPartial", new { transid = Session["transid"], IsValidated = Session["IsValidated"] });
+            Html.RenderAction("DetailGridViewPartial", new { transid = Session["transid"], IsValidated = Session["IsValidated"], NewKeyValue = ViewData["NewKeyValue"] });
         });
     });
 
@@ -429,3 +472,5 @@
     }
 }
 @grid.Bind(Model).GetHtml()
+
+

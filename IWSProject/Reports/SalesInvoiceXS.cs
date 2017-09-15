@@ -78,6 +78,8 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
     private XRLabel xrLabel32;
     private XRLabel xrLabel35;
     private XRLabel xrLabel34;
+    private XRLabel xrLabel37;
+    private XRLabel xrLabel36;
 
     /// <summary>
     /// Required designer variable.
@@ -122,6 +124,8 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
             DevExpress.XtraReports.Parameters.DynamicListLookUpSettings dynamicListLookUpSettings1 = new DevExpress.XtraReports.Parameters.DynamicListLookUpSettings();
             this.SalesInvoiceDS = new DevExpress.DataAccess.Sql.SqlDataSource(this.components);
             this.Detail = new DevExpress.XtraReports.UI.DetailBand();
+            this.xrLabel35 = new DevExpress.XtraReports.UI.XRLabel();
+            this.xrLabel34 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel21 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel20 = new DevExpress.XtraReports.UI.XRLabel();
             this.xrLabel19 = new DevExpress.XtraReports.UI.XRLabel();
@@ -191,8 +195,8 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
             this.xrLabel30 = new DevExpress.XtraReports.UI.XRLabel();
             this.PageHeader = new DevExpress.XtraReports.UI.PageHeaderBand();
             this.pSalesInvoice = new DevExpress.XtraReports.Parameters.Parameter();
-            this.xrLabel34 = new DevExpress.XtraReports.UI.XRLabel();
-            this.xrLabel35 = new DevExpress.XtraReports.UI.XRLabel();
+            this.xrLabel36 = new DevExpress.XtraReports.UI.XRLabel();
+            this.xrLabel37 = new DevExpress.XtraReports.UI.XRLabel();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.xrTable1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this)).BeginInit();
@@ -249,6 +253,30 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
             this.Detail.Name = "Detail";
             this.Detail.Padding = new DevExpress.XtraPrinting.PaddingInfo(0, 0, 0, 0, 100F);
             this.Detail.TextAlignment = DevExpress.XtraPrinting.TextAlignment.TopLeft;
+            // 
+            // xrLabel35
+            // 
+            this.xrLabel35.Dpi = 100F;
+            this.xrLabel35.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
+            this.xrLabel35.LocationFloat = new DevExpress.Utils.PointFloat(570.1432F, 111.8333F);
+            this.xrLabel35.Name = "xrLabel35";
+            this.xrLabel35.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 5, 5, 100F);
+            this.xrLabel35.SizeF = new System.Drawing.SizeF(222.8568F, 23F);
+            this.xrLabel35.StylePriority.UseFont = false;
+            this.xrLabel35.StylePriority.UsePadding = false;
+            this.xrLabel35.Text = global::IWSProject.Content.IWSLocalResource.ShipTo;
+            // 
+            // xrLabel34
+            // 
+            this.xrLabel34.Dpi = 100F;
+            this.xrLabel34.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
+            this.xrLabel34.LocationFloat = new DevExpress.Utils.PointFloat(10F, 111.8333F);
+            this.xrLabel34.Name = "xrLabel34";
+            this.xrLabel34.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 5, 5, 100F);
+            this.xrLabel34.SizeF = new System.Drawing.SizeF(208.283F, 23F);
+            this.xrLabel34.StylePriority.UseFont = false;
+            this.xrLabel34.StylePriority.UsePadding = false;
+            this.xrLabel34.Text = global::IWSProject.Content.IWSLocalResource.BillTo;
             // 
             // xrLabel21
             // 
@@ -973,7 +1001,7 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
             this.xrLabelDueDate.AutoWidth = true;
             this.xrLabelDueDate.Dpi = 100F;
             this.xrLabelDueDate.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
-            this.xrLabelDueDate.LocationFloat = new DevExpress.Utils.PointFloat(570.1431F, 49.99997F);
+            this.xrLabelDueDate.LocationFloat = new DevExpress.Utils.PointFloat(570.1431F, 51.33335F);
             this.xrLabelDueDate.Name = "xrLabelDueDate";
             this.xrLabelDueDate.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 5, 5, 100F);
             this.xrLabelDueDate.SizeF = new System.Drawing.SizeF(100F, 23F);
@@ -1006,7 +1034,7 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
             this.xrPageInfo2.Dpi = 100F;
             this.xrPageInfo2.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
             this.xrPageInfo2.Format = "{0} / {1}";
-            this.xrPageInfo2.LocationFloat = new DevExpress.Utils.PointFloat(671.1432F, 75.33335F);
+            this.xrPageInfo2.LocationFloat = new DevExpress.Utils.PointFloat(671.1432F, 103.3334F);
             this.xrPageInfo2.Name = "xrPageInfo2";
             this.xrPageInfo2.Padding = new DevExpress.XtraPrinting.PaddingInfo(2, 2, 0, 0, 100F);
             this.xrPageInfo2.SizeF = new System.Drawing.SizeF(121.857F, 23.00002F);
@@ -1019,7 +1047,7 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
             this.xrLabel30.AutoWidth = true;
             this.xrLabel30.Dpi = 100F;
             this.xrLabel30.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
-            this.xrLabel30.LocationFloat = new DevExpress.Utils.PointFloat(570.1432F, 73.33335F);
+            this.xrLabel30.LocationFloat = new DevExpress.Utils.PointFloat(570.1432F, 103.3334F);
             this.xrLabel30.Name = "xrLabel30";
             this.xrLabel30.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 5, 5, 100F);
             this.xrLabel30.SizeF = new System.Drawing.SizeF(100F, 23F);
@@ -1033,6 +1061,8 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
             // PageHeader
             // 
             this.PageHeader.Controls.AddRange(new DevExpress.XtraReports.UI.XRControl[] {
+            this.xrLabel37,
+            this.xrLabel36,
             this.xrLabel30,
             this.xrPageInfo2,
             this.xrLabelInvoiceNumber,
@@ -1043,7 +1073,7 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
             this.xrLabel27,
             this.xrLabel26});
             this.PageHeader.Dpi = 100F;
-            this.PageHeader.HeightF = 98.33337F;
+            this.PageHeader.HeightF = 128.3334F;
             this.PageHeader.Name = "PageHeader";
             // 
             // pSalesInvoice
@@ -1060,33 +1090,40 @@ public class SalesInvoiceXS : DevExpress.XtraReports.UI.XtraReport
             this.pSalesInvoice.Type = typeof(int);
             this.pSalesInvoice.ValueInfo = "0";
             // 
-            // xrLabel34
+            // xrLabel36
             // 
-            this.xrLabel34.Dpi = 100F;
-            this.xrLabel34.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
-            this.xrLabel34.LocationFloat = new DevExpress.Utils.PointFloat(10F, 111.8333F);
-            this.xrLabel34.Name = "xrLabel34";
-            this.xrLabel34.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 5, 5, 100F);
-            this.xrLabel34.SizeF = new System.Drawing.SizeF(208.283F, 23F);
-            this.xrLabel34.StylePriority.UseFont = false;
-            this.xrLabel34.StylePriority.UsePadding = false;
-        this.xrLabel34.Text = global::IWSProject.Content.IWSLocalResource.BillTo;
+            this.xrLabel36.AutoWidth = true;
+            this.xrLabel36.Dpi = 100F;
+            this.xrLabel36.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
+            this.xrLabel36.LocationFloat = new DevExpress.Utils.PointFloat(570.1431F, 77.33335F);
+            this.xrLabel36.Name = "xrLabel36";
+            this.xrLabel36.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 5, 5, 100F);
+            this.xrLabel36.SizeF = new System.Drawing.SizeF(100F, 23F);
+            this.xrLabel36.StylePriority.UseFont = false;
+            this.xrLabel36.StylePriority.UsePadding = false;
+            this.xrLabel36.StylePriority.UseTextAlignment = false;
+            this.xrLabel36.Text = global::IWSProject.Content.IWSLocalResource.BillPeriod; 
+            this.xrLabel36.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
+            this.xrLabel36.WordWrap = false;
             // 
-            // xrLabel35
+            // xrLabel37
             // 
-            this.xrLabel35.Dpi = 100F;
-            this.xrLabel35.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
-            this.xrLabel35.LocationFloat = new DevExpress.Utils.PointFloat(570.1432F, 111.8333F);
-            this.xrLabel35.Name = "xrLabel35";
-            this.xrLabel35.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 5, 5, 100F);
-            this.xrLabel35.SizeF = new System.Drawing.SizeF(222.8568F, 23F);
-            this.xrLabel35.StylePriority.UseFont = false;
-            this.xrLabel35.StylePriority.UsePadding = false;
-        this.xrLabel35.Text = global::IWSProject.Content.IWSLocalResource.ShipTo;
+            this.xrLabel37.DataBindings.AddRange(new DevExpress.XtraReports.UI.XRBinding[] {
+            new DevExpress.XtraReports.UI.XRBinding("Text", null, "Master.TransDate", "{0:MM - yyyy}")});
+            this.xrLabel37.Dpi = 100F;
+            this.xrLabel37.Font = new System.Drawing.Font("Times New Roman", 12F, System.Drawing.FontStyle.Bold);
+            this.xrLabel37.LocationFloat = new DevExpress.Utils.PointFloat(671.1432F, 77.33335F);
+            this.xrLabel37.Name = "xrLabel37";
+            this.xrLabel37.Padding = new DevExpress.XtraPrinting.PaddingInfo(5, 5, 5, 5, 100F);
+            this.xrLabel37.SizeF = new System.Drawing.SizeF(121.857F, 22.99999F);
+            this.xrLabel37.StylePriority.UseFont = false;
+            this.xrLabel37.StylePriority.UsePadding = false;
+            this.xrLabel37.StylePriority.UseTextAlignment = false;
+            this.xrLabel37.TextAlignment = DevExpress.XtraPrinting.TextAlignment.MiddleRight;
             // 
             // SalesInvoiceXS
             // 
-        this.Bands.AddRange(new DevExpress.XtraReports.UI.Band[] {
+            this.Bands.AddRange(new DevExpress.XtraReports.UI.Band[] {
             this.Detail,
             this.TopMargin,
             this.BottomMargin,

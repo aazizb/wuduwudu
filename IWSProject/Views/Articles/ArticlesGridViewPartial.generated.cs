@@ -73,7 +73,6 @@ namespace ASP
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "articles", Action = "ArticlesGridViewPartialDelete" };
 
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
-        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
         settings.SettingsResizing.Visualization = ResizingMode.Postponed;
 
         settings.CommandColumn.Visible = true;
@@ -212,7 +211,7 @@ namespace ASP
                 combo.DataSource = IWSLookUp.GetCurrency();
                 combo.Columns.Add("id").Caption = IWSLocalResource.id;
                 combo.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                combo.TextFormatString = "{0}";
+                combo.TextFormatString = "{1}";
             });
         });
         settings.Columns.Add("qttyunit").Caption=IWSLocalResource.qttyunit;
@@ -326,7 +325,7 @@ namespace ASP
                         s.Properties.DataSource = IWSLookUp.GetCurrency();
                         s.Properties.Columns.Add("id").Caption = IWSLocalResource.id;
                         s.Properties.Columns.Add("name").Caption = IWSLocalResource.Currency;
-                        s.Properties.TextFormatString = "{0}";
+                        s.Properties.TextFormatString = "{1}";
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);

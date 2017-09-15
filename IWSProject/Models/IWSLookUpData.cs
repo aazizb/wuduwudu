@@ -8,6 +8,7 @@
     using System.Linq;
     using System.Threading;
     using System.Web;
+
     public static class IWSLookUp
     {
 
@@ -140,6 +141,7 @@
         {
             var b = from o in IWSEntities.PurchaseOrders
                     where o.CompanyId == (string)HttpContext.Current.Session["CompanyID"]
+                    orderby o.id descending
                     select o;
             return b;
         }
@@ -2074,6 +2076,20 @@
             string userName = (string)HttpContext.Current.Session["UserName"];
             IWSEntities.LogException(msg, type, source, url, target, company, userName);
         }
+        public static string GetModelSateErrors(System.Web.Mvc.ModelStateDictionary modelState)
+        {
+            return string.Join("; ", modelState.Values
+                                       .SelectMany(x => x.Errors)
+                                       .Select(x => x.ErrorMessage));
+        }
+        public static List<string> GetModelSateErrorsList(System.Web.Mvc.ModelStateDictionary modelState)
+        {
+            var errors = from state in modelState.Values
+                        from error in state.Errors
+                        select error.ErrorMessage;
+            return errors.ToList();
+        }
+
 
         public enum DocsType
         {

@@ -268,6 +268,15 @@ namespace IWSProject.Content {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bill Period.
+        /// </summary>
+        public static string BillPeriod {
+            get {
+                return ResourceManager.GetString("BillPeriod", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Bill To:.
         /// </summary>
         public static string BillTo {

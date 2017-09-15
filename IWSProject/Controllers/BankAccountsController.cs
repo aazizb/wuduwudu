@@ -47,7 +47,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("BankAccountsGridViewPartial", db.BankAccounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }
@@ -74,7 +74,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("BankAccountsGridViewPartial", db.BankAccounts.Where(c => c.CompanyID == (string)Session["CompanyID"]));
         }

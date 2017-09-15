@@ -14,7 +14,6 @@
         settings.SettingsEditing.DeleteRowRouteValues = new { Controller = "PurchaseOrders", Action = "DetailGridViewPartialDelete", transid = Session["transid"] };
 
         settings.SettingsEditing.Mode = GridViewEditingMode.EditFormAndDisplayRow;
-        settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
         settings.SettingsResizing.Visualization = ResizingMode.Postponed;
 
         settings.SettingsBehavior.ConfirmDelete = true;
@@ -37,20 +36,6 @@
         settings.SettingsCommandButton.DeleteButton.Text = " ";
         settings.CommandColumn.ShowDeleteButton = true;
 
-        settings.CommandButtonInitialize = (s, e) =>
-        {
-            var value = Session["IsValidated"];
-            if (e.ButtonType == ColumnCommandButtonType.Edit || e.ButtonType == ColumnCommandButtonType.Delete
-                                                    || e.ButtonType == ColumnCommandButtonType.New)
-            {
-                e.Enabled = false.Equals(value);
-            }
-        };
-        settings.InitNewRow = (s, e) =>
-        {
-            e.NewValues["duedate"] = DateTime.Today;
-        };
-
         settings.KeyFieldName = "id";
 
         settings.Width = Unit.Percentage(100);
@@ -61,8 +46,6 @@
 
         settings.SettingsPager.Visible = true;
         settings.Settings.ShowGroupPanel = true;
-        settings.Settings.ShowFilterRow = true;
-        settings.Settings.ShowFilterRowMenu = true;
         settings.SettingsBehavior.AllowSelectByRowClick = true;
 
         settings.SettingsBehavior.AllowSelectByRowClick = true;
@@ -70,6 +53,9 @@
 
         settings.Styles.RowHotTrack.Cursor = "pointer";
         settings.Styles.AlternatingRow.BackColor = System.Drawing.Color.Beige;
+
+        settings.ClientSideEvents.RowClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
+        settings.ClientSideEvents.RowDblClick = "function(sender, e) { sender.StartEditRow(e.visibleIndex); }";
 
         settings.Columns.Add(column =>
         {
@@ -112,6 +98,7 @@
                 p.Width = Unit.Percentage(100);
             });
         });
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "Currency";
@@ -129,6 +116,7 @@
                 combo.TextFormatString = "{1}";
             });
         });
+
         settings.Columns.Add(column =>
         {
             column.FieldName = "quantity";
@@ -180,6 +168,7 @@
         #region Template
         settings.SetEditFormTemplateContent(templateContent =>
         {
+            var showUpdateButton = ((bool)Session["IsValidated"] == true) ? false : true;
 
             Html.DevExpress().FormLayout(formLayoutSettings =>
             {
@@ -210,10 +199,33 @@
                             a.Width = Unit.Percentage(85);
                         });
                         s.Properties.TextFormatString = "{0}-{1}";
+                        s.Properties.CallbackPageSize = 15;
+                        s.Properties.FilterMinLength = 2;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
                         s.Properties.ClientSideEvents.SelectedIndexChanged = "OnSelectedIndexChanged";
+                        s.TabIndex = 1;
+                        s.Properties.ClientSideEvents.Init = "function(s, e) { s.Focus(); }";
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "duedate";
+                    i.Caption = IWSLocalResource.duedate;
+                    i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
+                    i.NestedExtension().DateEdit(d =>
+                    {
+                        d.Properties.EditFormatString = "MM/dd/yyyy";
+                        d.Properties.NullDisplayText = "MM/dd/yyyy";
+                        d.Properties.EditFormat = EditFormat.Custom;
+                        d.Width = Unit.Percentage(90);
+                        d.Properties.DisplayFormatString = "yyyy-MM-dd";
+                        d.Properties.DisplayFormatInEditMode = true;
+                        d.Properties.AllowUserInput = true;
+                        d.Properties.AllowMouseWheel = true;
+                        d.TabIndex = 4;
                     });
                 });
 
@@ -226,22 +238,39 @@
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
+                        s.TabIndex = 7;
                     });
                 });
 
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "price";
-                    i.Caption = IWSLocalResource.price;
+                    i.FieldName = "quantity";
+                    i.Caption = IWSLocalResource.quantity;
                     i.NestedExtension().SpinEdit(s =>
                     {
-                        s.Properties.DisplayFormatString = "N";
                         s.Properties.MinValue = 0;
                         s.Properties.MaxValue = UInt32.MaxValue;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
+                        s.TabIndex = 2;
+                    });
+                });
+
+                formLayoutSettings.Items.Add(i =>
+                {
+                    i.FieldName = "Vat";
+                    i.Caption = IWSLocalResource.vat;
+                    i.NestedExtension().SpinEdit(s =>
+                    {
+                        s.Properties.MinValue = 0;
+                        s.Properties.MaxValue = UInt32.MaxValue;
+                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
+                        s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
+                        s.ShowModelErrors = true;
+                        s.Width = Unit.Percentage(100);
+                        s.TabIndex = 5;
                     });
                 });
 
@@ -271,53 +300,24 @@
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
+                        s.TabIndex = 8;
                     });
                 });
+
                 formLayoutSettings.Items.Add(i =>
                 {
-                    i.FieldName = "quantity";
-                    i.Caption = IWSLocalResource.quantity;
+                    i.FieldName = "price";
+                    i.Caption = IWSLocalResource.price;
                     i.NestedExtension().SpinEdit(s =>
                     {
+                        s.Properties.DisplayFormatString = "N";
                         s.Properties.MinValue = 0;
                         s.Properties.MaxValue = UInt32.MaxValue;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
                         s.ShowModelErrors = true;
                         s.Width = Unit.Percentage(100);
-                    });
-                });
-
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "Vat";
-                    i.Caption = IWSLocalResource.vat;
-                    i.NestedExtension().SpinEdit(s =>
-                    {
-                        s.Properties.MinValue = 0;
-                        s.Properties.MaxValue = UInt32.MaxValue;
-                        s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
-                        s.Properties.SpinButtons.ShowLargeIncrementButtons = true;
-                        s.ShowModelErrors = true;
-                        s.Width = Unit.Percentage(100);
-                    });
-                });
-
-                formLayoutSettings.Items.Add(i =>
-                {
-                    i.FieldName = "duedate";
-                    i.Caption = IWSLocalResource.duedate;
-                    i.NestedExtensionType = FormLayoutNestedExtensionItemType.DateEdit;
-                    i.NestedExtension().DateEdit(d =>
-                    {
-                        d.Properties.EditFormatString = "MM/dd/yyyy";
-                        d.Properties.NullDisplayText = "MM/dd/yyyy";
-                        d.Properties.EditFormat = EditFormat.Custom;
-                        d.Width = Unit.Percentage(90);
-                        d.Properties.DisplayFormatString = "yyyy-MM-dd";
-                        d.Properties.DisplayFormatInEditMode = true;
-                        d.Properties.AllowUserInput = true;
-                        d.Properties.AllowMouseWheel = true;
+                        s.TabIndex = 3;
                     });
                 });
 
@@ -331,8 +331,10 @@
                         s.ShowModelErrors = true;
                         s.Properties.ValidationSettings.ErrorDisplayMode = ErrorDisplayMode.ImageWithTooltip;
                         s.Width = Unit.Percentage(100);
+                        s.TabIndex = 6;
                     });
                 });
+
                 formLayoutSettings.Items.AddEmptyItem();
 
                 formLayoutSettings.Items.Add(i =>
@@ -350,7 +352,10 @@
                     btnSettings.ToolTip = IWSLocalResource.btnUpdate;
                     btnSettings.Style[HtmlTextWriterStyle.MarginRight] = "5px";
                     btnSettings.Images.Image.IconID = IconID.ActionsApply16x16;
+                    btnSettings.Width = Unit.Pixel(80);
+                    btnSettings.ClientVisible = showUpdateButton;
                     btnSettings.ClientSideEvents.Click = "function(s, e){ DetailGridView.UpdateEdit(); }";
+                    btnSettings.TabIndex = 9;
                 }).Render();
 
                     Html.DevExpress().Button(
@@ -361,7 +366,9 @@
                     btnSettings.ToolTip = IWSLocalResource.btnCancel;
                     btnSettings.Style[HtmlTextWriterStyle.MarginLeft] = "5px";
                     btnSettings.Images.Image.IconID = IconID.ActionsCancel16x16;
+                    btnSettings.Width = Unit.Pixel(80);
                     btnSettings.ClientSideEvents.Click = "function(s, e){ DetailGridView.CancelEdit(); }";
+                    btnSettings.TabIndex = 10;
                 }).Render();
 
                 });
@@ -371,6 +378,28 @@
         });
         #endregion
 
+        settings.CommandButtonInitialize = (s, e) =>
+        {
+            var value = Session["IsValidated"];
+            if (e.ButtonType == ColumnCommandButtonType.Edit || e.ButtonType == ColumnCommandButtonType.Delete
+                                                    || e.ButtonType == ColumnCommandButtonType.New)
+            {
+                e.Enabled = false.Equals(value);
+            }
+        };
+        settings.InitNewRow = (s, e) =>
+        {
+            e.NewValues["duedate"] = DateTime.Today;
+        };
+        settings.ClientSideEvents.Init = "OnInitDetail";
+        settings.PreRender = (sender, e) =>
+        {
+            if (ViewData["IsNewDetailRow"] != null)
+            {
+                MVCxGridView g = (MVCxGridView)sender;
+                g.AddNewRow();
+            }
+        };
         settings.DataBinding = (sender, e) =>
         {
             ((MVCxGridView)sender).ForceDataRowType(typeof(LinePurchaseOrder));
@@ -380,7 +409,6 @@
     if (ViewData["GenericError"] != null)
     {
         grid.SetEditErrorText((string)ViewData["GenericError"]);
-
     }
 }
 @grid.Bind(Model).GetHtml()

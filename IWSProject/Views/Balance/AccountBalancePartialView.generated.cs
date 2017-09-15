@@ -61,8 +61,7 @@ Write(Html.DevExpress().GridView(settings =>
 
     settings.KeyFieldName = "AccountID";
 
-    settings.SettingsResizing.ColumnResizeMode = ColumnResizeMode.NextColumn;
-    settings.SettingsResizing.Visualization = ResizingMode.Postponed;
+
 
     settings.SettingsBehavior.AllowSelectByRowClick = true;
     settings.SettingsBehavior.EnableRowHotTrack = true;

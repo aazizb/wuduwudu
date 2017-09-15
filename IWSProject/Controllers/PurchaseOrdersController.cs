@@ -49,12 +49,14 @@ namespace IWSProject.Controllers
             item.ShippingTerms = item.ShippingTerms ?? "N/A";
             item.HeaderText = item.HeaderText ?? "N/A";
             ViewData["item"] = item;
+            
             if (ModelState.IsValid)
             {
                 try
                 {
                     model.InsertOnSubmit(item);
                     db.SubmitChanges();
+                    ViewData["NewKeyValue"] = item.id;
                 }
                 catch (Exception e)
                 {
@@ -63,7 +65,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("MasterGridViewPartial", IWSLookUp.GetPurchaseOrder());
         }
@@ -92,7 +94,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("MasterGridViewPartial", IWSLookUp.GetPurchaseOrder());
         }
@@ -119,15 +121,16 @@ namespace IWSProject.Controllers
             return PartialView("MasterGridViewPartial", IWSLookUp.GetPurchaseOrder());
         }
         [ValidateInput(false)]
-        public ActionResult DetailGridViewPartial(int transid)
+        public ActionResult DetailGridViewPartial(int transId, object newKeyValue)
         {
-            return PartialView("DetailGridViewPartial", db.LinePurchaseOrders.Where(p => p.transid == transid).ToList());
+            if (newKeyValue != null)
+                ViewData["IsNewDetailRow"] = true;
+            return PartialView("DetailGridViewPartial", db.LinePurchaseOrders.Where(p => p.transid == transId).ToList());
         }
         [HttpPost, ValidateInput(false)]
         public ActionResult DetailGridViewPartialAddNew([ModelBinder(typeof(DevExpressEditorsBinder))] LinePurchaseOrder line, int transId)
         {
             var model = db.LinePurchaseOrders;
-
             line.transid = transId;
             ViewData["linePurchase"] = line;
             if (ModelState.IsValid)
@@ -145,7 +148,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("DetailGridViewPartial", model.Where(m => m.transid == transId));
         }
@@ -153,7 +156,6 @@ namespace IWSProject.Controllers
         public ActionResult DetailGridViewPartialUpdate([ModelBinder(typeof(DevExpressEditorsBinder))] LinePurchaseOrder line, int transId)
         {
             var model = db.LinePurchaseOrders;
-
             line.transid = transId;
 
             ViewData["linePurchase"] = line;
@@ -177,7 +179,7 @@ namespace IWSProject.Controllers
             }
             else
             {
-                ViewData["GenericError"] = IWSLocalResource.GenericError;
+                ViewData["GenericError"] = IWSLookUp.GetModelSateErrors(ModelState);
             }
             return PartialView("DetailGridViewPartial", db.LinePurchaseOrders.Where(p => p.transid == transId));
         }
@@ -186,7 +188,6 @@ namespace IWSProject.Controllers
         {
 
             var model = db.LinePurchaseOrders;
-
             if (Id >= 0)
             {
                 try

@@ -67,6 +67,56 @@
         e.cancel = true;
         s.SetFocusedRowIndex(e.visibleIndex);
     }
+
+    function OnInitMaster(s, e) {
+        ASPxClientUtils.AttachEventToElement(
+            s.GetMainElement(),
+            "keydown",
+            function (e) {
+                switch (e.keyCode) {
+                    //ENTER
+                    case 13:
+                        if (s.IsEditing()) {
+                            s.UpdateEdit();
+                        }
+                        break;
+                    //ESC
+                    case 27:
+                        if (s.IsEditing()) {
+                            s.CancelEdit();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
+    }
+
+    function OnInitDetail(s, e) {
+        ASPxClientUtils.AttachEventToElement(
+            s.GetMainElement(),
+            "keydown",
+            function (e) {
+                switch (e.keyCode) {
+                    //ENTER
+                    case 13:
+                        if (s.IsEditing()) {
+                            s.UpdateEdit();
+                            s.AddNewRow();
+                        }
+                        break;
+                    //ESC
+                    case 27:
+                        if (s.IsEditing()) {
+                            s.CancelEdit();
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            });
+    }
+
 </script>
 
 
